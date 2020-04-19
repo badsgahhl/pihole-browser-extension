@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="popup.css" />
+</head>
+
+<body>
+    <div style="text-align: center;">
+        <div class="status">Pi-Hole Status:</div>
+        <div id="display_status"></div>
+        <div class="text"></div>Enter the amount of minutes to turn off Pi-Hole.</div>
+        <div class="text">Use 0 for indefinite</div>
+        <input type="number" id="time" value="10" placeholder="10 seconds" min="0" />
+        
+        <label style="margin-left: 32%;margin-top: 5px" id="switch">
+            <input type="checkbox" id="sliderBox">
+            <span class="slider"></span>
+        </label>
+    </div>
+    <script type="module" src="/dist/js/popup/popup.js"></script>
+</body>
+
+</html>

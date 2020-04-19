@@ -1,0 +1,26 @@
+{
+	"name": "Remote-Switch-for-Pi-Hole-Chrome",
+	"version": "1.0.0",
+	"dependencies": {},
+	"devDependencies": {
+		"@types/chrome": "0.0.104",
+		"ts-loader": "^7.0.0",
+		"typescript": "^3.8.3"
+	},
+	"description": "Remote Switch for Pi-Hole to enable and disable the server with the specified time provide by the user without having to open a new tab. No other installs are required.",
+	"main": "src/ts/background.ts",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/xhorntail/Remote-Switch-for-Pi-Hole-Chrome.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/xhorntail/Remote-Switch-for-Pi-Hole-Chrome/issues"
+	},
+	"homepage": "https://github.com/xhorntail/Remote-Switch-for-Pi-Hole-Chrome#readme"
+}

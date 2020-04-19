@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="options.css"/>
+    </head>
+
+    <body>
+        <p>Enter the API key found under setting -> API/Web interface, Use a QR Code scanner to get the text.</p>
+
+        <table>
+            <tr>
+                <td><p>Pi-Hole Address:</p></td>
+                <td><input type="text" id="pi_uri_base" name="Pi-Hole Address"></td>
+            </tr>
+
+			<tr>
+                <td><p>API Key:</p></td>
+                <td><input type="text" id="api_key" name="API Key"></td>
+            </tr>
+			
+            <tr>
+                <td><p>Max Disable Time:</p></td>
+                <td><input type="text" id="max_time" name="Max Time"></td>
+            </tr>
+        </table>
+
+        <div id="confirmation_status" class="confirmation"></div>
+        <td><input type="button" id="save_button" value="Save"/>
+        <p>Not an official Pi-Hole application.</p>    
+
+        <script type="module" src="/dist/js/option/options.js"></script>
+    </body>
+
+</html>

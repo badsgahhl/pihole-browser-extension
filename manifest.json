@@ -1,0 +1,31 @@
+{
+	"manifest_version": 2,
+	"name": "Switch from PiHole",
+	"version": "1.0",
+	"author": "Pascal Glaser",
+	"description": "Small Extension to enable/disable your PiHole.",
+	"icons": {
+		"48": "icon/icon-48.png",
+		"96": "icon/icon-96.png"
+	},
+	"browser_action": {
+		"browser_style": true,
+		"default_icon": {
+			"16": "icon/icon-16.png",
+			"32": "icon/icon-32.png"
+		},
+		"default_popup": "src/view/popup/popup.html"
+	},
+	"options_ui": {
+		"page": "src/view/options/options.html"
+	},
+	"background": {
+		"page": "src/view/background/background.html"
+	},
+	"permissions": [
+		"storage",
+		"http://*/*",
+		"https://*/*",
+		"webRequest"
+	]
+}

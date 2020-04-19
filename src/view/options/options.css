@@ -1,0 +1,14 @@
+input[type=text] {
+    font-size: 12px;
+    width: 475px;
+}
+
+p {
+    font-size: 16px;
+    text-align: center;
+}
+
+.confirmation{
+    font-size: 16px;
+    text-align: center;
+}
