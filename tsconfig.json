@@ -8,8 +8,8 @@
 			"scripthost",
 			"es2015.promise"
 		],
-		"rootDir": "src/ts",
-		"outDir": "dist/js/",
+		"rootDir": "src/",
+		"outDir": "dist",
 		"types": [
 			//(various types, e.g. jquery, core-js),
 			"chrome"

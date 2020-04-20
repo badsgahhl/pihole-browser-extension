@@ -1,6 +1,6 @@
-import {PiHoleStorageAccess, read_pi_hole_storage} from "./utils/StorageAccess.js";
-import {set_badge_text} from "./utils/ChromeFunctions.js";
-import {PiHoleApiStatus, PiHoleApiStatusEnum} from "./utils/PiHoleModels.js";
+import {PiHoleStorageAccess, read_pi_hole_storage} from "../../data/storage/StorageAccess.js";
+import {set_badge_text} from "../../utils/ChromeFunctions.js";
+import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../data/api/models/pihole/PiHoleApiStatus.js";
 
 init().then();
 checkStatus().then();  //Get the current status when the browser opens

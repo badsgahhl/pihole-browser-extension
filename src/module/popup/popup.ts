@@ -2,9 +2,9 @@
  * Handles all Functions for the Extension PopUp
  */
 
-import {read_pi_hole_storage} from '../utils/StorageAccess.js';
-import {set_badge_text} from "../utils/ChromeFunctions.js";
-import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../utils/PiHoleModels.js";
+import {read_pi_hole_storage} from '../../data/storage/StorageAccess.js';
+import {set_badge_text} from "../../utils/ChromeFunctions.js";
+import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../data/api/models/pihole/PiHoleApiStatus.js";
 
 async function sliderClicked() {
 	const httpResponse = new XMLHttpRequest();    //Make a new object to accept return from server

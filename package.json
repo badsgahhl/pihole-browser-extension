@@ -8,7 +8,7 @@
 		"typescript": "^3.8.3"
 	},
 	"description": "Remote Switch for Pi-Hole to enable and disable the server with the specified time provide by the user without having to open a new tab. No other installs are required.",
-	"main": "src/ts/background.ts",
+	"main": "src/module/background/background.ts",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},

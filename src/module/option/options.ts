@@ -2,7 +2,7 @@
  * Functions for the options menu
  */
 
-import {PiHoleStorageAccess, read_pi_hole_storage} from "../utils/StorageAccess.js";
+import {PiHoleStorageAccess, read_pi_hole_storage} from "../../data/storage/StorageAccess.js";
 
 function setStorage() {
 	const storage:PiHoleStorageAccess = {

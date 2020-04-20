@@ -10,7 +10,7 @@ export function read_pi_hole_storage():Promise<PiHoleStorageAccess> {
 }
 
 /**
- * Interface for the local storage.
+ * Interface for the local storage structure.
  */
 export interface PiHoleStorageAccess {
 	pi_uri_base?:string;
