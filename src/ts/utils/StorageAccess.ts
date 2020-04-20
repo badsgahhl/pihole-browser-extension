@@ -19,5 +19,4 @@ export function get_storage_access() {
 export const PiHoleStorage = {
 	URI: 'pi_uri_base',
 	API_KEY: 'api_key',
-	MAX_TIME: 'max_time',
 };

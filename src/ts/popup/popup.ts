@@ -1,6 +1,7 @@
 //Function called after the enable/disable button is pressed.
 
 import {get_storage_access, PiHoleStorage} from '../utils/StorageAccess.js';
+import {set_badge_text} from "../utils/ChromeFunctions.js";
 
 async function buttonClicked() {
 	const httpResponse = new XMLHttpRequest();    //Make a new object to accept return from server
@@ -57,18 +58,18 @@ function changeIcon(data) {
 		display_status.className = "disabled";   //changed the text color
 		sliderBox.checked = false;
 		time.disabled = true;    //disable the time input box
-		chrome.browserAction.setBadgeText({text: "Off"});  //set the badge to off
+		set_badge_text("Off");  //set the badge to off
 	} else if (data.status === 'enabled') {    //If the Pi-Hole is enabled
 		display_status.innerHTML = "Enabled";    //Set the popup text
 		display_status.className = "enabled";    //set the text color
 		sliderBox.disabled = false;   //turn on the input box
 		sliderBox.checked = true;
-		chrome.browserAction.setBadgeText({text: "On"});   //set badge text to on
+		set_badge_text("On");   //set badge text to on
 	} else {   //If there is an API key error
 		display_status.innerHTML = "API Error";    //Set the popup text
 		display_status.className = "disabled";    //set the text color
 		sliderBox.disabled = true;   //turn off the input box
-		chrome.browserAction.setBadgeText({text: ""});   //set badge text to empty
+		set_badge_text("");   //set badge text to empty
 	}
 }
 
