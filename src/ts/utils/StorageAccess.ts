@@ -1,22 +1,18 @@
-class StorageAccess {
-	read(key) {
-		return new Promise((resolve, reject) => {
-			if (key != null) {
-				chrome.storage.local.get(key, function(obj) {
-					resolve(obj[key])
-				});
-			} else {
-				reject(null);
-			}
+/**
+ * Reads the Settings from the local extension storage.
+ */
+export function read_pi_hole_storage():Promise<PiHoleStorageAccess> {
+	return new Promise((resolve) => {
+		chrome.storage.local.get(null, function(obj) {
+			resolve(obj)
 		});
-	}
+	});
 }
 
-export function get_storage_access() {
-	return new StorageAccess();
+/**
+ * Interface for the local storage.
+ */
+export interface PiHoleStorageAccess {
+	pi_uri_base?:string;
+	api_key?:string;
 }
-
-export const PiHoleStorage = {
-	URI: 'pi_uri_base',
-	API_KEY: 'api_key',
-};

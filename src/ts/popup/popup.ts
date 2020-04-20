@@ -1,31 +1,34 @@
-//Function called after the enable/disable button is pressed.
+/**
+ * Handles all Functions for the Extension PopUp
+ */
 
-import {get_storage_access, PiHoleStorage} from '../utils/StorageAccess.js';
+import {read_pi_hole_storage} from '../utils/StorageAccess.js';
 import {set_badge_text} from "../utils/ChromeFunctions.js";
+import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../utils/PiHoleModels.js";
 
-async function buttonClicked() {
+async function sliderClicked() {
 	const httpResponse = new XMLHttpRequest();    //Make a new object to accept return from server
-	const PI_URI_BASE = await get_storage_access().read(PiHoleStorage.URI);
-	const API_KEY = await get_storage_access().read(PiHoleStorage.API_KEY);
+	const url_base = (await read_pi_hole_storage()).pi_uri_base;
+	const api_key = (await read_pi_hole_storage()).api_key;
 
-	let url;
-	const slider_box = <HTMLInputElement>document.getElementById("sliderBox");
+	let url:string;
+	const slider_box = <HTMLInputElement>document.getElementById('sliderBox');
 	if (!slider_box.checked) {
-		let time:number = Number((<HTMLInputElement>document.getElementById("time")).value);   //get the time from the box
+		let time:number = Number((<HTMLInputElement>document.getElementById('time')).value);   //get the time from the box
 
-		url = PI_URI_BASE + "/api.php?disable=" + String(time) + "&auth=" + API_KEY;  //build the url
+		url = url_base + "/api.php?disable=" + String(time) + "&auth=" + api_key;  //build the url
 	} else if (slider_box.checked) {
-		url = PI_URI_BASE + "/api.php?enable&auth=" + API_KEY;    //build the url
+		url = url_base + "/api.php?enable&auth=" + api_key;    //build the url
 	}
 
 	httpResponse.onreadystatechange = function() {
 		if (this.readyState === 4 && this.status === 200) {
 			// Action to be performed when the document is read;
-			const data = JSON.parse(this.response);   //parse the return JSON
+			const data:PiHoleApiStatus = JSON.parse(this.response);   //parse the return JSON
 			changeIcon(data);
 		}
 	};
-	httpResponse.open("GET", String(url), true);
+	httpResponse.open('GET', url, true);
 	httpResponse.send();
 }
 
@@ -41,25 +44,29 @@ async function getPiHoleStatus() {
 			changeIcon(data);
 		}
 	};
-	const uri = await get_storage_access().read('pi_uri_base');
+	const uri = (await read_pi_hole_storage()).pi_uri_base;
 
 	httpResponse.open("GET", uri + "/api.php?", true);
 	httpResponse.send();
 }
 
-function changeIcon(data) {
+/**
+ * This function changes different view components accordingly to the PiHoleStatus
+ * @param data
+ */
+function changeIcon(data:PiHoleApiStatus) {
 
-	const display_status = document.getElementById("display_status");
-	const sliderBox = <HTMLInputElement>document.getElementById("sliderBox");
-	const time = <HTMLInputElement>document.getElementById("time");
+	const display_status = document.getElementById('display_status');
+	const sliderBox = <HTMLInputElement>document.getElementById('sliderBox');
+	const time = <HTMLInputElement>document.getElementById('time');
 
-	if (data.status === "disabled") {  //If the Pi-Hole status is disabled
+	if (data.status === PiHoleApiStatusEnum.disabled) {  //If the Pi-Hole status is disabled
 		display_status.innerHTML = "Disabled";   //Set the popup text
 		display_status.className = "disabled";   //changed the text color
 		sliderBox.checked = false;
 		time.disabled = true;    //disable the time input box
 		set_badge_text("Off");  //set the badge to off
-	} else if (data.status === 'enabled') {    //If the Pi-Hole is enabled
+	} else if (data.status === PiHoleApiStatusEnum.enabled) {    //If the Pi-Hole is enabled
 		display_status.innerHTML = "Enabled";    //Set the popup text
 		display_status.className = "enabled";    //set the text color
 		sliderBox.disabled = false;   //turn on the input box
@@ -73,8 +80,10 @@ function changeIcon(data) {
 	}
 }
 
-
-document.addEventListener("DOMContentLoaded", getPiHoleStatus); //When the page loads get the status
-document.getElementById('sliderBox').addEventListener('click', buttonClicked);
+/**
+ * EventListener Section
+ */
+document.addEventListener('DOMContentLoaded', getPiHoleStatus); //When the page loads get the status
+document.getElementById('sliderBox').addEventListener('click', sliderClicked);
 
 

@@ -1,5 +1,5 @@
 {
-	"name": "Remote-Switch-for-Pi-Hole-Chrome",
+	"name": "Switch-for-PiHole Chrome",
 	"version": "1.0.0",
 	"dependencies": {},
 	"devDependencies": {
@@ -14,13 +14,13 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/xhorntail/Remote-Switch-for-Pi-Hole-Chrome.git"
+		"url": "git+https://github.com/badsgahhl/pihole-chrome-extension.git"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"bugs": {
-		"url": "https://github.com/xhorntail/Remote-Switch-for-Pi-Hole-Chrome/issues"
+		"url": "https://github.com/badsgahhl/pihole-chrome-extension/issues"
 	},
-	"homepage": "https://github.com/xhorntail/Remote-Switch-for-Pi-Hole-Chrome#readme"
+	"homepage": "https://github.com/badsgahhl/pihole-chrome-extension/#readme"
 }

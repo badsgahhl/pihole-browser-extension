@@ -1,3 +1,7 @@
+#main {
+    text-align: center;
+}
+
 .status {
     font-size: 16px;
     text-align: center;
@@ -25,11 +29,12 @@
 
 /* The switch - the box around the slider */
 #switch {
+    margin-top: 5px;
     position: relative;
     display: inline-block;
     width: 60px;
     height: 34px;
-  }
+}
   
   /* Hide default HTML checkbox */
   .switch input {display:none;}
