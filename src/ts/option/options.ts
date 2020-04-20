@@ -9,8 +9,14 @@ function setStorage() {
 		pi_uri_base: (<HTMLInputElement>document.getElementById('pi_uri_base')).value,
 		api_key: (<HTMLInputElement>document.getElementById('api_key')).value
 	};
+
+	const save_button:HTMLButtonElement = <HTMLInputElement>document.getElementById('save_button');
 	chrome.storage.local.set(storage, function() {
-		document.getElementById('confirmation_status').innerHTML = 'Saved Successful!';
+		const btn_default:string = save_button.value;
+		save_button.value = 'Saved Successful!';
+		setTimeout(function() {
+			save_button.value = btn_default;
+		}, 1500);
 	});
 }
 
