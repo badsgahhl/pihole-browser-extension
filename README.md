@@ -1,11 +1,19 @@
 # Switch-for-PiHole Chrome
 
-This is a small project to revive the project of Yoder Spencer.
+This is a small extension to revive the project of Yoder Spencer.
+I reused some of his code and icons to build this extension.
+
 https://github.com/Spencer-Yoder/Remote-Switch-for-Pi-Hole-Chrome	
 
-### Inital Use:
+### How to use:
 
-After installing this extension to chrome 'right-click' the raspberry icon in the top-navigation. Click 'options'. Enter your PiHole URL in the following format http(s)://domain.local/path/to/pihole. Next go into your PiHole Settings and get the API Token and copy/paste it into the settings page. After pressing 'save' the extension will dynamically update every 30s.
+- Install the extension
+- Right click the "Raspberry" Icon in the top navigation fo your browser and click 'Settings'
+- Enter your host address (including http:// or https://)
+- Go to your Pihole settings. Click 'Api/Web interface' and then on 'Show Api token' at the bottom of your screen.
+- Copy the token to the settings. Press save.
+- Congratulations you successfully installed and configured the extension.
+
 
 This is not an official Pi-Hole application.
 Pi-hole® is a registered trademark of Pi-hole LLC” or “FTLDNS™ is a trademark of Pi-hole LLC
