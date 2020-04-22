@@ -6,7 +6,8 @@
 	"description": "Small Extension to enable/disable your PiHole.",
 	"icons": {
 		"48": "icon/icon-48.png",
-		"96": "icon/icon-96.png"
+		"96": "icon/icon-96.png",
+		"128": "icon/icon-128.png"
 	},
 	"browser_action": {
 		"browser_style": true,
