@@ -1,22 +1,22 @@
-/**
- * Handles all Functions for the Extension PopUp
- */
-
-import {StorageAccess} from '../../data/storage/StorageAccess.js';
+import {StorageAccessService} from '../../data/storage/StorageAccessService.js';
 import {BadgeService, ExtensionBadgeText} from "../../data/storage/BadgeService.js";
 import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../data/api/models/pihole/PiHoleApiStatus.js";
 
-async function sliderClicked()
+/**
+ * Function to handler the slider click.
+ * TODO: HTTPRequest into APIRequestService
+ */
+async function sliderClicked(): Promise<void>
 {
 	const httpResponse = new XMLHttpRequest();    //Make a new object to accept return from server
-	const url_base = (await StorageAccess.get_pi_hole_settings()).pi_uri_base;
-	const api_key = (await StorageAccess.get_pi_hole_settings()).api_key;
+	const url_base = (await StorageAccessService.get_pi_hole_settings()).pi_uri_base;
+	const api_key = (await StorageAccessService.get_pi_hole_settings()).api_key;
 
-	let url:string;
-	const slider_box = <HTMLInputElement>document.getElementById('sliderBox');
+	let url: string;
+	const slider_box = <HTMLInputElement> document.getElementById('sliderBox');
 	if (!slider_box.checked)
 	{
-		let time:number = Number((<HTMLInputElement>document.getElementById('time')).value);   //get the time from the box
+		let time: number = Number((<HTMLInputElement> document.getElementById('time')).value);   //get the time from the box
 
 		url = url_base + "/api.php?disable=" + String(time) + "&auth=" + api_key;  //build the url
 	}
@@ -29,7 +29,7 @@ async function sliderClicked()
 		if (this.readyState === 4 && this.status === 200)
 		{
 			// Action to be performed when the document is read;
-			const data:PiHoleApiStatus = JSON.parse(this.response);   //parse the return JSON
+			const data: PiHoleApiStatus = JSON.parse(this.response);   //parse the return JSON
 			changeIcon(data);
 		}
 	};
@@ -37,10 +37,12 @@ async function sliderClicked()
 	httpResponse.send();
 }
 
-//Function that gets the current status of the Pi-Hole
-async function getPiHoleStatus()
+/**
+ * Function to get the current PiHoleStatus
+ * TODO: Should be built into an APIAccess Service
+ */
+async function getPiHoleStatus(): Promise<void>
 {
-
 	const httpResponse = new XMLHttpRequest();    //make a new request object
 
 	httpResponse.onreadystatechange = function() {
@@ -51,7 +53,7 @@ async function getPiHoleStatus()
 			changeIcon(data);
 		}
 	};
-	const uri = (await StorageAccess.get_pi_hole_settings()).pi_uri_base;
+	const uri = (await StorageAccessService.get_pi_hole_settings()).pi_uri_base;
 
 	httpResponse.open("GET", uri + "/api.php?", true);
 	httpResponse.send();
@@ -61,12 +63,12 @@ async function getPiHoleStatus()
  * This function changes different view components accordingly to the PiHoleStatus
  * @param data
  */
-function changeIcon(data:PiHoleApiStatus)
+function changeIcon(data: PiHoleApiStatus): void
 {
 
 	const display_status = document.getElementById('display_status');
-	const sliderBox = <HTMLInputElement>document.getElementById('sliderBox');
-	const time = <HTMLInputElement>document.getElementById('time');
+	const sliderBox = <HTMLInputElement> document.getElementById('sliderBox');
+	const time = <HTMLInputElement> document.getElementById('time');
 
 	if (data.status === PiHoleApiStatusEnum.disabled)
 	{  //If the Pi-Hole status is disabled

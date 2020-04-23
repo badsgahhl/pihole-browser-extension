@@ -3,7 +3,7 @@
  */
 export interface PiHoleApiStatus
 {
-	status:PiHoleApiStatusEnum;
+	status: PiHoleApiStatusEnum;
 }
 
 /**

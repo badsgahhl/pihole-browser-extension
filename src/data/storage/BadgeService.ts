@@ -1,28 +1,38 @@
-/**
- * Sets the extension icon badge text in chrome.
- * @param text
- */
 import {PiHoleApiStatusEnum} from "../api/models/pihole/PiHoleApiStatus.js";
 
+/**
+ * Service Module for the extension icon badge.
+ */
 export module BadgeService
 {
 
-	export function set_badge_text(text:ExtensionBadgeText)
+	/**
+	 * Sets the badge text.
+	 * @param text
+	 */
+	export function set_badge_text(text: ExtensionBadgeText)
 	{
 		chrome.browserAction.setBadgeText({text: text});
 	}
 
-	export function get_badge_text():Promise<ExtensionBadgeText>
+	/**
+	 * Returns the badge text as enum value.
+	 */
+	export function get_badge_text(): Promise<ExtensionBadgeText>
 	{
 		return new Promise((resolve) => {
-			chrome.browserAction.getBadgeText({}, function(result:string) {
+			chrome.browserAction.getBadgeText({}, function(result: string) {
 				resolve(convert_string_to_badge_text(result));
 			})
 		});
 
 	}
 
-	function convert_string_to_badge_text(input:string):ExtensionBadgeText
+	/**
+	 * Converts an input string to the correct ExtensionBadgeText Enum
+	 * @param input
+	 */
+	function convert_string_to_badge_text(input: string): ExtensionBadgeText
 	{
 		switch (input)
 		{
@@ -42,7 +52,7 @@ export module BadgeService
 	 * @param badge_text
 	 * @param api_status
 	 */
-	export function compare_badge_to_api_status(badge_text:ExtensionBadgeText, api_status:PiHoleApiStatusEnum):boolean
+	export function compare_badge_to_api_status(badge_text: ExtensionBadgeText, api_status: PiHoleApiStatusEnum): boolean
 	{
 		switch (badge_text)
 		{
