@@ -1,18 +1,30 @@
 /**
  * Reads the Settings from the local extension storage.
  */
-export function read_pi_hole_storage():Promise<PiHoleStorageAccess> {
-	return new Promise((resolve) => {
-		chrome.storage.local.get(null, function(obj) {
-			resolve(obj)
+import {PiHoleApiStatusEnum} from "../api/models/pihole/PiHoleApiStatus.js";
+
+export module StorageAccess {
+	export function get_pi_hole_settings():Promise<PiHoleSettingsStorage> {
+		return new Promise((resolve) => {
+			chrome.storage.local.get(null, function(obj) {
+				resolve(obj)
+			});
 		});
-	});
+	}
+
 }
 
 /**
- * Interface for the local storage structure.
+ * Interface for the local settings storage structure.
  */
-export interface PiHoleStorageAccess {
+export interface PiHoleSettingsStorage {
 	pi_uri_base?:string;
 	api_key?:string;
+}
+
+export enum ExtensionBadgeText {
+	enabled = 'On',
+	disabled = 'Off',
+	error = 'Error'
+
 }

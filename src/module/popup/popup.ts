@@ -2,14 +2,14 @@
  * Handles all Functions for the Extension PopUp
  */
 
-import {read_pi_hole_storage} from '../../data/storage/StorageAccess.js';
-import {set_badge_text} from "../../utils/ChromeFunctions.js";
+import {ExtensionBadgeText, StorageAccess} from '../../data/storage/StorageAccess.js';
+import {ChromeFunctions} from "../../utils/ChromeFunctions.js";
 import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../data/api/models/pihole/PiHoleApiStatus.js";
 
 async function sliderClicked() {
 	const httpResponse = new XMLHttpRequest();    //Make a new object to accept return from server
-	const url_base = (await read_pi_hole_storage()).pi_uri_base;
-	const api_key = (await read_pi_hole_storage()).api_key;
+	const url_base = (await StorageAccess.get_pi_hole_settings()).pi_uri_base;
+	const api_key = (await StorageAccess.get_pi_hole_settings()).api_key;
 
 	let url:string;
 	const slider_box = <HTMLInputElement>document.getElementById('sliderBox');
@@ -44,7 +44,7 @@ async function getPiHoleStatus() {
 			changeIcon(data);
 		}
 	};
-	const uri = (await read_pi_hole_storage()).pi_uri_base;
+	const uri = (await StorageAccess.get_pi_hole_settings()).pi_uri_base;
 
 	httpResponse.open("GET", uri + "/api.php?", true);
 	httpResponse.send();
@@ -65,18 +65,18 @@ function changeIcon(data:PiHoleApiStatus) {
 		display_status.className = "disabled";   //changed the text color
 		sliderBox.checked = false;
 		time.disabled = true;    //disable the time input box
-		set_badge_text("Off");  //set the badge to off
+		ChromeFunctions.set_badge_text(ExtensionBadgeText.enabled);  //set the badge to off
 	} else if (data.status === PiHoleApiStatusEnum.enabled) {    //If the Pi-Hole is enabled
 		display_status.innerHTML = "Enabled";    //Set the popup text
 		display_status.className = "enabled";    //set the text color
 		sliderBox.disabled = false;   //turn on the input box
 		sliderBox.checked = true;
-		set_badge_text("On");   //set badge text to on
+		ChromeFunctions.set_badge_text(ExtensionBadgeText.disabled);   //set badge text to on
 	} else {   //If there is an API key error
 		display_status.innerHTML = "API Error";    //Set the popup text
 		display_status.className = "disabled";    //set the text color
 		sliderBox.disabled = true;   //turn off the input box
-		set_badge_text("");   //set badge text to empty
+		ChromeFunctions.set_badge_text(ExtensionBadgeText.error);   //set badge text to empty
 	}
 }
 

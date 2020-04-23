@@ -2,10 +2,10 @@
  * Functions for the options menu
  */
 
-import {PiHoleStorageAccess, read_pi_hole_storage} from "../../data/storage/StorageAccess.js";
+import {PiHoleSettingsStorage, StorageAccess} from "../../data/storage/StorageAccess.js";
 
 function setStorage() {
-	const storage:PiHoleStorageAccess = {
+	const storage:PiHoleSettingsStorage = {
 		pi_uri_base: (<HTMLInputElement>document.getElementById('pi_uri_base')).value,
 		api_key: (<HTMLInputElement>document.getElementById('api_key')).value
 	};
@@ -22,7 +22,7 @@ function setStorage() {
 
 //Function fills the storage data into the option input form.
 async function getStorage() {
-	const storage:PiHoleStorageAccess = await read_pi_hole_storage();
+	const storage:PiHoleSettingsStorage = await StorageAccess.get_pi_hole_settings();
 	(<HTMLInputElement>document.getElementById('pi_uri_base')).defaultValue = storage.pi_uri_base ? storage.pi_uri_base : '';
 	(<HTMLInputElement>document.getElementById('api_key')).defaultValue = storage.api_key ? storage.api_key : '';
 }
