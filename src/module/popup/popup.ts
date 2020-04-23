@@ -65,13 +65,13 @@ function changeIcon(data:PiHoleApiStatus) {
 		display_status.className = "disabled";   //changed the text color
 		sliderBox.checked = false;
 		time.disabled = true;    //disable the time input box
-		ChromeFunctions.set_badge_text(ExtensionBadgeText.enabled);  //set the badge to off
+		ChromeFunctions.set_badge_text(ExtensionBadgeText.disabled);  //set the badge to off
 	} else if (data.status === PiHoleApiStatusEnum.enabled) {    //If the Pi-Hole is enabled
 		display_status.innerHTML = "Enabled";    //Set the popup text
 		display_status.className = "enabled";    //set the text color
 		sliderBox.disabled = false;   //turn on the input box
 		sliderBox.checked = true;
-		ChromeFunctions.set_badge_text(ExtensionBadgeText.disabled);   //set badge text to on
+		ChromeFunctions.set_badge_text(ExtensionBadgeText.enabled);   //set badge text to on
 	} else {   //If there is an API key error
 		display_status.innerHTML = "API Error";    //Set the popup text
 		display_status.className = "disabled";    //set the text color
