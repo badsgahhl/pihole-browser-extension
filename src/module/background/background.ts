@@ -1,6 +1,7 @@
 import {BadgeService, ExtensionBadgeText} from "../../data/storage/BadgeService.js";
 import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../data/api/models/pihole/PiHoleApiStatus.js";
 import {PiHoleSettingsStorage, StorageAccessService} from "../../data/storage/StorageAccessService.js";
+import {ApiRequestService} from "../../data/api/service/ApiRequestService.js";
 
 /**
  * Background Service
@@ -12,13 +13,13 @@ window.setInterval(checkStatus, 15000); //Keep checking every 15 seconds
 
 /**
  * Checking the current status of the pihole
- * TODO: Should be done in an APIRequest Service
+ *
  */
 async function checkStatus(): Promise<void>
 {
-	const httpResponse = new XMLHttpRequest();
+	const api_request: ApiRequestService = new ApiRequestService();
 
-	httpResponse.onreadystatechange = function() {
+	const onreadystatechange = function() {
 		if (this.readyState === 4 && this.status === 200)
 		{
 			const data: PiHoleApiStatus = JSON.parse(this.response);
@@ -41,9 +42,11 @@ async function checkStatus(): Promise<void>
 			//set_badge_text('');
 		}
 	};
-	const url = (await StorageAccessService.get_pi_hole_settings()).pi_uri_base;
-	httpResponse.open("GET", url + "/api.php?", true);
-	httpResponse.send();
+
+	api_request.add_param('status');
+	api_request.set_onreadystatechange(onreadystatechange);
+
+	await api_request.send();
 }
 
 /**

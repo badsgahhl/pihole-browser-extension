@@ -1,31 +1,15 @@
-import {StorageAccessService} from '../../data/storage/StorageAccessService.js';
 import {BadgeService, ExtensionBadgeText} from "../../data/storage/BadgeService.js";
 import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../data/api/models/pihole/PiHoleApiStatus.js";
+import {ApiRequestMethodEnum, ApiRequestService} from "../../data/api/service/ApiRequestService.js";
 
 /**
  * Function to handler the slider click.
- * TODO: HTTPRequest into APIRequestService
  */
 async function sliderClicked(): Promise<void>
 {
-	const httpResponse = new XMLHttpRequest();    //Make a new object to accept return from server
-	const url_base = (await StorageAccessService.get_pi_hole_settings()).pi_uri_base;
-	const api_key = (await StorageAccessService.get_pi_hole_settings()).api_key;
+	const api_request: ApiRequestService = new ApiRequestService();
 
-	let url: string;
-	const slider_box = <HTMLInputElement> document.getElementById('sliderBox');
-	if (!slider_box.checked)
-	{
-		let time: number = Number((<HTMLInputElement> document.getElementById('time')).value);   //get the time from the box
-
-		url = url_base + "/api.php?disable=" + String(time) + "&auth=" + api_key;  //build the url
-	}
-	else if (slider_box.checked)
-	{
-		url = url_base + "/api.php?enable&auth=" + api_key;    //build the url
-	}
-
-	httpResponse.onreadystatechange = function() {
+	const onreadystatechange = function() {
 		if (this.readyState === 4 && this.status === 200)
 		{
 			// Action to be performed when the document is read;
@@ -33,19 +17,35 @@ async function sliderClicked(): Promise<void>
 			changeIcon(data);
 		}
 	};
-	httpResponse.open('GET', url, true);
-	httpResponse.send();
+
+	api_request.set_method(ApiRequestMethodEnum.GET);
+	api_request.set_onreadystatechange(onreadystatechange);
+
+	const slider_box = <HTMLInputElement> document.getElementById('sliderBox');
+	if (!slider_box.checked)
+	{
+		let time: number = Number((<HTMLInputElement> document.getElementById('time')).value);   //get the time from the box
+
+		api_request.add_param('disable', String(time));
+
+	}
+	else if (slider_box.checked)
+	{
+
+		api_request.add_param('enable');
+
+	}
+	await api_request.send();
 }
 
 /**
  * Function to get the current PiHoleStatus
- * TODO: Should be built into an APIAccess Service
  */
 async function getPiHoleStatus(): Promise<void>
 {
-	const httpResponse = new XMLHttpRequest();    //make a new request object
+	const api_request: ApiRequestService = new ApiRequestService();
 
-	httpResponse.onreadystatechange = function() {
+	const onreadystatechange = function() {
 		if (this.readyState === 4 && this.status === 200)
 		{
 			// Action to be performed when the document is read;
@@ -53,10 +53,12 @@ async function getPiHoleStatus(): Promise<void>
 			changeIcon(data);
 		}
 	};
-	const uri = (await StorageAccessService.get_pi_hole_settings()).pi_uri_base;
 
-	httpResponse.open("GET", uri + "/api.php?", true);
-	httpResponse.send();
+	api_request.set_method(ApiRequestMethodEnum.GET);
+	api_request.add_param('status');
+	api_request.set_onreadystatechange(onreadystatechange);
+
+	await api_request.send();
 }
 
 /**
