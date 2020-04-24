@@ -60,7 +60,6 @@ export class ApiRequestService
 			const params: ApiParameter = this._params[i];
 			if (params)
 			{
-				console.warn(params);
 				const key: string = Object.keys(params)[0];
 				const value: string = Object.keys(params).map(key => params[key])[0];
 
