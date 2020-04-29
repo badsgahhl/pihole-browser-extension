@@ -1,5 +1,5 @@
 {
-	"name": "Switch-for-PiHole-Chrome",
+	"name": "switch-for-pihole-chrome",
 	"version": "2.0.1",
 	"dependencies": {},
 	"devDependencies": {
@@ -16,9 +16,13 @@
 		"type": "git",
 		"url": "git+https://github.com/badsgahhl/pihole-chrome-extension.git"
 	},
-	"keywords": [],
+	"keywords": [
+		"pihole",
+		"extension",
+		"chrome"
+	],
 	"author": "Pascal Glaser",
-	"license": "ISC",
+	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/badsgahhl/pihole-chrome-extension/issues"
 	},
