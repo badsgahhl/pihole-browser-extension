@@ -15,5 +15,12 @@ https://github.com/Spencer-Yoder/Remote-Switch-for-Pi-Hole-Chrome
 - Congratulations you successfully installed and configured the extension.
 
 
+### Troubleshooting
+
+#### Status / Slider are not working
+Please check that you used the correct host address. Use the address where you can see your dashboard page (statistics board).
+For example if your pihole is located at http://192.168.178.2 but you can see your dashboard/admin page at http://192.168.178.2/admin then don't forget to add /admin to the address.
+
+
 This is not an official Pi-Hole application.
 Pi-hole® is a registered trademark of Pi-hole LLC” or “FTLDNS™ is a trademark of Pi-hole LLC
