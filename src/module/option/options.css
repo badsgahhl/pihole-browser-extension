@@ -1,4 +1,4 @@
-input[type=text] {
+input {
     font-size: 12px;
     width: 475px;
 }
@@ -11,4 +11,9 @@ p {
 .confirmation {
     font-size: 16px;
     text-align: center;
+}
+
+tr > td:first-child p {
+    text-align: left;
+    width: 150px;
 }

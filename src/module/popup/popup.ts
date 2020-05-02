@@ -1,6 +1,7 @@
 import {BadgeService, ExtensionBadgeText} from "../../data/storage/BadgeService.js";
 import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../data/api/models/pihole/PiHoleApiStatus.js";
 import {ApiRequestMethodEnum, ApiRequestService} from "../../data/api/service/ApiRequestService.js";
+import {PiHoleSettingsStorage, StorageAccessService} from "../../data/storage/StorageAccessService.js";
 
 /**
  * Function to handler the slider click.
@@ -36,6 +37,19 @@ async function sliderClicked(): Promise<void>
 
 	}
 	await api_request.send();
+}
+
+
+async function load_settings_and_status(): Promise<void>
+{
+	getPiHoleStatus().then();
+
+	const time = <HTMLInputElement> document.getElementById('time');
+
+	const storage: PiHoleSettingsStorage = await StorageAccessService.get_pi_hole_settings();
+
+	time.defaultValue = String(storage.default_disable_time);
+
 }
 
 /**
@@ -100,7 +114,7 @@ function changeIcon(data: PiHoleApiStatus): void
 /**
  * EventListener Section
  */
-document.addEventListener('DOMContentLoaded', getPiHoleStatus); //When the page loads get the status
+document.addEventListener('DOMContentLoaded', load_settings_and_status); //When the page loads get the status
 document.getElementById('sliderBox').addEventListener('click', sliderClicked);
 
 

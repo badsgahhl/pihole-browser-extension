@@ -33,5 +33,12 @@ export interface PiHoleSettingsStorage
 {
 	pi_uri_base?: string;
 	api_key?: string;
+	default_disable_time?: number;
 }
 
+export enum PiHoleSettingsDefaults
+{
+	pi_uri_base = 'http://pi.hole',
+	api_key = '',
+	default_disable_time = 10
+}
