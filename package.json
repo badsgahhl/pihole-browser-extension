@@ -1,6 +1,6 @@
 {
 	"name": "switch-for-pihole-chrome",
-	"version": "2.0.1",
+	"version": "2.0.2",
 	"dependencies": {},
 	"devDependencies": {
 		"@types/chrome": "0.0.104",
