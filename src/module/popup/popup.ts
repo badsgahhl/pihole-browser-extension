@@ -1,7 +1,7 @@
 import {BadgeService, ExtensionBadgeText} from "../../data/storage/BadgeService.js";
 import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../data/api/models/pihole/PiHoleApiStatus.js";
 import {ApiRequestMethodEnum, ApiRequestService} from "../../data/api/service/ApiRequestService.js";
-import {PiHoleSettingsStorage, StorageAccessService} from "../../data/storage/StorageAccessService.js";
+import {PiHoleSettingsDefaults, PiHoleSettingsStorage, StorageAccessService} from "../../data/storage/StorageAccessService.js";
 
 /**
  * Function to handler the slider click.
@@ -48,7 +48,9 @@ async function load_settings_and_status(): Promise<void>
 
 	const storage: PiHoleSettingsStorage = await StorageAccessService.get_pi_hole_settings();
 
-	time.defaultValue = String(storage.default_disable_time);
+	const default_disable_time: number = storage.default_disable_time ? storage.default_disable_time : PiHoleSettingsDefaults.default_disable_time;
+
+	time.defaultValue = String(default_disable_time);
 
 }
 
