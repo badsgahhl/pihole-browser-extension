@@ -1,6 +1,6 @@
 import {BadgeService, ExtensionBadgeText} from "../../data/storage/BadgeService.js";
 import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../data/api/models/pihole/PiHoleApiStatus.js";
-import {PiHoleSettingsStorage, StorageAccessService} from "../../data/storage/StorageAccessService.js";
+import {PiHoleSettingsDefaults, PiHoleSettingsStorage, StorageAccessService} from "../../data/storage/StorageAccessService.js";
 import {ApiRequestService} from "../../data/api/service/ApiRequestService.js";
 
 /**
@@ -67,5 +67,11 @@ async function init(): Promise<void>
 	else
 	{
 		console.log("Current URI base: " + storage.pi_uri_base);
+	}
+
+	if (!storage.default_disable_time)
+	{
+		const storage: PiHoleSettingsStorage = {default_disable_time: PiHoleSettingsDefaults.default_disable_time.valueOf()};
+		StorageAccessService.save_to_local_storage(storage);
 	}
 }

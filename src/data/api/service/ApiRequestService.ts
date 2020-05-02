@@ -53,6 +53,12 @@ export class ApiRequestService
 		const url_base = (await StorageAccessService.get_pi_hole_settings()).pi_uri_base;
 		const api_key = (await StorageAccessService.get_pi_hole_settings()).api_key;
 
+		if (!url_base || !api_key)
+		{
+			console.log("Settings haven't been set. Cancled API Request")
+			return;
+		}
+
 		let url: string = url_base + "/api.php?auth=" + api_key;
 
 		for (let i = 0; i < this._params.length; i++)
@@ -70,7 +76,7 @@ export class ApiRequestService
 
 		if (this.get_onreadystatechange())
 		{
-			httpResponse.onreadystatechange = this.get_onreadystatechange()
+			httpResponse.onreadystatechange = this.get_onreadystatechange();
 		}
 
 		httpResponse.open(this.get_method(), url, this.get_async());
