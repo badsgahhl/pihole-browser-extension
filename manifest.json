@@ -21,7 +21,6 @@
 		"page": "src/module/option/options.html"
 	},
 	"background": {
-		"name": "tst",
 		"page": "src/module/background/background.html"
 	},
 	"permissions": [
