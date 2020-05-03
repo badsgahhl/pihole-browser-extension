@@ -12,5 +12,6 @@ export interface PiHoleApiStatus
 export enum PiHoleApiStatusEnum
 {
 	enabled = 'enabled',
-	disabled = 'disabled'
+	disabled = 'disabled',
+	error = 'error'
 }

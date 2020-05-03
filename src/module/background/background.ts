@@ -37,10 +37,6 @@ async function checkStatus(): Promise<void>
 				}
 			});
 		}
-		else
-		{
-			//set_badge_text('');
-		}
 	};
 
 	api_request.add_param('status');

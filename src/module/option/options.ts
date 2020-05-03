@@ -5,11 +5,18 @@ import {PiHoleSettingsDefaults, PiHoleSettingsStorage, StorageAccessService} fro
  */
 function set_settings(): void
 {
+	const default_disable_time_input: HTMLInputElement = (<HTMLInputElement> document.getElementById('default_time'));
+
 	const storage: PiHoleSettingsStorage = {
 		pi_uri_base: (<HTMLInputElement> document.getElementById('pi_uri_base')).value,
 		api_key: (<HTMLInputElement> document.getElementById('api_key')).value,
-		default_disable_time: (<HTMLInputElement> document.getElementById('default_time')).valueAsNumber
+		default_disable_time: default_disable_time_input.valueAsNumber
 	};
+
+	if (!check_validity_and_error(default_disable_time_input))
+	{
+		return
+	}
 
 	const save_button: HTMLButtonElement = <HTMLButtonElement> document.getElementById('save_button');
 	const function_callback: () => void = function() {
@@ -21,6 +28,26 @@ function set_settings(): void
 	}
 
 	StorageAccessService.save_to_local_storage(storage, function_callback);
+}
+
+/**
+ * Checks if the input is valid and shows an error if not.
+ * @param element
+ */
+function check_validity_and_error(element: HTMLInputElement): boolean
+{
+	if (!element.checkValidity())
+	{
+		console.warn('Input Value is not valid.')
+		element.setAttribute('style', 'background:red;')
+
+		setTimeout(function() {
+			element.removeAttribute('style');
+		}, 1500);
+
+		return false;
+	}
+	return true;
 }
 
 //Function fills the storage data into the option input form.

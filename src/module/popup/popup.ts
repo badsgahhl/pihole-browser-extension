@@ -27,7 +27,15 @@ async function sliderClicked(): Promise<void>
 	{
 		let time: number = Number((<HTMLInputElement> document.getElementById('time')).value);   //get the time from the box
 
-		api_request.add_param('disable', String(time));
+		if (time < 0)
+		{
+			show_error_message('Time cannot be smaller than 0. Canceling api request.');
+			return;
+		}
+		else
+		{
+			api_request.add_param('disable', String(time));
+		}
 
 	}
 	else if (slider_box.checked)
@@ -39,6 +47,20 @@ async function sliderClicked(): Promise<void>
 	await api_request.send();
 }
 
+/**
+ * Returns an error message to the console and changes the icon to error.
+ * @param error_message
+ */
+function show_error_message(error_message: string): void
+{
+	console.warn(error_message);
+
+	changeIcon({status: PiHoleApiStatusEnum.error})
+
+	setTimeout(function() {
+		getPiHoleStatus().then();
+	}, 1500);
+}
 
 async function load_settings_and_status(): Promise<void>
 {
