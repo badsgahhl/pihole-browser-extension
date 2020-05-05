@@ -11,14 +11,16 @@ async function sliderClicked(): Promise<void>
 	const api_request: ApiRequestService = new ApiRequestService();
 
 	const onreadystatechange = function() {
+		debugger;
 		if (this.readyState === 4 && this.status === 200)
 		{
 			// Action to be performed when the document is read;
 			const data: PiHoleApiStatus = JSON.parse(this.response);   //parse the return JSON
 			changeIcon(data);
 		}
-		else
+		else if (this.status !== 200 && this.status !== 0)
 		{
+			console.error(this.status);
 			show_error_message('API Call failed. Check the address.');
 		}
 	};
