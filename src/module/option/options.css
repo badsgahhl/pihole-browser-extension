@@ -1,25 +1,18 @@
-input {
-    font-size: 12px;
-    width: 450px;
+body {
+    padding: 10px;
+    min-width: 550px;
+    max-width: 600px;
 }
 
-p {
-    font-size: 16px;
-    text-align: center;
-}
-
-.confirmation {
-    font-size: 16px;
-    text-align: center;
-}
-
-tr > td:first-child p {
-    text-align: left;
-    width: 150px;
-}
 
 #save_button {
-
-    padding: 5px 15px;
     width: -moz-fit-content;
+}
+
+.headline {
+    margin-bottom: 10px;
+}
+
+.btn-success:focus, .btn-success.focus {
+    box-shadow: unset !important;
 }

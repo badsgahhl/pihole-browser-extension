@@ -17,6 +17,10 @@ async function sliderClicked(): Promise<void>
 			const data: PiHoleApiStatus = JSON.parse(this.response);   //parse the return JSON
 			changeIcon(data);
 		}
+		else
+		{
+			show_error_message('API Call failed. Check the address.');
+		}
 	};
 
 	api_request.set_method(ApiRequestMethodEnum.GET);
@@ -29,7 +33,7 @@ async function sliderClicked(): Promise<void>
 
 		if (time < 0)
 		{
-			show_error_message('Time cannot be smaller than 0. Canceling api request.');
+			show_error_message('Time cannot be smaller than 0. Canceling api request.', true);
 			return;
 		}
 		else
@@ -50,16 +54,19 @@ async function sliderClicked(): Promise<void>
 /**
  * Returns an error message to the console and changes the icon to error.
  * @param error_message
+ * @param refresh_status
  */
-function show_error_message(error_message: string): void
+function show_error_message(error_message: string, refresh_status: boolean = false): void
 {
 	console.warn(error_message);
 
 	changeIcon({status: PiHoleApiStatusEnum.error})
-
-	setTimeout(function() {
-		getPiHoleStatus().then();
-	}, 1500);
+	if (refresh_status)
+	{
+		setTimeout(function() {
+			getPiHoleStatus().then();
+		}, 1500);
+	}
 }
 
 async function load_settings_and_status(): Promise<void>
@@ -105,31 +112,25 @@ async function getPiHoleStatus(): Promise<void>
  */
 function changeIcon(data: PiHoleApiStatus): void
 {
-
-	const display_status = document.getElementById('display_status');
 	const sliderBox = <HTMLInputElement> document.getElementById('sliderBox');
 	const time = <HTMLInputElement> document.getElementById('time');
 
 	if (data.status === PiHoleApiStatusEnum.disabled)
 	{  //If the Pi-Hole status is disabled
-		display_status.innerHTML = "Disabled";   //Set the popup text
-		display_status.className = "disabled";   //changed the text color
 		sliderBox.checked = false;
 		time.disabled = true;    //disable the time input box
 		BadgeService.set_badge_text(ExtensionBadgeText.disabled);  //set the badge to off
 	}
 	else if (data.status === PiHoleApiStatusEnum.enabled)
 	{    //If the Pi-Hole is enabled
-		display_status.innerHTML = "Enabled";    //Set the popup text
-		display_status.className = "enabled";    //set the text color
+		time.disabled = false;
 		sliderBox.disabled = false;   //turn on the input box
 		sliderBox.checked = true;
 		BadgeService.set_badge_text(ExtensionBadgeText.enabled);   //set badge text to on
 	}
 	else
 	{   //If there is an API key error
-		display_status.innerHTML = "API Error";    //Set the popup text
-		display_status.className = "disabled";    //set the text color
+		time.disabled = true;
 		sliderBox.disabled = true;   //turn off the input box
 		BadgeService.set_badge_text(ExtensionBadgeText.error);   //set badge text to empty
 	}

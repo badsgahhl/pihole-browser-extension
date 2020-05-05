@@ -1,34 +1,22 @@
-* {
-    --black-mode-background: #2b3943;
-}
-
 body {
-    padding: 5px;
-    min-width: 150px;
-    max-width: 175px;
+    min-width: 180px;
+    max-width: 190px;
 }
 
 #main {
+    margin: 7px 5px 0 5px;
     text-align: center;
 }
 
-#time {
-    max-width: 75px;
-    margin-top: 5px;
-    padding: 3px;
+.text {
+    font-size: 13px;
+    margin-bottom: 5px;
+    text-align: center;
 }
 
-@media (prefers-color-scheme: dark) {
-    body {
-        background: var(--black-mode-background);
-        color: white;
-    }
 
-    input {
-        background: var(--black-mode-background);
-        border: white 1px solid;
-        color: white;
-    }
+#time {
+    max-width: 100px;
 }
 
 .status {
@@ -49,12 +37,6 @@ body {
     color: #F60D1A;
 }
 
-.text {
-    font-size: 12px;
-    text-align: center;
-    letter-spacing: 2;
-}
-
 
 /* The switch - the box around the slider */
 #switch {
@@ -66,7 +48,7 @@ body {
 }
 
 /* Hide default HTML checkbox */
-.switch input {
+#switch input {
     display: none;
 }
 
@@ -81,11 +63,13 @@ body {
     background-color: #ccc;
     -webkit-transition: .4s;
     transition: .4s;
+    border-radius: 15px;
 }
 
 .slider:before {
     position: absolute;
     content: "";
+    border-radius: 15px;
     height: 26px;
     width: 26px;
     left: 4px;
@@ -93,6 +77,10 @@ body {
     background-color: white;
     -webkit-transition: .4s;
     transition: .4s;
+}
+
+input + .slider {
+    background-color: red;
 }
 
 input:checked + .slider {

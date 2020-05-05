@@ -1,0 +1,10 @@
+* {
+    --black-mode-background: #2b3943;
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background: var(--black-mode-background) !important;
+        color: white !important;
+    }
+}

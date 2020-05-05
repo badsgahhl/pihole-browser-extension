@@ -37,6 +37,10 @@ async function checkStatus(): Promise<void>
 				}
 			});
 		}
+		else
+		{
+			BadgeService.set_badge_text(ExtensionBadgeText.error);
+		}
 	};
 
 	api_request.add_param('status');

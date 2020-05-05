@@ -4,15 +4,18 @@
 <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="popup.css"/>
+    <link rel="stylesheet" href="../../libs/css/bootstrap.css">
+    <title>PiHole Remote Popup</title>
+    <link rel="stylesheet" href="../general/darkmode.css">
 </head>
 
 <body>
 <div id="main">
-    <div class="status">Pi-Hole Status:</div>
-    <div id="display_status"></div>
+    <div class="status">Pi-Hole Switch</div>
     <div class="text">Enter the amount of seconds to turn off Pi-Hole.</div>
     <div class="text">Use 0 for permanent</div>
-    <input type="number" id="time" min="0"/>
+
+    <label for="time"><input class="form-control" disabled type="number" id="time" min="0"/></label>
     <br>
     <label id="switch">
         <input type="checkbox" id="sliderBox">
