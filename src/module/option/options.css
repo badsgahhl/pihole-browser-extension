@@ -1,6 +1,6 @@
 input {
     font-size: 12px;
-    width: 475px;
+    width: 450px;
 }
 
 p {
@@ -16,4 +16,10 @@ p {
 tr > td:first-child p {
     text-align: left;
     width: 150px;
+}
+
+#save_button {
+
+    padding: 5px 15px;
+    width: -moz-fit-content;
 }
