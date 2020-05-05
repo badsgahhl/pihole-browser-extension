@@ -37,8 +37,9 @@ async function checkStatus(): Promise<void>
 				}
 			});
 		}
-		else
+		else if (this.status !== 200 && this.status !== 0)
 		{
+			console.log(this.status);
 			BadgeService.set_badge_text(ExtensionBadgeText.error);
 		}
 	};
