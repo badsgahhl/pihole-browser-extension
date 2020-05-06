@@ -109,9 +109,7 @@ async function getPiHoleStatus(): Promise<void>
 			}
 			catch (e)
 			{
-				console.log(this.response);
 				console.warn(ApiJsonErrorMessages.invalid);
-				console.warn(e);
 				return;
 			}
 			changeIcon(data);
