@@ -2,6 +2,7 @@ import {BadgeService, ExtensionBadgeText} from "../../data/storage/BadgeService.
 import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../data/api/models/pihole/PiHoleApiStatus.js";
 import {PiHoleSettingsDefaults, PiHoleSettingsStorage, StorageAccessService} from "../../data/storage/StorageAccessService.js";
 import {ApiRequestService} from "../../data/api/service/ApiRequestService.js";
+import {ApiJsonErrorMessages} from "../../data/api/errors/ApiErrorMessages.js";
 
 /**
  * Background Service
@@ -22,7 +23,16 @@ async function checkStatus(): Promise<void>
 	const onreadystatechange = function() {
 		if (this.readyState === 4 && this.status === 200)
 		{
-			const data: PiHoleApiStatus = JSON.parse(this.response);
+			let data: PiHoleApiStatus
+			try
+			{
+				data = JSON.parse(this.response);
+			}
+			catch (e)
+			{
+				console.warn(ApiJsonErrorMessages.invalid);
+				return;
+			}
 			BadgeService.get_badge_text().then(function(result) {
 				if (!(BadgeService.compare_badge_to_api_status(result, data.status)))
 				{

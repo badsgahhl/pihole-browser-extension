@@ -70,7 +70,7 @@ export enum ExtensionBadgeText
 {
 	enabled = 'On',
 	disabled = 'Off',
-	error = 'Error'
+	error = 'Err'
 }
 
 

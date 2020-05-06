@@ -2,6 +2,7 @@ import {BadgeService, ExtensionBadgeText} from "../../data/storage/BadgeService.
 import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../data/api/models/pihole/PiHoleApiStatus.js";
 import {ApiRequestService} from "../../data/api/service/ApiRequestService.js";
 import {PiHoleSettingsDefaults, PiHoleSettingsStorage, StorageAccessService} from "../../data/storage/StorageAccessService.js";
+import {ApiJsonErrorMessages} from "../../data/api/errors/ApiErrorMessages.js";
 
 /**
  * Function to handler the slider click.
@@ -10,12 +11,20 @@ async function sliderClicked(): Promise<void>
 {
 	const api_request: ApiRequestService = new ApiRequestService();
 
-	const onreadystatechange = function() {
-		debugger;
+	api_request.onreadystatechange = function() {
 		if (this.readyState === 4 && this.status === 200)
 		{
 			// Action to be performed when the document is read;
-			const data: PiHoleApiStatus = JSON.parse(this.response);   //parse the return JSON
+			let data: PiHoleApiStatus;
+			try
+			{
+				data = JSON.parse(this.response);   //parse the return JSON
+			}
+			catch (e)
+			{
+				show_error_message(ApiJsonErrorMessages.invalid);
+				return;
+			}
 			changeIcon(data);
 		}
 		else if (this.status !== 200 && this.status !== 0)
@@ -24,8 +33,6 @@ async function sliderClicked(): Promise<void>
 			show_error_message('API Call failed. Check the address.');
 		}
 	};
-
-	api_request.onreadystatechange = onreadystatechange;
 
 	const slider_box = <HTMLInputElement> document.getElementById('sliderBox');
 	if (!slider_box.checked)
@@ -95,7 +102,18 @@ async function getPiHoleStatus(): Promise<void>
 		if (this.readyState === 4 && this.status === 200)
 		{
 			// Action to be performed when the document is read;
-			const data = JSON.parse(this.response);   //parse the return JSON
+			let data;
+			try
+			{
+				data = JSON.parse(this.response);
+			}
+			catch (e)
+			{
+				console.log(this.response);
+				console.warn(ApiJsonErrorMessages.invalid);
+				console.warn(e);
+				return;
+			}
 			changeIcon(data);
 		}
 	};
