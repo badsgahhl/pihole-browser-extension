@@ -8,32 +8,32 @@ export class ApiRequestService
 	private _params: Array<ApiParameter> = [];
 
 
-	public get_onreadystatechange(): ((this: XMLHttpRequest, ev: Event) => any) | null
+	public get onreadystatechange(): ((this: XMLHttpRequest, ev: Event) => any) | null
 	{
 		return this._onreadystatechange;
 	}
 
-	public set_onreadystatechange(value: ((this: XMLHttpRequest, ev: Event) => any) | null)
+	public set onreadystatechange(value: ((this: XMLHttpRequest, ev: Event) => any) | null)
 	{
 		this._onreadystatechange = value;
 	}
 
-	public get_method(): ApiRequestMethodEnum
+	public get method(): ApiRequestMethodEnum
 	{
 		return this._method;
 	}
 
-	public set_method(value: ApiRequestMethodEnum)
+	public set method(value: ApiRequestMethodEnum)
 	{
 		this._method = value;
 	}
 
-	public get_async(): boolean
+	public get is_async(): boolean
 	{
 		return this._async;
 	}
 
-	public set_async(async: boolean): void
+	public set is_async(async: boolean)
 	{
 		this._async = async;
 	}
@@ -74,12 +74,12 @@ export class ApiRequestService
 			}
 		}
 
-		if (this.get_onreadystatechange())
+		if (this.onreadystatechange)
 		{
-			httpResponse.onreadystatechange = this.get_onreadystatechange();
+			httpResponse.onreadystatechange = this.onreadystatechange;
 		}
 
-		httpResponse.open(this.get_method(), url, this.get_async());
+		httpResponse.open(this.method, url, this.is_async);
 		httpResponse.send();
 	}
 }

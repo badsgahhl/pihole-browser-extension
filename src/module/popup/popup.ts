@@ -1,6 +1,6 @@
 import {BadgeService, ExtensionBadgeText} from "../../data/storage/BadgeService.js";
 import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../data/api/models/pihole/PiHoleApiStatus.js";
-import {ApiRequestMethodEnum, ApiRequestService} from "../../data/api/service/ApiRequestService.js";
+import {ApiRequestService} from "../../data/api/service/ApiRequestService.js";
 import {PiHoleSettingsDefaults, PiHoleSettingsStorage, StorageAccessService} from "../../data/storage/StorageAccessService.js";
 
 /**
@@ -25,8 +25,7 @@ async function sliderClicked(): Promise<void>
 		}
 	};
 
-	api_request.set_method(ApiRequestMethodEnum.GET);
-	api_request.set_onreadystatechange(onreadystatechange);
+	api_request.onreadystatechange = onreadystatechange;
 
 	const slider_box = <HTMLInputElement> document.getElementById('sliderBox');
 	if (!slider_box.checked)
@@ -101,9 +100,8 @@ async function getPiHoleStatus(): Promise<void>
 		}
 	};
 
-	api_request.set_method(ApiRequestMethodEnum.GET);
 	api_request.add_param('status');
-	api_request.set_onreadystatechange(onreadystatechange);
+	api_request.onreadystatechange = onreadystatechange;
 
 	await api_request.send();
 }

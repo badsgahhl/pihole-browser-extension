@@ -4,8 +4,7 @@
 		"sourceMap": false,
 		"lib": [
 			"dom",
-			"es5",
-			"scripthost",
+			"es6",
 			"es2015.promise"
 		],
 		"rootDir": "src/",
