@@ -12,11 +12,14 @@
 <body>
 <div id="main">
     <div class="status">Pi-Hole Switch</div>
-    <div class="text">Enter the amount of seconds to turn off Pi-Hole.</div>
     <div class="text">Use 0 for permanent</div>
+    <div id="time_div" class="input-group justify-content-center">
+        <label for="time"></label><input class="form-control" disabled type="number" id="time" min="0">
+        <div class="input-group-append">
+            <span class="input-group-text" id="time_unit">s</span>
+        </div>
+    </div>
 
-    <label for="time"><input class="form-control" disabled type="number" id="time" min="0"/></label>
-    <br>
     <label id="switch">
         <input type="checkbox" id="sliderBox">
         <span class="slider"></span>

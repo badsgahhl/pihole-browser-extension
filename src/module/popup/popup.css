@@ -1,5 +1,5 @@
 body {
-    min-width: 180px;
+    min-width: 150px;
     max-width: 190px;
 }
 
@@ -10,13 +10,28 @@ body {
 
 .text {
     font-size: 13px;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     text-align: center;
 }
 
+#time_div {
+    margin-bottom: 10px;
+}
 
 #time {
-    max-width: 100px;
+    max-width: 80px;
+    border-top-left-radius: 5px !important;
+    border-bottom-left-radius: 5px !important;
+}
+
+#time:focus {
+    border-color: #ced4da;
+    box-shadow: unset;
+    outline: none;
+}
+
+#time_unit {
+    min-width: 40px;
 }
 
 .status {
@@ -24,19 +39,6 @@ body {
     text-align: center;
     font-weight: bold;
 }
-
-.enabled {
-    font-size: 16px;
-    text-align: center;
-    color: #22B225;
-}
-
-.disabled {
-    font-size: 16px;
-    text-align: center;
-    color: #F60D1A;
-}
-
 
 /* The switch - the box around the slider */
 #switch {

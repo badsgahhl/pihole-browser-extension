@@ -152,10 +152,29 @@ function changeIcon(data: PiHoleApiStatus): void
 	}
 }
 
+function time_input_changed(): void
+{
+	const input_object = <HTMLInputElement> document.getElementById('time');
+	const unit_object = document.getElementById('time_unit');
+	const infinity_symbol = '∞'
+	console.log(unit_object.innerText);
+
+	if (input_object.valueAsNumber === 0)
+	{
+		unit_object.innerText = infinity_symbol;
+	}
+	else if (unit_object.innerText == infinity_symbol)
+	{
+		unit_object.innerText = 's';
+	}
+}
+
 /**
  * EventListener Section
  */
 document.addEventListener('DOMContentLoaded', load_settings_and_status); //When the page loads get the status
 document.getElementById('sliderBox').addEventListener('click', sliderClicked);
+document.getElementById('time').addEventListener('input', time_input_changed);
+
 
 
