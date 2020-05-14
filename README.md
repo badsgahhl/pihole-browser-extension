@@ -6,6 +6,13 @@ https://github.com/Spencer-Yoder/Remote-Switch-for-Pi-Hole-Chrome
 I reused some of his code and icons to build this extension, but a lot of parts got rebuild.
 This extension is available in the chrome webstore and mozilla addon store.
 
+### Features:
+- Disable your pihole easily with one click
+- Individual url to your pihole
+- Dark Mode depending on your OS Settings
+- Compact UI
+- Settable default disable time
+
 ### How to use:
 
 - Install the extension
