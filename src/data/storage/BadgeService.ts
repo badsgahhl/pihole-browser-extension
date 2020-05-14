@@ -10,8 +10,16 @@ export module BadgeService
 	 * Sets the badge text.
 	 * @param text
 	 */
-	export function set_badge_text(text: ExtensionBadgeText)
+	export function set_badge_text(text: ExtensionBadgeText): void
 	{
+		// Firefox needs white text color.
+		if (typeof browser !== 'undefined')
+		{
+			browser.browserAction.setBadgeTextColor({color: "white"}).then();
+		}
+
+		chrome.browserAction.setBadgeBackgroundColor({color: get_color_for_badge_text(text)});
+
 		chrome.browserAction.setBadgeText({text: text});
 	}
 
@@ -42,6 +50,19 @@ export module BadgeService
 				return ExtensionBadgeText.enabled
 			default:
 				return ExtensionBadgeText.error;
+		}
+	}
+
+	function get_color_for_badge_text(input: ExtensionBadgeText): string
+	{
+		switch (input)
+		{
+			case ExtensionBadgeText.disabled:
+				return 'gray';
+			case ExtensionBadgeText.enabled:
+				return 'green';
+			default:
+				return 'red'
 		}
 	}
 

@@ -69,7 +69,7 @@ async function init(): Promise<void>
 
 	if (!storage.pi_uri_base)
 	{
-		const storage: PiHoleSettingsStorage = {pi_uri_base: "http://pi.hole"};
+		const storage: PiHoleSettingsStorage = {pi_uri_base: PiHoleSettingsDefaults.pi_uri_base.valueOf()};
 
 		StorageAccessService.save_to_local_storage(storage, function() {
 			console.log("Set default URL to http://pi.hole");

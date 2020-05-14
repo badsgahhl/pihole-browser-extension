@@ -11,7 +11,8 @@
 		"outDir": "dist",
 		"types": [
 			//(various types, e.g. jquery, core-js),
-			"chrome"
+			"chrome",
+			"firefox-webext-browser"
 		]
 	},
 	"exclude": [

@@ -1,4 +1,5 @@
 import {StorageAccessService} from "../../storage/StorageAccessService.js";
+import {BadgeService, ExtensionBadgeText} from "../../storage/BadgeService.js";
 
 export class ApiRequestService
 {
@@ -77,6 +78,10 @@ export class ApiRequestService
 		if (this.onreadystatechange)
 		{
 			httpResponse.onreadystatechange = this.onreadystatechange;
+		}
+
+		httpResponse.onerror = function(this: XMLHttpRequest, ev: ProgressEvent) {
+			BadgeService.set_badge_text(ExtensionBadgeText.error);
 		}
 
 		httpResponse.open(this.method, url, this.is_async);

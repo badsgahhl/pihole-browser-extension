@@ -4,6 +4,7 @@
 	"dependencies": {},
 	"devDependencies": {
 		"@types/chrome": "0.0.104",
+		"@types/firefox-webext-browser": "^70.0.1",
 		"ts-loader": "^7.0.0",
 		"typescript": "^3.8.3"
 	},
