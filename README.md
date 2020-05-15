@@ -29,6 +29,16 @@ This extension is available in the chrome webstore and mozilla addon store.
 Please check that you used the correct host address. Use the address where you can see your dashboard page (statistics board).
 For example if your pihole is located at http://192.168.178.2 but you can see your dashboard/admin page at http://192.168.178.2/admin then don't forget to add /admin to the address.
 
+#### Error after clicking the Slider (was "on" before)
+
+This indicates that your API key is probably wrong. In the version >2.0.6 the options will show you if your key is wrong.
+Therefor check that you copied the key correctly and that there are no whitespaces, etc. in it.
+
+#### PiHole doesn't block ads after turning it on
+
+Disabling your pihole works seamlessly. Turning it on, or turning on automatically after the timeout will need some seconds.
+During the start ads will show up, and the popup won't show any status until the pihole is back online. Be patient.
+
 
 This is not an official Pi-Hole application.
 Pi-hole® is a registered trademark of Pi-hole LLC” or “FTLDNS™ is a trademark of Pi-hole LLC
