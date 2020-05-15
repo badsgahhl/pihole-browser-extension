@@ -35,9 +35,11 @@ function set_settings(): void
 	const save_button: HTMLButtonElement = <HTMLButtonElement> document.getElementById('save_button');
 	const function_callback: () => void = function() {
 		const btn_default: string = save_button.textContent;
+		save_button.disabled = true;
 		save_button.textContent = 'Saved!';
 		setTimeout(function() {
 			save_button.textContent = btn_default;
+			save_button.disabled = false;
 		}, 1500);
 	}
 
