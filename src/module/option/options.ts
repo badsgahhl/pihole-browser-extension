@@ -7,16 +7,30 @@ function set_settings(): void
 {
 	const default_disable_time_input: HTMLInputElement = (<HTMLInputElement> document.getElementById('default_time'));
 
-	const storage: PiHoleSettingsStorage = {
-		pi_uri_base: (<HTMLInputElement> document.getElementById('pi_uri_base')).value,
-		api_key: (<HTMLInputElement> document.getElementById('api_key')).value,
-		default_disable_time: default_disable_time_input.valueAsNumber
-	};
+	// Removing spaces from the api_key and pi_uri
+	const api_key = (<HTMLInputElement> document.getElementById('api_key')).value.replace(/\s+/g, '');
+	const pi_uri_base = (<HTMLInputElement> document.getElementById('pi_uri_base')).value.replace(/\s+/g, '')
+
+	// Checks the API Key. We save the key but show a warning if it doesnt match the expression.
+	if (!api_key.match('^[a-f0-9]{64}$'))
+	{
+		toggle_api_warning('Api Key doesn\'t match scheme (64 chars long). It may be invalid!');
+	}
+	else
+	{
+		toggle_api_warning();
+	}
 
 	if (!check_validity_and_error(default_disable_time_input))
 	{
-		return
+		return;
 	}
+
+	const storage: PiHoleSettingsStorage = {
+		pi_uri_base: pi_uri_base,
+		api_key: api_key,
+		default_disable_time: default_disable_time_input.valueAsNumber
+	};
 
 	const save_button: HTMLButtonElement = <HTMLButtonElement> document.getElementById('save_button');
 	const function_callback: () => void = function() {
@@ -38,16 +52,45 @@ function check_validity_and_error(element: HTMLInputElement): boolean
 {
 	if (!element.checkValidity())
 	{
+		const is_invalid_class = 'is-invalid';
+
 		console.warn('Input Value is not valid.')
-		element.setAttribute('style', 'background:red;')
+		element.classList.add(is_invalid_class);
 
 		setTimeout(function() {
-			element.removeAttribute('style');
+			if (element.classList.contains(is_invalid_class))
+			{
+				element.classList.remove(is_invalid_class);
+			}
 		}, 1500);
 
 		return false;
 	}
 	return true;
+}
+
+/**
+ * Toggles the API Warning depending if we want to show an error or not.
+ * @param text
+ */
+function toggle_api_warning(text?: string): void
+{
+	const element = document.getElementById('bottom_warning');
+	const display_none_class = 'd-none';
+
+	if (!text)
+	{
+		element.classList.add(display_none_class);
+		return;
+	}
+
+	element.innerText = text;
+
+	if (element.classList.contains(display_none_class))
+	{
+		element.classList.remove(display_none_class);
+	}
+
 }
 
 //Function fills the storage data into the option input form.

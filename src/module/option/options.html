@@ -22,11 +22,17 @@
 
 <div class="form-group">
     <label for="default_time">Default disable time:</label>
-    <input class="form-control" type="number" id="default_time" min="1" name="Disable Time:">
+    <div id="time_div" class="input-group justify-content-center">
+        <input class="form-control" type="number" id="default_time" min="1" name="Disable Time:">
+        <div class="input-group-append">
+            <span class="input-group-text" id="time_unit">seconds</span>
+        </div>
+    </div>
 </div>
-
 <button type="button" class="btn btn-success" id="save_button" value="Save">Save</button>
-<h6 class="text-center">Not an official Pi-Hole application.</h6>
+<div id="bottom_warning" class="alert alert-warning d-none" role="alert">
+    This is a danger alert—check it out!
+</div>
 
 <script type="module" src="/dist/module/option/options.js"></script>
 </body>

@@ -16,3 +16,13 @@ body {
 .btn-success:focus, .btn-success.focus {
     box-shadow: unset !important;
 }
+
+#bottom_warning {
+    margin-top: 10px;
+}
+
+@-moz-document url-prefix() {
+    .headline {
+        font-size: 16px;
+    }
+}

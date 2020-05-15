@@ -60,7 +60,7 @@ export module BadgeService
 			case ExtensionBadgeText.disabled:
 				return 'gray';
 			case ExtensionBadgeText.enabled:
-				return 'green';
+				return '#1ea23d';
 			default:
 				return 'red'
 		}

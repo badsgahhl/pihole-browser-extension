@@ -34,6 +34,16 @@ body {
     min-width: 40px;
 }
 
+@-moz-document url-prefix() {
+    #time {
+        font-size: 16px;
+    }
+    #time_unit {
+        font-size: 16px;
+    }
+}
+
+
 .status {
     font-size: 16px;
     text-align: center;
