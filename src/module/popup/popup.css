@@ -1,10 +1,14 @@
+* {
+    --card-padding: 5px;
+}
+
 body {
     min-width: 150px;
     max-width: 190px;
 }
 
 #main {
-    margin: 7px 5px 0 5px;
+    margin: 1px 1px 1px 1px;
     text-align: center;
 }
 
@@ -14,8 +18,30 @@ body {
     text-align: center;
 }
 
-#time_div {
-    margin-bottom: 10px;
+.card {
+    width: 100% !important;
+}
+
+.card:nth-child(2) {
+    margin-bottom: 5px;
+}
+
+.card-body {
+    padding: var(--card-padding) !important;
+    font-size: 14px;
+}
+
+.card-header {
+    padding: var(--card-padding) !important;
+    font-size: 16px;
+}
+
+.card-footer {
+    padding: var(--card-padding) !important;
+}
+
+.input-group {
+    margin-bottom: 10px !important;
 }
 
 #time {
@@ -52,7 +78,7 @@ body {
 
 /* The switch - the box around the slider */
 #switch {
-    margin-top: 5px;
+    /* margin-top: 5px; */
     position: relative;
     display: inline-block;
     width: 60px;

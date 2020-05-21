@@ -1,8 +1,33 @@
 import {BadgeService, ExtensionBadgeText} from "../../data/storage/BadgeService.js";
 import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../data/api/models/pihole/PiHoleApiStatus.js";
-import {ApiRequestService} from "../../data/api/service/ApiRequestService.js";
+import {ApiRequestMethodEnum, ApiRequestService} from "../../data/api/service/ApiRequestService.js";
 import {PiHoleSettingsDefaults, PiHoleSettingsStorage, StorageAccessService} from "../../data/storage/StorageAccessService.js";
 import {ApiJsonErrorMessages} from "../../data/api/errors/ApiErrorMessages.js";
+import {TabService} from "../../data/storage/TabService.js";
+import {ApiListMode} from "../../data/api/models/pihole/PiHoleListStatus.js";
+
+
+chrome.webRequest.onBeforeSendHeaders.addListener(
+	function(details) {
+		for (let i = 0; i < details.requestHeaders.length; ++i)
+		{
+			if (details.requestHeaders[i].name === 'Origin')
+			{
+				details.requestHeaders[i].value = '';
+			}
+		}
+
+		return {
+			requestHeaders: details.requestHeaders
+		};
+	}, {
+		urls: ["<all_urls>"]
+	},
+	[
+		"blocking",
+		"requestHeaders",
+		"extraHeaders"
+	]);
 
 /**
  * Function to handler the slider click.
@@ -46,14 +71,14 @@ async function sliderClicked(): Promise<void>
 		}
 		else
 		{
-			api_request.add_param('disable', String(time));
+			api_request.add_get_param('disable', String(time));
 		}
 
 	}
 	else if (slider_box.checked)
 	{
 
-		api_request.add_param('enable');
+		api_request.add_get_param('enable');
 
 	}
 	await api_request.send();
@@ -81,6 +106,8 @@ async function load_settings_and_status(): Promise<void>
 {
 	getPiHoleStatus().then();
 
+	whitelist_blacklist_handler().then();
+
 	const time = <HTMLInputElement> document.getElementById('time');
 
 	const storage: PiHoleSettingsStorage = await StorageAccessService.get_pi_hole_settings();
@@ -92,6 +119,99 @@ async function load_settings_and_status(): Promise<void>
 }
 
 /**
+ * Adds the event handlers for the list buttons
+ */
+async function whitelist_blacklist_handler()
+{
+	const url = (await TabService.get_current_tab_url_cleaned());
+
+	if (!url)
+	{
+		return;
+	}
+
+	document.getElementById('list_card').classList.remove('d-none');
+
+	document.getElementById('current_url').innerText = url;
+
+
+	/**
+	 * EventListener for the Buttons
+	 */
+	document.getElementById('list_action_white').addEventListener('click', (event) => list_domain(url, ApiListMode.whitelist, event));
+	document.getElementById('list_action_black').addEventListener('click', (event) => list_domain(url, ApiListMode.blacklist, event));
+
+}
+
+/**
+ * This function will add a domain to the whitelist or blocklist
+ * @param domain
+ * @param mode
+ * @param event
+ */
+function list_domain(domain: string, mode: ApiListMode, event: MouseEvent): void
+{
+	const button_element = <HTMLButtonElement> event.currentTarget;
+	toggle_list_button(button_element);
+
+	const api_request = new ApiRequestService();
+
+	api_request.method = ApiRequestMethodEnum.POST;
+	api_request.add_get_param('list', mode);
+	api_request.add_get_param('add', domain);
+	api_request.add_post_param('comment', 'Added via PiHole Remote Extension');
+
+	api_request.onreadystatechange = function() {
+		console.error(this.response);
+		if (this.readyState === 4 && this.status === 200)
+		{
+			// We wait 12 Seconds until we can assume that the pihole is back online.
+			setTimeout(() => toggle_list_button(button_element), 12000)
+		}
+	}
+	api_request.send().then();
+}
+
+/**
+ * Toggles to list buttons between showing loading icon and the normal svg.
+ * Will also block both buttons until api request is completed.
+ */
+function toggle_list_button(clicked_button: HTMLElement): void
+{
+	const list_buttons = document.querySelectorAll('.btn-list');
+	list_buttons.forEach((object: HTMLButtonElement) => {
+		const is_pressed_button = object.isEqualNode(clicked_button);
+		if (object.disabled)
+		{
+			if (is_pressed_button)
+			{
+				object.querySelectorAll('.spinner-border').forEach((object) => {
+					object.classList.add('d-none');
+				});
+				object.querySelectorAll('svg').forEach((object) => {
+					object.classList.remove('d-none');
+				});
+			}
+			object.disabled = false;
+		}
+		else
+		{
+			if (is_pressed_button)
+			{
+				object.querySelectorAll('.spinner-border').forEach((object) => {
+					object.classList.remove('d-none');
+				});
+				object.querySelectorAll('svg').forEach((object) => {
+					object.classList.add('d-none');
+				});
+			}
+
+			object.disabled = true;
+		}
+	});
+}
+
+/**
  * Function to get the current PiHoleStatus
  */
 async function getPiHoleStatus(): Promise<void>
@@ -99,6 +219,7 @@ async function getPiHoleStatus(): Promise<void>
 	const api_request: ApiRequestService = new ApiRequestService();
 
 	const onreadystatechange = function() {
+		console.log(this.response)
 		if (this.readyState === 4 && this.status === 200)
 		{
 			// Action to be performed when the document is read;
@@ -116,7 +237,7 @@ async function getPiHoleStatus(): Promise<void>
 		}
 	};
 
-	api_request.add_param('status');
+	api_request.add_get_param('status');
 	api_request.onreadystatechange = onreadystatechange;
 
 	await api_request.send();
@@ -175,6 +296,7 @@ function time_input_changed(): void
 document.addEventListener('DOMContentLoaded', load_settings_and_status); //When the page loads get the status
 document.getElementById('sliderBox').addEventListener('click', sliderClicked);
 document.getElementById('time').addEventListener('input', time_input_changed);
+
 
 
 

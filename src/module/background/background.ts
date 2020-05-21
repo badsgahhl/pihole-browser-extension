@@ -54,7 +54,7 @@ async function checkStatus(): Promise<void>
 		}
 	};
 
-	api_request.add_param('status');
+	api_request.add_get_param('status');
 	api_request.onreadystatechange = onreadystatechange;
 
 	await api_request.send();

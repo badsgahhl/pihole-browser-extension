@@ -7,23 +7,68 @@
     <link rel="stylesheet" href="../../libs/css/bootstrap.css">
     <title>PiHole Remote Popup</title>
     <link rel="stylesheet" href="../general/darkmode.css">
+    <script src="../../libs/jquery-3.5.1.min.js"></script>
 </head>
 
 <body>
 <div id="main">
-    <div class="status">Pi-Hole Switch</div>
-    <div class="text">Use 0 for permanent</div>
-    <div id="time_div" class="input-group justify-content-center">
-        <label for="time"></label><input class="form-control" disabled type="number" id="time" min="0">
-        <div class="input-group-append">
-            <span class="input-group-text" id="time_unit">s</span>
+    <div class="card">
+        <div class="card-header">
+            <div class="status">Pi-Hole Switch</div>
+        </div>
+        <div class="card-body">
+            <div class="text">Use 0 for permanent</div>
+            <div id="time_div" class="input-group justify-content-center">
+                <label for="time"></label><input class="form-control" disabled type="number" id="time" min="0">
+                <div class="input-group-append">
+                    <span class="input-group-text" id="time_unit">s</span>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-center" style="max-height: 45px">
+            <label id="switch">
+                <input type="checkbox" id="sliderBox">
+                <span class="slider justify-content-center"></span>
+            </label>
         </div>
     </div>
 
-    <label id="switch">
-        <input type="checkbox" id="sliderBox">
-        <span class="slider"></span>
-    </label>
+
+    <div class="card d-none" id="list_card">
+        <div class="card-header text-center font-weight-bold">
+            Current Url:
+        </div>
+        <div id="current_url" class="card-body text-center">
+        </div>
+        <div class="card-footer text-center">
+            <button title="Whitelist" class="btn btn-success btn-sm btn-list" id="list_action_white">
+                <svg class="bi bi-check-circle" width="20px" height="20px" viewBox="0 0 16 16" fill="currentColor"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                          d="M15.354 2.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3-3a.5.5 0 11.708-.708L8 9.293l6.646-6.647a.5.5 0 01.708 0z"
+                          clip-rule="evenodd"/>
+                    <path fill-rule="evenodd"
+                          d="M8 2.5A5.5 5.5 0 1013.5 8a.5.5 0 011 0 6.5 6.5 0 11-3.25-5.63.5.5 0 11-.5.865A5.472 5.472 0 008 2.5z"
+                          clip-rule="evenodd"/>
+                </svg>
+                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+            </button>
+            <button title="Blacklist" class="btn btn-danger btn-sm btn-list" id="list_action_black">
+                <svg class="bi bi-x-circle" width="20px" height="20px" viewBox="0 0 16 16" fill="currentColor"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M8 15A7 7 0 108 1a7 7 0 000 14zm0 1A8 8 0 108 0a8 8 0 000 16z"
+                          clip-rule="evenodd"/>
+                    <path fill-rule="evenodd"
+                          d="M11.854 4.146a.5.5 0 010 .708l-7 7a.5.5 0 01-.708-.708l7-7a.5.5 0 01.708 0z"
+                          clip-rule="evenodd"/>
+                    <path fill-rule="evenodd"
+                          d="M4.146 4.146a.5.5 0 000 .708l7 7a.5.5 0 00.708-.708l-7-7a.5.5 0 00-.708 0z"
+                          clip-rule="evenodd"/>
+                </svg>
+                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+            </button>
+        </div>
+    </div>
 </div>
 <script type="module" src="/dist/module/popup/popup.js"></script>
 </body>
