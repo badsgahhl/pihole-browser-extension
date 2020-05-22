@@ -7,27 +7,7 @@ import {TabService} from "../../data/storage/TabService.js";
 import {ApiListMode} from "../../data/api/models/pihole/PiHoleListStatus.js";
 
 
-chrome.webRequest.onBeforeSendHeaders.addListener(
-	function(details) {
-		for (let i = 0; i < details.requestHeaders.length; ++i)
-		{
-			if (details.requestHeaders[i].name === 'Origin')
-			{
-				details.requestHeaders[i].value = '';
-			}
-		}
 
-		return {
-			requestHeaders: details.requestHeaders
-		};
-	}, {
-		urls: ["<all_urls>"]
-	},
-	[
-		"blocking",
-		"requestHeaders",
-		"extraHeaders"
-	]);
 
 /**
  * Function to handler the slider click.
@@ -144,13 +124,46 @@ async function whitelist_blacklist_handler()
 }
 
 /**
+ * Function to override the webrequest header
+ * @param details
+ */
+function get_webrequest_origin_modifier_callback(details)
+{
+	for (let i = 0; i < details.requestHeaders.length; ++i)
+	{
+		console.log("RUN");
+		if (details.requestHeaders[i].name === 'Origin')
+		{
+			details.requestHeaders[i].value = '';
+		}
+	}
+
+	return {
+		requestHeaders: details.requestHeaders
+	}
+}
+
+/**
  * This function will add a domain to the whitelist or blocklist
  * @param domain
  * @param mode
  * @param event
  */
-function list_domain(domain: string, mode: ApiListMode, event: MouseEvent): void
+async function list_domain(domain: string, mode: ApiListMode, event: MouseEvent): Promise<void>
 {
+	const pihole_url = (await StorageAccessService.get_pi_hole_settings()).pi_uri_base;
+
+	// Registering the handler only after the button click. We dont want to change the headers of anything else
+	chrome.webRequest.onBeforeSendHeaders.addListener(
+		get_webrequest_origin_modifier_callback, {
+			urls: [pihole_url + "/*"]
+		},
+		[
+			"blocking",
+			"requestHeaders",
+			"extraHeaders"
+		]);
+
 	const button_element = <HTMLButtonElement> event.currentTarget;
 	toggle_list_button(button_element);
 
@@ -165,8 +178,9 @@ function list_domain(domain: string, mode: ApiListMode, event: MouseEvent): void
 		console.error(this.response);
 		if (this.readyState === 4 && this.status === 200)
 		{
+			chrome.webRequest.onBeforeSendHeaders.removeListener(get_webrequest_origin_modifier_callback);
 			// We wait 12 Seconds until we can assume that the pihole is back online.
-			setTimeout(() => toggle_list_button(button_element), 12000)
+			setTimeout(() => toggle_list_button(button_element), 12000);
 		}
 	}
 	api_request.send().then();
