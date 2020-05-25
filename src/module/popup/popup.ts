@@ -208,15 +208,19 @@ async function list_domain(mode: ApiListMode, buttonElement: HTMLButtonElement):
 	}
 
 	// Registering the handler only after the button click. We dont want to change the headers of anything else
-	chrome.webRequest.onBeforeSendHeaders.addListener(
-		get_web_request_origin_modifier_callback, {
-			urls: [pi_url + "/*"]
-		},
-		[
-			"blocking",
-			"requestHeaders",
-			"extraHeaders"
-		]);
+	// This is only needed in chrome!
+	if (typeof browser === 'undefined')
+	{
+		chrome.webRequest.onBeforeSendHeaders.addListener(
+			get_web_request_origin_modifier_callback, {
+				urls: [pi_url + "/*"]
+			},
+			[
+				"blocking",
+				"requestHeaders",
+				"extraHeaders"
+			]);
+	}
 
 	toggle_list_button(buttonElement);
 
@@ -230,7 +234,10 @@ async function list_domain(mode: ApiListMode, buttonElement: HTMLButtonElement):
 	api_request.onreadystatechange = function() {
 		if (this.readyState === 4 && this.status === 200)
 		{
-			chrome.webRequest.onBeforeSendHeaders.removeListener(get_web_request_origin_modifier_callback);
+			if (typeof browser === 'undefined')
+			{
+				chrome.webRequest.onBeforeSendHeaders.removeListener(get_web_request_origin_modifier_callback);
+			}
 			// We wait 12 Seconds until we can assume that the pihole is back online.
 			setTimeout(() => toggle_list_button(buttonElement), 12000);
 		}
