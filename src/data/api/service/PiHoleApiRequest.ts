@@ -1,7 +1,10 @@
 import {StorageAccessService} from "../../storage/StorageAccessService.js";
 import {BadgeService, ExtensionBadgeText} from "../../storage/BadgeService.js";
 
-export class ApiRequestService
+/**
+ * Class to access the pihole api with get,post params etc.
+ */
+export class PiHoleApiRequest
 {
 	private _onreadystatechange: ((this: XMLHttpRequest, ev: Event) => any) | null = null;
 	private _method: ApiRequestMethodEnum = ApiRequestMethodEnum.GET;

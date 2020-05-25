@@ -1,20 +1,19 @@
 import {BadgeService, ExtensionBadgeText} from "../../data/storage/BadgeService.js";
 import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../data/api/models/pihole/PiHoleApiStatus.js";
-import {ApiRequestMethodEnum, ApiRequestService} from "../../data/api/service/ApiRequestService.js";
+import {ApiRequestMethodEnum, PiHoleApiRequest} from "../../data/api/service/PiHoleApiRequest.js";
 import {PiHoleSettingsDefaults, PiHoleSettingsStorage, StorageAccessService} from "../../data/storage/StorageAccessService.js";
 import {ApiJsonErrorMessages} from "../../data/api/errors/ApiErrorMessages.js";
 import {TabService} from "../../data/storage/TabService.js";
-import {ApiListMode} from "../../data/api/models/pihole/PiHoleListStatus.js";
+import {ApiListMode, PiHoleVersions} from "../../data/api/models/pihole/PiHoleListStatus.js";
 
-
-
+let current_tab_url: string = '';
 
 /**
  * Function to handler the slider click.
  */
 async function sliderClicked(): Promise<void>
 {
-	const api_request: ApiRequestService = new ApiRequestService();
+	const api_request: PiHoleApiRequest = new PiHoleApiRequest();
 
 	api_request.onreadystatechange = function() {
 		if (this.readyState === 4 && this.status === 200)
@@ -103,35 +102,85 @@ async function load_settings_and_status(): Promise<void>
  */
 async function whitelist_blacklist_handler()
 {
-	const url = (await TabService.get_current_tab_url_cleaned());
+	const list_action_white = <HTMLButtonElement> document.getElementById('list_action_white');
+	const list_action_black = <HTMLButtonElement> document.getElementById('list_action_black');
+	list_action_white.addEventListener('click', () => list_domain(ApiListMode.whitelist, list_action_white));
+	list_action_black.addEventListener('click', () => list_domain(ApiListMode.blacklist, list_action_black));
+}
+
+/**
+ * Singleton like. We cache the domain for each instance of the popup
+ * to prevent wrong domains if the users switches the tab an didn't close the popup, or
+ * other weired scenarios.
+ */
+async function get_current_tab_url_cleaned_cached(): Promise<string>
+{
+	if (current_tab_url.length <= 0)
+	{
+		current_tab_url = (await TabService.get_current_tab_url_cleaned());
+	}
+	return current_tab_url;
+}
+
+/**
+ * Shows or hides the list feature card depending on the pihole version, url, and status
+ */
+async function toggle_list_card(): Promise<void>
+{
+	const card_object = document.getElementById('list_card');
+
+	const url = (await get_current_tab_url_cleaned_cached());
 
 	if (!url)
 	{
 		return;
 	}
 
-	document.getElementById('list_card').classList.remove('d-none');
-
 	document.getElementById('current_url').innerText = url;
 
+	const request = new PiHoleApiRequest();
 
-	/**
-	 * EventListener for the Buttons
-	 */
-	document.getElementById('list_action_white').addEventListener('click', (event) => list_domain(url, ApiListMode.whitelist, event));
-	document.getElementById('list_action_black').addEventListener('click', (event) => list_domain(url, ApiListMode.blacklist, event));
+	request.add_get_param('versions');
 
+	const version_promise: Promise<number> = new Promise((resolve) => {
+		request.onreadystatechange = function() {
+			if (this.readyState === 4 && this.status === 200)
+			{
+				try
+				{
+					const data: PiHoleVersions = JSON.parse(this.response);
+					if (data.FTL_current)
+					{
+						resolve(Number(data.FTL_current.replace('v', '')));
+					}
+				}
+				catch (e)
+				{
+				}
+			}
+		}
+		request.send();
+	});
+
+
+	const current_ftl_version: number = (await version_promise);
+
+	// TODO: Needs a higher version
+	if (current_ftl_version.valueOf() >= 5)
+	{
+		card_object.classList.remove('d-none');
+	}
 }
 
 /**
- * Function to override the webrequest header
+ * Function to override the webrequest header.
+ * This is needed to go around the pihole cors security policies.
  * @param details
  */
-function get_webrequest_origin_modifier_callback(details)
+function get_web_request_origin_modifier_callback(details)
 {
 	for (let i = 0; i < details.requestHeaders.length; ++i)
 	{
-		console.log("RUN");
 		if (details.requestHeaders[i].name === 'Origin')
 		{
 			details.requestHeaders[i].value = '';
@@ -144,19 +193,24 @@ function get_webrequest_origin_modifier_callback(details)
 }
 
 /**
- * This function will add a domain to the whitelist or blocklist
- * @param domain
+ * This function will add a domain to the whitelist or block list
  * @param mode
- * @param event
+ * @param buttonElement
  */
-async function list_domain(domain: string, mode: ApiListMode, event: MouseEvent): Promise<void>
+async function list_domain(mode: ApiListMode, buttonElement: HTMLButtonElement): Promise<void>
 {
-	const pihole_url = (await StorageAccessService.get_pi_hole_settings()).pi_uri_base;
+	const pi_url = (await StorageAccessService.get_pi_hole_settings()).pi_uri_base;
+	const domain = (await get_current_tab_url_cleaned_cached());
+
+	if (!pi_url || !domain)
+	{
+		return;
+	}
 
 	// Registering the handler only after the button click. We dont want to change the headers of anything else
 	chrome.webRequest.onBeforeSendHeaders.addListener(
-		get_webrequest_origin_modifier_callback, {
-			urls: [pihole_url + "/*"]
+		get_web_request_origin_modifier_callback, {
+			urls: [pi_url + "/*"]
 		},
 		[
 			"blocking",
@@ -164,10 +218,9 @@ async function list_domain(domain: string, mode: ApiListMode, event: MouseEvent)
 			"extraHeaders"
 		]);
 
-	const button_element = <HTMLButtonElement> event.currentTarget;
-	toggle_list_button(button_element);
+	toggle_list_button(buttonElement);
 
-	const api_request = new ApiRequestService();
+	const api_request = new PiHoleApiRequest();
 
 	api_request.method = ApiRequestMethodEnum.POST;
 	api_request.add_get_param('list', mode);
@@ -175,12 +228,11 @@ async function list_domain(domain: string, mode: ApiListMode, event: MouseEvent)
 	api_request.add_post_param('comment', 'Added via PiHole Remote Extension');
 
 	api_request.onreadystatechange = function() {
-		console.error(this.response);
 		if (this.readyState === 4 && this.status === 200)
 		{
-			chrome.webRequest.onBeforeSendHeaders.removeListener(get_webrequest_origin_modifier_callback);
+			chrome.webRequest.onBeforeSendHeaders.removeListener(get_web_request_origin_modifier_callback);
 			// We wait 12 Seconds until we can assume that the pihole is back online.
-			setTimeout(() => toggle_list_button(button_element), 12000);
+			setTimeout(() => toggle_list_button(buttonElement), 12000);
 		}
 	}
 	api_request.send().then();
@@ -230,10 +282,9 @@ function toggle_list_button(clicked_button: HTMLElement): void
  */
 async function getPiHoleStatus(): Promise<void>
 {
-	const api_request: ApiRequestService = new ApiRequestService();
+	const api_request: PiHoleApiRequest = new PiHoleApiRequest();
 
 	const onreadystatechange = function() {
-		console.log(this.response)
 		if (this.readyState === 4 && this.status === 200)
 		{
 			// Action to be performed when the document is read;
@@ -278,6 +329,7 @@ function changeIcon(data: PiHoleApiStatus): void
 		sliderBox.disabled = false;   //turn on the input box
 		sliderBox.checked = true;
 		BadgeService.set_badge_text(ExtensionBadgeText.enabled);   //set badge text to on
+		toggle_list_card().then();
 	}
 	else
 	{   //If there is an API key error
@@ -292,7 +344,6 @@ function time_input_changed(): void
 	const input_object = <HTMLInputElement> document.getElementById('time');
 	const unit_object = document.getElementById('time_unit');
 	const infinity_symbol = '∞'
-	console.log(unit_object.innerText);
 
 	if (input_object.valueAsNumber === 0)
 	{
