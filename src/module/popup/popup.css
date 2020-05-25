@@ -24,7 +24,11 @@ body {
 }
 
 .card:nth-child(2) {
-    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+#current_url {
+    -webkit-transition: background-color 500ms ease;
 }
 
 .card-body {

@@ -238,8 +238,34 @@ async function list_domain(mode: ApiListMode, buttonElement: HTMLButtonElement):
 			{
 				chrome.webRequest.onBeforeSendHeaders.removeListener(get_web_request_origin_modifier_callback);
 			}
-			// We wait 12 Seconds until we can assume that the pihole is back online.
-			setTimeout(() => toggle_list_button(buttonElement), 12000);
+
+			const response: string = this.response;
+			const current_url_element = document.getElementById('current_url');
+
+			/**
+			 * Changing the background color depending on the status of adding the url.
+			 * Orange: Url was skipped by PIHOLE
+			 * Green: URL was added to the list.
+			 */
+			if (response.includes('skipped'))
+			{
+				toggle_list_button(buttonElement);
+				current_url_element.classList.add('bg-warning')
+				setTimeout(() => {
+					current_url_element.classList.remove('bg-warning');
+				}, 1500)
+			}
+			else if (response.includes('added'))
+			{
+				// We wait 3.5 Seconds until we can assume that the pihole is back online.
+				current_url_element.classList.add('bg-success')
+				setTimeout(function() {
+					current_url_element.classList.remove('bg-success');
+				}, 1500)
+				setTimeout(() => {
+					toggle_list_button(buttonElement);
+				}, 3500);
+			}
 		}
 	}
 	api_request.send().then();
