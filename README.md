@@ -1,10 +1,13 @@
-# Switch-for-PiHole
+# Switch-for-PiHole ![t](https://github.com/badsgahhl/pihole-chrome-extension/blob/master/icon/icon-48.png?raw=true)
 
 This is a small extension to revive the project of Yoder Spencer.
 https://github.com/Spencer-Yoder/Remote-Switch-for-Pi-Hole-Chrome	
 
 I reused some of his code and icons to build this extension, but a lot of parts got rebuild.
 This extension is available in the chrome webstore and mozilla addon store.
+
+![alt text](https://cdn.glaser.casa/s/B7bDBr8oVP_807c35a29a748ca0d4cbda4ced9c65613a0037de6bbba3059e.png)
+
 
 ### Features:
 - Disable your pihole easily with one click
