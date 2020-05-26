@@ -142,7 +142,7 @@ async function toggle_list_card(): Promise<void>
 
 	request.add_get_param('versions');
 
-	const version_promise: Promise<number> = new Promise((resolve) => {
+	const version_promise: Promise<string> = new Promise((resolve) => {
 		request.onreadystatechange = function() {
 			if (this.readyState === 4 && this.status === 200)
 			{
@@ -151,22 +151,21 @@ async function toggle_list_card(): Promise<void>
 					const data: PiHoleVersions = JSON.parse(this.response);
 					if (data.FTL_current)
 					{
-						resolve(Number(data.FTL_current.replace('v', '')));
+						resolve(data.FTL_current.replace('v', ''));
 					}
 				}
 				catch (e)
 				{
+					resolve('none')
 				}
 			}
 		}
 		request.send();
 	});
 
-
-	const current_ftl_version: number = (await version_promise);
-
+	const current_ftl_version: string = (await version_promise);
 	// TODO: Needs a higher version
-	if (current_ftl_version.valueOf() >= 5)
+	if (current_ftl_version == 'Dev' || Number(current_ftl_version) >= 5)
 	{
 		card_object.classList.remove('d-none');
 	}
@@ -249,11 +248,13 @@ async function list_domain(mode: ApiListMode, buttonElement: HTMLButtonElement):
 			 */
 			if (response.includes('skipped'))
 			{
-				toggle_list_button(buttonElement);
-				current_url_element.classList.add('bg-warning')
 				setTimeout(() => {
-					current_url_element.classList.remove('bg-warning');
-				}, 1500)
+					toggle_list_button(buttonElement);
+					current_url_element.classList.add('bg-warning')
+					setTimeout(() => {
+						current_url_element.classList.remove('bg-warning');
+					}, 1500)
+				}, 500);
 			}
 			else if (response.includes('added'))
 			{
