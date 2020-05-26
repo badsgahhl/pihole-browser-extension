@@ -35,7 +35,7 @@ For example if your pihole is located at http://192.168.178.2 but you can see yo
 #### Error after clicking the Slider (was "on" before)
 
 This indicates that your API key is probably wrong. In the version >2.0.6 the options will show you if your key is wrong.
-Therefor check that you copied the key correctly and that there are no whitespaces, etc. in it.
+Check that you copied the key correctly and that there are no whitespaces, etc. in it.
 
 #### PiHole doesn't block ads after turning it on
 
