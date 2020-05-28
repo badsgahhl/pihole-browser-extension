@@ -1,6 +1,6 @@
 {
 	"name": "switch-for-pihole-chrome",
-	"version": "2.0.6",
+	"version": "2.1.0",
 	"dependencies": {},
 	"devDependencies": {
 		"@types/chrome": "0.0.104",
@@ -11,7 +11,9 @@
 	"description": "Remote Switch for Pi-Hole to enable and disable the server with the specified time provide by the user without having to open a new tab. No other installs are required.",
 	"main": "src/module/background/background.ts",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "tsc -watch",
+		"build": "tsc --project tsconfig.json && ./create_package.sh"
 	},
 	"repository": {
 		"type": "git",

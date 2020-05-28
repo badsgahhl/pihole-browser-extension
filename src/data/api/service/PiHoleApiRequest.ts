@@ -1,12 +1,16 @@
 import {StorageAccessService} from "../../storage/StorageAccessService.js";
 import {BadgeService, ExtensionBadgeText} from "../../storage/BadgeService.js";
 
-export class ApiRequestService
+/**
+ * Class to access the pihole api with get,post params etc.
+ */
+export class PiHoleApiRequest
 {
 	private _onreadystatechange: ((this: XMLHttpRequest, ev: Event) => any) | null = null;
 	private _method: ApiRequestMethodEnum = ApiRequestMethodEnum.GET;
 	private _async: boolean = true;
-	private _params: Array<ApiParameter> = [];
+	private _get_params: Array<ApiParameter> = [];
+	private _post_params: Array<ApiParameter> = [];
 
 
 	public get onreadystatechange(): ((this: XMLHttpRequest, ev: Event) => any) | null
@@ -39,13 +43,22 @@ export class ApiRequestService
 		this._async = async;
 	}
 
-	public add_param(key: string, value?: string): void
+	public add_get_param(key: string, value?: string): void
 	{
 		if (!value)
 		{
 			value = null;
 		}
-		this._params.push({[key]: value})
+		this._get_params.push({[key]: value})
+	}
+
+	public add_post_param(key: string, value?: string): void
+	{
+		if (!value)
+		{
+			value = null;
+		}
+		this._post_params.push({[key]: value})
 	}
 
 	public async send(): Promise<void>
@@ -62,9 +75,9 @@ export class ApiRequestService
 
 		let url: string = url_base + "/api.php?auth=" + api_key;
 
-		for (let i = 0; i < this._params.length; i++)
+		for (let i = 0; i < this._get_params.length; i++)
 		{
-			const params: ApiParameter = this._params[i];
+			const params: ApiParameter = this._get_params[i];
 			if (params)
 			{
 				const key: string = Object.keys(params)[0];
@@ -80,12 +93,36 @@ export class ApiRequestService
 			httpResponse.onreadystatechange = this.onreadystatechange;
 		}
 
-		httpResponse.onerror = function(this: XMLHttpRequest, ev: ProgressEvent) {
+		httpResponse.onerror = function(this: XMLHttpRequest) {
 			BadgeService.set_badge_text(ExtensionBadgeText.error);
 		}
 
 		httpResponse.open(this.method, url, this.is_async);
-		httpResponse.send();
+
+		if (this.method === ApiRequestMethodEnum.POST)
+		{
+			let post_params = '';
+			for (let i = 0; i < this._post_params.length; i++)
+			{
+				const params: ApiParameter = this._post_params[i];
+				if (params)
+				{
+					const key: string = Object.keys(params)[0];
+					const value: string = Object.keys(params).map(key => params[key])[0];
+					if (i > 0)
+					{
+						post_params += '&'
+					}
+					post_params += key + "=" + value;
+				}
+			}
+			httpResponse.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+			httpResponse.send(post_params);
+		}
+		else
+		{
+			httpResponse.send();
+		}
 	}
 }
 
@@ -96,6 +133,6 @@ interface ApiParameter
 
 export enum ApiRequestMethodEnum
 {
-	GET = 'Get',
-	POST = 'Post'
+	GET = 'GET',
+	POST = 'POST'
 }

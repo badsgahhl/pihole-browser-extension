@@ -1,7 +1,7 @@
 import {BadgeService, ExtensionBadgeText} from "../../data/storage/BadgeService.js";
 import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../data/api/models/pihole/PiHoleApiStatus.js";
 import {PiHoleSettingsDefaults, PiHoleSettingsStorage, StorageAccessService} from "../../data/storage/StorageAccessService.js";
-import {ApiRequestService} from "../../data/api/service/ApiRequestService.js";
+import {PiHoleApiRequest} from "../../data/api/service/PiHoleApiRequest.js";
 import {ApiJsonErrorMessages} from "../../data/api/errors/ApiErrorMessages.js";
 
 /**
@@ -18,7 +18,7 @@ window.setInterval(checkStatus, 15000); //Keep checking every 15 seconds
  */
 async function checkStatus(): Promise<void>
 {
-	const api_request: ApiRequestService = new ApiRequestService();
+	const api_request: PiHoleApiRequest = new PiHoleApiRequest();
 
 	const onreadystatechange = function() {
 		if (this.readyState === 4 && this.status === 200)
@@ -54,7 +54,7 @@ async function checkStatus(): Promise<void>
 		}
 	};
 
-	api_request.add_param('status');
+	api_request.add_get_param('status');
 	api_request.onreadystatechange = onreadystatechange;
 
 	await api_request.send();

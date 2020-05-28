@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Switch for PiHole",
-	"version": "2.0.6",
+	"version": "2.1.0",
 	"author": "Pascal Glaser",
 	"description": "Small Extension to enable/disable your PiHole.",
 	"icons": {
@@ -21,11 +21,15 @@
 		"page": "src/module/option/options.html"
 	},
 	"background": {
+		"persistent": true,
 		"page": "src/module/background/background.html"
 	},
 	"permissions": [
 		"storage",
 		"http://*/*",
-		"https://*/*"
+		"https://*/*",
+		"webRequest",
+		"webRequestBlocking",
+		"activeTab"
 	]
 }
