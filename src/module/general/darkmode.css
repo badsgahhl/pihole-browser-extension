@@ -6,23 +6,23 @@
 
 @media (prefers-color-scheme: dark) {
     body {
-        background: var(--black-mode-background) !important;
+        background: var(--black-mode-background);
         color: white !important;
     }
 
     .card-header {
-        background: var(--black-mode-background) !important;
+        background: var(--black-mode-background);
     }
 
     .card-body {
-        background: var(--black-mode-background-light) !important;
+        background: var(--black-mode-background-light);
     }
 
     .card-footer {
-        background: var(--black-mode-background) !important;
+        background: var(--black-mode-background);
     }
 
     .card {
-        border-color: var(--black-mode-color-light-blue-grey) !important;
+        border-color: var(--black-mode-color-light-blue-grey);
     }
 }

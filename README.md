@@ -39,6 +39,21 @@ Therefor check that you copied the key correctly and that there are no whitespac
 Disabling your pihole works seamlessly. Turning it on, or turning on automatically after the timeout will need some seconds.
 During the start ads will show up, and the popup won't show any status until the pihole is back online. Be patient.
 
+#### Black- / Whitelisting domains
+With the extension version v2.1 you are able to black and whitelist the current tabs url. This feature requires PiHole v5.
+<br>Meaning of colors:
+ - Orange: The domain wasn't added to any list
+ - Green: The domain was successfully added to the list
+ 
+**Known Bug:** Domains which you have manually added to one of the both lists cannot be added/changed via the extension.
+This will be fixed in the next version of PiHole.
+
+**What does that mean:** For example you added a domain to your blacklist (example.com), then you visit this domain in your browser.
+You want to whitelist this domain with the extension now. If you click onto the whitelist button it will respond with orange and
+the domain cannot be added to the whitelist (cannot be moved from the black to the whitelist). This will work in a future update of PiHole.
+
+ 
+
 
 This is not an official Pi-Hole application.
 Pi-hole® is a registered trademark of Pi-hole LLC” or “FTLDNS™ is a trademark of Pi-hole LLC

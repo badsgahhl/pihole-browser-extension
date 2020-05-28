@@ -164,7 +164,7 @@ async function toggle_list_card(): Promise<void>
 	});
 
 	const current_ftl_version: string = (await version_promise);
-	// TODO: Needs a higher version
+	// TODO: Needs a higher version later with the fix
 	if (current_ftl_version == 'Dev' || Number(current_ftl_version) >= 5)
 	{
 		card_object.classList.remove('d-none');
