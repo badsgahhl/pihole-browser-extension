@@ -58,6 +58,5 @@ the domain cannot be added to the whitelist (cannot be moved from the black to t
 
  
 
-**This is not an official Pi-Hole application.**
-<br>
-Please use the issue templates in this repository for bugs. The main PiHole project is not responsible for any malfunction that is caused by the use of the extension!
+### This is not an official Pi-Hole application.
+Please use the issue templates in **this** repository for bugs. The main PiHole project **is not responsible** for any malfunction that is caused by the use of the extension!
