@@ -15,6 +15,7 @@ This extension is available in the chrome webstore and mozilla addon store.
 - Dark Mode depending on your OS Settings
 - Compact UI
 - Settable default disable time
+- White-/Blacklist your current tabs url with one click (PiHole v5.0+)
 
 ### How to use:
 
