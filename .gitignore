@@ -200,4 +200,5 @@ temp/
 # End of https://www.gitignore.io/api/node,intellij
 
 # Created package for chrome webstore
-package.zip
+package.chrome.zip
+package.firefox.zip
