@@ -3,10 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="popup.css"/>
-    <link rel="stylesheet" href="../../libs/css/bootstrap.css">
     <title>PiHole Remote Popup</title>
-    <link rel="stylesheet" href="../general/darkmode.css">
 </head>
 
 <body>
@@ -41,7 +38,8 @@
         </div>
         <div class="card-footer text-center">
             <button title="Whitelist" class="btn btn-success btn-sm btn-list" id="list_action_white">
-                <svg class="bi bi-check-circle" width="20px" height="20px" viewBox="0 0 16 16" fill="currentColor"
+                <svg style="vertical-align: bottom" class="bi bi-check-circle" width="20px" height="20px"
+                     viewBox="0 0 16 16" fill="currentColor"
                      xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd"
                           d="M15.354 2.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3-3a.5.5 0 11.708-.708L8 9.293l6.646-6.647a.5.5 0 01.708 0z"
@@ -50,10 +48,13 @@
                           d="M8 2.5A5.5 5.5 0 1013.5 8a.5.5 0 011 0 6.5 6.5 0 11-3.25-5.63.5.5 0 11-.5.865A5.472 5.472 0 008 2.5z"
                           clip-rule="evenodd"/>
                 </svg>
-                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                <span style="width: 18px; height: 18px;" class="spinner-border spinner-border-sm d-none"
+                      role="status"
+                      aria-hidden="true"></span>
             </button>
             <button title="Blacklist" class="btn btn-danger btn-sm btn-list" id="list_action_black">
-                <svg class="bi bi-x-circle" width="20px" height="20px" viewBox="0 0 16 16" fill="currentColor"
+                <svg style="vertical-align: bottom" class="bi bi-x-circle" width="20px" height="20px"
+                     viewBox="0 0 16 16" fill="currentColor"
                      xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" d="M8 15A7 7 0 108 1a7 7 0 000 14zm0 1A8 8 0 108 0a8 8 0 000 16z"
                           clip-rule="evenodd"/>
@@ -64,12 +65,13 @@
                           d="M4.146 4.146a.5.5 0 000 .708l7 7a.5.5 0 00.708-.708l-7-7a.5.5 0 00-.708 0z"
                           clip-rule="evenodd"/>
                 </svg>
-                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                <span style="width: 18px; height: 18px;" class="spinner-border spinner-border-sm d-none"
+                      role="status"
+                      aria-hidden="true"></span>
             </button>
         </div>
     </div>
 </div>
-<script type="module" src="/dist/module/popup/popup.js"></script>
 </body>
 
 </html>

@@ -1,5 +1,5 @@
-import {StorageAccessService} from "../../storage/StorageAccessService.js";
-import {BadgeService, ExtensionBadgeText} from "../../storage/BadgeService.js";
+import {StorageAccessService} from "../../storage/StorageAccessService";
+import {BadgeService, ExtensionBadgeText} from "../../storage/BadgeService";
 
 /**
  * Class to access the pihole api with get,post params etc.

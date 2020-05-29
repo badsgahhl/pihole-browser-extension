@@ -1,4 +1,7 @@
-import {PiHoleSettingsDefaults, PiHoleSettingsStorage, StorageAccessService} from "../../data/storage/StorageAccessService.js";
+import {PiHoleSettingsDefaults, PiHoleSettingsStorage, StorageAccessService} from "../../data/storage/StorageAccessService";
+import "./options.css";
+import "../general/darkmode.css";
+import "bootstrap/dist/css/bootstrap.min.css"
 
 /**
  * Saves the extension settings to the local storage.

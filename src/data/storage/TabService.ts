@@ -1,4 +1,4 @@
-import {StorageAccessService} from "./StorageAccessService.js";
+import {StorageAccessService} from "./StorageAccessService";
 
 export module TabService
 {
