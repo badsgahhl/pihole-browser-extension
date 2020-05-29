@@ -60,4 +60,3 @@ the domain cannot be added to the whitelist (cannot be moved from the black to t
 
 
 This is not an official Pi-Hole application.
-Pi-hole® is a registered trademark of Pi-hole LLC” or “FTLDNS™ is a trademark of Pi-hole LLC
