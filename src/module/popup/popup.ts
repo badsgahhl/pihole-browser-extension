@@ -1,10 +1,13 @@
-import {BadgeService, ExtensionBadgeText} from "../../data/storage/BadgeService.js";
-import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../data/api/models/pihole/PiHoleApiStatus.js";
-import {ApiRequestMethodEnum, PiHoleApiRequest} from "../../data/api/service/PiHoleApiRequest.js";
-import {PiHoleSettingsDefaults, PiHoleSettingsStorage, StorageAccessService} from "../../data/storage/StorageAccessService.js";
-import {ApiJsonErrorMessages} from "../../data/api/errors/ApiErrorMessages.js";
-import {TabService} from "../../data/storage/TabService.js";
-import {ApiListMode, PiHoleVersions} from "../../data/api/models/pihole/PiHoleListStatus.js";
+import {BadgeService, ExtensionBadgeText} from "../../data/storage/BadgeService";
+import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../data/api/models/pihole/PiHoleApiStatus";
+import {ApiRequestMethodEnum, PiHoleApiRequest} from "../../data/api/service/PiHoleApiRequest";
+import {PiHoleSettingsDefaults, PiHoleSettingsStorage, StorageAccessService} from "../../data/storage/StorageAccessService";
+import {ApiJsonErrorMessages} from "../../data/api/errors/ApiErrorMessages";
+import {TabService} from "../../data/storage/TabService";
+import {ApiListMode, PiHoleVersions} from "../../data/api/models/pihole/PiHoleListStatus";
+import "./popup.css";
+import "../general/darkmode.css";
+import "bootstrap/dist/css/bootstrap.min.css"
 
 let current_tab_url: string = '';
 

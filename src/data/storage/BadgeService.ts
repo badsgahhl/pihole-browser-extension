@@ -1,4 +1,4 @@
-import {PiHoleApiStatusEnum} from "../api/models/pihole/PiHoleApiStatus.js";
+import {PiHoleApiStatusEnum} from "../api/models/pihole/PiHoleApiStatus";
 
 /**
  * Service Module for the extension icon badge.

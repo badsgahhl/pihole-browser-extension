@@ -15,14 +15,14 @@
 			"16": "icon/icon-16.png",
 			"32": "icon/icon-32.png"
 		},
-		"default_popup": "src/module/popup/popup.html"
+		"default_popup": "popup.html"
 	},
 	"options_ui": {
-		"page": "src/module/option/options.html"
+		"page": "options.html"
 	},
 	"background": {
 		"persistent": true,
-		"page": "src/module/background/background.html"
+		"page": "background.html"
 	},
 	"permissions": [
 		"storage",

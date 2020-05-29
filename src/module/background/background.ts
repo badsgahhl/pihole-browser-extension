@@ -1,8 +1,8 @@
-import {BadgeService, ExtensionBadgeText} from "../../data/storage/BadgeService.js";
-import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../data/api/models/pihole/PiHoleApiStatus.js";
-import {PiHoleSettingsDefaults, PiHoleSettingsStorage, StorageAccessService} from "../../data/storage/StorageAccessService.js";
-import {PiHoleApiRequest} from "../../data/api/service/PiHoleApiRequest.js";
-import {ApiJsonErrorMessages} from "../../data/api/errors/ApiErrorMessages.js";
+import {BadgeService, ExtensionBadgeText} from "../../data/storage/BadgeService";
+import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../data/api/models/pihole/PiHoleApiStatus";
+import {PiHoleSettingsDefaults, PiHoleSettingsStorage, StorageAccessService} from "../../data/storage/StorageAccessService";
+import {PiHoleApiRequest} from "../../data/api/service/PiHoleApiRequest";
+import {ApiJsonErrorMessages} from "../../data/api/errors/ApiErrorMessages";
 
 /**
  * Background Service
@@ -10,7 +10,7 @@ import {ApiJsonErrorMessages} from "../../data/api/errors/ApiErrorMessages.js";
  */
 init().then();
 checkStatus().then();  //Get the current status when the browser opens
-window.setInterval(checkStatus, 15000); //Keep checking every 15 seconds
+window.setInterval(checkStatus, 1000); //Keep checking every 15 seconds
 
 /**
  * Checking the current status of the pihole
