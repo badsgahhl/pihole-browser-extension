@@ -3,7 +3,11 @@
 This is a small extension to revive the project of Yoder Spencer.
 https://github.com/Spencer-Yoder/Remote-Switch-for-Pi-Hole-Chrome	
 
-This extension is available in the chrome webstore and mozilla addon store.
+<br>
+
+[![chrome](https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_206x58.png)]()
+[![firefox](https://cdn.glaser.casa/tp/firefox2.png)](https://addons.mozilla.org/de/firefox/addon/switch-for-pihole/)
+
 
 ![alt text](https://cdn.glaser.casa/s/B7bDBr8oVP_807c35a29a748ca0d4cbda4ced9c65613a0037de6bbba3059e.png)
 
