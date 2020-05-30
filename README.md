@@ -7,7 +7,7 @@ Switch-for-PiHole is a small browser extension for Chrome and Firefox. It's writ
 ![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) `Notice: Due to a permission mistake, the chrome extension is currently unavailble in the chrome webstore. It is expected to be available again in the first week of June.`
 
 [![chrome](https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_206x58.png)]()
-[![firefox](https://cdn.glaser.casa/tp/firefox2.png)](https://addons.mozilla.org/de/firefox/addon/switch-for-pihole/)
+[![firefox](https://cdn.glaser.casa/tp/firefox4.png)](https://addons.mozilla.org/de/firefox/addon/switch-for-pihole/)
 
 
 ### Features:
