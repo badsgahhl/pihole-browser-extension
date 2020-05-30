@@ -1,15 +1,13 @@
 # Switch-for-PiHole ![t](https://github.com/badsgahhl/pihole-chrome-extension/blob/master/icon/icon-48.png?raw=true)
 
-This is a small extension to revive the project of Yoder Spencer.
-https://github.com/Spencer-Yoder/Remote-Switch-for-Pi-Hole-Chrome	
+Switch-for-PiHole is a small browser extension for Chrome and Firefox. It's written in Vanilla TypeScript together with HTML and CSS. With this extension you can control your PiHole remotely (e.g. Turning it on/off, black/white listing current tab, etc.).
 
 <br>
 
+![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) `Notice: Due to a permission mistake, the chrome extension is currently unavailble in the chrome webstore. It is expected to be available again in the first week of June.`
+
 [![chrome](https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_206x58.png)]()
 [![firefox](https://cdn.glaser.casa/tp/firefox2.png)](https://addons.mozilla.org/de/firefox/addon/switch-for-pihole/)
-
-
-![alt text](https://cdn.glaser.casa/s/B7bDBr8oVP_807c35a29a748ca0d4cbda4ced9c65613a0037de6bbba3059e.png)
 
 
 ### Features:
