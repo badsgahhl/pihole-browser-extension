@@ -1,4 +1,4 @@
-import {PiHoleSettingsDefaults, PiHoleSettingsStorage, StorageAccessService} from "../../data/storage/StorageAccessService";
+import {PiHoleSettingsDefaults, PiHoleSettingsStorageOld, StorageService} from "../../data/storage/StorageService";
 import "./options.css";
 import "../general/darkmode.css";
 import "bootstrap/dist/css/bootstrap.min.css"
@@ -29,7 +29,7 @@ function set_settings(): void
 		return;
 	}
 
-	const storage: PiHoleSettingsStorage = {
+	const storage: PiHoleSettingsStorageOld = {
 		pi_uri_base: pi_uri_base,
 		api_key: api_key,
 		default_disable_time: default_disable_time_input.valueAsNumber
@@ -46,7 +46,7 @@ function set_settings(): void
 		}, 1500);
 	}
 
-	StorageAccessService.save_to_local_storage(storage, function_callback);
+	StorageService.save_to_local_storage(storage, function_callback);
 }
 
 /**
@@ -101,7 +101,7 @@ function toggle_api_warning(text?: string): void
 //Function fills the storage data into the option input form.
 async function get_settings(): Promise<void>
 {
-	const storage: PiHoleSettingsStorage = await StorageAccessService.get_pi_hole_settings();
+	const storage: PiHoleSettingsStorageOld = await StorageService.get_pi_hole_settings();
 	(<HTMLInputElement> document.getElementById('pi_uri_base')).defaultValue = storage.pi_uri_base ? storage.pi_uri_base : PiHoleSettingsDefaults.pi_uri_base;
 	(<HTMLInputElement> document.getElementById('api_key')).defaultValue = storage.api_key ? storage.api_key : PiHoleSettingsDefaults.api_key;
 
