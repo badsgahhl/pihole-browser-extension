@@ -375,7 +375,7 @@ function toggle_list_button(clicked_button: HTMLElement): void
  * This function changes different view components accordingly to the PiHoleStatus
  * @param data
  */
-export function change_icon(data: PiHoleApiStatus): void
+function change_icon(data: PiHoleApiStatus): void
 {
 	const sliderBox = <HTMLInputElement> document.getElementById('sliderBox');
 	const time = <HTMLInputElement> document.getElementById('time');
