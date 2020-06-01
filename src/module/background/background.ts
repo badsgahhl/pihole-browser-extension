@@ -1,8 +1,7 @@
-import {BadgeService, ExtensionBadgeText} from "../../data/storage/BadgeService";
-import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../data/api/models/pihole/PiHoleApiStatus";
 import {StorageService} from "../../data/storage/StorageService";
-import {PiHoleApiRequest} from "../../data/api/service/PiHoleApiRequest";
-import {ApiJsonErrorMessages} from "../../data/api/errors/ApiErrorMessages";
+import {PiHoleApiService} from "../../data/api/service/PiHoleApiService";
+import {BadgeService, ExtensionBadgeText} from "../../data/storage/BadgeService";
+import {PiHoleApiStatusEnum} from "../../data/api/models/pihole/PiHoleApiStatus";
 
 
 chrome.runtime.onInstalled.addListener(function(details) {
@@ -23,6 +22,7 @@ chrome.runtime.onInstalled.addListener(function(details) {
 		 */
 		if (details.previousVersion === '2.1.1' && thisVersion === '2.1.2')
 		{
+			console.log("Running migration");
 			StorageService.process_storage_migration();
 		}
 	}
@@ -42,44 +42,21 @@ window.setInterval(checkStatus, 15000); //Keep checking every 15 seconds
  */
 async function checkStatus(): Promise<void>
 {
-	const api_request: PiHoleApiRequest = new PiHoleApiRequest();
-
-	const onreadystatechange = function() {
-		if (this.readyState === 4 && this.status === 200)
-		{
-			let data: PiHoleApiStatus
-			try
+	const success_callback = (data) => {
+		console.log(data);
+		BadgeService.get_badge_text().then(function(result) {
+			if (!(BadgeService.compare_badge_to_api_status(result, data.status)))
 			{
-				data = JSON.parse(this.response);
-			}
-			catch (e)
-			{
-				console.warn(ApiJsonErrorMessages.invalid);
-				return;
-			}
-			BadgeService.get_badge_text().then(function(result) {
-				if (!(BadgeService.compare_badge_to_api_status(result, data.status)))
+				if (data.status === PiHoleApiStatusEnum.disabled)
 				{
-					if (data.status === PiHoleApiStatusEnum.disabled)
-					{
-						BadgeService.set_badge_text(ExtensionBadgeText.disabled);
-					}
-					else if (data.status === PiHoleApiStatusEnum.enabled)
-					{
-						BadgeService.set_badge_text(ExtensionBadgeText.enabled);
-					}
+					BadgeService.set_badge_text(ExtensionBadgeText.disabled);
 				}
-			});
-		}
-		else if (this.status !== 200 && this.status !== 0)
-		{
-			console.log(this.status);
-			BadgeService.set_badge_text(ExtensionBadgeText.error);
-		}
+				else if (data.status === PiHoleApiStatusEnum.enabled)
+				{
+					BadgeService.set_badge_text(ExtensionBadgeText.enabled);
+				}
+			}
+		})
 	};
-
-	api_request.add_get_param('status');
-	api_request.onreadystatechange = onreadystatechange;
-
-	await api_request.send();
+	PiHoleApiService.refresh_pi_hole_status(success_callback).then();
 }

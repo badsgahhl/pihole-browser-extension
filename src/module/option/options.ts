@@ -1,4 +1,4 @@
-import {PiHoleSettingsDefaults, PiHoleSettingsStorageOld, StorageService} from "../../data/storage/StorageService";
+import {PiHoleSettingsDefaults, PiHoleSettingsStorage, StorageService} from "../../data/storage/StorageService";
 import "./options.css";
 import "../general/darkmode.css";
 import "bootstrap/dist/css/bootstrap.min.css"
@@ -29,10 +29,9 @@ function set_settings(): void
 		return;
 	}
 
-	const storage: PiHoleSettingsStorageOld = {
+	const settings_storage: PiHoleSettingsStorage = {
 		pi_uri_base: pi_uri_base,
 		api_key: api_key,
-		default_disable_time: default_disable_time_input.valueAsNumber
 	};
 
 	const save_button: HTMLButtonElement = <HTMLButtonElement> document.getElementById('save_button');
@@ -46,7 +45,9 @@ function set_settings(): void
 		}, 1500);
 	}
 
-	StorageService.save_to_local_storage(storage, function_callback);
+	StorageService.clear_pi_hole_settings();
+	StorageService.save_default_disable_time(default_disable_time_input.valueAsNumber);
+	StorageService.add_pi_hole_settings(settings_storage, function_callback);
 }
 
 /**
@@ -101,11 +102,35 @@ function toggle_api_warning(text?: string): void
 //Function fills the storage data into the option input form.
 async function get_settings(): Promise<void>
 {
-	const storage: PiHoleSettingsStorageOld = await StorageService.get_pi_hole_settings();
-	(<HTMLInputElement> document.getElementById('pi_uri_base')).defaultValue = storage.pi_uri_base ? storage.pi_uri_base : PiHoleSettingsDefaults.pi_uri_base;
-	(<HTMLInputElement> document.getElementById('api_key')).defaultValue = storage.api_key ? storage.api_key : PiHoleSettingsDefaults.api_key;
+	const storage_array = (await StorageService.get_pi_hole_settings_array());
+	let default_disable_time = (await StorageService.get_default_disable_time());
 
-	const default_time: number = storage.default_disable_time ? storage.default_disable_time : PiHoleSettingsDefaults.default_disable_time;
+	let storage: PiHoleSettingsStorage;
+	if (!(typeof storage_array === "undefined"))
+	{
+		storage = storage_array[0];
+	}
+	else
+	{
+		storage = {
+			api_key: String(PiHoleSettingsDefaults.api_key),
+			pi_uri_base: String(PiHoleSettingsDefaults.pi_uri_base)
+		}
+	}
+
+	if (!(typeof default_disable_time === "undefined"))
+	{
+		default_disable_time = default_disable_time.valueOf();
+	}
+	else
+	{
+		default_disable_time = PiHoleSettingsDefaults.default_disable_time;
+	}
+
+	(<HTMLInputElement> document.getElementById('pi_uri_base')).defaultValue = storage.pi_uri_base;
+	(<HTMLInputElement> document.getElementById('api_key')).defaultValue = storage.api_key;
+
+	const default_time: number = default_disable_time;
 	(<HTMLInputElement> document.getElementById('default_time')).defaultValue = String(default_time);
 }
 

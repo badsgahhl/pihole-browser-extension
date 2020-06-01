@@ -19,15 +19,28 @@ export module TabService
 		let url = '';
 		let full_url = (await current_tab_url_promise);
 		const url_validity_regex = new RegExp('^(http|https):\\/\\/[^ "]+$');
-		const pi_hole_url = (await StorageService.get_pi_hole_settings()).pi_uri_base;
 
 		// Domains that should not be listed anyway.
-		const excluded_domains: Array<string> = [
-			new URL(pi_hole_url).hostname,
+		let excluded_domains: Array<string> = [
 			'localhost',
 			'127.0.0.1',
 			'pi.hole'
-		]
+		];
+
+		let pi_hole_urls = (await StorageService.get_pi_hole_settings_array());
+		let pi_hole_urls_array = [];
+		if (!(typeof pi_hole_urls === "undefined"))
+		{
+			pi_hole_urls.forEach((value => {
+				pi_hole_urls_array.push((new URL(value.pi_uri_base).hostname));
+			}))
+		}
+
+		if (pi_hole_urls_array.length > 0)
+		{
+			excluded_domains = excluded_domains.concat(pi_hole_urls_array);
+		}
+
 		// Checking regex
 		if (url_validity_regex.test(full_url))
 		{

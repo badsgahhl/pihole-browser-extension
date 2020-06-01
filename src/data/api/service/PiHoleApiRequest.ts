@@ -1,4 +1,3 @@
-import {StorageService} from "../../storage/StorageService";
 import {BadgeService, ExtensionBadgeText} from "../../storage/BadgeService";
 
 /**
@@ -11,6 +10,14 @@ export class PiHoleApiRequest
 	private _async: boolean = true;
 	private _get_params: Array<ApiParameter> = [];
 	private _post_params: Array<ApiParameter> = [];
+	private readonly _pi_hole_url: string;
+	private readonly _api_key: string;
+
+	constructor(pi_hole_url: string, api_key: string)
+	{
+		this._pi_hole_url = pi_hole_url;
+		this._api_key = api_key;
+	}
 
 
 	public get onreadystatechange(): ((this: XMLHttpRequest, ev: Event) => any) | null
@@ -64,8 +71,8 @@ export class PiHoleApiRequest
 	public async send(): Promise<void>
 	{
 		const httpResponse = new XMLHttpRequest();    //Make a new object to accept return from server
-		const url_base = (await StorageService.get_pi_hole_settings()).pi_uri_base;
-		const api_key = (await StorageService.get_pi_hole_settings()).api_key;
+		const url_base = this._pi_hole_url;
+		const api_key = this._api_key;
 
 		if (!url_base)
 		{
