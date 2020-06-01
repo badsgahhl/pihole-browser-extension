@@ -1,6 +1,6 @@
 import {BadgeService, ExtensionBadgeText} from "../../data/storage/BadgeService";
 import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../data/api/models/pihole/PiHoleApiStatus";
-import {PiHoleSettingsDefaults, PiHoleSettingsStorageOld, StorageService} from "../../data/storage/StorageService";
+import {StorageService} from "../../data/storage/StorageService";
 import {PiHoleApiRequest} from "../../data/api/service/PiHoleApiRequest";
 import {ApiJsonErrorMessages} from "../../data/api/errors/ApiErrorMessages";
 
