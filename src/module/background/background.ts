@@ -33,7 +33,6 @@ chrome.runtime.onInstalled.addListener(function(details) {
  * Background Service
  * Initialises the pihole domain, checks the pihole status.
  */
-init().then();
 checkStatus().then();  //Get the current status when the browser opens
 window.setInterval(checkStatus, 15000); //Keep checking every 15 seconds
 
@@ -83,31 +82,4 @@ async function checkStatus(): Promise<void>
 	api_request.onreadystatechange = onreadystatechange;
 
 	await api_request.send();
-}
-
-/**
- * Initialising a default domain if none is set.
- */
-async function init(): Promise<void>
-{
-	const storage: PiHoleSettingsStorageOld = await StorageService.get_pi_hole_settings();
-
-	if (!storage.pi_uri_base)
-	{
-		const storage: PiHoleSettingsStorageOld = {pi_uri_base: String(PiHoleSettingsDefaults.pi_uri_base).valueOf()};
-
-		StorageService.save_to_local_storage(storage, function() {
-			console.log("Set default URL to http://pi.hole");
-		});
-	}
-	else
-	{
-		console.log("Current URI base: " + storage.pi_uri_base);
-	}
-
-	if (!storage.default_disable_time)
-	{
-		const storage: PiHoleSettingsStorageOld = {default_disable_time: Number(PiHoleSettingsDefaults.default_disable_time).valueOf()};
-		StorageService.save_to_local_storage(storage);
-	}
 }
