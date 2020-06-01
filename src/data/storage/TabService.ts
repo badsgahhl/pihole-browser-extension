@@ -1,4 +1,4 @@
-import {StorageAccessService} from "./StorageAccessService";
+import {StorageService} from "./StorageService";
 
 export module TabService
 {
@@ -19,7 +19,7 @@ export module TabService
 		let url = '';
 		let full_url = (await current_tab_url_promise);
 		const url_validity_regex = new RegExp('^(http|https):\\/\\/[^ "]+$');
-		const pi_hole_url = (await StorageAccessService.get_pi_hole_settings()).pi_uri_base;
+		const pi_hole_url = (await StorageService.get_pi_hole_settings()).pi_uri_base;
 
 		// Domains that should not be listed anyway.
 		const excluded_domains: Array<string> = [

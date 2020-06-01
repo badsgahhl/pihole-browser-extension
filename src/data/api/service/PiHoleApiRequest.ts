@@ -1,4 +1,4 @@
-import {StorageAccessService} from "../../storage/StorageAccessService";
+import {StorageService} from "../../storage/StorageService";
 import {BadgeService, ExtensionBadgeText} from "../../storage/BadgeService";
 
 /**
@@ -64,10 +64,10 @@ export class PiHoleApiRequest
 	public async send(): Promise<void>
 	{
 		const httpResponse = new XMLHttpRequest();    //Make a new object to accept return from server
-		const url_base = (await StorageAccessService.get_pi_hole_settings()).pi_uri_base;
-		const api_key = (await StorageAccessService.get_pi_hole_settings()).api_key;
+		const url_base = (await StorageService.get_pi_hole_settings()).pi_uri_base;
+		const api_key = (await StorageService.get_pi_hole_settings()).api_key;
 
-		if (!url_base || !api_key)
+		if (!url_base)
 		{
 			console.log("Settings haven't been set. Cancled API Request")
 			return;

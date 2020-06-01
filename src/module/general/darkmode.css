@@ -6,12 +6,12 @@
 
 @media (prefers-color-scheme: dark) {
     body {
-        background: var(--black-mode-background);
+        background: var(--black-mode-background) !important;
         color: white !important;
     }
 
     .card-header {
-        background: var(--black-mode-background);
+        background: var(--black-mode-background) !important;
     }
 
     .card-body {
@@ -19,7 +19,7 @@
     }
 
     .card-footer {
-        background: var(--black-mode-background);
+        background: var(--black-mode-background) !important;
     }
 
     .card {

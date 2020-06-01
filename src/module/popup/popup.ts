@@ -1,20 +1,22 @@
 import {BadgeService, ExtensionBadgeText} from "../../data/storage/BadgeService";
 import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../data/api/models/pihole/PiHoleApiStatus";
 import {ApiRequestMethodEnum, PiHoleApiRequest} from "../../data/api/service/PiHoleApiRequest";
-import {PiHoleSettingsDefaults, PiHoleSettingsStorage, StorageAccessService} from "../../data/storage/StorageAccessService";
+import {PiHoleSettingsDefaults, PiHoleSettingsStorageOld, StorageService} from "../../data/storage/StorageService";
 import {ApiJsonErrorMessages} from "../../data/api/errors/ApiErrorMessages";
 import {TabService} from "../../data/storage/TabService";
-import {ApiListMode, PiHoleVersions} from "../../data/api/models/pihole/PiHoleListStatus";
+import {ApiListMode} from "../../data/api/models/pihole/PiHoleListStatus";
 import "./popup.css";
 import "../general/darkmode.css";
 import "bootstrap/dist/css/bootstrap.min.css"
+import {PiHoleVersions} from "../../data/api/models/pihole/PiHoleVersions";
+import {PiHoleApiService} from "../../data/api/service/PiHoleApiService";
 
 let current_tab_url: string = '';
 
 /**
  * Function to handler the slider click.
  */
-async function sliderClicked(): Promise<void>
+async function on_slider_click(): Promise<void>
 {
 	const api_request: PiHoleApiRequest = new PiHoleApiRequest();
 
@@ -29,15 +31,15 @@ async function sliderClicked(): Promise<void>
 			}
 			catch (e)
 			{
-				show_error_message(ApiJsonErrorMessages.invalid);
+				throw_console_badge_error(ApiJsonErrorMessages.invalid);
 				return;
 			}
-			changeIcon(data);
+			change_icon(data);
 		}
 		else if (this.status !== 200 && this.status !== 0)
 		{
 			console.error(this.status);
-			show_error_message('API Call failed. Check the address.');
+			throw_console_badge_error('API Call failed. Check the address.');
 		}
 	};
 
@@ -48,7 +50,7 @@ async function sliderClicked(): Promise<void>
 
 		if (time < 0)
 		{
-			show_error_message('Time cannot be smaller than 0. Canceling api request.', true);
+			throw_console_badge_error('Time cannot be smaller than 0. Canceling api request.', true);
 			return;
 		}
 		else
@@ -71,44 +73,63 @@ async function sliderClicked(): Promise<void>
  * @param error_message
  * @param refresh_status
  */
-function show_error_message(error_message: string, refresh_status: boolean = false): void
+function throw_console_badge_error(error_message: string, refresh_status: boolean = false): void
 {
 	console.warn(error_message);
 
-	changeIcon({status: PiHoleApiStatusEnum.error})
+	change_icon({status: PiHoleApiStatusEnum.error})
 	if (refresh_status)
 	{
 		setTimeout(function() {
-			getPiHoleStatus().then();
+			refresh_pi_hole_status().then();
 		}, 1500);
 	}
 }
 
 async function load_settings_and_status(): Promise<void>
 {
-	getPiHoleStatus().then();
+	refresh_pi_hole_status().then();
 
-	whitelist_blacklist_handler().then();
+	check_for_pi_hole_updates().then();
 
+	set_default_disable_time_html().then();
+
+	document.getElementById('sliderBox').addEventListener('click', on_slider_click);
+	document.getElementById('time').addEventListener('input', time_input_changed);
+}
+
+/**
+ * Sets the default disable time from the storage to the FE Formula
+ */
+async function set_default_disable_time_html(): Promise<void>
+{
 	const time = <HTMLInputElement> document.getElementById('time');
 
-	const storage: PiHoleSettingsStorage = await StorageAccessService.get_pi_hole_settings();
+	const storage: PiHoleSettingsStorageOld = await StorageService.get_pi_hole_settings();
 
 	const default_disable_time: number = storage.default_disable_time ? storage.default_disable_time : PiHoleSettingsDefaults.default_disable_time;
 
 	time.defaultValue = String(default_disable_time);
-
 }
 
 /**
- * Adds the event handlers for the list buttons
+ * Checks if the pihole is up to date
  */
-async function whitelist_blacklist_handler()
+async function check_for_pi_hole_updates(): Promise<void>
 {
-	const list_action_white = <HTMLButtonElement> document.getElementById('list_action_white');
-	const list_action_black = <HTMLButtonElement> document.getElementById('list_action_black');
-	list_action_white.addEventListener('click', () => list_domain(ApiListMode.whitelist, list_action_white));
-	list_action_black.addEventListener('click', () => list_domain(ApiListMode.blacklist, list_action_black));
+	const versions = (await PiHoleApiService.get_pi_hole_version());
+
+	if (versions.FTL_current < versions.FTL_latest || versions.core_current < versions.core_current || versions.web_current < versions.web_latest)
+	{
+		const main_elem = document.getElementById('main');
+
+		const alert = document.createElement('div');
+		alert.classList.add('alert', 'alert-warning', 'popup-alert');
+		alert.setAttribute('role', 'alert');
+		alert.innerText = "PiHole Update available!"
+
+		main_elem.append(alert);
+	}
 }
 
 /**
@@ -141,36 +162,17 @@ async function toggle_list_card(): Promise<void>
 
 	document.getElementById('current_url').innerText = url;
 
-	const request = new PiHoleApiRequest();
-
-	request.add_get_param('versions');
-
-	const version_promise: Promise<string> = new Promise((resolve) => {
-		request.onreadystatechange = function() {
-			if (this.readyState === 4 && this.status === 200)
-			{
-				try
-				{
-					const data: PiHoleVersions = JSON.parse(this.response);
-					if (data.FTL_current)
-					{
-						resolve(data.FTL_current.replace('v', ''));
-					}
-				}
-				catch (e)
-				{
-					resolve('none')
-				}
-			}
-		}
-		request.send();
-	});
-
-	const current_ftl_version: string = (await version_promise);
+	const pi_hole_versions: PiHoleVersions = (await PiHoleApiService.get_pi_hole_version());
 	// TODO: Needs a higher version later with the fix
-	if (current_ftl_version == 'Dev' || Number(current_ftl_version) >= 5)
+	if (pi_hole_versions.FTL_current >= 5)
 	{
 		card_object.classList.remove('d-none');
+
+		// Adding the event handlers
+		const list_action_white = <HTMLButtonElement> document.getElementById('list_action_white');
+		const list_action_black = <HTMLButtonElement> document.getElementById('list_action_black');
+		list_action_white.addEventListener('click', () => list_domain(ApiListMode.whitelist, list_action_white));
+		list_action_black.addEventListener('click', () => list_domain(ApiListMode.blacklist, list_action_black));
 	}
 }
 
@@ -201,7 +203,7 @@ function get_web_request_origin_modifier_callback(details)
  */
 async function list_domain(mode: ApiListMode, buttonElement: HTMLButtonElement): Promise<void>
 {
-	const pi_url = (await StorageAccessService.get_pi_hole_settings()).pi_uri_base;
+	const pi_url = (await StorageService.get_pi_hole_settings()).pi_uri_base;
 	const domain = (await get_current_tab_url_cleaned_cached());
 
 	if (!pi_url || !domain)
@@ -210,7 +212,7 @@ async function list_domain(mode: ApiListMode, buttonElement: HTMLButtonElement):
 	}
 
 	// Registering the handler only after the button click. We dont want to change the headers of anything else
-	// This is only needed in chrome!
+	// This is only needed in chrome! -.-
 	if (typeof browser === 'undefined')
 	{
 		chrome.webRequest.onBeforeSendHeaders.addListener(
@@ -317,7 +319,7 @@ function toggle_list_button(clicked_button: HTMLElement): void
 /**
  * Function to get the current PiHoleStatus
  */
-async function getPiHoleStatus(): Promise<void>
+async function refresh_pi_hole_status(): Promise<void>
 {
 	const api_request: PiHoleApiRequest = new PiHoleApiRequest();
 
@@ -335,7 +337,7 @@ async function getPiHoleStatus(): Promise<void>
 				console.warn(ApiJsonErrorMessages.invalid);
 				return;
 			}
-			changeIcon(data);
+			change_icon(data);
 		}
 	};
 
@@ -349,7 +351,7 @@ async function getPiHoleStatus(): Promise<void>
  * This function changes different view components accordingly to the PiHoleStatus
  * @param data
  */
-function changeIcon(data: PiHoleApiStatus): void
+function change_icon(data: PiHoleApiStatus): void
 {
 	const sliderBox = <HTMLInputElement> document.getElementById('sliderBox');
 	const time = <HTMLInputElement> document.getElementById('time');
@@ -396,8 +398,6 @@ function time_input_changed(): void
  * EventListener Section
  */
 document.addEventListener('DOMContentLoaded', load_settings_and_status); //When the page loads get the status
-document.getElementById('sliderBox').addEventListener('click', sliderClicked);
-document.getElementById('time').addEventListener('input', time_input_changed);
 
 
 
