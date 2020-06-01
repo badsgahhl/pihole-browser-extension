@@ -94,7 +94,7 @@ async function init(): Promise<void>
 
 	if (!storage.pi_uri_base)
 	{
-		const storage: PiHoleSettingsStorageOld = {pi_uri_base: PiHoleSettingsDefaults.pi_uri_base.valueOf()};
+		const storage: PiHoleSettingsStorageOld = {pi_uri_base: String(PiHoleSettingsDefaults.pi_uri_base).valueOf()};
 
 		StorageService.save_to_local_storage(storage, function() {
 			console.log("Set default URL to http://pi.hole");
@@ -107,7 +107,7 @@ async function init(): Promise<void>
 
 	if (!storage.default_disable_time)
 	{
-		const storage: PiHoleSettingsStorageOld = {default_disable_time: PiHoleSettingsDefaults.default_disable_time.valueOf()};
+		const storage: PiHoleSettingsStorageOld = {default_disable_time: Number(PiHoleSettingsDefaults.default_disable_time).valueOf()};
 		StorageService.save_to_local_storage(storage);
 	}
 }

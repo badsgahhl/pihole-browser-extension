@@ -67,7 +67,7 @@ export class PiHoleApiRequest
 		const url_base = (await StorageService.get_pi_hole_settings()).pi_uri_base;
 		const api_key = (await StorageService.get_pi_hole_settings()).api_key;
 
-		if (!url_base || !api_key)
+		if (!url_base)
 		{
 			console.log("Settings haven't been set. Cancled API Request")
 			return;

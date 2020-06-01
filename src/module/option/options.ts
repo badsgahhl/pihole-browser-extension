@@ -15,7 +15,7 @@ function set_settings(): void
 	const pi_uri_base = (<HTMLInputElement> document.getElementById('pi_uri_base')).value.replace(/\s+/g, '')
 
 	// Checks the API Key. We save the key but show a warning if it doesnt match the expression.
-	if (!api_key.match('^[a-f0-9]{64}$'))
+	if (!api_key.match('^[a-f0-9]{64}$') && api_key.length !== 0)
 	{
 		toggle_api_warning('Api Key doesn\'t match scheme (64 chars long). It may be invalid!');
 	}

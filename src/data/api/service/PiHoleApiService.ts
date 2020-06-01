@@ -25,7 +25,6 @@ export module PiHoleApiService
 					{
 						const data = JSON.parse(this.response);
 						Object.entries(data).forEach(([key, value]) => {
-							console.log(`${key} ${value}`);
 							if (key in versions)
 							{
 								let version: number | string = String(value).replace('v', '');
