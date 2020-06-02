@@ -353,6 +353,7 @@ function change_icon(data: PiHoleApiStatus): void
 	{   //If there is an API key error
 		time.disabled = true;
 		sliderBox.disabled = true;   //turn off the input box
+		sliderBox.checked = false;
 		BadgeService.set_badge_text(ExtensionBadgeText.error);   //set badge text to empty
 	}
 }
