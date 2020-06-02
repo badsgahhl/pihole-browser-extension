@@ -43,7 +43,6 @@ window.setInterval(checkStatus, 15000); //Keep checking every 15 seconds
 async function checkStatus(): Promise<void>
 {
 	const success_callback = (data) => {
-		console.log(data);
 		BadgeService.get_badge_text().then(function(result) {
 			if (!(BadgeService.compare_badge_to_api_status(result, data.status)))
 			{

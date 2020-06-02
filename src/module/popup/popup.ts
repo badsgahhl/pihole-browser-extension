@@ -1,8 +1,6 @@
 import {BadgeService, ExtensionBadgeText} from "../../data/storage/BadgeService";
 import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../data/api/models/pihole/PiHoleApiStatus";
-import {ApiRequestMethodEnum, PiHoleApiRequest} from "../../data/api/service/PiHoleApiRequest";
 import {PiHoleSettingsDefaults, StorageService} from "../../data/storage/StorageService";
-import {ApiJsonErrorMessages} from "../../data/api/errors/ApiErrorMessages";
 import {TabService} from "../../data/storage/TabService";
 import {ApiListMode} from "../../data/api/models/pihole/PiHoleListStatus";
 import "./popup.css";
@@ -17,57 +15,16 @@ let current_tab_url: string = '';
  */
 async function on_slider_click(): Promise<void>
 {
-	const pi_hole_storage = (await StorageService.get_pi_hole_settings_array());
-	for (const pi_hole of pi_hole_storage)
+	const status_mode = (<HTMLInputElement> document.getElementById('sliderBox')).checked ? PiHoleApiStatusEnum.enabled : PiHoleApiStatusEnum.disabled;
+	let time: number = Number((<HTMLInputElement> document.getElementById('time')).value);
+	
+	if (time >= 0)
 	{
-		const api_request: PiHoleApiRequest = new PiHoleApiRequest(pi_hole.pi_uri_base, pi_hole.api_key);
-
-		api_request.onreadystatechange = function() {
-			if (this.readyState === 4 && this.status === 200)
-			{
-				// Action to be performed when the document is read;
-				let data: PiHoleApiStatus;
-				try
-				{
-					data = JSON.parse(this.response);   //parse the return JSON
-				}
-				catch (e)
-				{
-					throw_console_badge_error(ApiJsonErrorMessages.invalid);
-					return;
-				}
-				change_icon(data);
-			}
-			else if (this.status !== 200 && this.status !== 0)
-			{
-				console.error(this.status);
-				throw_console_badge_error('API Call failed. Check the address.');
-			}
-		};
-
-		const slider_box = <HTMLInputElement> document.getElementById('sliderBox');
-		if (!slider_box.checked)
-		{
-			let time: number = Number((<HTMLInputElement> document.getElementById('time')).value);   //get the time from the box
-
-			if (time < 0)
-			{
-				throw_console_badge_error('Time cannot be smaller than 0. Canceling api request.', true);
-				return;
-			}
-			else
-			{
-				api_request.add_get_param('disable', String(time));
-			}
-
-		}
-		else if (slider_box.checked)
-		{
-
-			api_request.add_get_param('enable');
-
-		}
-		await api_request.send();
+		await PiHoleApiService.change_pi_hole_status(status_mode, time, change_icon, throw_console_badge_error);
+	}
+	else
+	{
+		throw_console_badge_error('Time cannot be smaller than 0. Canceling api request.', true);
 	}
 }
 
@@ -260,74 +217,45 @@ async function list_domain(mode: ApiListMode, buttonElement: HTMLButtonElement):
 			]);
 	}
 
-
-	const pi_hole_storage = (await StorageService.get_pi_hole_settings_array());
-
 	toggle_list_button(buttonElement);
 
 	// Delay between each call to one of multiple piholes
 	const delay_increment = 2000;
 	let delay = 0;
 
-	const promise = new Promise((resolve) => pi_hole_storage.forEach((pi_hole, index) => {
-		const api_request = new PiHoleApiRequest(pi_hole.pi_uri_base, pi_hole.api_key);
+	const pi_hole_list_results = (await PiHoleApiService.list_domain(domain, mode));
 
-		api_request.method = ApiRequestMethodEnum.POST;
-		api_request.add_get_param('list', mode);
-		api_request.add_get_param('add', domain);
-		api_request.add_post_param('comment', 'Added via PiHole Remote Extension');
+	if (typeof browser === 'undefined')
+	{
+		chrome.webRequest.onBeforeSendHeaders.removeListener(get_web_request_origin_modifier_callback);
+	}
 
-		api_request.onreadystatechange = function() {
-			if (this.readyState === 4 && this.status === 200)
-			{
-				const response: string = this.response;
-				const current_url_element = document.getElementById('current_url');
-
-				/**
-				 * Changing the background color depending on the status of adding the url.
-				 * Orange: Url was skipped by PIHOLE
-				 * Green: URL was added to the list.
-				 */
-				if (response.includes('skipped'))
-				{
-					current_url_element.classList.add('bg-warning')
-					setTimeout(() => {
-						current_url_element.classList.remove('bg-warning');
-						if (index === pi_hole_urls.length - 1)
-						{
-							resolve();
-						}
-					}, 1500)
-				}
-				else if (response.includes('added'))
-				{
-					current_url_element.classList.add('bg-success')
-					setTimeout(function() {
-						current_url_element.classList.remove('bg-success');
-						if (index === pi_hole_urls.length - 1)
-						{
-							resolve();
-						}
-					}, 1500);
-				}
-			}
-		};
-
+	pi_hole_list_results.forEach((pi_hole_result, index) => {
 		setTimeout(function() {
-			api_request.send().then();
+			const current_url_element = document.getElementById('current_url');
+			if (pi_hole_result.includes('skipped'))
+			{
+				current_url_element.classList.add('bg-warning')
+				setTimeout(() => {
+					current_url_element.classList.remove('bg-warning');
+				}, 1500)
+			}
+			else if (pi_hole_result.includes('added'))
+			{
+				current_url_element.classList.add('bg-success')
+				setTimeout(function() {
+					current_url_element.classList.remove('bg-success');
+				}, 1500);
+			}
+
+			// After the last one we enable the button again and remove the spinning circle
+			if (index + 1 === pi_hole_list_results.length)
+			{
+				setTimeout(() => toggle_list_button(buttonElement), 1500);
+			}
 		}, delay);
-
 		delay += delay_increment;
-	}));
-
-	promise.then(() => {
-		toggle_list_button(buttonElement);
-
-		if (typeof browser === 'undefined')
-		{
-			chrome.webRequest.onBeforeSendHeaders.removeListener(get_web_request_origin_modifier_callback);
-		}
-	});
+	})
 }
 
 /**

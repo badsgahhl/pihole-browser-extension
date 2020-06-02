@@ -1,13 +1,15 @@
 import {PiHoleVersions} from "../models/pihole/PiHoleVersions";
-import {PiHoleApiRequest} from "./PiHoleApiRequest";
-import {PiHoleSettingsStorage, StorageService} from "../../storage/StorageService";
+import {ApiRequestMethodEnum, PiHoleApiRequest} from "./PiHoleApiRequest";
+import {StorageService} from "../../storage/StorageService";
 import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../models/pihole/PiHoleApiStatus";
 import {ApiJsonErrorMessages} from "../errors/ApiErrorMessages";
-import {BadgeService, ExtensionBadgeText} from "../../storage/BadgeService";
+import {ApiListMode} from "../models/pihole/PiHoleListStatus";
 
 export module PiHoleApiService
 {
-
+	/**
+	 * Returns an array of PiHoleVersions for each pihole
+	 */
 	export async function get_pi_hole_version(): Promise<PiHoleVersions[]>
 	{
 		const storage = (await StorageService.get_pi_hole_settings_array());
@@ -65,68 +67,156 @@ export module PiHoleApiService
 	}
 
 	/**
-	 * Function to get the current PiHoleStatus
+	 * Sends a request to list a domain on all pi-holes
+	 * @param domain
+	 * @param mode
 	 */
-	export async function refresh_pi_hole_status(successCallback: (data: PiHoleApiStatus) => void): Promise<void>
+	export async function list_domain(domain: string, mode: ApiListMode): Promise<string[]>
 	{
-		StorageService.get_pi_hole_settings_array().then(storage => check_status_for_pi_hole(storage, 0, successCallback));
+		const request_promises = [];
+		const storage = (await StorageService.get_pi_hole_settings_array());
+
+		for (const pi_hole of storage)
+		{
+			const promise_function = (resolve) => {
+				const api_request = new PiHoleApiRequest(pi_hole.pi_uri_base, pi_hole.api_key);
+
+				api_request.method = ApiRequestMethodEnum.POST;
+				api_request.add_get_param('list', mode);
+				api_request.add_get_param('add', domain);
+				api_request.add_post_param('comment', 'Added via PiHole Remote Extension');
+
+				api_request.onreadystatechange = function() {
+					if (this.readyState === 4 && this.status === 200)
+					{
+						const response: string = this.response;
+
+						resolve(response);
+
+					}
+				}
+
+				api_request.send().then();
+			};
+			request_promises.push(new Promise(promise_function));
+		}
+
+		return await Promise.all(request_promises);
 	}
 
-	function check_status_for_pi_hole(pi_hole_storage: PiHoleSettingsStorage[], iteration: number, successCallback: (data: PiHoleApiStatus) => void): void
+	/**
+	 * Changes the status of all pi-hole to the given status
+	 * @param status
+	 * @param time
+	 * @param successCallback
+	 * @param errorCallback
+	 */
+	export async function change_pi_hole_status(status: PiHoleApiStatusEnum, time: number, successCallback: (data: PiHoleApiStatus) => void, errorCallback: (data: string) => void): Promise<void>
 	{
-		if (iteration >= pi_hole_storage.length)
+		const pi_hole_storage = (await StorageService.get_pi_hole_settings_array());
+		for (const pi_hole of pi_hole_storage)
 		{
-			return;
-		}
-		const pi_hole = pi_hole_storage[iteration];
-
-		const promise_function = (resolve) => {
 			const api_request: PiHoleApiRequest = new PiHoleApiRequest(pi_hole.pi_uri_base, pi_hole.api_key);
 
-			const onreadystatechange = function() {
+			api_request.onreadystatechange = function() {
 				if (this.readyState === 4 && this.status === 200)
 				{
 					// Action to be performed when the document is read;
 					let data: PiHoleApiStatus;
 					try
 					{
-						data = JSON.parse(this.response);
+						data = JSON.parse(this.response);   //parse the return JSON
 					}
 					catch (e)
 					{
-						console.warn(ApiJsonErrorMessages.invalid);
+						errorCallback(ApiJsonErrorMessages.invalid + " - Pihole:" + pi_hole.pi_uri_base);
 						return;
 					}
-					// The last pihole changes finally the icon and text
-					if ((iteration + 1) === pi_hole_storage.length)
-					{
-						successCallback(data);
-					}
-
-					if (data.status === PiHoleApiStatusEnum.enabled)
-					{
-						resolve();
-					}
-					else
-					{
-						successCallback(data);
-					}
+					successCallback(data);
 				}
 				else if (this.status !== 200 && this.status !== 0)
 				{
-					console.log(this.status);
-					BadgeService.set_badge_text(ExtensionBadgeText.error);
+					console.error(this.status);
+					errorCallback('API Call failed. Check the address.' + " - Pihole:" + pi_hole.pi_uri_base);
 				}
 			};
 
-			api_request.add_get_param('status');
-			api_request.onreadystatechange = onreadystatechange;
+			if (status === PiHoleApiStatusEnum.disabled)
+			{
+				api_request.add_get_param('disable', String(time));
+			}
+			else if (status === PiHoleApiStatusEnum.enabled)
+			{
+				api_request.add_get_param('enable');
+			}
+			await api_request.send();
+		}
+	}
 
-			api_request.send().then();
-		};
 
-		const promise = new Promise(promise_function);
-		// Only check the next piholes if the current is enabled
-		promise.then(() => check_status_for_pi_hole(pi_hole_storage, iteration + 1, successCallback));
+	/**
+	 * Function to refresh the current PiHoleStatus
+	 * @param successCallback Callback that is called once with a valid PiHoleApiStatus
+	 */
+	export async function refresh_pi_hole_status(successCallback: (data: PiHoleApiStatus) => void): Promise<void>
+	{
+		const request_promises = [];
+		const storage = (await StorageService.get_pi_hole_settings_array());
+		for (const pi_hole of storage)
+		{
+			const promise_function = (resolve) => {
+				const api_request: PiHoleApiRequest = new PiHoleApiRequest(pi_hole.pi_uri_base, pi_hole.api_key);
+
+				const onreadystatechange = function() {
+					if (this.readyState === 4 && this.status === 200)
+					{
+						// Action to be performed when the document is read;
+						let data: PiHoleApiStatus;
+						try
+						{
+							data = JSON.parse(this.response);
+						}
+						catch (e)
+						{
+							console.warn(ApiJsonErrorMessages.invalid);
+							const error: PiHoleApiStatus = {status: PiHoleApiStatusEnum.error};
+							resolve(error);
+						}
+						resolve(data);
+
+					}
+					else if (this.status !== 200 && this.status !== 0)
+					{
+						console.log(this.status);
+						//BadgeService.set_badge_text(ExtensionBadgeText.error);
+						const error: PiHoleApiStatus = {status: PiHoleApiStatusEnum.error};
+						resolve(error);
+					}
+				};
+
+				api_request.add_get_param('status');
+				api_request.onreadystatechange = onreadystatechange;
+
+				api_request.send().then();
+			};
+
+			const pi_hole_promise: Promise<PiHoleApiStatus> = new Promise(promise_function);
+			request_promises.push(pi_hole_promise);
+		}
+
+		const results: PiHoleApiStatus[] = await Promise.all(request_promises);
+
+		for (const result of results)
+		{
+			// If any pihole is offline or has an error we use its status
+			if (result.status === PiHoleApiStatusEnum.error || result.status === PiHoleApiStatusEnum.disabled)
+			{
+				console.log(result);
+				successCallback(result);
+				return;
+			}
+		}
+		successCallback({status: PiHoleApiStatusEnum.enabled});
+
 	}
 }
