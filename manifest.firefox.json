@@ -1,9 +1,9 @@
 {
 	"manifest_version": 2,
 	"name": "Switch for PiHole",
-	"version": "2.1.1",
+	"version": "2.1.2",
 	"author": "Pascal Glaser",
-	"description": "Small Extension to enable/disable your PiHole.",
+	"description": "Browser extension to control your PiHole",
 	"icons": {
 		"48": "icon/icon-48.png",
 		"96": "icon/icon-96.png",

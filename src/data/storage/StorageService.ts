@@ -75,7 +75,7 @@ export module StorageService
 		});
 	}
 
-	export function get_pi_hole_settings_array(): Promise<PiHoleSettingsStorage[]>
+	export function get_pi_hole_settings_array(): Promise<PiHoleSettingsStorage[]> | undefined
 	{
 		return new Promise((resolve) => {
 			chrome.storage.local.get(ExtensionStorageEnum.pi_hole_settings, function(obj) {
@@ -91,7 +91,7 @@ export module StorageService
 	export function process_storage_migration(): void
 	{
 		get_pi_hole_settings().then(oldStorage => {
-			//chrome.storage.local.clear();
+			chrome.storage.local.clear();
 			const migration_storage: PiHoleSettingsStorage = {
 				pi_uri_base: oldStorage.pi_uri_base,
 				api_key: oldStorage.api_key
