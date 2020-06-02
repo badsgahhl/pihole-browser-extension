@@ -48,14 +48,41 @@ function throw_console_badge_error(error_message: string, refresh_status: boolea
 
 async function load_settings_and_status(): Promise<void>
 {
+	render_slider_switch().then();
+
 	PiHoleApiService.refresh_pi_hole_status((data => change_icon(data))).then();
 
 	check_for_pi_hole_updates().then();
 
 	set_default_disable_time_html().then();
 
-	document.getElementById('sliderBox').addEventListener('click', on_slider_click);
 	document.getElementById('time').addEventListener('input', time_input_changed);
+}
+
+/**
+ * Renders the the slider depending on the current badge text.
+ * Gets updated if there is a change between the background and the popup refresh
+ */
+async function render_slider_switch(): Promise<void>
+{
+	const badgeText = await BadgeService.get_badge_text();
+
+	const input = document.createElement('input');
+	input.addEventListener('click', on_slider_click);
+	input.checked = badgeText === ExtensionBadgeText.enabled;
+	input.id = 'sliderBox';
+	input.type = 'checkbox';
+
+	const span = document.createElement('span');
+	span.classList.add('slider', 'justify-content-center');
+
+	const label = document.createElement('label');
+	label.id = 'switch';
+
+	label.appendChild(input)
+	label.appendChild(span)
+
+	document.getElementById('status_footer').appendChild(label);
 }
 
 /**
