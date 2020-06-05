@@ -11,8 +11,9 @@ chrome.runtime.onInstalled.addListener(function(details) {
 	}
 	else if (details.reason == "update")
 	{
-		const thisVersion = chrome.runtime.getManifest().version;
-		console.log("Updated from " + details.previousVersion + " to " + thisVersion + "!");
+		const previousVersion = Number(details.previousVersion.split('.').join(''));
+		const thisVersion = Number(chrome.runtime.getManifest().version.split('.').join(''));
+		console.log("Updated from " + previousVersion + " to " + thisVersion + "!");
 
 		/**
 		 * Update Roadmap:
@@ -20,7 +21,7 @@ chrome.runtime.onInstalled.addListener(function(details) {
 		 * 2.1.2 Migration + Making Methods ready to work with multiple pi holes
 		 * 2.2.0 Allowing multiple pihole in the settings
 		 */
-		if (details.previousVersion === '2.1.1' && thisVersion === '2.1.2')
+		if (previousVersion <= 211 && thisVersion > 211)
 		{
 			console.log("Running migration");
 			StorageService.process_storage_migration();

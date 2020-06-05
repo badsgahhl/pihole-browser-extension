@@ -65,11 +65,10 @@ async function load_settings_and_status(): Promise<void>
  */
 async function render_slider_switch(): Promise<void>
 {
-	const badgeText = await BadgeService.get_badge_text();
-
+	const pi_hole_enabled_from_badge = (await BadgeService.get_badge_text() === ExtensionBadgeText.enabled);
 	const input = document.createElement('input');
 	input.addEventListener('click', on_slider_click);
-	input.checked = badgeText === ExtensionBadgeText.enabled;
+	input.checked = pi_hole_enabled_from_badge;
 	input.id = 'sliderBox';
 	input.type = 'checkbox';
 
@@ -83,6 +82,9 @@ async function render_slider_switch(): Promise<void>
 	label.appendChild(span)
 
 	document.getElementById('status_footer').appendChild(label);
+
+	// We also enable the time input with the background badge text
+	(<HTMLInputElement> document.getElementById('time')).disabled = !pi_hole_enabled_from_badge;
 }
 
 /**
@@ -377,8 +379,8 @@ function time_input_changed(): void
 /**
  * EventListener Section
  */
-document.addEventListener('DOMContentLoaded', load_settings_and_status); //When the page loads get the status
+//document.addEventListener('DOMContentLoaded', load_settings_and_status); //When the page loads get the status
 
 
-
+load_settings_and_status().then();
 
