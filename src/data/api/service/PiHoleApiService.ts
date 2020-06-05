@@ -13,6 +13,10 @@ export module PiHoleApiService
 	export async function get_pi_hole_version(): Promise<PiHoleVersions[]>
 	{
 		const storage = (await StorageService.get_pi_hole_settings_array());
+		if (typeof storage === "undefined")
+		{
+			return [];
+		}
 		let promise_array = [];
 		for (const pi_hole_setting of storage)
 		{
@@ -162,6 +166,10 @@ export module PiHoleApiService
 	{
 		const request_promises = [];
 		const storage = (await StorageService.get_pi_hole_settings_array());
+		if (typeof storage === "undefined")
+		{
+			return;
+		}
 		for (const pi_hole of storage)
 		{
 			const promise_function = (resolve) => {

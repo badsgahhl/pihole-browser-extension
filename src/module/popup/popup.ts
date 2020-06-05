@@ -223,6 +223,10 @@ async function list_domain(mode: ApiListMode, buttonElement: HTMLButtonElement):
 			pi_hole_urls_array.push(pi_hole_url.pi_uri_base + "/*");
 		}
 	}
+	else
+	{
+		return;
+	}
 
 	const domain = (await get_current_tab_url_cleaned_cached());
 
