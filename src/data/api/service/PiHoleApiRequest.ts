@@ -88,7 +88,7 @@ export class PiHoleApiRequest
 			if (params)
 			{
 				const key: string = Object.keys(params)[0];
-				const value: string = Object.keys(params).map(key => params[key])[0];
+				const value: string = Object.keys(params).map(value_key => params[value_key])[0];
 
 
 				url += "&" + key + (value ? '=' + value : '');
@@ -115,7 +115,7 @@ export class PiHoleApiRequest
 				if (params)
 				{
 					const key: string = Object.keys(params)[0];
-					const value: string = Object.keys(params).map(key => params[key])[0];
+					const value: string = Object.keys(params).map(value_key => params[value_key])[0];
 					if (i > 0)
 					{
 						post_params += '&'

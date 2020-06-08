@@ -11,7 +11,7 @@ export module StorageService
 	export function add_pi_hole_settings(settings: PiHoleSettingsStorage, callback?: () => void): void
 	{
 		get_pi_hole_settings_array().then(current_settings => {
-			if (!(typeof current_settings === "undefined") && current_settings.length > 0)
+			if (typeof current_settings !== "undefined" && current_settings.length > 0)
 			{
 				current_settings.push(settings);
 			}

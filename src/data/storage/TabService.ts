@@ -11,8 +11,8 @@ export module TabService
 			chrome.tabs.query({'active': true, 'lastFocusedWindow': true, 'currentWindow': true}, function(tabs) {
 				if (tabs[0])
 				{
-					const url = tabs[0].url;
-					resolve(url);
+					const tab_url = tabs[0].url;
+					resolve(tab_url);
 				}
 			});
 		});
@@ -29,7 +29,7 @@ export module TabService
 
 		let pi_hole_urls = (await StorageService.get_pi_hole_settings_array());
 		let pi_hole_urls_array = [];
-		if (!(typeof pi_hole_urls === "undefined"))
+		if (typeof pi_hole_urls !== "undefined")
 		{
 			pi_hole_urls.forEach((value => {
 				pi_hole_urls_array.push((new URL(value.pi_uri_base).hostname));

@@ -106,7 +106,7 @@ async function get_settings(): Promise<void>
 	let default_disable_time = (await StorageService.get_default_disable_time());
 
 	let storage: PiHoleSettingsStorage;
-	if (!(typeof storage_array === "undefined"))
+	if (typeof storage_array !== "undefined")
 	{
 		storage = storage_array[0];
 	}
@@ -118,7 +118,7 @@ async function get_settings(): Promise<void>
 		}
 	}
 
-	if (!(typeof default_disable_time === "undefined"))
+	if (typeof default_disable_time !== "undefined")
 	{
 		default_disable_time = default_disable_time.valueOf();
 	}

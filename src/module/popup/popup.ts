@@ -216,7 +216,7 @@ async function list_domain(mode: ApiListMode, buttonElement: HTMLButtonElement):
 {
 	let pi_hole_urls = (await StorageService.get_pi_hole_settings_array());
 	let pi_hole_urls_array = [];
-	if (!(typeof pi_hole_urls === "undefined"))
+	if (typeof pi_hole_urls !== "undefined")
 	{
 		for (const pi_hole_url of pi_hole_urls)
 		{
@@ -305,11 +305,11 @@ function toggle_list_button(clicked_button: HTMLElement): void
 		{
 			if (is_pressed_button)
 			{
-				object.querySelectorAll('.spinner-border').forEach((object) => {
-					object.classList.add('d-none');
+				object.querySelectorAll('.spinner-border').forEach((child_object) => {
+					child_object.classList.add('d-none');
 				});
-				object.querySelectorAll('svg').forEach((object) => {
-					object.classList.remove('d-none');
+				object.querySelectorAll('svg').forEach((child_object) => {
+					child_object.classList.remove('d-none');
 				});
 			}
 			object.disabled = false;
@@ -318,11 +318,11 @@ function toggle_list_button(clicked_button: HTMLElement): void
 		{
 			if (is_pressed_button)
 			{
-				object.querySelectorAll('.spinner-border').forEach((object) => {
-					object.classList.remove('d-none');
+				object.querySelectorAll('.spinner-border').forEach((child_object) => {
+					child_object.classList.remove('d-none');
 				});
-				object.querySelectorAll('svg').forEach((object) => {
-					object.classList.add('d-none');
+				object.querySelectorAll('svg').forEach((child_object) => {
+					child_object.classList.add('d-none');
 				});
 			}
 
