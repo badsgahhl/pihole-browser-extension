@@ -30,7 +30,7 @@ Switch-for-PiHole is a small browser extension for Chrome and Firefox. It's writ
 
 #### Status / Slider are not working
 Please check that you used the correct host address. Use the address where you can see your dashboard page (statistics board).
-For example if your pihole is located at http://192.168.178.2 but you can see your dashboard/admin page at http://192.168.178.2/admin then don't forget to add /admin to the address.
+For example if your pihole is located at http://192.168.178.2, but you can see your dashboard/admin page at http://192.168.178.2/admin then don't forget to add /admin to the address.
 
 #### Error after clicking the Slider (was "on" before)
 

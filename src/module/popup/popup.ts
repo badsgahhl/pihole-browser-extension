@@ -1,14 +1,11 @@
 import {BadgeService, ExtensionBadgeText} from "../../data/storage/BadgeService";
 import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../data/api/models/pihole/PiHoleApiStatus";
-import {ApiRequestMethodEnum, PiHoleApiRequest} from "../../data/api/service/PiHoleApiRequest";
-import {PiHoleSettingsDefaults, PiHoleSettingsStorageOld, StorageService} from "../../data/storage/StorageService";
-import {ApiJsonErrorMessages} from "../../data/api/errors/ApiErrorMessages";
+import {PiHoleSettingsDefaults, StorageService} from "../../data/storage/StorageService";
 import {TabService} from "../../data/storage/TabService";
 import {ApiListMode} from "../../data/api/models/pihole/PiHoleListStatus";
 import "./popup.css";
 import "../general/darkmode.css";
 import "bootstrap/dist/css/bootstrap.min.css"
-import {PiHoleVersions} from "../../data/api/models/pihole/PiHoleVersions";
 import {PiHoleApiService} from "../../data/api/service/PiHoleApiService";
 
 let current_tab_url: string = '';
@@ -18,54 +15,17 @@ let current_tab_url: string = '';
  */
 async function on_slider_click(): Promise<void>
 {
-	const api_request: PiHoleApiRequest = new PiHoleApiRequest();
-
-	api_request.onreadystatechange = function() {
-		if (this.readyState === 4 && this.status === 200)
-		{
-			// Action to be performed when the document is read;
-			let data: PiHoleApiStatus;
-			try
-			{
-				data = JSON.parse(this.response);   //parse the return JSON
-			}
-			catch (e)
-			{
-				throw_console_badge_error(ApiJsonErrorMessages.invalid);
-				return;
-			}
-			change_icon(data);
-		}
-		else if (this.status !== 200 && this.status !== 0)
-		{
-			console.error(this.status);
-			throw_console_badge_error('API Call failed. Check the address.');
-		}
-	};
-
-	const slider_box = <HTMLInputElement> document.getElementById('sliderBox');
-	if (!slider_box.checked)
+	const status_mode = (<HTMLInputElement> document.getElementById('sliderBox')).checked ? PiHoleApiStatusEnum.enabled : PiHoleApiStatusEnum.disabled;
+	let time: number = Number((<HTMLInputElement> document.getElementById('time')).value);
+	
+	if (time >= 0)
 	{
-		let time: number = Number((<HTMLInputElement> document.getElementById('time')).value);   //get the time from the box
-
-		if (time < 0)
-		{
-			throw_console_badge_error('Time cannot be smaller than 0. Canceling api request.', true);
-			return;
-		}
-		else
-		{
-			api_request.add_get_param('disable', String(time));
-		}
-
+		await PiHoleApiService.change_pi_hole_status(status_mode, time, change_icon, throw_console_badge_error);
 	}
-	else if (slider_box.checked)
+	else
 	{
-
-		api_request.add_get_param('enable');
-
+		throw_console_badge_error('Time cannot be smaller than 0. Canceling api request.', true);
 	}
-	await api_request.send();
 }
 
 /**
@@ -81,21 +41,50 @@ function throw_console_badge_error(error_message: string, refresh_status: boolea
 	if (refresh_status)
 	{
 		setTimeout(function() {
-			refresh_pi_hole_status().then();
+			PiHoleApiService.refresh_pi_hole_status((data => change_icon(data))).then();
 		}, 1500);
 	}
 }
 
 async function load_settings_and_status(): Promise<void>
 {
-	refresh_pi_hole_status().then();
+	render_slider_switch().then();
+
+	PiHoleApiService.refresh_pi_hole_status((data => change_icon(data))).then();
 
 	check_for_pi_hole_updates().then();
 
 	set_default_disable_time_html().then();
 
-	document.getElementById('sliderBox').addEventListener('click', on_slider_click);
 	document.getElementById('time').addEventListener('input', time_input_changed);
+}
+
+/**
+ * Renders the the slider depending on the current badge text.
+ * Gets updated if there is a change between the background and the popup refresh
+ */
+async function render_slider_switch(): Promise<void>
+{
+	const pi_hole_enabled_from_badge = (await BadgeService.get_badge_text() === ExtensionBadgeText.enabled);
+	const input = document.createElement('input');
+	input.addEventListener('click', on_slider_click);
+	input.checked = pi_hole_enabled_from_badge;
+	input.id = 'sliderBox';
+	input.type = 'checkbox';
+
+	const span = document.createElement('span');
+	span.classList.add('slider', 'justify-content-center');
+
+	const label = document.createElement('label');
+	label.id = 'switch';
+
+	label.appendChild(input)
+	label.appendChild(span)
+
+	document.getElementById('status_footer').appendChild(label);
+
+	// We also enable the time input with the background badge text
+	(<HTMLInputElement> document.getElementById('time')).disabled = !pi_hole_enabled_from_badge;
 }
 
 /**
@@ -105,9 +94,9 @@ async function set_default_disable_time_html(): Promise<void>
 {
 	const time = <HTMLInputElement> document.getElementById('time');
 
-	const storage: PiHoleSettingsStorageOld = await StorageService.get_pi_hole_settings();
+	const default_disable_time_storage = await StorageService.get_default_disable_time();
 
-	const default_disable_time: number = storage.default_disable_time ? storage.default_disable_time : PiHoleSettingsDefaults.default_disable_time;
+	const default_disable_time: number = default_disable_time_storage ? default_disable_time_storage : PiHoleSettingsDefaults.default_disable_time;
 
 	time.defaultValue = String(default_disable_time);
 }
@@ -117,19 +106,31 @@ async function set_default_disable_time_html(): Promise<void>
  */
 async function check_for_pi_hole_updates(): Promise<void>
 {
-	const versions = (await PiHoleApiService.get_pi_hole_version());
+	const versions_array = (await PiHoleApiService.get_pi_hole_version());
 
-	if (versions.FTL_current < versions.FTL_latest || versions.core_current < versions.core_current || versions.web_current < versions.web_latest)
+	let update_available = false;
+	let amount_updatable = 0;
+	for (const pi_hole_version of versions_array)
+	{
+		if (pi_hole_version.FTL_current < pi_hole_version.FTL_latest || pi_hole_version.core_current < pi_hole_version.core_latest || pi_hole_version.web_current < pi_hole_version.web_latest)
+		{
+			update_available = true;
+			amount_updatable++;
+		}
+	}
+
+	if (update_available)
 	{
 		const main_elem = document.getElementById('main');
 
 		const alert = document.createElement('div');
 		alert.classList.add('alert', 'alert-warning', 'popup-alert');
 		alert.setAttribute('role', 'alert');
-		alert.innerText = "PiHole Update available!"
+		alert.innerText = "PiHole Update available! (" + amount_updatable + "/" + versions_array.length + ")";
 
 		main_elem.append(alert);
 	}
+
 }
 
 /**
@@ -162,9 +163,19 @@ async function toggle_list_card(): Promise<void>
 
 	document.getElementById('current_url').innerText = url;
 
-	const pi_hole_versions: PiHoleVersions = (await PiHoleApiService.get_pi_hole_version());
+	const pi_hole_versions = (await PiHoleApiService.get_pi_hole_version());
 	// TODO: Needs a higher version later with the fix
-	if (pi_hole_versions.FTL_current >= 5)
+	let pi_hole_version_5 = true;
+
+	for (let version of pi_hole_versions)
+	{
+		if (version.FTL_current < 5 && version.FTL_current !== -1)
+		{
+			pi_hole_version_5 = false;
+		}
+	}
+
+	if (pi_hole_version_5 && card_object.classList.contains('d-none'))
 	{
 		card_object.classList.remove('d-none');
 
@@ -203,10 +214,23 @@ function get_web_request_origin_modifier_callback(details)
  */
 async function list_domain(mode: ApiListMode, buttonElement: HTMLButtonElement): Promise<void>
 {
-	const pi_url = (await StorageService.get_pi_hole_settings()).pi_uri_base;
+	let pi_hole_urls = (await StorageService.get_pi_hole_settings_array());
+	let pi_hole_urls_array = [];
+	if (!(typeof pi_hole_urls === "undefined"))
+	{
+		for (const pi_hole_url of pi_hole_urls)
+		{
+			pi_hole_urls_array.push(pi_hole_url.pi_uri_base + "/*");
+		}
+	}
+	else
+	{
+		return;
+	}
+
 	const domain = (await get_current_tab_url_cleaned_cached());
 
-	if (!pi_url || !domain)
+	if (!pi_hole_urls_array || !domain)
 	{
 		return;
 	}
@@ -217,7 +241,7 @@ async function list_domain(mode: ApiListMode, buttonElement: HTMLButtonElement):
 	{
 		chrome.webRequest.onBeforeSendHeaders.addListener(
 			get_web_request_origin_modifier_callback, {
-				urls: [pi_url + "/*"]
+				urls: pi_hole_urls_array
 			},
 			[
 				"blocking",
@@ -228,53 +252,43 @@ async function list_domain(mode: ApiListMode, buttonElement: HTMLButtonElement):
 
 	toggle_list_button(buttonElement);
 
-	const api_request = new PiHoleApiRequest();
+	// Delay between each call to one of multiple piholes
+	const delay_increment = 2000;
+	let delay = 0;
 
-	api_request.method = ApiRequestMethodEnum.POST;
-	api_request.add_get_param('list', mode);
-	api_request.add_get_param('add', domain);
-	api_request.add_post_param('comment', 'Added via PiHole Remote Extension');
+	const pi_hole_list_results = (await PiHoleApiService.list_domain(domain, mode));
 
-	api_request.onreadystatechange = function() {
-		if (this.readyState === 4 && this.status === 200)
-		{
-			if (typeof browser === 'undefined')
-			{
-				chrome.webRequest.onBeforeSendHeaders.removeListener(get_web_request_origin_modifier_callback);
-			}
+	if (typeof browser === 'undefined')
+	{
+		chrome.webRequest.onBeforeSendHeaders.removeListener(get_web_request_origin_modifier_callback);
+	}
 
-			const response: string = this.response;
+	pi_hole_list_results.forEach((pi_hole_result, index) => {
+		setTimeout(function() {
 			const current_url_element = document.getElementById('current_url');
-
-			/**
-			 * Changing the background color depending on the status of adding the url.
-			 * Orange: Url was skipped by PIHOLE
-			 * Green: URL was added to the list.
-			 */
-			if (response.includes('skipped'))
+			if (pi_hole_result.includes('skipped'))
 			{
+				current_url_element.classList.add('bg-warning')
 				setTimeout(() => {
-					toggle_list_button(buttonElement);
-					current_url_element.classList.add('bg-warning')
-					setTimeout(() => {
-						current_url_element.classList.remove('bg-warning');
-					}, 1500)
-				}, 500);
+					current_url_element.classList.remove('bg-warning');
+				}, 1500)
 			}
-			else if (response.includes('added'))
+			else if (pi_hole_result.includes('added'))
 			{
-				// We wait 3.5 Seconds until we can assume that the pihole is back online.
 				current_url_element.classList.add('bg-success')
 				setTimeout(function() {
 					current_url_element.classList.remove('bg-success');
-				}, 1500)
-				setTimeout(() => {
-					toggle_list_button(buttonElement);
-				}, 3500);
+				}, 1500);
 			}
-		}
-	}
-	api_request.send().then();
+
+			// After the last one we enable the button again and remove the spinning circle
+			if (index + 1 === pi_hole_list_results.length)
+			{
+				setTimeout(() => toggle_list_button(buttonElement), 1500);
+			}
+		}, delay);
+		delay += delay_increment;
+	})
 }
 
 /**
@@ -283,6 +297,7 @@ async function list_domain(mode: ApiListMode, buttonElement: HTMLButtonElement):
  */
 function toggle_list_button(clicked_button: HTMLElement): void
 {
+	console.log("fired");
 	const list_buttons = document.querySelectorAll('.btn-list');
 	list_buttons.forEach((object: HTMLButtonElement) => {
 		const is_pressed_button = object.isEqualNode(clicked_button);
@@ -316,36 +331,6 @@ function toggle_list_button(clicked_button: HTMLElement): void
 	});
 }
 
-/**
- * Function to get the current PiHoleStatus
- */
-async function refresh_pi_hole_status(): Promise<void>
-{
-	const api_request: PiHoleApiRequest = new PiHoleApiRequest();
-
-	const onreadystatechange = function() {
-		if (this.readyState === 4 && this.status === 200)
-		{
-			// Action to be performed when the document is read;
-			let data;
-			try
-			{
-				data = JSON.parse(this.response);
-			}
-			catch (e)
-			{
-				console.warn(ApiJsonErrorMessages.invalid);
-				return;
-			}
-			change_icon(data);
-		}
-	};
-
-	api_request.add_get_param('status');
-	api_request.onreadystatechange = onreadystatechange;
-
-	await api_request.send();
-}
 
 /**
  * This function changes different view components accordingly to the PiHoleStatus
@@ -374,6 +359,7 @@ function change_icon(data: PiHoleApiStatus): void
 	{   //If there is an API key error
 		time.disabled = true;
 		sliderBox.disabled = true;   //turn off the input box
+		sliderBox.checked = false;
 		BadgeService.set_badge_text(ExtensionBadgeText.error);   //set badge text to empty
 	}
 }
@@ -397,8 +383,8 @@ function time_input_changed(): void
 /**
  * EventListener Section
  */
-document.addEventListener('DOMContentLoaded', load_settings_and_status); //When the page loads get the status
+//document.addEventListener('DOMContentLoaded', load_settings_and_status); //When the page loads get the status
 
 
-
+load_settings_and_status().then();
 

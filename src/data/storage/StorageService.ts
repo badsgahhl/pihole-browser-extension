@@ -4,34 +4,37 @@
 export module StorageService
 {
 	/**
-	 * Saves the Object to the local storage.
-	 * @param items
-	 * @param callback
-	 * @deprecated
-	 */
-	export function save_to_local_storage(items: Object, callback?: () => void): void
-	{
-		chrome.storage.local.set(items, callback);
-	}
-
-	/**
 	 * Function to save one settings object according to its id
 	 * @param settings
-	 * @param id
 	 * @param callback
 	 */
-	export function save_pi_hole_settings(settings: PiHoleSettingsStorage, id: number, callback?: () => void): void
+	export function add_pi_hole_settings(settings: PiHoleSettingsStorage, callback?: () => void): void
 	{
-		get_pi_hole_settings_array().then(r => {
-			r[id] = settings;
-
-			const storage: ExtensionStorage = {
-				storage_version: 2,
-				pi_hole_settings: r
+		get_pi_hole_settings_array().then(current_settings => {
+			if (!(typeof current_settings === "undefined") && current_settings.length > 0)
+			{
+				current_settings.push(settings);
+			}
+			else
+			{
+				current_settings = [settings];
 			}
 
-			chrome.storage.local.set(storage, callback);
-		})
+			let storage: ExtensionStorage = {
+				pi_hole_settings: current_settings,
+			}
+
+			if (storage)
+			{
+				chrome.storage.local.set(storage, callback);
+			}
+		});
+
+	}
+
+	export function clear_pi_hole_settings(): void
+	{
+		chrome.storage.local.remove(ExtensionStorageEnum.pi_hole_settings.valueOf());
 	}
 
 	/**
@@ -50,6 +53,15 @@ export module StorageService
 		chrome.storage.local.set(storage);
 	}
 
+	export function get_default_disable_time(): Promise<number>
+	{
+		return new Promise((resolve) => {
+			chrome.storage.local.get(ExtensionStorageEnum.default_disable_time, function(obj) {
+				resolve((<ExtensionStorage> obj).default_disable_time)
+			});
+		});
+	}
+
 	/**
 	 * Gets the current extension settings.
 	 * @deprecated
@@ -63,7 +75,7 @@ export module StorageService
 		});
 	}
 
-	export function get_pi_hole_settings_array(): Promise<PiHoleSettingsStorage[]>
+	export function get_pi_hole_settings_array(): Promise<PiHoleSettingsStorage[]> | undefined
 	{
 		return new Promise((resolve) => {
 			chrome.storage.local.get(ExtensionStorageEnum.pi_hole_settings, function(obj) {
@@ -80,7 +92,12 @@ export module StorageService
 	{
 		get_pi_hole_settings().then(oldStorage => {
 			chrome.storage.local.clear();
-			save_pi_hole_settings(oldStorage, 0);
+			const migration_storage: PiHoleSettingsStorage = {
+				pi_uri_base: oldStorage.pi_uri_base,
+				api_key: oldStorage.api_key
+			}
+
+			add_pi_hole_settings(migration_storage);
 			save_default_disable_time(oldStorage.default_disable_time);
 		})
 
@@ -120,5 +137,6 @@ export interface ExtensionStorage
 export enum ExtensionStorageEnum
 {
 	pi_hole_settings = 'pi_hole_settings',
-	storage_version = 'storage_version'
+	storage_version = 'storage_version',
+	default_disable_time = 'default_disable_time'
 }
