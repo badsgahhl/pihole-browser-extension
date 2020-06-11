@@ -138,15 +138,17 @@ function toggle_api_warning(text?: string): void
  */
 async function get_settings(): Promise<void>
 {
-	const storage_array = (await StorageService.get_pi_hole_settings_array());
+	let storage_array = (await StorageService.get_pi_hole_settings_array());
 	let default_disable_time = (await StorageService.get_default_disable_time());
 
 	if (typeof storage_array === "undefined")
 	{
-		storage_array[0] = {
-			api_key: String(PiHoleSettingsDefaults.api_key),
-			pi_uri_base: String(PiHoleSettingsDefaults.pi_uri_base)
-		}
+		storage_array = [
+			{
+				api_key: String(PiHoleSettingsDefaults.api_key),
+				pi_uri_base: String(PiHoleSettingsDefaults.pi_uri_base)
+			}
+		];
 	}
 
 	for (let i = 0; i < storage_array.length; i++)
@@ -216,8 +218,8 @@ function enable_add_pi_hole_button(): void
 		button.addEventListener('click', function() {
 
 			const default_settings: PiHoleSettingsStorage = {
-				api_key: PiHoleSettingsDefaults.api_key,
-				pi_uri_base: PiHoleSettingsDefaults.pi_uri_base
+				api_key: String(PiHoleSettingsDefaults.api_key),
+				pi_uri_base: String(PiHoleSettingsDefaults.pi_uri_base)
 			};
 
 			const counter = document.getElementById('settings_tabs').childNodes.length;
