@@ -4,6 +4,9 @@ body {
     max-width: 600px;
 }
 
+#pi_hole_settings_tab_content {
+    margin-top: 5px;
+}
 
 #save_button {
     width: -moz-fit-content;

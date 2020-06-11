@@ -8,13 +8,12 @@
 <body>
 <h6 class="headline text-center">Enter the API key found under setting -> API/Web interface, Use a QR Code scanner to
     get the text.</h6>
-<div class="form-group">
-    <label for="pi_uri_base">Pi-Hole Address:</label>
-    <input class="form-control" type="text" id="pi_uri_base" name="Pi-Hole Address">
+<div id="pi_hole_input_buttons" class="form-group float-right">
 </div>
 
-<div class="form-group">
-    <label for="api_key">API Key:</label><input class="form-control" type="text" id="api_key" name="API Key">
+<ul class="nav nav-tabs" id="settings_tabs" role="tablist">
+</ul>
+<div class="tab-content" id="pi_hole_settings_tab_content">
 </div>
 
 <div class="form-group">
@@ -26,6 +25,7 @@
         </div>
     </div>
 </div>
+
 <button type="button" class="btn btn-success" id="save_button" value="Save">Save</button>
 <div id="bottom_warning" class="alert alert-warning d-none" role="alert">
     This is a danger alert—check it out!

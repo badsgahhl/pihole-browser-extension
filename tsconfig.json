@@ -14,7 +14,9 @@
 		"types": [
 			//(various types, e.g. jquery, core-js),
 			"chrome",
-			"firefox-webext-browser"
+			"firefox-webext-browser",
+			"jquery",
+			"bootstrap"
 		]
 	},
 	"exclude": [
