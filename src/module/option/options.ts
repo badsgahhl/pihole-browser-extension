@@ -222,9 +222,7 @@ function enable_add_pi_hole_button(): void
 				pi_uri_base: String(PiHoleSettingsDefaults.pi_uri_base)
 			};
 
-			const counter = document.getElementById('settings_tabs').childElementCount + 1
-			console.log(counter);
-			console.log(document.getElementById('settings_tabs').childElementCount)
+			const counter = document.getElementById('settings_tabs').childElementCount + 1;
 			render_tab(default_settings, counter, false);
 			$('#pi_hole_setting' + (counter)).tab('show');
 
