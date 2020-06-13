@@ -222,12 +222,14 @@ function enable_add_pi_hole_button(): void
 				pi_uri_base: String(PiHoleSettingsDefaults.pi_uri_base)
 			};
 
-			const counter = document.getElementById('settings_tabs').childNodes.length;
-			render_tab(default_settings, counter + 1, false);
+			const counter = document.getElementById('settings_tabs').childElementCount + 1
+			console.log(counter);
+			console.log(document.getElementById('settings_tabs').childElementCount)
+			render_tab(default_settings, counter, false);
 			$('#pi_hole_setting' + (counter)).tab('show');
 
 			const tabs = document.getElementById('settings_tabs');
-			change_add_remove_button_by_number(tabs.childNodes.length - 1);
+			change_add_remove_button_by_number(tabs.childElementCount);
 		});
 
 		const input_buttons = document.getElementById('pi_hole_input_buttons');
@@ -276,11 +278,10 @@ function enable_remove_pi_hole_button(): void
 			const tabs_content = document.getElementById('pi_hole_settings_tab_content');
 			tabs_content.removeChild(tabs_content.lastChild);
 
-			if (last_child_was_selected)
-			{
-				$('#pi_hole_setting' + (tabs.childNodes.length - 1)).tab('show');
+			if (last_child_was_selected) {
+				$('#pi_hole_setting' + tabs.childElementCount).tab('show');
 			}
-			change_add_remove_button_by_number(tabs.childNodes.length - 1);
+			change_add_remove_button_by_number(tabs.childElementCount);
 		});
 
 		document.getElementById('pi_hole_input_buttons').append(button);
