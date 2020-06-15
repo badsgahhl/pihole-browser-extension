@@ -8,27 +8,26 @@ export module StorageService
 	 * @param settings
 	 * @param callback
 	 */
-	export function add_pi_hole_settings(settings: PiHoleSettingsStorage, callback?: () => void): void
+	export async function add_pi_hole_settings(settings: PiHoleSettingsStorage, callback?: () => void): Promise<void>
 	{
-		get_pi_hole_settings_array().then(current_settings => {
-			if (typeof current_settings !== "undefined" && current_settings.length > 0)
-			{
-				current_settings.push(settings);
-			}
-			else
-			{
-				current_settings = [settings];
-			}
+		let current_settings = await get_pi_hole_settings_array();
+		if (typeof current_settings !== "undefined" && current_settings.length > 0)
+		{
+			current_settings.push(settings);
+		}
+		else
+		{
+			current_settings = [settings];
+		}
 
-			let storage: ExtensionStorage = {
-				pi_hole_settings: current_settings,
-			}
+		let storage: ExtensionStorage = {
+			pi_hole_settings: current_settings,
+		}
 
-			if (storage)
-			{
-				chrome.storage.local.set(storage, callback);
-			}
-		});
+		if (storage)
+		{
+			chrome.storage.local.set(storage, callback);
+		}
 
 	}
 

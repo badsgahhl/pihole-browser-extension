@@ -25,4 +25,8 @@
     .card {
         border-color: var(--black-mode-color-light-blue-grey);
     }
+
+    .nav-link:not(.active) {
+        color: white !important;
+    }
 }
