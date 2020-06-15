@@ -4,6 +4,12 @@ body {
     max-width: 600px;
 }
 
+.nav_bar_box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between
+}
+
 #pi_hole_settings_tab_content {
     margin-top: 5px;
 }

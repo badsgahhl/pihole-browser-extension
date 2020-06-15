@@ -1,7 +1,4 @@
-#### What happens while using multiple pihole?
-
-If you use multiple pihole with this extension the whole UI will behave as before.
-You only have one switch and one UI for the list feature.
+## Using multiple Piholes
 
 #### How does everything respond?
 
@@ -10,7 +7,7 @@ You only have one switch and one UI for the list feature.
 If you open the popup, or the extension refreshes the status in the background it will show you the status the following:
 - If one of your piholes throws an error, an error will show up
 - If one of your piholes is offline, offline is displayed.
-- Only if every pihole is online the extension will show online!
+- Only if every pihole is online the extension will show online
 
 ##### Disabling / Enabling piholes
 

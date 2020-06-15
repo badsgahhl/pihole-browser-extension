@@ -217,7 +217,7 @@ function enable_add_pi_hole_button(): void
 
 		button.addEventListener('click', function() {
 
-			const default_settings:PiHoleSettingsStorage = {
+			const default_settings: PiHoleSettingsStorage = {
 				api_key: String(PiHoleSettingsDefaults.api_key),
 				pi_uri_base: String(PiHoleSettingsDefaults.pi_uri_base)
 			};
