@@ -20,7 +20,7 @@ async function on_slider_click(): Promise<void>
 	
 	if (time >= 0)
 	{
-		await PiHoleApiService.change_pi_hole_status(status_mode, time, change_icon, throw_console_badge_error);
+		await PiHoleApiService.change_pi_hole_status(status_mode, time, (data) => change_icon(data), (data) => throw_console_badge_error(data));
 	}
 	else
 	{
