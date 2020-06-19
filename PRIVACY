@@ -1,0 +1,8 @@
+MIT License
+
+Copyright (c) 2020 Pascal Glaser
+
+The browser extension "pihole-extension" has the possibility to access private data and confidential information via your browser.
+
+These permissions are needed to send so called "requests" to your local PiHole server.
+The extension neither collects user data, nor does it establish a connection to servers outside of the addresses you provide.
