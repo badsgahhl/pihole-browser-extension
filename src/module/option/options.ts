@@ -82,16 +82,11 @@ async function set_settings(): Promise<void>
 
 	StorageService.save_default_disable_time(default_disable_time_input.valueAsNumber);
 
-	const disable_after_new_tab = (<HTMLInputElement> document.getElementById('disable_after_new_tab')).checked;
 	const reload_after_enable_disable = (<HTMLInputElement> document.getElementById('reload_after_enable_disable')).checked;
 	const reload_after_white_black_list = (<HTMLInputElement> document.getElementById('reload_after_white_black_list')).checked;
 
-	StorageService.save_disable_after_new_tab(disable_after_new_tab);
 	StorageService.save_reload_after_enable_disable(reload_after_enable_disable);
 	StorageService.save_reload_after_white_black_list(reload_after_white_black_list);
-
-
-	chrome.runtime.sendMessage({text: ExtensionStorageEnum.disable_after_new_tab});
 
 	button_saved();
 }
@@ -152,7 +147,6 @@ async function get_settings(): Promise<void>
 {
 	let storage_array = (await StorageService.get_pi_hole_settings_array());
 	let default_disable_time = (await StorageService.get_default_disable_time());
-	let disable_after_new_tab = (await StorageService.get_disable_after_new_tab());
 	let reload_after_enable_disable = (await StorageService.get_reload_after_enable_disable());
 	let reload_after_white_black_list = (await StorageService.get_reload_after_white_black_list());
 
@@ -184,10 +178,6 @@ async function get_settings(): Promise<void>
 	const default_time: number = default_disable_time;
 	(<HTMLInputElement> document.getElementById('default_time')).defaultValue = String(default_time);
 
-	if (typeof disable_after_new_tab === 'undefined')
-	{
-		disable_after_new_tab = false;
-	}
 	if (typeof reload_after_enable_disable === 'undefined')
 	{
 		reload_after_enable_disable = false;
@@ -197,7 +187,6 @@ async function get_settings(): Promise<void>
 		reload_after_white_black_list = false;
 	}
 
-	(<HTMLInputElement> document.getElementById('disable_after_new_tab')).checked = disable_after_new_tab;
 	(<HTMLInputElement> document.getElementById('reload_after_enable_disable')).checked = reload_after_enable_disable;
 	(<HTMLInputElement> document.getElementById('reload_after_white_black_list')).checked = reload_after_white_black_list;
 

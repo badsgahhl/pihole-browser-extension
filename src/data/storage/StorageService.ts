@@ -62,27 +62,6 @@ export module StorageService
 	}
 
 	/**
-	 * Function to set the state for disable_after_new_tab
-	 * @param state
-	 */
-	export function save_disable_after_new_tab(state: boolean): void
-	{
-		const storage: ExtensionStorage = {
-			disable_after_new_tab: state
-		}
-		chrome.storage.local.set(storage);
-	}
-
-	export function get_disable_after_new_tab(): Promise<boolean>
-	{
-		return new Promise((resolve) => {
-			chrome.storage.local.get(ExtensionStorageEnum.disable_after_new_tab, function(obj) {
-				resolve((<ExtensionStorage> obj).disable_after_new_tab)
-			});
-		});
-	}
-
-	/**
 	 * Function to set the state for reload_after_enable_disable
 	 * @param state
 	 */
@@ -194,7 +173,6 @@ export interface ExtensionStorage
 	pi_hole_settings?: PiHoleSettingsStorage[],
 	default_disable_time?: number,
 	storage_version?: number,
-	disable_after_new_tab?: boolean,
 	reload_after_enable_disable?: boolean,
 	reload_after_white_black_list?: boolean,
 }
@@ -204,8 +182,6 @@ export enum ExtensionStorageEnum
 	pi_hole_settings = 'pi_hole_settings',
 	storage_version = 'storage_version',
 	default_disable_time = 'default_disable_time',
-	disable_after_new_tab = 'disable_after_new_tab',
 	reload_after_enable_disable = 'reload_after_enable_disable',
 	reload_after_white_black_list = 'reload_after_white_black_list'
-
 }
