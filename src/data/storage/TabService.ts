@@ -54,4 +54,16 @@ export module TabService
 		return url;
 	}
 
+	/**
+	 * Function to reload the current tab
+	 */
+	export function reload_current_tab(): void
+	{
+		chrome.tabs.query({'active': true, 'lastFocusedWindow': true, 'currentWindow': true}, function(tabs) {
+			if (tabs[0])
+			{
+				chrome.tabs.reload(tabs[0].id);
+			}
+		});
+	}
 }

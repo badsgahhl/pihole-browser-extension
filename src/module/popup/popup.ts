@@ -17,14 +17,29 @@ async function on_slider_click(): Promise<void>
 {
 	const status_mode = (<HTMLInputElement> document.getElementById('sliderBox')).checked ? PiHoleApiStatusEnum.enabled : PiHoleApiStatusEnum.disabled;
 	let time: number = Number((<HTMLInputElement> document.getElementById('time')).value);
-	
+
 	if (time >= 0)
 	{
-		await PiHoleApiService.change_pi_hole_status(status_mode, time, (data) => change_icon(data), (data) => throw_console_badge_error(data));
+		await PiHoleApiService.change_pi_hole_status(status_mode, time, (data) => on_slider_click_success_handler(data), (data) => throw_console_badge_error(data));
+
 	}
 	else
 	{
 		throw_console_badge_error('Time cannot be smaller than 0. Canceling api request.', true);
+	}
+}
+
+async function on_slider_click_success_handler(data: PiHoleApiStatus): Promise<void>
+{
+	change_icon(data);
+	if (data.status === PiHoleApiStatusEnum.disabled)
+	{
+		const reload_after_enable_disable = (await StorageService.get_reload_after_enable_disable());
+
+		if (reload_after_enable_disable)
+		{
+			TabService.reload_current_tab();
+		}
 	}
 }
 
@@ -284,7 +299,15 @@ async function list_domain(mode: ApiListMode, buttonElement: HTMLButtonElement):
 			// After the last one we enable the button again and remove the spinning circle
 			if (index + 1 === pi_hole_list_results.length)
 			{
-				setTimeout(() => toggle_list_button(buttonElement), 1500);
+				setTimeout(async () => {
+					const reload_after_white_black_list = (await StorageService.get_reload_after_white_black_list());
+
+					if (reload_after_white_black_list)
+					{
+						TabService.reload_current_tab();
+					}
+					toggle_list_button(buttonElement);
+				}, 1500);
 			}
 		}, delay);
 		delay += delay_increment;

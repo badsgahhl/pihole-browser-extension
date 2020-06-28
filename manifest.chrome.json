@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Switch for PiHole",
-	"version": "2.2.1",
+	"version": "2.2.2",
 	"author": "Pascal Glaser",
 	"description": "Browser extension to control your PiHole",
 	"icons": {
@@ -27,6 +27,7 @@
 	"permissions": [
 		"storage",
 		"<all_urls>",
+		"tabs",
 		"webRequest",
 		"webRequestBlocking"
 	]
