@@ -29,6 +29,8 @@ chrome.runtime.onInstalled.addListener(function(details) {
 	}
 });
 
+// Hook to show a survey after uninstalling the extension
+chrome.runtime.setUninstallURL('https://forms.gle/RsGUyrmB1jtsGhYQ9');
 
 /**
  * Background Service
