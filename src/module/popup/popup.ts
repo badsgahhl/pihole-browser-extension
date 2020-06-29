@@ -42,7 +42,7 @@ async function on_slider_click_success_handler(data: PiHoleApiStatus): Promise<v
 
 		if (reload_after_enable_disable)
 		{
-			TabService.reload_current_tab();
+			TabService.reload_current_tab(1000);
 		}
 	}
 }
@@ -308,7 +308,7 @@ async function list_domain(mode: ApiListMode, buttonElement: HTMLButtonElement):
 
 					if (reload_after_white_black_list)
 					{
-						TabService.reload_current_tab();
+						TabService.reload_current_tab(250);
 					}
 					toggle_list_button(buttonElement);
 				}, 1500);

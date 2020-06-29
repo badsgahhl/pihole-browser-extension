@@ -56,10 +56,16 @@ export module TabService
 
 	/**
 	 * Function to reload the current tab
+	 * @param delay in ms
 	 */
-	export function reload_current_tab(): void
+	export function reload_current_tab(delay?: number): void
 	{
-		chrome.tabs.query({'active': true, 'lastFocusedWindow': true, 'currentWindow': true}, (tabs) => {
+		const query_info = {
+			'active': true,
+			'lastFocusedWindow': true,
+			'currentWindow': true
+		};
+		const query_function = (tabs) => {
 			if (tabs[0])
 			{
 				get_current_tab_url_cleaned().then((url) => {
@@ -69,6 +75,16 @@ export module TabService
 					}
 				});
 			}
-		});
+		}
+		const tabs_function = () => chrome.tabs.query(query_info, query_function);
+
+		if (delay > 0)
+		{
+			setTimeout(tabs_function, delay);
+		}
+		else
+		{
+			tabs_function();
+		}
 	}
 }
