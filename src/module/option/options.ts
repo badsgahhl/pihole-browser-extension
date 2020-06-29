@@ -82,11 +82,11 @@ async function set_settings(): Promise<void>
 
 	StorageService.save_default_disable_time(default_disable_time_input.valueAsNumber);
 
-	const reload_after_enable_disable = (<HTMLInputElement> document.getElementById('reload_after_enable_disable')).checked;
-	const reload_after_white_black_list = (<HTMLInputElement> document.getElementById('reload_after_white_black_list')).checked;
+	const reload_after_enable_disable = (<HTMLInputElement> document.getElementById('reload_after_disable')).checked;
+	const reload_after_white_black_list = (<HTMLInputElement> document.getElementById('reload_after_white_list')).checked;
 
-	StorageService.save_reload_after_enable_disable(reload_after_enable_disable);
-	StorageService.save_reload_after_white_black_list(reload_after_white_black_list);
+	StorageService.save_reload_after_disable(reload_after_enable_disable);
+	StorageService.save_reload_after_white_list(reload_after_white_black_list);
 
 	button_saved();
 }
@@ -147,8 +147,8 @@ async function get_settings(): Promise<void>
 {
 	let storage_array = (await StorageService.get_pi_hole_settings_array());
 	let default_disable_time = (await StorageService.get_default_disable_time());
-	let reload_after_enable_disable = (await StorageService.get_reload_after_enable_disable());
-	let reload_after_white_black_list = (await StorageService.get_reload_after_white_black_list());
+	let reload_after_disable = (await StorageService.get_reload_after_disable());
+	let reload_after_white_list = (await StorageService.get_reload_after_white_list());
 
 	if (typeof storage_array === "undefined")
 	{
@@ -178,17 +178,17 @@ async function get_settings(): Promise<void>
 	const default_time: number = default_disable_time;
 	(<HTMLInputElement> document.getElementById('default_time')).defaultValue = String(default_time);
 
-	if (typeof reload_after_enable_disable === 'undefined')
+	if (typeof reload_after_disable === 'undefined')
 	{
-		reload_after_enable_disable = false;
+		reload_after_disable = false;
 	}
-	if (typeof reload_after_white_black_list === 'undefined')
+	if (typeof reload_after_white_list === 'undefined')
 	{
-		reload_after_white_black_list = false;
+		reload_after_white_list = false;
 	}
 
-	(<HTMLInputElement> document.getElementById('reload_after_enable_disable')).checked = reload_after_enable_disable;
-	(<HTMLInputElement> document.getElementById('reload_after_white_black_list')).checked = reload_after_white_black_list;
+	(<HTMLInputElement> document.getElementById('reload_after_disable')).checked = reload_after_disable;
+	(<HTMLInputElement> document.getElementById('reload_after_white_list')).checked = reload_after_white_list;
 
 }
 

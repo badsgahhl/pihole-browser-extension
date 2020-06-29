@@ -38,9 +38,9 @@ async function on_slider_click_success_handler(data: PiHoleApiStatus): Promise<v
 	change_icon(data);
 	if (data.status === PiHoleApiStatusEnum.disabled)
 	{
-		const reload_after_enable_disable = (await StorageService.get_reload_after_enable_disable());
+		const reload_after_disable = (await StorageService.get_reload_after_disable());
 
-		if (reload_after_enable_disable)
+		if (reload_after_disable)
 		{
 			TabService.reload_current_tab(1000);
 		}
@@ -304,9 +304,9 @@ async function list_domain(mode: ApiListMode, buttonElement: HTMLButtonElement):
 			if (index + 1 === pi_hole_list_results.length)
 			{
 				setTimeout(async () => {
-					const reload_after_white_black_list = (await StorageService.get_reload_after_white_black_list());
+					const reload_after_white_black_list = (await StorageService.get_reload_after_white_list());
 
-					if (reload_after_white_black_list)
+					if (reload_after_white_black_list && mode === ApiListMode.whitelist)
 					{
 						TabService.reload_current_tab(250);
 					}
