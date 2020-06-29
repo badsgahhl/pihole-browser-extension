@@ -1,6 +1,6 @@
 import {PiHoleVersions} from "../models/pihole/PiHoleVersions";
 import {ApiRequestMethodEnum, PiHoleApiRequest} from "./PiHoleApiRequest";
-import {PiHoleSettingsStorage, StorageService} from "../../storage/StorageService";
+import {PiHoleSettingsStorage, StorageService} from "../../browser/StorageService";
 import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../models/pihole/PiHoleApiStatus";
 import {ApiJsonErrorMessages} from "../errors/ApiErrorMessages";
 import {ApiListMode} from "../models/pihole/PiHoleListStatus";

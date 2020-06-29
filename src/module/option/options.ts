@@ -1,4 +1,4 @@
-import {PiHoleSettingsDefaults, PiHoleSettingsStorage, StorageService} from "../../data/storage/StorageService";
+import {PiHoleSettingsDefaults, PiHoleSettingsStorage, StorageService} from "../../service/browser/StorageService";
 import "./options.css";
 import "../general/darkmode.css";
 import "bootstrap/dist/css/bootstrap.min.css";

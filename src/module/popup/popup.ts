@@ -1,12 +1,12 @@
-import {BadgeService, ExtensionBadgeText} from "../../data/storage/BadgeService";
-import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../data/api/models/pihole/PiHoleApiStatus";
-import {PiHoleSettingsDefaults, StorageService} from "../../data/storage/StorageService";
-import {TabService} from "../../data/storage/TabService";
-import {ApiListMode} from "../../data/api/models/pihole/PiHoleListStatus";
+import {BadgeService, ExtensionBadgeText} from "../../service/browser/BadgeService";
+import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../service/api/models/pihole/PiHoleApiStatus";
+import {PiHoleSettingsDefaults, StorageService} from "../../service/browser/StorageService";
+import {TabService} from "../../service/browser/TabService";
+import {ApiListMode} from "../../service/api/models/pihole/PiHoleListStatus";
 import "./popup.css";
 import "../general/darkmode.css";
 import "bootstrap/dist/css/bootstrap.min.css"
-import {PiHoleApiService} from "../../data/api/service/PiHoleApiService";
+import {PiHoleApiService} from "../../service/api/service/PiHoleApiService";
 
 let current_tab_url: string = '';
 
