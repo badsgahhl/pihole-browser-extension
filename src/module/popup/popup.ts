@@ -29,6 +29,10 @@ async function on_slider_click(): Promise<void>
 	}
 }
 
+/**
+ * Success Handler for the slider. Is fired as soon as the change_pi_hole_status is done.
+ * @param data
+ */
 async function on_slider_click_success_handler(data: PiHoleApiStatus): Promise<void>
 {
 	change_icon(data);

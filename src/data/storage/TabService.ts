@@ -59,10 +59,15 @@ export module TabService
 	 */
 	export function reload_current_tab(): void
 	{
-		chrome.tabs.query({'active': true, 'lastFocusedWindow': true, 'currentWindow': true}, function(tabs) {
+		chrome.tabs.query({'active': true, 'lastFocusedWindow': true, 'currentWindow': true}, (tabs) => {
 			if (tabs[0])
 			{
-				chrome.tabs.reload(tabs[0].id);
+				get_current_tab_url_cleaned().then((url) => {
+					if (url)
+					{
+						chrome.tabs.reload(tabs[0].id);
+					}
+				});
 			}
 		});
 	}
