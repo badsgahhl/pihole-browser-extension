@@ -1,6 +1,6 @@
 import {PiHoleVersions} from "../models/pihole/PiHoleVersions";
 import {ApiRequestMethodEnum, PiHoleApiRequest} from "./PiHoleApiRequest";
-import {PiHoleSettingsStorage, StorageService} from "../../storage/StorageService";
+import {PiHoleSettingsStorage, StorageService} from "../../browser/StorageService";
 import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../models/pihole/PiHoleApiStatus";
 import {ApiJsonErrorMessages} from "../errors/ApiErrorMessages";
 import {ApiListMode} from "../models/pihole/PiHoleListStatus";
@@ -200,7 +200,6 @@ export module PiHoleApiService
 			// If any pihole is offline or has an error we use its status
 			if (result.status === PiHoleApiStatusEnum.error || result.status === PiHoleApiStatusEnum.disabled)
 			{
-				console.log(result);
 				successCallback(result);
 				return;
 			}
@@ -238,8 +237,6 @@ export module PiHoleApiService
 			}
 			else if (this.status !== 200 && this.status !== 0)
 			{
-				console.log(this.status);
-				//BadgeService.set_badge_text(ExtensionBadgeText.error);
 				const error: PiHoleApiStatus = {status: PiHoleApiStatusEnum.error};
 				resolve(error);
 			}

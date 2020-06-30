@@ -1,12 +1,12 @@
-import {BadgeService, ExtensionBadgeText} from "../../data/storage/BadgeService";
-import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../data/api/models/pihole/PiHoleApiStatus";
-import {PiHoleSettingsDefaults, StorageService} from "../../data/storage/StorageService";
-import {TabService} from "../../data/storage/TabService";
-import {ApiListMode} from "../../data/api/models/pihole/PiHoleListStatus";
+import {BadgeService, ExtensionBadgeText} from "../../service/browser/BadgeService";
+import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../service/api/models/pihole/PiHoleApiStatus";
+import {PiHoleSettingsDefaults, StorageService} from "../../service/browser/StorageService";
+import {TabService} from "../../service/browser/TabService";
+import {ApiListMode} from "../../service/api/models/pihole/PiHoleListStatus";
 import "./popup.css";
 import "../general/darkmode.css";
 import "bootstrap/dist/css/bootstrap.min.css"
-import {PiHoleApiService} from "../../data/api/service/PiHoleApiService";
+import {PiHoleApiService} from "../../service/api/service/PiHoleApiService";
 
 let current_tab_url: string = '';
 
@@ -17,14 +17,33 @@ async function on_slider_click(): Promise<void>
 {
 	const status_mode = (<HTMLInputElement> document.getElementById('sliderBox')).checked ? PiHoleApiStatusEnum.enabled : PiHoleApiStatusEnum.disabled;
 	let time: number = Number((<HTMLInputElement> document.getElementById('time')).value);
-	
+
 	if (time >= 0)
 	{
-		await PiHoleApiService.change_pi_hole_status(status_mode, time, (data) => change_icon(data), (data) => throw_console_badge_error(data));
+		await PiHoleApiService.change_pi_hole_status(status_mode, time, (data) => on_slider_click_success_handler(data), (data) => throw_console_badge_error(data));
+
 	}
 	else
 	{
 		throw_console_badge_error('Time cannot be smaller than 0. Canceling api request.', true);
+	}
+}
+
+/**
+ * Success Handler for the slider. Is fired as soon as the change_pi_hole_status is done.
+ * @param data
+ */
+async function on_slider_click_success_handler(data: PiHoleApiStatus): Promise<void>
+{
+	change_icon(data);
+	if (data.status === PiHoleApiStatusEnum.disabled)
+	{
+		const reload_after_disable = (await StorageService.get_reload_after_disable());
+
+		if (reload_after_disable)
+		{
+			TabService.reload_current_tab(1000);
+		}
 	}
 }
 
@@ -284,7 +303,15 @@ async function list_domain(mode: ApiListMode, buttonElement: HTMLButtonElement):
 			// After the last one we enable the button again and remove the spinning circle
 			if (index + 1 === pi_hole_list_results.length)
 			{
-				setTimeout(() => toggle_list_button(buttonElement), 1500);
+				setTimeout(async () => {
+					const reload_after_white_black_list = (await StorageService.get_reload_after_white_list());
+
+					if (reload_after_white_black_list && mode === ApiListMode.whitelist)
+					{
+						TabService.reload_current_tab(250);
+					}
+					toggle_list_button(buttonElement);
+				}, 1500);
 			}
 		}, delay);
 		delay += delay_increment;

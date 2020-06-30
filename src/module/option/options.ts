@@ -1,4 +1,4 @@
-import {PiHoleSettingsDefaults, PiHoleSettingsStorage, StorageService} from "../../data/storage/StorageService";
+import {PiHoleSettingsDefaults, PiHoleSettingsStorage, StorageService} from "../../service/browser/StorageService";
 import "./options.css";
 import "../general/darkmode.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -81,6 +81,13 @@ async function set_settings(): Promise<void>
 	}
 
 	StorageService.save_default_disable_time(default_disable_time_input.valueAsNumber);
+
+	const reload_after_enable_disable = (<HTMLInputElement> document.getElementById('reload_after_disable')).checked;
+	const reload_after_white_black_list = (<HTMLInputElement> document.getElementById('reload_after_white_list')).checked;
+
+	StorageService.save_reload_after_disable(reload_after_enable_disable);
+	StorageService.save_reload_after_white_list(reload_after_white_black_list);
+
 	button_saved();
 }
 
@@ -140,6 +147,8 @@ async function get_settings(): Promise<void>
 {
 	let storage_array = (await StorageService.get_pi_hole_settings_array());
 	let default_disable_time = (await StorageService.get_default_disable_time());
+	let reload_after_disable = (await StorageService.get_reload_after_disable());
+	let reload_after_white_list = (await StorageService.get_reload_after_white_list());
 
 	if (typeof storage_array === "undefined")
 	{
@@ -168,6 +177,19 @@ async function get_settings(): Promise<void>
 	}
 	const default_time: number = default_disable_time;
 	(<HTMLInputElement> document.getElementById('default_time')).defaultValue = String(default_time);
+
+	if (typeof reload_after_disable === 'undefined')
+	{
+		reload_after_disable = false;
+	}
+	if (typeof reload_after_white_list === 'undefined')
+	{
+		reload_after_white_list = false;
+	}
+
+	(<HTMLInputElement> document.getElementById('reload_after_disable')).checked = reload_after_disable;
+	(<HTMLInputElement> document.getElementById('reload_after_white_list')).checked = reload_after_white_list;
+
 }
 
 /**
@@ -207,11 +229,7 @@ function enable_add_pi_hole_button(): void
 		button = document.createElement('button');
 		button.id = add_settings_button;
 		button.classList.add('btn', 'btn-success');
-		button.innerHTML = '<svg class="bi bi-plus-circle" width="20px" height="20px" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\n' +
-								 '  <path fill-rule="evenodd" d="M8 3.5a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5H4a.5.5 0 0 1 0-1h3.5V4a.5.5 0 0 1 .5-.5z"/>\n' +
-								 '  <path fill-rule="evenodd" d="M7.5 8a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0V8z"/>\n' +
-								 '  <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>\n' +
-								 '</svg>';
+		button.appendChild(get_add_button_svg());
 
 		button.title = 'Add';
 
@@ -233,6 +251,19 @@ function enable_add_pi_hole_button(): void
 		const input_buttons = document.getElementById('pi_hole_input_buttons');
 		input_buttons.insertBefore(button, input_buttons.firstChild);
 	}
+}
+
+/**
+ * Creates a SVGElement for the add Button
+ */
+function get_add_button_svg(): SVGElement
+{
+	const icon_class = 'bi-plus-circle';
+	const path1_d = 'M8 3.5a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5H4a.5.5 0 0 1 0-1h3.5V4a.5.5 0 0 1 .5-.5z';
+	const path2_d = 'M7.5 8a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0V8z';
+	const path3_d = 'M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z';
+
+	return get_meta_button_svg(icon_class, path1_d, path2_d, path3_d);
 }
 
 /**
@@ -261,11 +292,7 @@ function enable_remove_pi_hole_button(): void
 		button = document.createElement('button');
 		button.id = remove_button_id;
 		button.classList.add('btn', 'btn-danger');
-		button.innerHTML = '<svg class="bi bi-x-circle" width="20px" height="20px" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\n' +
-								 '  <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>\n' +
-								 '  <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z"/>\n' +
-								 '  <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 0 0 0 .708l7 7a.5.5 0 0 0 .708-.708l-7-7a.5.5 0 0 0-.708 0z"/>\n' +
-								 '</svg>';
+		button.appendChild(get_remove_button_svg());
 
 		button.title = 'Remove';
 
@@ -276,7 +303,8 @@ function enable_remove_pi_hole_button(): void
 			const tabs_content = document.getElementById('pi_hole_settings_tab_content');
 			tabs_content.removeChild(tabs_content.lastChild);
 
-			if (last_child_was_selected) {
+			if (last_child_was_selected)
+			{
 				$('#pi_hole_setting' + tabs.childElementCount).tab('show');
 			}
 			change_add_remove_button_by_number(tabs.childElementCount);
@@ -284,6 +312,55 @@ function enable_remove_pi_hole_button(): void
 
 		document.getElementById('pi_hole_input_buttons').append(button);
 	}
+}
+
+/**
+ * Creates a SVGElement for the remove Button
+ */
+function get_remove_button_svg(): SVGElement
+{
+	const icon_class = 'bi-x-circle';
+	const path1_d = 'M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z';
+	const path2_d = 'M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z';
+	const path3_d = 'M4.146 4.146a.5.5 0 0 0 0 .708l7 7a.5.5 0 0 0 .708-.708l-7-7a.5.5 0 0 0-.708 0z';
+
+	return get_meta_button_svg(icon_class, path1_d, path2_d, path3_d);
+}
+
+/**
+ * Creates a meta button for the given attributes
+ *
+ * @param icon_class
+ * @param path1_d
+ * @param path2_d
+ * @param path3_d
+ */
+function get_meta_button_svg(icon_class: string, path1_d: string, path2_d: string, path3_d: string): SVGElement
+{
+	const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+	svg.classList.add('bi', icon_class);
+	svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+	svg.setAttribute('width', '20px');
+	svg.setAttribute('height', '20px');
+	svg.setAttribute('viewBox', '0 0 16 16');
+	svg.setAttribute('fill', 'currentColor');
+
+	const path1 = document.createElementNS("http://www.w3.org/2000/svg", 'path');
+	path1.setAttribute('fill-rule', 'evenodd');
+	path1.setAttribute('d', path1_d);
+	const path2 = document.createElementNS("http://www.w3.org/2000/svg", 'path');
+	path2.setAttribute('fill-rule', 'evenodd');
+	path2.setAttribute('d', path2_d);
+	const path3 = document.createElementNS("http://www.w3.org/2000/svg", 'path');
+	path3.setAttribute('fill-rule', 'evenodd');
+	path3.setAttribute('d', path3_d);
+
+
+	svg.appendChild(path1);
+	svg.appendChild(path2);
+	svg.appendChild(path3);
+
+	return svg;
 }
 
 /**

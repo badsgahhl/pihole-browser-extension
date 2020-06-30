@@ -1,7 +1,7 @@
-import {StorageService} from "../../data/storage/StorageService";
-import {PiHoleApiService} from "../../data/api/service/PiHoleApiService";
-import {BadgeService, ExtensionBadgeText} from "../../data/storage/BadgeService";
-import {PiHoleApiStatusEnum} from "../../data/api/models/pihole/PiHoleApiStatus";
+import {StorageService} from "../../service/browser/StorageService";
+import {PiHoleApiService} from "../../service/api/service/PiHoleApiService";
+import {BadgeService, ExtensionBadgeText} from "../../service/browser/BadgeService";
+import {PiHoleApiStatusEnum} from "../../service/api/models/pihole/PiHoleApiStatus";
 
 
 chrome.runtime.onInstalled.addListener(function(details) {

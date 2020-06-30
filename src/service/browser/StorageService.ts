@@ -62,6 +62,48 @@ export module StorageService
 	}
 
 	/**
+	 * Function to set the state for reload_after_enable_disable
+	 * @param state
+	 */
+	export function save_reload_after_disable(state: boolean): void
+	{
+		const storage: ExtensionStorage = {
+			reload_after_disable: state
+		}
+		chrome.storage.local.set(storage);
+	}
+
+	export function get_reload_after_disable(): Promise<boolean>
+	{
+		return new Promise((resolve) => {
+			chrome.storage.local.get(ExtensionStorageEnum.reload_after_disable, function(obj) {
+				resolve((<ExtensionStorage> obj).reload_after_disable)
+			});
+		});
+	}
+
+	/**
+	 * Function to set the state for reload_after_white_black_list
+	 * @param state
+	 */
+	export function save_reload_after_white_list(state: boolean): void
+	{
+		const storage: ExtensionStorage = {
+			reload_after_white_list: state
+		}
+		chrome.storage.local.set(storage);
+	}
+
+	export function get_reload_after_white_list(): Promise<boolean>
+	{
+		return new Promise((resolve) => {
+			chrome.storage.local.get(ExtensionStorageEnum.reload_after_white_list, function(obj) {
+				resolve((<ExtensionStorage> obj).reload_after_white_list)
+			});
+		});
+	}
+
+	/**
 	 * Gets the current extension settings.
 	 * @deprecated
 	 */
@@ -130,12 +172,16 @@ export interface ExtensionStorage
 {
 	pi_hole_settings?: PiHoleSettingsStorage[],
 	default_disable_time?: number,
-	storage_version?: number
+	storage_version?: number,
+	reload_after_disable?: boolean,
+	reload_after_white_list?: boolean,
 }
 
 export enum ExtensionStorageEnum
 {
 	pi_hole_settings = 'pi_hole_settings',
 	storage_version = 'storage_version',
-	default_disable_time = 'default_disable_time'
+	default_disable_time = 'default_disable_time',
+	reload_after_disable = 'reload_after_disable',
+	reload_after_white_list = 'reload_after_white_list'
 }
