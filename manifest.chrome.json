@@ -27,7 +27,7 @@
 	"permissions": [
 		"storage",
 		"<all_urls>",
-		"tabs",
+		"activeTab",
 		"webRequest",
 		"webRequestBlocking"
 	]

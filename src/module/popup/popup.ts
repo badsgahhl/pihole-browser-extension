@@ -324,7 +324,6 @@ async function list_domain(mode: ApiListMode, buttonElement: HTMLButtonElement):
  */
 function toggle_list_button(clicked_button: HTMLElement): void
 {
-	console.log("fired");
 	const list_buttons = document.querySelectorAll('.btn-list');
 	list_buttons.forEach((object: HTMLButtonElement) => {
 		const is_pressed_button = object.isEqualNode(clicked_button);
