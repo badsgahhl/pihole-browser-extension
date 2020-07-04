@@ -1,0 +1,64 @@
+{
+	"test_key": {
+		"message": "Test Message",
+		"description": "This is a chrome i18n Test Message"
+	},
+	"options_title": {
+		"message": "PiHole Remote Optionen",
+		"description": "Translation for the title tag in the options.html"
+	},
+	"options_headline_info": {
+		"message": "Gebe den API Key ein welchen du unter -> API/Web interface in deinen PiHole Einstellungen findest."
+	},
+	"options_default_time_label": {
+		"message": "Standard-Deaktivierungszeit:"
+	},
+	"options_default_time_unit": {
+		"message": "Sekunden"
+	},
+	"options_reload_after_disable": {
+		"message": "Aktuellen Tab nach Deaktivierung neu laden"
+	},
+	"options_reload_after_white_list": {
+		"message": "Aktuellen Tab nach Whitelisting neu laden"
+	},
+	"options_save_button": {
+		"message": "Speichern"
+	},
+	"options_save_button_confirmed": {
+		"message": "Gespeichert!"
+	},
+	"options_api_key": {
+		"message": "API Key"
+	},
+	"options_pi_hole_address": {
+		"message": "PiHole Addresse"
+	},
+	"options_add_button": {
+		"message": "Hinzufügen"
+	},
+	"options_remove_button": {
+		"message": "Entfernen"
+	},
+	"options_api_key_invalid_warning": {
+		"message": "Api Key stimmt nicht mit dem Schema überein (64 Zeichen lang). Er könnte ungültig sein!"
+	},
+	"popup_title": {
+		"message": "PiHole Remote Popup"
+	},
+	"popup_status_card_title": {
+		"message": "PiHole Switch"
+	},
+	"popup_status_card_info_text": {
+		"message": "Nutze 0 für 'dauerhaft'"
+	},
+	"popup_second_card_current_url": {
+		"message": "Aktuelle Url"
+	},
+	"popup_second_card_whitelist": {
+		"message": "Whitelist"
+	},
+	"popup_second_card_blacklist": {
+		"message": "Blacklist"
+	}
+}

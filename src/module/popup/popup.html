@@ -3,17 +3,17 @@
 
 <head>
     <meta charset="utf-8">
-    <title>PiHole Remote Popup</title>
+    <title>__MSG_popup_title__</title>
 </head>
 
 <body>
 <div id="main">
     <div class="card">
         <div class="card-header">
-            <div class="status">Pi-Hole Switch</div>
+            <div class="status">__MSG_popup_status_card_title__</div>
         </div>
         <div class="card-body">
-            <div class="text">Use 0 for permanent</div>
+            <div class="text">__MSG_popup_status_card_info_text__</div>
             <div id="time_div" class="input-group justify-content-center">
                 <label for="time"></label><input class="form-control" disabled type="number" id="time" min="0">
                 <div class="input-group-append">
@@ -29,12 +29,13 @@
 
     <div class="card d-none" id="list_card">
         <div class="card-header text-center font-weight-bold">
-            Current Url:
+            __MSG_popup_second_card_current_url__
         </div>
         <div id="current_url" class="card-body text-center">
         </div>
         <div class="card-footer text-center">
-            <button title="Whitelist" class="btn btn-success btn-sm btn-list" id="list_action_white">
+            <button title="__MSG_popup_second_card_whitelist__" class="btn btn-success btn-sm btn-list"
+                    id="list_action_white">
                 <svg style="vertical-align: bottom" class="bi bi-check-circle" width="20px" height="20px"
                      viewBox="0 0 16 16" fill="currentColor"
                      xmlns="http://www.w3.org/2000/svg">
@@ -49,7 +50,8 @@
                       role="status"
                       aria-hidden="true"></span>
             </button>
-            <button title="Blacklist" class="btn btn-danger btn-sm btn-list" id="list_action_black">
+            <button title="__MSG_popup_second_card_blacklist__" class="btn btn-danger btn-sm btn-list"
+                    id="list_action_black">
                 <svg style="vertical-align: bottom" class="bi bi-x-circle" width="20px" height="20px"
                      viewBox="0 0 16 16" fill="currentColor"
                      xmlns="http://www.w3.org/2000/svg">

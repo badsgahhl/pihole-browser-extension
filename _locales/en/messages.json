@@ -1,0 +1,64 @@
+{
+	"test_key": {
+		"message": "Test Message",
+		"description": "This is a chrome i18n Test Message"
+	},
+	"options_title": {
+		"message": "PiHole Remote Options",
+		"description": "Translation for the title tag in the options.html"
+	},
+	"options_headline_info": {
+		"message": "Enter the API key found under setting -> API/Web interface, Use a QR Code scanner to get the text."
+	},
+	"options_default_time_label": {
+		"message": "Default disable time:"
+	},
+	"options_default_time_unit": {
+		"message": "seconds"
+	},
+	"options_reload_after_disable": {
+		"message": "Reload current tab after Disabling"
+	},
+	"options_reload_after_white_list": {
+		"message": "Reload current tab after Whitelisting"
+	},
+	"options_save_button": {
+		"message": "Save"
+	},
+	"options_save_button_confirmed": {
+		"message": "Saved!"
+	},
+	"options_api_key": {
+		"message": "API Key"
+	},
+	"options_pi_hole_address": {
+		"message": "PiHole Address"
+	},
+	"options_add_button": {
+		"message": "Add"
+	},
+	"options_remove_button": {
+		"message": "Remove"
+	},
+	"options_api_key_invalid_warning": {
+		"message": "Api Key doesn't match scheme (64 chars long). It may be invalid!"
+	},
+	"popup_title": {
+		"message": "PiHole Remote Popup"
+	},
+	"popup_status_card_title": {
+		"message": "PiHole Switch"
+	},
+	"popup_status_card_info_text": {
+		"message": "Use 0 for permanent"
+	},
+	"popup_second_card_current_url": {
+		"message": "Current Url"
+	},
+	"popup_second_card_whitelist": {
+		"message": "Whitelist"
+	},
+	"popup_second_card_blacklist": {
+		"message": "Blacklist"
+	}
+}

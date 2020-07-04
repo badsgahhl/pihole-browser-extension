@@ -2,12 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>PiHole Remote Options</title>
+    <title>__MSG_options_title__</title>
 </head>
 
 <body>
-<h6 class="headline text-center">Enter the API key found under setting -> API/Web interface, Use a QR Code scanner to
-    get the text.</h6>
+<h6 class="headline text-center">__MSG_options_headline_info__</h6>
 
 <div class="nav_bar_box">
     <ul class="nav nav-tabs" id="settings_tabs" role="tablist">
@@ -18,11 +17,11 @@
 </div>
 
 <div class="form-group">
-    <label for="default_time">Default disable time:</label>
+    <label for="default_time">__MSG_options_default_time_label__</label>
     <div id="time_div" class="input-group justify-content-center">
         <input class="form-control" type="number" id="default_time" min="1" name="Disable Time:">
         <div class="input-group-append">
-            <span class="input-group-text" id="time_unit">seconds</span>
+            <span class="input-group-text" id="time_unit">__MSG_options_default_time_unit__</span>
         </div>
     </div>
 </div>
@@ -30,7 +29,7 @@
     <div class="form-check">
         <input class="form-check-input" type="checkbox" value="" id="reload_after_disable">
         <label class="form-check-label" for="reload_after_disable">
-            Reload current tab after Disabling
+            __MSG_options_reload_after_disable__
         </label>
     </div>
 </div>
@@ -38,14 +37,13 @@
     <div class="form-check">
         <input class="form-check-input" type="checkbox" value="" id="reload_after_white_list">
         <label class="form-check-label" for="reload_after_white_list">
-            Reload current tab after Whitelisting
+            __MSG_options_reload_after_white_list__
         </label>
     </div>
 </div>
 
-<button type="button" class="btn btn-success" id="save_button" value="Save">Save</button>
+<button type="button" class="btn btn-success" id="save_button" value="Save">__MSG_options_save_button__</button>
 <div id="bottom_warning" class="alert alert-warning d-none" role="alert">
-    This is a danger alert—check it out!
 </div>
 
 </body>

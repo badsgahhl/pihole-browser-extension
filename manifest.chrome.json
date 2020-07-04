@@ -1,9 +1,10 @@
 {
 	"manifest_version": 2,
 	"name": "Switch for PiHole",
-	"version": "2.2.3",
+	"version": "2.2.4",
 	"author": "Pascal Glaser",
 	"description": "Browser extension to control your PiHole",
+	"default_locale": "en",
 	"icons": {
 		"48": "icon/icon-48.png",
 		"96": "icon/icon-96.png",

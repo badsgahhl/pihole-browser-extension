@@ -4,6 +4,7 @@ import "../general/darkmode.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap";
 import * as $ from "jquery";
+import {i18nOptionsKeys, i18nService} from "../../service/browser/i18nService";
 
 /**
  * Saves the extension settings to the local storage.
@@ -57,7 +58,7 @@ async function set_settings(): Promise<void>
 		}
 		invalid_pi_holes_text = '(' + invalid_pi_holes_text + ')';
 
-		toggle_api_warning('Api Key doesn\'t match scheme (64 chars long). It may be invalid!' + invalid_pi_holes_text);
+		toggle_api_warning(i18nService.translate(i18nOptionsKeys.options_api_key_invalid_warning) + ' ' + invalid_pi_holes_text);
 	}
 	else
 	{
@@ -73,7 +74,7 @@ async function set_settings(): Promise<void>
 	const button_saved: () => void = function() {
 		const btn_default: string = save_button.textContent;
 		save_button.disabled = true;
-		save_button.textContent = 'Saved!';
+		save_button.textContent = i18nService.translate(i18nOptionsKeys.options_save_button_confirmed);
 		setTimeout(function() {
 			save_button.textContent = btn_default;
 			save_button.disabled = false;
@@ -231,7 +232,7 @@ function enable_add_pi_hole_button(): void
 		button.classList.add('btn', 'btn-success');
 		button.appendChild(get_add_button_svg());
 
-		button.title = 'Add';
+		button.title = i18nService.translate(i18nOptionsKeys.options_add_button);
 
 		button.addEventListener('click', function() {
 
@@ -294,7 +295,7 @@ function enable_remove_pi_hole_button(): void
 		button.classList.add('btn', 'btn-danger');
 		button.appendChild(get_remove_button_svg());
 
-		button.title = 'Remove';
+		button.title = i18nService.translate(i18nOptionsKeys.options_remove_button);
 
 		button.addEventListener('click', function() {
 			const tabs = document.getElementById('settings_tabs');
@@ -417,8 +418,10 @@ function render_tab(settings: PiHoleSettingsStorage, counter: number, active: bo
 	content_div.id = content_id;
 	content_div.setAttribute('role', 'tabpanel');
 
-	content_div.appendChild(get_settings_form(settings.pi_uri_base, counter, 'pi_uri_base', 'Pi-Hole Address'));
-	content_div.appendChild(get_settings_form(settings.api_key, counter, 'api_key', 'API Key'));
+	const pi_hole_address_tet = i18nService.translate(i18nOptionsKeys.options_pi_hole_address);
+	const api_key_text = i18nService.translate(i18nOptionsKeys.options_api_key);
+	content_div.appendChild(get_settings_form(settings.pi_uri_base, counter, 'pi_uri_base', pi_hole_address_tet));
+	content_div.appendChild(get_settings_form(settings.api_key, counter, 'api_key', api_key_text));
 
 
 	document.getElementById('pi_hole_settings_tab_content').appendChild(content_div);
@@ -474,5 +477,11 @@ function get_input_input(id: string, name: string, value: string): HTMLInputElem
 	return input;
 }
 
-document.getElementById('save_button').addEventListener('click', set_settings);   //Action event for when save is pressed
-window.addEventListener('load', get_settings);    //Get the API key when the page loads
+function on_load(): void
+{
+	i18nService.translate_html_page();
+	get_settings().then();
+	document.getElementById('save_button').addEventListener('click', set_settings);
+}
+
+window.addEventListener('load', on_load);    //Get the API key when the page loads

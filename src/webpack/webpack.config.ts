@@ -53,6 +53,11 @@ export function get_config(browser: string, production: boolean): webpack.Config
 												 from: "icon", to: 'icon',
 											 }
 										 ]),
+			new CopyWebpackPlugin([
+											 {
+												 from: "_locales", to: '_locales'
+											 }
+										 ]),
 			new HtmlWebpackPlugin({
 											 template: path.join(__dirname, "../", "module/popup", "popup.html"),
 											 filename: "popup.html",
