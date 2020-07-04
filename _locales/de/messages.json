@@ -7,7 +7,7 @@
 		"description": "Translation for the title tag in the options.html"
 	},
 	"options_headline_info": {
-		"message": "Gebe den API Key ein welchen du unter -> API/Web interface in deinen PiHole Einstellungen findest."
+		"message": "Gebe die Adresse und den API Key ein, welchen du unter API/Web interface in deinen PiHole Einstellungen findest."
 	},
 	"options_default_time_label": {
 		"message": "Standard-Deaktivierungszeit:"
