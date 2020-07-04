@@ -1,7 +1,6 @@
 {
-	"test_key": {
-		"message": "Test Message",
-		"description": "This is a chrome i18n Test Message"
+	"manifest_description": {
+		"message": "Browser Erweiterung um dein PiHole einfach zu steuern."
 	},
 	"options_title": {
 		"message": "PiHole Remote Optionen",
