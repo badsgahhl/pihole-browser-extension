@@ -3,7 +3,7 @@
 	"name": "Switch for PiHole",
 	"version": "2.2.4",
 	"author": "Pascal Glaser",
-	"description": "Browser extension to control your PiHole",
+	"description": "__MSG_manifest_description__",
 	"default_locale": "en",
 	"icons": {
 		"48": "icon/icon-48.png",
