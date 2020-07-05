@@ -1,6 +1,6 @@
 {
 	"manifest_description": {
-		"message": "Browser Erweiterung um dein PiHole einfach zu steuern."
+		"message": "Browser Erweiterung um dein PiHole zu steuern."
 	},
 	"options_title": {
 		"message": "PiHole Remote Optionen",
