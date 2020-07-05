@@ -9,7 +9,7 @@ const ZipPlugin = require('zip-webpack-plugin');
 export function get_config(browser: string, production: boolean): webpack.Configuration
 {
 	let config: webpack.Configuration = {
-		mode: "development",
+		mode: production ? "production" : "development",
 		entry: {
 			popup: path.join(__dirname, "../", "module/popup", "popup.ts"),
 			options: path.join(__dirname, "../", "module/option", "options.ts"),
