@@ -139,7 +139,11 @@ export module StorageService
 			}
 
 			add_pi_hole_settings(migration_storage);
-			save_default_disable_time(oldStorage.default_disable_time);
+			const old_default_disable_time = oldStorage.default_disable_time;
+			if (old_default_disable_time)
+			{
+				save_default_disable_time(old_default_disable_time);
+			}
 		})
 
 	}

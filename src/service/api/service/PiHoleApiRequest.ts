@@ -54,18 +54,18 @@ export class PiHoleApiRequest
 	{
 		if (!value)
 		{
-			value = null;
+			value = undefined;
 		}
-		this._get_params.push({[key]: value})
+		this._get_params.push(<ApiParameter> {[key]: value})
 	}
 
 	public add_post_param(key: string, value?: string): void
 	{
 		if (!value)
 		{
-			value = null;
+			value = undefined;
 		}
-		this._post_params.push({[key]: value})
+		this._post_params.push(<ApiParameter> {[key]: value})
 	}
 
 	public async send(): Promise<void>
@@ -88,7 +88,7 @@ export class PiHoleApiRequest
 			if (params)
 			{
 				const key: string = Object.keys(params)[0];
-				const value: string = Object.keys(params).map(value_key => params[value_key])[0];
+				const value = Object.keys(params).map(value_key => params[value_key])[0];
 
 
 				url += "&" + key + (value ? '=' + value : '');
@@ -115,12 +115,12 @@ export class PiHoleApiRequest
 				if (params)
 				{
 					const key: string = Object.keys(params)[0];
-					const value: string = Object.keys(params).map(value_key => params[value_key])[0];
+					const value = Object.keys(params).map(value_key => params[value_key])[0];
 					if (i > 0)
 					{
 						post_params += '&'
 					}
-					post_params += key + "=" + value;
+					post_params += key + (value ? '=' + value : '')
 				}
 			}
 			httpResponse.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -135,7 +135,7 @@ export class PiHoleApiRequest
 
 interface ApiParameter
 {
-	[key: string]: string;
+	[key: string]: string | null;
 }
 
 export enum ApiRequestMethodEnum

@@ -17,7 +17,9 @@
 			"firefox-webext-browser",
 			"jquery",
 			"bootstrap"
-		]
+		],
+		"moduleResolution": "node"
+		//"strict": true
 	},
 	"exclude": [
 		"node_modules"

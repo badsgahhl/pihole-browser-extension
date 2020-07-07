@@ -49,7 +49,7 @@
 		"message": "PiHole Switch"
 	},
 	"popup_status_card_info_text": {
-		"message": "Use 0 for permanent"
+		"message": "0 for permanent"
 	},
 	"popup_second_card_current_url": {
 		"message": "Current Url"

@@ -28,16 +28,24 @@ export module PiHoleApiService
 
 	/**
 	 * Promise function for PiHoleApiService::get_pi_hole_version
-	 * @param pi_hole_setting
+	 * @param pi_hole_settings
 	 * @param resolve
 	 */
-	function pi_hole_version_promise_function(pi_hole_setting: PiHoleSettingsStorage, resolve: (value) => void): void
+	function pi_hole_version_promise_function(pi_hole_settings: PiHoleSettingsStorage, resolve: (value) => void): void
 	{
-		const request = new PiHoleApiRequest(pi_hole_setting.pi_uri_base, pi_hole_setting.api_key);
+		const pi_uri_base = pi_hole_settings.pi_uri_base;
+		const api_key = pi_hole_settings.api_key;
+		if (typeof pi_uri_base === "undefined" || typeof api_key === "undefined")
+		{
+			resolve({});
+			return;
+		}
+
+		const request = new PiHoleApiRequest(pi_uri_base, api_key);
 
 		request.add_get_param('versions');
 
-		request.onreadystatechange = function() {
+		request.onreadystatechange = function(this: XMLHttpRequest) {
 			if (this.readyState === 4 && this.status === 200)
 			{
 				let versions: PiHoleVersions = {
@@ -97,21 +105,29 @@ export module PiHoleApiService
 
 	/**
 	 * Promise function for PiHoleApiService::list_domain
-	 * @param pi_hole_setting
+	 * @param pi_hole_settings
 	 * @param mode
 	 * @param domain
 	 * @param resolve
 	 */
-	function list_domain_promise_function(pi_hole_setting: PiHoleSettingsStorage, mode: ApiListMode, domain: string, resolve: (value) => void): void
+	function list_domain_promise_function(pi_hole_settings: PiHoleSettingsStorage, mode: ApiListMode, domain: string, resolve: (value) => void): void
 	{
-		const api_request = new PiHoleApiRequest(pi_hole_setting.pi_uri_base, pi_hole_setting.api_key);
+		const pi_uri_base = pi_hole_settings.pi_uri_base;
+		const api_key = pi_hole_settings.api_key;
+		if (typeof pi_uri_base === "undefined" || typeof api_key === "undefined")
+		{
+			resolve('error');
+			return;
+		}
+
+		const api_request = new PiHoleApiRequest(pi_uri_base, api_key);
 
 		api_request.method = ApiRequestMethodEnum.POST;
 		api_request.add_get_param('list', mode);
 		api_request.add_get_param('add', domain);
 		api_request.add_post_param('comment', 'Added via PiHole Remote Extension');
 
-		api_request.onreadystatechange = function() {
+		api_request.onreadystatechange = function(this: XMLHttpRequest) {
 			if (this.readyState === 4 && this.status === 200)
 			{
 				const response: string = this.response;
@@ -137,7 +153,7 @@ export module PiHoleApiService
 		{
 			const api_request: PiHoleApiRequest = new PiHoleApiRequest(pi_hole.pi_uri_base, pi_hole.api_key);
 
-			api_request.onreadystatechange = function() {
+			api_request.onreadystatechange = function(this: XMLHttpRequest) {
 				if (this.readyState === 4 && this.status === 200)
 				{
 					// Action to be performed when the document is read;
@@ -215,9 +231,17 @@ export module PiHoleApiService
 	 */
 	function refresh_pi_hole_status_promise_function(pi_hole_settings: PiHoleSettingsStorage, resolve: (value) => void): void
 	{
-		const api_request: PiHoleApiRequest = new PiHoleApiRequest(pi_hole_settings.pi_uri_base, pi_hole_settings.api_key);
+		const pi_uri_base = pi_hole_settings.pi_uri_base;
+		const api_key = pi_hole_settings.api_key;
+		if (typeof pi_uri_base === "undefined" || typeof api_key === "undefined")
+		{
+			resolve({status: PiHoleApiStatusEnum.error});
+			return;
+		}
 
-		const onreadystatechange = function() {
+		const api_request: PiHoleApiRequest = new PiHoleApiRequest(pi_uri_base, api_key);
+
+		const onreadystatechange = function(this: XMLHttpRequest) {
 			if (this.readyState === 4 && this.status === 200)
 			{
 				// Action to be performed when the document is read;

@@ -9,6 +9,7 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import {PiHoleApiService} from "../../service/api/service/PiHoleApiService";
 import {i18nService} from "../../service/browser/i18nService";
 
+
 let current_tab_url: string = '';
 
 /**
@@ -69,7 +70,7 @@ function throw_console_badge_error(error_message: string, refresh_status: boolea
 async function load_settings_and_status(): Promise<void>
 {
 	i18nService.translate_html_page();
-	
+
 	render_slider_switch().then();
 
 	PiHoleApiService.refresh_pi_hole_status((data => change_icon(data))).then();
@@ -413,4 +414,13 @@ function time_input_changed(): void
  * EventListener Section
  */
 document.addEventListener('DOMContentLoaded', load_settings_and_status); //When the page loads get the status
+import Vue from "vue";
+import PopupComponent from "./popup.vue";
 
+
+const popup_vue_component = {
+	el: "#main",
+	render: h => h(PopupComponent)
+};
+
+new Vue(popup_vue_component);
