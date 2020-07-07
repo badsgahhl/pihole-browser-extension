@@ -70,8 +70,6 @@ async function load_settings_and_status(): Promise<void>
 {
 	i18nService.translate_html_page();
 
-	document.getElementById('main').hidden = false;
-
 	render_slider_switch().then();
 
 	PiHoleApiService.refresh_pi_hole_status((data => change_icon(data))).then();
@@ -447,6 +445,7 @@ async function init(): Promise<void>
 	}
 	else
 	{
+		document.getElementById('main').hidden = false;
 		await load_settings_and_status();
 	}
 }

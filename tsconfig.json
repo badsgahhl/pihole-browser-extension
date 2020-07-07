@@ -19,7 +19,8 @@
 			"bootstrap"
 		],
 		"moduleResolution": "node",
-		"module": "CommonJS"
+		"module": "CommonJS",
+		"experimentalDecorators": true
 		//"strict": true
 	},
 	"exclude": [
