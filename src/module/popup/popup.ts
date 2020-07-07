@@ -413,14 +413,22 @@ function time_input_changed(): void
 /**
  * EventListener Section
  */
-document.addEventListener('DOMContentLoaded', load_settings_and_status); //When the page loads get the status
 import Vue from "vue";
-import PopupComponent from "./popup.vue";
+import PopupComponent from "./vue/PopupComponent.vue";
+import BootstrapVue, {IconsPlugin} from "bootstrap-vue";
 
 
-const popup_vue_component = {
-	el: "#main",
-	render: h => h(PopupComponent)
-};
+function init_vue(): void
+{
+	const popup_vue_component = {
+		el: "#app",
+		render: h => h(PopupComponent)
+	};
 
-new Vue(popup_vue_component);
+	new Vue(popup_vue_component);
+	Vue.use(BootstrapVue);
+	Vue.use(IconsPlugin);
+}
+
+document.addEventListener('DOMContentLoaded', load_settings_and_status); //When the page loads get the status
+document.addEventListener('DOMContentLoaded', () => init_vue()); //When the page loads get the status
