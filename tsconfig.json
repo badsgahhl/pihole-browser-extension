@@ -18,7 +18,8 @@
 			"jquery",
 			"bootstrap"
 		],
-		"moduleResolution": "node"
+		"moduleResolution": "node",
+		"module": "CommonJS"
 		//"strict": true
 	},
 	"exclude": [

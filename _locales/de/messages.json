@@ -59,5 +59,8 @@
 	},
 	"popup_second_card_blacklist": {
 		"message": "Blacklist"
+	},
+	"options_beta_feature_flag": {
+		"message": "Aktiviere Beta Features (Achtung!)"
 	}
 }

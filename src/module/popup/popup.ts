@@ -9,7 +9,6 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import {PiHoleApiService} from "../../service/api/service/PiHoleApiService";
 import {i18nService} from "../../service/browser/i18nService";
 
-
 let current_tab_url: string = '';
 
 /**
@@ -70,6 +69,8 @@ function throw_console_badge_error(error_message: string, refresh_status: boolea
 async function load_settings_and_status(): Promise<void>
 {
 	i18nService.translate_html_page();
+
+	document.getElementById('main').hidden = false;
 
 	render_slider_switch().then();
 
@@ -411,24 +412,46 @@ function time_input_changed(): void
 }
 
 /**
- * EventListener Section
+ * [Beta] Initialises the new Vue Popup
  */
-import Vue from "vue";
-import PopupComponent from "./vue/PopupComponent.vue";
-import BootstrapVue, {IconsPlugin} from "bootstrap-vue";
-
-
-function init_vue(): void
+async function init_vue(): Promise<void>
 {
+	const vue_import = await import ('vue');
+	const popup_component_import = await import ('./vue/PopupComponent.vue');
+	const bootstrap_vue_import = await import ('bootstrap-vue');
+
+	const Vue = vue_import.default;
+	const BootstrapVue = bootstrap_vue_import.default;
+	const PopupComponent = popup_component_import.default;
+
+
 	const popup_vue_component = {
-		el: "#app",
+		el: "#main",
 		render: h => h(PopupComponent)
 	};
 
-	new Vue(popup_vue_component);
 	Vue.use(BootstrapVue);
-	Vue.use(IconsPlugin);
+	new Vue(popup_vue_component);
 }
 
-document.addEventListener('DOMContentLoaded', load_settings_and_status); //When the page loads get the status
-document.addEventListener('DOMContentLoaded', () => init_vue()); //When the page loads get the status
+/**
+ * Main Init function for the popup
+ */
+async function init(): Promise<void>
+{
+	const beta_flag = await StorageService.get_beta_feature_flag();
+
+	if (beta_flag)
+	{
+		await init_vue();
+	}
+	else
+	{
+		await load_settings_and_status();
+	}
+}
+
+/**
+ * EventListener Section
+ */
+document.addEventListener('DOMContentLoaded', () => init()); //When the page loads get the status
