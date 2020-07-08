@@ -52,6 +52,11 @@ export function get_config(browser: string, production: boolean): webpack.Config
 				'vue$': 'vue/dist/vue.esm.js'
 			}
 		},
+		optimization: {
+			splitChunks: {
+				chunks: 'all',
+			}
+		},
 		plugins: [
 			// expose and write the allowed env vars on the compiled bundle
 			new CopyWebpackPlugin([
