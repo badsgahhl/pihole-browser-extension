@@ -5,9 +5,12 @@ import {TabService} from "../../service/browser/TabService";
 import {ApiListMode} from "../../service/api/models/pihole/PiHoleListStatus";
 import "./popup.css";
 import "../general/darkmode.css";
-import "bootstrap/dist/css/bootstrap.min.css"
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 import {PiHoleApiService} from "../../service/api/service/PiHoleApiService";
 import {i18nService} from "../../service/browser/i18nService";
+import {BootstrapVue} from 'bootstrap-vue'
+import Vue from "vue";
 
 let current_tab_url: string = '';
 
@@ -414,15 +417,9 @@ function time_input_changed(): void
  */
 async function init_vue(): Promise<void>
 {
-	const vue_import = await import ('vue');
 	const popup_component_import = await import ('./vue/PopupComponent.vue');
-	const bootstrap_vue_import = await import ('bootstrap-vue');
-
-	const Vue = vue_import.default;
-	const BootstrapVue = bootstrap_vue_import.default;
 	const PopupComponent = popup_component_import.default;
-
-
+	
 	const popup_vue_component = {
 		el: "#main",
 		render: h => h(PopupComponent)
