@@ -15,7 +15,7 @@
                 </b-input-group-append>
             </b-input-group>
         </b-card-body>
-        <b-card-footer style="max-height: 45px;">
+        <b-card-footer class="text-center" style="max-height: 45px;">
             <label id="switch">
                 <input :disabled="slider_disabled" v-model:checked="slider_checked" v-on:change="sliderClicked()"
                        id="sliderBox" type="checkbox"/>
@@ -204,10 +204,6 @@
 
 <style lang="sass" scoped>
 
-.status
-    font-size: 16px
-    text-align: center
-    font-weight: bold
 
 .text
     font-size: 13px
@@ -270,5 +266,16 @@ input:checked
 
 .time_unit
     min-width: 40px
+
+#time
+    max-width: 80px
+    border-top-left-radius: 5px !important
+    border-bottom-left-radius: 5px !important
+
+#time:focus
+    border-color: #ced4da
+    box-shadow: unset
+    outline: none
+
 
 </style>

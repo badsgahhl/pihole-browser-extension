@@ -34,13 +34,6 @@ body {
     padding: var(--card-padding) !important;
     font-size: 14px;
 }
-.popup-alert{
-    padding: 0 !important;
-    font-size: 14px;
-    margin-top: 5px;
-    font-weight: bold;
-    margin-bottom: 0 !important;
-}
 
 .card-header {
     padding: var(--card-padding) !important;
@@ -50,6 +43,15 @@ body {
 .card-footer {
     padding: var(--card-padding) !important;
 }
+
+.popup-alert {
+    padding: 0 !important;
+    font-size: 14px;
+    margin-top: 5px;
+    font-weight: bold;
+    margin-bottom: 0 !important;
+}
+
 
 .input-group {
     margin-bottom: 10px !important;

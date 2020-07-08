@@ -14,51 +14,69 @@
 
 	@Component
 	export default class PopupUpdateAlertComponent extends Vue
-	{
-		@Prop({default: () => i18nPopupKeys})
-		i18nPopupKeys!: typeof i18nPopupKeys;
+	 {
+		 @Prop({default: () => i18nPopupKeys})
+		 i18nPopupKeys!: typeof i18nPopupKeys;
 
-		private updates_available: boolean = false;
-		private updates_available_amount: number = 0;
-		private amount_of_piholes: number = 0;
+		 // Prop which is emitted to the parent. Gets updates after a version check
+		 @Prop({default: false})
+		 is_pi_hole_version_5_or_higher!: boolean;
 
-		mounted()
-		{
-			this.check_for_updates();
-		}
+		 // Data Prop: Is an update needed?
+		 private updates_available: boolean = false;
 
-		/**
-		 * Wrapper for translation
-		 * @param string
-		 */
-		translate(string: i18nPopupKeys, placeholder?: any): string
-		{
-			return i18nService.translate(string, placeholder);
-		}
+		 // Data Prop: How many Updates are available
+		 private updates_available_amount: number = 0;
 
-		private check_for_updates(): void
-		{
-			const get_pi_hole_version_callback = ((pi_hole_versions_array: PiHoleVersions[]) => {
-				let update_available = false;
-				let amount_updatable = 0;
-				for (const pi_hole_version of pi_hole_versions_array)
-				{
-					if (pi_hole_version.FTL_current < pi_hole_version.FTL_latest || pi_hole_version.core_current < pi_hole_version.core_latest || pi_hole_version.web_current < pi_hole_version.web_latest)
-					{
-						update_available = true;
-						amount_updatable++;
-					}
-				}
-				if (update_available)
-				{
-					this.updates_available = update_available;
-					this.updates_available_amount = amount_updatable;
-					this.amount_of_piholes = pi_hole_versions_array.length;
-				}
-			})
-			PiHoleApiService.get_pi_hole_version().then(get_pi_hole_version_callback);
+		 // Data Prop: How many PiHoles does the user use
+		 private amount_of_piholes: number = 0;
 
-		}
+		 mounted()
+		 {
+			 this.check_for_updates();
+		 }
+
+		 /**
+		  * Wrapper for translation
+		  * @param string
+		  */
+		 translate(string: i18nPopupKeys, placeholder?: any): string
+		 {
+			 return i18nService.translate(string, placeholder);
+		 }
+
+		 /**
+		  * Checks the pihole(s) for updates
+		  * Activates the alert if an update is available
+		  */
+		 private check_for_updates(): void
+		 {
+			 const get_pi_hole_version_callback = ((pi_hole_versions_array: PiHoleVersions[]) => {
+				 let update_available = false;
+				 let amount_updatable = 0;
+				 for (const pi_hole_version of pi_hole_versions_array)
+				 {
+					 if (pi_hole_version.FTL_current < pi_hole_version.FTL_latest || pi_hole_version.core_current < pi_hole_version.core_latest || pi_hole_version.web_current < pi_hole_version.web_latest)
+					 {
+						 update_available = true;
+						 amount_updatable++;
+					 }
+
+					 if (!this.is_pi_hole_version_5_or_higher && pi_hole_version.FTL_current < 5 && pi_hole_version.FTL_current !== -1)
+					 {
+						 this.$emit('update:is_pi_hole_version_5_or_higher', false);
+					 }
+				 }
+				 if (update_available)
+				 {
+					 this.updates_available = update_available;
+					 this.updates_available_amount = amount_updatable;
+					 this.amount_of_piholes = pi_hole_versions_array.length;
+				 }
+			 })
+			 PiHoleApiService.get_pi_hole_version().then(get_pi_hole_version_callback);
+
+		 }
 	}
 </script>
 

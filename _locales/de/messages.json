@@ -52,7 +52,7 @@
 		"message": "0 für 'dauerhaft'"
 	},
 	"popup_second_card_current_url": {
-		"message": "Aktuelle Url"
+		"message": "Aktuelle Url:"
 	},
 	"popup_second_card_whitelist": {
 		"message": "Whitelist"
