@@ -38,6 +38,22 @@ export function get_config(browser: string, production: boolean): webpack.Config
 				{
 					test: /\.css$/,
 					loader: "style-loader!css-loader",
+				},
+				{
+					test: /\.sass$/,
+					use: [
+						'vue-style-loader',
+						'css-loader',
+						{
+							loader: 'sass-loader',
+							options: {
+								// sass-loader version >= 8
+								sassOptions: {
+									indentedSyntax: true
+								}
+							}
+						}
+					]
 				}
 			]
 		},

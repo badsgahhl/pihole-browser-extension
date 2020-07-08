@@ -1,3 +1,4 @@
+//@ts-nocheck
 import {BadgeService, ExtensionBadgeText} from "../../service/browser/BadgeService";
 import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../service/api/models/pihole/PiHoleApiStatus";
 import {PiHoleSettingsDefaults, StorageService} from "../../service/browser/StorageService";
@@ -9,7 +10,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import {PiHoleApiService} from "../../service/api/service/PiHoleApiService";
 import {i18nService} from "../../service/browser/i18nService";
-import {BootstrapVue} from 'bootstrap-vue'
+import {BootstrapVue, BIconXCircle, BIconCheckCircle} from 'bootstrap-vue';
 import Vue from "vue";
 
 let current_tab_url: string = '';
@@ -419,13 +420,15 @@ async function init_vue(): Promise<void>
 {
 	const popup_component_import = await import ('./vue/PopupComponent.vue');
 	const PopupComponent = popup_component_import.default;
-	
+
 	const popup_vue_component = {
 		el: "#main",
 		render: h => h(PopupComponent)
 	};
 
 	Vue.use(BootstrapVue);
+	Vue.component('BIconCheckCircle', BIconCheckCircle);
+	Vue.component('BIconXCircle', BIconXCircle);
 	new Vue(popup_vue_component);
 }
 

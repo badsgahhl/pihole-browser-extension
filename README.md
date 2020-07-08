@@ -6,7 +6,7 @@
 [![Mozilla Add-on](https://img.shields.io/amo/rating/switch-for-pihole)](https://addons.mozilla.org/firefox/addon/switch-for-pihole/reviews/)
 ![GitHub](https://img.shields.io/github/license/badsgahhl/pihole-chrome-extension)
 <br><br>
-Switch-for-PiHole is a small browser extension for Chrome and Firefox. It's written in Vanilla TypeScript together with HTML and CSS. With this extension you can control your PiHole remotely (e.g. Turning it on/off, black/white listing current tab, etc.).
+Switch-for-PiHole is a small browser extension for Chrome and Firefox. It's written with Vue and Typescript. With this extension you can control your PiHole remotely (e.g. Turning it on/off, black/white listing current tab, etc.).
 
 <br>
 

@@ -1,3 +1,4 @@
+//@ts-nocheck
 import {PiHoleSettingsDefaults, PiHoleSettingsStorage, StorageService} from "../../service/browser/StorageService";
 import "./options.css";
 import "../general/darkmode.css";

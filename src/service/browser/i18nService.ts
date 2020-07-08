@@ -4,9 +4,9 @@ export module i18nService
 	 * Wrapper Function for the chrome.i18n.getMessage Function
 	 * @param key
 	 */
-	export function translate(key: string): string
+	export function translate(key: string, substitutions?: any): string
 	{
-		return chrome.i18n.getMessage(key);
+		return chrome.i18n.getMessage(key, substitutions);
 	}
 
 	/**
@@ -58,5 +58,6 @@ export enum i18nPopupKeys
 	popup_status_card_info_text = "popup_status_card_info_text",
 	popup_second_card_current_url = "popup_second_card_current_url",
 	popup_second_card_whitelist = "popup_second_card_whitelist",
-	popup_second_card_blacklist = "popup_second_card_blacklist"
+	popup_second_card_blacklist = "popup_second_card_blacklist",
+	popup_update_card_info = "popup_update_card_info"
 }

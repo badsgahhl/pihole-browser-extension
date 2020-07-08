@@ -62,5 +62,16 @@
 	},
 	"options_beta_feature_flag": {
 		"message": "Aktiviere Beta Features (Achtung!)"
+	},
+	"popup_update_card_info": {
+		"message": "PiHole Update verfügbar! ($updates$/$piholes$)",
+		"placeholders": {
+			"updates": {
+				"content": "$1"
+			},
+			"piholes": {
+				"content": "$2"
+			}
+		}
 	}
 }

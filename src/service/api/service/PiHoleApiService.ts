@@ -20,10 +20,10 @@ export module PiHoleApiService
 		let promise_array = [];
 		for (const pi_hole_setting of storage)
 		{
-			promise_array.push(new Promise(resolve => pi_hole_version_promise_function(pi_hole_setting, resolve)));
+			promise_array.push(new Promise<PiHoleVersions>(resolve => pi_hole_version_promise_function(pi_hole_setting, resolve)));
 		}
 
-		return await Promise.all(promise_array);
+		return await Promise.all<PiHoleVersions>(promise_array);
 	}
 
 	/**
@@ -31,13 +31,13 @@ export module PiHoleApiService
 	 * @param pi_hole_settings
 	 * @param resolve
 	 */
-	function pi_hole_version_promise_function(pi_hole_settings: PiHoleSettingsStorage, resolve: (value) => void): void
+	function pi_hole_version_promise_function(pi_hole_settings: PiHoleSettingsStorage, resolve: (value?: PiHoleVersions) => void): void
 	{
 		const pi_uri_base = pi_hole_settings.pi_uri_base;
 		const api_key = pi_hole_settings.api_key;
 		if (typeof pi_uri_base === "undefined" || typeof api_key === "undefined")
 		{
-			resolve({});
+			resolve(undefined);
 			return;
 		}
 
@@ -70,6 +70,7 @@ export module PiHoleApiService
 							{
 								version = Number(version);
 							}
+							//@ts-ignore
 							versions[key] = version;
 						}
 					});
@@ -94,13 +95,16 @@ export module PiHoleApiService
 	{
 		const request_promises = [];
 		const storage = (await StorageService.get_pi_hole_settings_array());
-
+		if (typeof storage === "undefined")
+		{
+			return [];
+		}
 		for (const pi_hole of storage)
 		{
-			request_promises.push(new Promise(resolve => list_domain_promise_function(pi_hole, mode, domain, resolve)));
+			request_promises.push(new Promise<string>(resolve => list_domain_promise_function(pi_hole, mode, domain, resolve)));
 		}
 
-		return await Promise.all(request_promises);
+		return await Promise.all<string>(request_promises);
 	}
 
 	/**
@@ -110,7 +114,7 @@ export module PiHoleApiService
 	 * @param domain
 	 * @param resolve
 	 */
-	function list_domain_promise_function(pi_hole_settings: PiHoleSettingsStorage, mode: ApiListMode, domain: string, resolve: (value) => void): void
+	function list_domain_promise_function(pi_hole_settings: PiHoleSettingsStorage, mode: ApiListMode, domain: string, resolve: (value: string) => void): void
 	{
 		const pi_uri_base = pi_hole_settings.pi_uri_base;
 		const api_key = pi_hole_settings.api_key;
@@ -149,8 +153,17 @@ export module PiHoleApiService
 	export async function change_pi_hole_status(status: PiHoleApiStatusEnum, time: number, successCallback: (data: PiHoleApiStatus) => void, errorCallback: (data: string) => void): Promise<void>
 	{
 		const pi_hole_storage = (await StorageService.get_pi_hole_settings_array());
+		if (typeof pi_hole_storage === "undefined")
+		{
+			return;
+		}
+
 		for (const pi_hole of pi_hole_storage)
 		{
+			if (typeof pi_hole.pi_uri_base === "undefined" || typeof pi_hole.api_key === "undefined")
+			{
+				return;
+			}
 			const api_request: PiHoleApiRequest = new PiHoleApiRequest(pi_hole.pi_uri_base, pi_hole.api_key);
 
 			api_request.onreadystatechange = function(this: XMLHttpRequest) {
@@ -203,13 +216,13 @@ export module PiHoleApiService
 		}
 		for (const pi_hole of storage)
 		{
-			const promise_function = (resolve) => refresh_pi_hole_status_promise_function(pi_hole, resolve);
+			const promise_function = (resolve: (value?: any) => void) => refresh_pi_hole_status_promise_function(pi_hole, resolve);
 
 			const pi_hole_promise: Promise<PiHoleApiStatus> = new Promise(promise_function);
 			request_promises.push(pi_hole_promise);
 		}
 
-		const results: PiHoleApiStatus[] = await Promise.all(request_promises);
+		const results: PiHoleApiStatus[] = await Promise.all<PiHoleApiStatus>(request_promises);
 
 		for (const result of results)
 		{
@@ -229,7 +242,7 @@ export module PiHoleApiService
 	 * @param pi_hole_settings
 	 * @param resolve
 	 */
-	function refresh_pi_hole_status_promise_function(pi_hole_settings: PiHoleSettingsStorage, resolve: (value) => void): void
+	function refresh_pi_hole_status_promise_function(pi_hole_settings: PiHoleSettingsStorage, resolve: (value: PiHoleApiStatus) => void): void
 	{
 		const pi_uri_base = pi_hole_settings.pi_uri_base;
 		const api_key = pi_hole_settings.api_key;
@@ -245,10 +258,10 @@ export module PiHoleApiService
 			if (this.readyState === 4 && this.status === 200)
 			{
 				// Action to be performed when the document is read;
-				let data: PiHoleApiStatus;
 				try
 				{
-					data = JSON.parse(this.response);
+					let data: PiHoleApiStatus = JSON.parse(this.response);
+					resolve(data);
 				}
 				catch (e)
 				{
@@ -256,8 +269,6 @@ export module PiHoleApiService
 					const error: PiHoleApiStatus = {status: PiHoleApiStatusEnum.error};
 					resolve(error);
 				}
-				resolve(data);
-
 			}
 			else if (this.status !== 200 && this.status !== 0)
 			{

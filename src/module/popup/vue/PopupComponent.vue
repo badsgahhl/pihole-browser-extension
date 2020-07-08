@@ -1,67 +1,66 @@
 <template>
     <div id="popup">
-        <b-card no-body>
-            <b-card-header class="status">
-                {{ translate(i18nPopupKeys.popup_status_card_title)}}
-            </b-card-header>
-            <b-card-body>
-                <div class="text">{{translate(i18nPopupKeys.popup_status_card_info_text)}}</div>
-                <PopupDisableTimeComponent></PopupDisableTimeComponent>
-            </b-card-body>
-            <b-card-footer style="max-height: 45px;">
-                <PopupSliderComponent :is_checked=true></PopupSliderComponent>
-            </b-card-footer>
-        </b-card>
+        <PopupStatusCardComponent :is_active_by_status.sync="is_active_by_real_status"
+                                  v-if="is_active_by_badge_loaded" :is_active_by_badge="is_active_by_badge"/>
+        <PopupListCardComponent v-if="is_active_by_real_status && current_url.length > 0" :current_url="current_url"/>
+        <PopupUpdateAlertComponent v-if="is_active_by_real_status"/>
     </div>
 </template>
 
 <script lang="ts">
 
-	import {i18nPopupKeys, i18nService} from "../../../service/browser/i18nService";
-
-	import Vue from 'vue'
-	import {Component, Prop} from 'vue-property-decorator'
-	import PopupDisableTimeComponent from "./PopupDisableTimeComponent.vue";
-	import PopupSliderComponent from "./PopupSliderComponent.vue";
+	import Vue from 'vue';
+	import {Component} from 'vue-property-decorator';
+	import PopupStatusCardComponent from "./PopupStatusCardComponent.vue";
+	import PopupListCardComponent from "./PopupListCardComponent.vue";
+	import {BadgeService, ExtensionBadgeText} from "../../../service/browser/BadgeService";
+	import {TabService} from "../../../service/browser/TabService";
+	import PopupUpdateAlertComponent from "./PopupUpdateAlertComponent.vue";
 
 	@Component({
-					  components: {PopupSliderComponent, PopupDisableTimeComponent}
+					  components: {PopupUpdateAlertComponent, PopupListCardComponent, PopupStatusCardComponent}
 				  })
 	export default class PopupComponent extends Vue
 	{
-		// Data property
-		@Prop({default: () => i18nPopupKeys})
-		i18nPopupKeys: string;
+		private is_active_by_badge: boolean = false;
 
+		private is_active_by_badge_loaded: boolean = false
 
-		// Lifecycle hook
+		private is_active_by_real_status: boolean = false;
+
+		private current_url: string = '';
+
 		mounted()
 		{
-
+			this.update_is_active_by_badge();
+			this.update_current_url();
 		}
 
-		translate(string)
+		private update_is_active_by_badge(): void
 		{
-			return i18nService.translate(string);
+			BadgeService.get_badge_text().then((text: string) => {
+				this.is_active_by_badge = text === ExtensionBadgeText.enabled;
+				this.is_active_by_badge_loaded = true;
+			})
+		}
+
+		private update_current_url(): void
+		{
+			TabService.get_current_tab_url_cleaned().then((url: string) => {
+				if (url.length > 0)
+				{
+					this.current_url = url;
+				}
+			})
 		}
 	}
+
+
 </script>
 
-<style scoped>
-    #popup {
-        margin: 1px 1px 1px 1px;
-        text-align: center;
-    }
+<style lang="sass" scoped>
+#popup
+    margin: 1px 1px 1px 1px
+    text-align: center
 
-    .status {
-        font-size: 16px;
-        text-align: center;
-        font-weight: bold;
-    }
-
-    .text {
-        font-size: 13px;
-        margin-bottom: 10px;
-        text-align: center;
-    }
 </style>
