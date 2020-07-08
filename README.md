@@ -31,6 +31,21 @@ Switch-for-PiHole is a small browser extension for Chrome and Firefox. It's writ
 - Copy the token to the settings. Press save.
 - Congratulations you successfully installed and configured the extension.
 
+### Using multiple piholes
+
+If you want to use several PiHoles please read the following information page first:
+
+[Multiple PiHoles Documentation](https://github.com/badsgahhl/pihole-chrome-extension/blob/master/documentation/multiple-pihole.md)
+
+### Using Beta features
+
+Starting with version v2.2.4 there is a new setting in the options. This activates the beta functionality if currently available.
+
+Please read the release note on github (matching your version). There you can see which features are currently available as beta.
+
+Please note that this is a beta. It is not guaranteed that the extension will work completely once the feature is activated.
+
+If you have problems please create an issue on github or deactivate the beta mode.
 
 ### Troubleshooting
 
