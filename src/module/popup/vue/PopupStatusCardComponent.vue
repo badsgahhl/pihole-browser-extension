@@ -105,11 +105,12 @@
 		{
 			if (data.status === PiHoleApiStatusEnum.disabled)
 			{
-				this.default_disable_time_disabled = true;
-				this.slider_checked = false;
-				BadgeService.set_badge_text(ExtensionBadgeText.disabled);
-				this.$emit('update:is_active_by_status', false);
-			}
+					this.default_disable_time_disabled = true;
+					this.slider_checked = false;
+					this.slider_disabled = false;
+					BadgeService.set_badge_text(ExtensionBadgeText.disabled);
+					this.$emit('update:is_active_by_status', false);
+				}
 			else if (data.status === PiHoleApiStatusEnum.enabled)
 			{
 				this.default_disable_time_disabled = false;
