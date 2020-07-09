@@ -62,6 +62,30 @@ export module StorageService
 	}
 
 	/**
+	 * Enable disable beta feature
+	 * @param time
+	 */
+	export function save_beta_feature_flag(value: boolean): void
+	{
+		const storage: ExtensionStorage = {
+			beta_feature_flag: value
+		}
+		chrome.storage.local.set(storage);
+	}
+
+	/**
+	 * Gets the status of the beta feature
+	 */
+	export function get_beta_feature_flag(): Promise<boolean>
+	{
+		return new Promise((resolve) => {
+			chrome.storage.local.get(ExtensionStorageEnum.beta_feature_flag, function(obj) {
+				resolve((<ExtensionStorage> obj).beta_feature_flag)
+			});
+		});
+	}
+
+	/**
 	 * Function to set the state for reload_after_enable_disable
 	 * @param state
 	 */
@@ -139,7 +163,11 @@ export module StorageService
 			}
 
 			add_pi_hole_settings(migration_storage);
-			save_default_disable_time(oldStorage.default_disable_time);
+			const old_default_disable_time = oldStorage.default_disable_time;
+			if (old_default_disable_time)
+			{
+				save_default_disable_time(old_default_disable_time);
+			}
 		})
 
 	}
@@ -175,6 +203,7 @@ export interface ExtensionStorage
 	storage_version?: number,
 	reload_after_disable?: boolean,
 	reload_after_white_list?: boolean,
+	beta_feature_flag?: boolean
 }
 
 export enum ExtensionStorageEnum
@@ -183,5 +212,6 @@ export enum ExtensionStorageEnum
 	storage_version = 'storage_version',
 	default_disable_time = 'default_disable_time',
 	reload_after_disable = 'reload_after_disable',
-	reload_after_white_list = 'reload_after_white_list'
+	reload_after_white_list = 'reload_after_white_list',
+	beta_feature_flag = 'beta_feature_flag'
 }

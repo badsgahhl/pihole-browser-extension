@@ -1,7 +1,7 @@
 import {StorageService} from "../../service/browser/StorageService";
 import {PiHoleApiService} from "../../service/api/service/PiHoleApiService";
 import {BadgeService, ExtensionBadgeText} from "../../service/browser/BadgeService";
-import {PiHoleApiStatusEnum} from "../../service/api/models/pihole/PiHoleApiStatus";
+import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../service/api/models/pihole/PiHoleApiStatus";
 
 
 chrome.runtime.onInstalled.addListener(function(details) {
@@ -9,7 +9,7 @@ chrome.runtime.onInstalled.addListener(function(details) {
 	{
 		console.log("This is a first install!");
 	}
-	else if (details.reason == "update")
+	else if (details.reason == "update" && details.previousVersion)
 	{
 		const previousVersion = Number(details.previousVersion.split('.').join(''));
 		const thisVersion = Number(chrome.runtime.getManifest().version.split('.').join(''));
@@ -45,7 +45,7 @@ window.setInterval(checkStatus, 15000); //Keep checking every 15 seconds
  */
 async function checkStatus(): Promise<void>
 {
-	const success_callback = (data) => {
+	const success_callback = (data: PiHoleApiStatus) => {
 		BadgeService.get_badge_text().then(function(result) {
 			if (!(BadgeService.compare_badge_to_api_status(result, data.status)))
 			{

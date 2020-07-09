@@ -17,7 +17,11 @@
 			"firefox-webext-browser",
 			"jquery",
 			"bootstrap"
-		]
+		],
+		"moduleResolution": "node",
+		"module": "CommonJS",
+		"experimentalDecorators": true,
+		"strict": true
 	},
 	"exclude": [
 		"node_modules"

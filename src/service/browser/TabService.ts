@@ -1,7 +1,9 @@
-import {StorageService} from "./StorageService";
+import {PiHoleSettingsStorage, StorageService} from "./StorageService";
 
 export module TabService
 {
+	import Tab = chrome.tabs.Tab;
+
 	/**
 	 * Returns the current tab url. Cleaned only the real domain without the parameters etc.
 	 */
@@ -28,11 +30,14 @@ export module TabService
 		];
 
 		let pi_hole_urls = (await StorageService.get_pi_hole_settings_array());
-		let pi_hole_urls_array = [];
+		let pi_hole_urls_array: Array<string> = [];
 		if (typeof pi_hole_urls !== "undefined")
 		{
-			pi_hole_urls.forEach((value => {
-				pi_hole_urls_array.push((new URL(value.pi_uri_base).hostname));
+			pi_hole_urls.forEach(((value: PiHoleSettingsStorage) => {
+				if (value.pi_uri_base)
+				{
+					pi_hole_urls_array.push((new URL(value.pi_uri_base).hostname));
+				}
 			}))
 		}
 
@@ -58,24 +63,25 @@ export module TabService
 	 * Function to reload the current tab
 	 * @param delay in ms
 	 */
-	export function reload_current_tab(delay?: number): void
+	export function reload_current_tab(delay: number = 0): void
 	{
 		const query_info = {
 			'active': true,
 			'lastFocusedWindow': true,
 			'currentWindow': true
 		};
-		const query_function = (tabs) => {
+		const query_function = (tabs: Tab[]) => {
+
 			if (tabs[0])
 			{
 				get_current_tab_url_cleaned().then((url) => {
-					if (url)
+					if (url && tabs[0].id)
 					{
 						chrome.tabs.reload(tabs[0].id);
 					}
 				});
 			}
-		}
+		};
 		const tabs_function = () => chrome.tabs.query(query_info, query_function);
 
 		if (delay > 0)

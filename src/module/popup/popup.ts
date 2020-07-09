@@ -1,3 +1,4 @@
+//@ts-nocheck
 import {BadgeService, ExtensionBadgeText} from "../../service/browser/BadgeService";
 import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../service/api/models/pihole/PiHoleApiStatus";
 import {PiHoleSettingsDefaults, StorageService} from "../../service/browser/StorageService";
@@ -5,9 +6,12 @@ import {TabService} from "../../service/browser/TabService";
 import {ApiListMode} from "../../service/api/models/pihole/PiHoleListStatus";
 import "./popup.css";
 import "../general/darkmode.css";
-import "bootstrap/dist/css/bootstrap.min.css"
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 import {PiHoleApiService} from "../../service/api/service/PiHoleApiService";
 import {i18nService} from "../../service/browser/i18nService";
+import {BootstrapVue, BIconXCircle, BIconCheckCircle} from 'bootstrap-vue';
+import Vue from "vue";
 
 let current_tab_url: string = '';
 
@@ -69,7 +73,7 @@ function throw_console_badge_error(error_message: string, refresh_status: boolea
 async function load_settings_and_status(): Promise<void>
 {
 	i18nService.translate_html_page();
-	
+
 	render_slider_switch().then();
 
 	PiHoleApiService.refresh_pi_hole_status((data => change_icon(data))).then();
@@ -134,7 +138,7 @@ async function check_for_pi_hole_updates(): Promise<void>
 	let amount_updatable = 0;
 	for (const pi_hole_version of versions_array)
 	{
-		if (pi_hole_version.FTL_current < pi_hole_version.FTL_latest || pi_hole_version.core_current < pi_hole_version.core_latest || pi_hole_version.web_current < pi_hole_version.web_latest)
+		if (pi_hole_version.core_update || pi_hole_version.web_update || pi_hole_version.FTL_update)
 		{
 			update_available = true;
 			amount_updatable++;
@@ -278,7 +282,7 @@ async function list_domain(mode: ApiListMode, buttonElement: HTMLButtonElement):
 	const delay_increment = 2000;
 	let delay = 0;
 
-	const pi_hole_list_results = (await PiHoleApiService.list_domain(domain, mode));
+	const pi_hole_list_results = (await PiHoleApiService.list_domain_old(domain, mode));
 
 	if (typeof browser === 'undefined')
 	{
@@ -288,14 +292,14 @@ async function list_domain(mode: ApiListMode, buttonElement: HTMLButtonElement):
 	pi_hole_list_results.forEach((pi_hole_result, index) => {
 		setTimeout(function() {
 			const current_url_element = document.getElementById('current_url');
-			if (pi_hole_result.includes('skipped'))
+			if (pi_hole_result.includes('skipped') || pi_hole_result.includes('Not adding'))
 			{
 				current_url_element.classList.add('bg-warning')
 				setTimeout(() => {
 					current_url_element.classList.remove('bg-warning');
 				}, 1500)
 			}
-			else if (pi_hole_result.includes('added'))
+			else if (pi_hole_result.includes('added') || pi_hole_result.includes('Added'))
 			{
 				current_url_element.classList.add('bg-success')
 				setTimeout(function() {
@@ -410,7 +414,43 @@ function time_input_changed(): void
 }
 
 /**
+ * [Beta] Initialises the new Vue Popup
+ */
+async function init_vue(): Promise<void>
+{
+	const popup_component_import = await import ('./vue/PopupComponent.vue');
+	const PopupComponent = popup_component_import.default;
+
+	const popup_vue_component = {
+		el: "#main",
+		render: h => h(PopupComponent)
+	};
+
+	Vue.use(BootstrapVue);
+	Vue.component('BIconCheckCircle', BIconCheckCircle);
+	Vue.component('BIconXCircle', BIconXCircle);
+	new Vue(popup_vue_component);
+}
+
+/**
+ * Main Init function for the popup
+ */
+async function init(): Promise<void>
+{
+	const beta_flag = await StorageService.get_beta_feature_flag();
+
+	if (beta_flag)
+	{
+		await init_vue();
+	}
+	else
+	{
+		document.getElementById('main').hidden = false;
+		await load_settings_and_status();
+	}
+}
+
+/**
  * EventListener Section
  */
-document.addEventListener('DOMContentLoaded', load_settings_and_status); //When the page loads get the status
-
+document.addEventListener('DOMContentLoaded', () => init()); //When the page loads get the status

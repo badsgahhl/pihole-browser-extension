@@ -1,6 +1,6 @@
 {
 	"manifest_description": {
-		"message": "Browser Erweiterung um dein PiHole zu steuern."
+		"message": "Browser Erweiterung um dein PiHole zu steuern. Gebaut mit Typescript und ❤"
 	},
 	"options_title": {
 		"message": "PiHole Remote Optionen",
@@ -52,12 +52,26 @@
 		"message": "0 für 'dauerhaft'"
 	},
 	"popup_second_card_current_url": {
-		"message": "Aktuelle Url"
+		"message": "Aktuelle Url:"
 	},
 	"popup_second_card_whitelist": {
 		"message": "Whitelist"
 	},
 	"popup_second_card_blacklist": {
 		"message": "Blacklist"
+	},
+	"options_beta_feature_flag": {
+		"message": "Aktiviere Beta Features (Achtung!)"
+	},
+	"popup_update_card_info": {
+		"message": "PiHole Update verfügbar! ($updates$/$piholes$)",
+		"placeholders": {
+			"updates": {
+				"content": "$1"
+			},
+			"piholes": {
+				"content": "$2"
+			}
+		}
 	}
 }

@@ -1,7 +1,8 @@
+//@ts-nocheck
 import {PiHoleSettingsDefaults, PiHoleSettingsStorage, StorageService} from "../../service/browser/StorageService";
 import "./options.css";
 import "../general/darkmode.css";
-import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap";
 import * as $ from "jquery";
 import {i18nOptionsKeys, i18nService} from "../../service/browser/i18nService";
@@ -72,7 +73,7 @@ async function set_settings(): Promise<void>
 
 	const save_button: HTMLButtonElement = <HTMLButtonElement> document.getElementById('save_button');
 	const button_saved: () => void = function() {
-		const btn_default: string = save_button.textContent;
+		const btn_default: string = save_button.textContent ? save_button.textContent : '';
 		save_button.disabled = true;
 		save_button.textContent = i18nService.translate(i18nOptionsKeys.options_save_button_confirmed);
 		setTimeout(function() {
@@ -85,9 +86,11 @@ async function set_settings(): Promise<void>
 
 	const reload_after_enable_disable = (<HTMLInputElement> document.getElementById('reload_after_disable')).checked;
 	const reload_after_white_black_list = (<HTMLInputElement> document.getElementById('reload_after_white_list')).checked;
+	const beta_feature_flag = (<HTMLInputElement> document.getElementById('beta_feature_flag')).checked;
 
 	StorageService.save_reload_after_disable(reload_after_enable_disable);
 	StorageService.save_reload_after_white_list(reload_after_white_black_list);
+	StorageService.save_beta_feature_flag(beta_feature_flag);
 
 	button_saved();
 }
@@ -150,6 +153,7 @@ async function get_settings(): Promise<void>
 	let default_disable_time = (await StorageService.get_default_disable_time());
 	let reload_after_disable = (await StorageService.get_reload_after_disable());
 	let reload_after_white_list = (await StorageService.get_reload_after_white_list());
+	let beta_feature_flag = (await StorageService.get_beta_feature_flag());
 
 	if (typeof storage_array === "undefined")
 	{
@@ -187,9 +191,14 @@ async function get_settings(): Promise<void>
 	{
 		reload_after_white_list = false;
 	}
+	if (typeof beta_feature_flag === 'undefined')
+	{
+		beta_feature_flag = false;
+	}
 
 	(<HTMLInputElement> document.getElementById('reload_after_disable')).checked = reload_after_disable;
 	(<HTMLInputElement> document.getElementById('reload_after_white_list')).checked = reload_after_white_list;
+	(<HTMLInputElement> document.getElementById('beta_feature_flag')).checked = beta_feature_flag;
 
 }
 
@@ -420,8 +429,9 @@ function render_tab(settings: PiHoleSettingsStorage, counter: number, active: bo
 
 	const pi_hole_address_tet = i18nService.translate(i18nOptionsKeys.options_pi_hole_address);
 	const api_key_text = i18nService.translate(i18nOptionsKeys.options_api_key);
-	content_div.appendChild(get_settings_form(settings.pi_uri_base, counter, 'pi_uri_base', pi_hole_address_tet));
-	content_div.appendChild(get_settings_form(settings.api_key, counter, 'api_key', api_key_text));
+
+	content_div.appendChild(get_settings_form(settings.pi_uri_base ? settings.pi_uri_base : '', counter, 'pi_uri_base', pi_hole_address_tet));
+	content_div.appendChild(get_settings_form(settings.api_key ? settings.api_key : '', counter, 'api_key', api_key_text));
 
 
 	document.getElementById('pi_hole_settings_tab_content').appendChild(content_div);
@@ -484,4 +494,4 @@ function on_load(): void
 	document.getElementById('save_button').addEventListener('click', set_settings);
 }
 
-window.addEventListener('load', on_load);    //Get the API key when the page loads
+document.addEventListener('DOMContentLoaded', on_load);    //Get the API key when the page loads

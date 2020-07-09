@@ -4,6 +4,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ZipPlugin = require('zip-webpack-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 
 export function get_config(browser: string, production: boolean): webpack.Configuration
@@ -23,13 +24,36 @@ export function get_config(browser: string, production: boolean): webpack.Config
 		module: {
 			rules: [
 				{
+					test: /\.vue$/,
+					loader: 'vue-loader',
+				},
+				{
 					test: /\.tsx?$/,
 					loader: 'ts-loader',
 					exclude: /node_modules/,
+					options: {
+						appendTsSuffixTo: [/\.vue$/]
+					}
 				},
 				{
 					test: /\.css$/,
 					loader: "style-loader!css-loader",
+				},
+				{
+					test: /\.sass$/,
+					use: [
+						'vue-style-loader',
+						'css-loader',
+						{
+							loader: 'sass-loader',
+							options: {
+								// sass-loader version >= 8
+								sassOptions: {
+									indentedSyntax: true
+								}
+							}
+						}
+					]
 				}
 			]
 		},
@@ -37,8 +61,17 @@ export function get_config(browser: string, production: boolean): webpack.Config
 			extensions: [
 				".tsx",
 				".ts",
-				".js"
+				".js",
+				".vue"
 			],
+			alias: {
+				'vue$': 'vue/dist/vue.esm.js'
+			}
+		},
+		optimization: {
+			splitChunks: {
+				chunks: 'all',
+			}
 		},
 		plugins: [
 			// expose and write the allowed env vars on the compiled bundle
@@ -72,17 +105,22 @@ export function get_config(browser: string, production: boolean): webpack.Config
 											 template: path.join(__dirname, "../", "module/background", "background.html"),
 											 filename: "background.html",
 											 chunks: ["background"]
-										 })
+										 }),
+			new VueLoaderPlugin()
 		]
 	};
 
 
 	if (production)
 	{
-		config.plugins.push(new ZipPlugin({
-														 filename: "package." + browser + ".zip",
-														 path: path.join(__dirname, '../../')
-													 }));
+		if (config.plugins)
+		{
+			const zip_options = {
+				filename: "package." + browser + ".zip",
+				path: path.join(__dirname, '../../')
+			};
+			config.plugins.push(new ZipPlugin(zip_options));
+		}
 	}
 
 	return config;
