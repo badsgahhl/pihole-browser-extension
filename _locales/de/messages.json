@@ -1,6 +1,6 @@
 {
 	"manifest_description": {
-		"message": "Browser Erweiterung um dein PiHole zu steuern."
+		"message": "Browser Erweiterung um dein PiHole zu steuern. Gebaut mit Typescript und ❤"
 	},
 	"options_title": {
 		"message": "PiHole Remote Optionen",

@@ -10,14 +10,14 @@
                       :title="translate(i18nPopupKeys.popup_second_card_whitelist)"
                       v-on:click="whitelist_url" id="list_action_white">
                 <b-icon-check-circle v-if="!whitelisting_active" style="height: 20px;width: 20px"></b-icon-check-circle>
-                <b-spinner v-else style="width:18px;height: 18px"></b-spinner>
+                <b-spinner v-else style="width:20px;height: 20px"></b-spinner>
             </b-button>
             <b-button variant="danger" size="sm" :disabled="buttons_disabled"
                       :title="translate(i18nPopupKeys.popup_second_card_blacklist)"
                       v-on:click="blacklist_url"
                       id="list_action_black">
                 <b-icon-x-circle v-if="!blacklisting_active" style="height: 20px;width: 20px"></b-icon-x-circle>
-                <b-spinner v-else style="width:18px;height: 18px"></b-spinner>
+                <b-spinner v-else style="width:20px;height: 20px"></b-spinner>
             </b-button>
         </b-card-footer>
     </b-card>
@@ -148,20 +148,30 @@
 
 			pi_hole_list_results.forEach((pi_hole_result, index) => {
 				setTimeout(() => {
-					if (pi_hole_result.includes('skipped'))
-					{
-						this.background_classes = 'bg-warning';
-						setTimeout(() => {
-							this.background_classes = '';
-						}, 1500)
-					}
-					else if (pi_hole_result.includes('added'))
-					{
-						this.background_classes = 'bg-success';
-						setTimeout(() => {
-							this.background_classes = '';
-						}, 1500);
-					}
+						 if (pi_hole_result.success)
+						 {
+							 if (pi_hole_result.message.includes('Not adding'))
+							 {
+								 this.background_classes = 'bg-warning text-dark';
+								 setTimeout(() => {
+									 this.background_classes = '';
+								 }, 1500)
+							 }
+							 else if (pi_hole_result.message.includes('Added'))
+							 {
+								 this.background_classes = 'bg-success text-white';
+								 setTimeout(() => {
+									 this.background_classes = '';
+								 }, 1500);
+							 }
+						 }
+						 else
+						 {
+							 this.background_classes = 'bg-danger text-white';
+							 setTimeout(() => {
+								 this.background_classes = '';
+							 }, 1500);
+						 }
 
 					// After the last one we enable the button again and remove the spinning circle
 					if (index + 1 === pi_hole_list_results.length)

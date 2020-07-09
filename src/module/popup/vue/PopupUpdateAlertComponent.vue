@@ -56,7 +56,7 @@
 				 let amount_updatable = 0;
 				 for (const pi_hole_version of pi_hole_versions_array)
 				 {
-					 if (pi_hole_version.FTL_current < pi_hole_version.FTL_latest || pi_hole_version.core_current < pi_hole_version.core_latest || pi_hole_version.web_current < pi_hole_version.web_latest)
+					 if (pi_hole_version.core_update || pi_hole_version.web_update || pi_hole_version.FTL_update)
 					 {
 						 update_available = true;
 						 amount_updatable++;
