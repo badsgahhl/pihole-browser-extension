@@ -148,30 +148,30 @@
 
 			pi_hole_list_results.forEach((pi_hole_result, index) => {
 				setTimeout(() => {
-						 if (pi_hole_result.success)
-						 {
-							 if (pi_hole_result.message.includes('Not adding'))
-							 {
-								 this.background_classes = 'bg-warning text-dark';
-								 setTimeout(() => {
-									 this.background_classes = '';
-								 }, 1500)
-							 }
-							 else if (pi_hole_result.message.includes('Added'))
-							 {
-								 this.background_classes = 'bg-success text-white';
-								 setTimeout(() => {
-									 this.background_classes = '';
-								 }, 1500);
-							 }
-						 }
-						 else
-						 {
-							 this.background_classes = 'bg-danger text-white';
-							 setTimeout(() => {
-								 this.background_classes = '';
-							 }, 1500);
-						 }
+					if (pi_hole_result.success)
+					{
+						if (pi_hole_result.message.includes('Not adding'))
+						{
+							this.background_classes = 'bg-warning text-dark';
+							setTimeout(() => {
+								this.background_classes = '';
+							}, 1500)
+						}
+						else if (pi_hole_result.message.includes('Added'))
+						{
+							this.background_classes = 'bg-success text-white';
+							setTimeout(() => {
+								this.background_classes = '';
+							}, 1500);
+						}
+					}
+					else
+					{
+						this.background_classes = 'bg-danger text-white';
+						setTimeout(() => {
+							this.background_classes = '';
+						}, 1500);
+					}
 
 					// After the last one we enable the button again and remove the spinning circle
 					if (index + 1 === pi_hole_list_results.length)
@@ -179,7 +179,7 @@
 						setTimeout(async () => {
 							const reload_after_white_black_list = (await StorageService.get_reload_after_white_list());
 
-							if (reload_after_white_black_list && mode === ApiListMode.whitelist)
+							if (reload_after_white_black_list && mode === ApiListMode.whitelist && pi_hole_result.success && pi_hole_result.message.includes('Added'))
 							{
 								TabService.reload_current_tab(250);
 							}
