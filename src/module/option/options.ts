@@ -531,7 +531,7 @@ async function init(): Promise<void>
 	else
 	{
 		document.getElementById('main').hidden = false;
-		await on_load();
+		on_load();
 	}
 }
 
