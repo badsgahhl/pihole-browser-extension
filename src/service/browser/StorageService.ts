@@ -88,7 +88,7 @@ export module StorageService
 
 	/**
 	 * Enable disable beta feature
-	 * @param time
+	 * @param value
 	 */
 	export function save_beta_feature_flag(value: boolean): void
 	{
