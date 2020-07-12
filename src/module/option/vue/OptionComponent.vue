@@ -77,16 +77,24 @@
 	}
 </script>
 
-<style lang="sass" scoped>
-#option
-    padding: 10px
-    min-width: 550px
-    max-width: 600px
+<style lang="scss">
+#option {
+    padding: 10px;
+    min-width: 550px;
+    max-width: 600px;
+}
 
-.headline
-    margin-bottom: 10px
+body {
+    padding: 10px;
+    min-width: 550px;
+    max-width: 600px;
+}
 
-    @-moz-document url-prefix()
-        font-size: 16px
+.headline {
+    margin-bottom: 10px;
 
+    @-moz-document url-prefix() {
+        font-size: 16px;
+    }
+}
 </style>

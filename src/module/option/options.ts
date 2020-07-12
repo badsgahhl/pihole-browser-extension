@@ -1,9 +1,7 @@
 //@ts-nocheck
 import {PiHoleSettingsDefaults, PiHoleSettingsStorage, StorageService} from "../../service/browser/StorageService";
 import "./options.css";
-import "../general/darkmode.css";
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+import "../general/general.scss";
 import "bootstrap/dist/js/bootstrap";
 import * as $ from "jquery";
 import {i18nOptionsKeys, i18nService} from "../../service/browser/i18nService";

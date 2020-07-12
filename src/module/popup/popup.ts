@@ -5,9 +5,7 @@ import {PiHoleSettingsDefaults, StorageService} from "../../service/browser/Stor
 import {TabService} from "../../service/browser/TabService";
 import {ApiListMode} from "../../service/api/models/pihole/PiHoleListStatus";
 import "./popup.css";
-import "../general/darkmode.css";
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+import "../general/general.scss";
 import {PiHoleApiService} from "../../service/api/service/PiHoleApiService";
 import {i18nService} from "../../service/browser/i18nService";
 import {BootstrapVue, BIconXCircle, BIconCheckCircle} from 'bootstrap-vue';
