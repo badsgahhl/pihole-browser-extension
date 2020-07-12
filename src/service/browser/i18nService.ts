@@ -48,7 +48,9 @@ export enum i18nOptionsKeys
 	options_pi_hole_address = "options_pi_hole_address",
 	options_add_button = "options_add_button",
 	options_remove_button = "options_remove_button",
-	options_api_key_invalid_warning = "options_api_key_invalid_warning"
+	options_api_key_invalid_warning = "options_api_key_invalid_warning",
+	options_beta_feature_flag = "options_beta_feature_flag",
+	options_url_invalid_warning = "options_url_invalid_warning"
 }
 
 export enum i18nPopupKeys

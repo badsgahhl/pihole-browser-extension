@@ -42,6 +42,9 @@
 	"options_api_key_invalid_warning": {
 		"message": "Api Key stimmt nicht mit dem Schema überein (64 Zeichen lang). Er könnte ungültig sein!"
 	},
+	"options_url_invalid_warning": {
+		"message": "Die URL ist invalide. (Fehlendes http(s), ungültiges Format oder leer)"
+	},
 	"popup_title": {
 		"message": "PiHole Remote Popup"
 	},

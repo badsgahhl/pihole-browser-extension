@@ -2,10 +2,13 @@
 import {PiHoleSettingsDefaults, PiHoleSettingsStorage, StorageService} from "../../service/browser/StorageService";
 import "./options.css";
 import "../general/darkmode.css";
-import "bootstrap/dist/css/bootstrap.css";
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 import "bootstrap/dist/js/bootstrap";
 import * as $ from "jquery";
 import {i18nOptionsKeys, i18nService} from "../../service/browser/i18nService";
+import Vue from "vue";
+import {BIconPlusCircle, BIconXCircle, BootstrapVue} from "bootstrap-vue";
 
 /**
  * Saves the extension settings to the local storage.
@@ -494,4 +497,42 @@ function on_load(): void
 	document.getElementById('save_button').addEventListener('click', set_settings);
 }
 
-document.addEventListener('DOMContentLoaded', on_load);    //Get the API key when the page loads
+
+/**
+ * [Beta] Initialises the new Vue Popup
+ */
+async function init_vue(): Promise<void>
+{
+	const option_component = await import ('./vue/OptionComponent.vue');
+	const OptionComponent = option_component.default;
+
+	const option_vue_component = {
+		el: "#main",
+		render: h => h(OptionComponent)
+	};
+
+	Vue.use(BootstrapVue);
+	Vue.component('BIconPlusCircle', BIconPlusCircle);
+	Vue.component('BIconXCircle', BIconXCircle);
+	new Vue(option_vue_component);
+}
+
+/**
+ * Main Init function for the popup
+ */
+async function init(): Promise<void>
+{
+	const beta_flag = await StorageService.get_beta_feature_flag();
+
+	if (beta_flag)
+	{
+		await init_vue();
+	}
+	else
+	{
+		document.getElementById('main').hidden = false;
+		await on_load();
+	}
+}
+
+document.addEventListener('DOMContentLoaded', () => init());
