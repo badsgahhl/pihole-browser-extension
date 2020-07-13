@@ -47,8 +47,21 @@ export module StorageService
 				return;
 			}
 
+			let secure_settings: PiHoleSettingsStorage[] = [];
+
+			// Type Assertion
+			for (const setting of filtered_settings)
+			{
+				const secure_setting: PiHoleSettingsStorage = {};
+
+				secure_setting.pi_uri_base = String(setting.pi_uri_base);
+				secure_setting.api_key = String(setting.api_key);
+
+				secure_settings.push(secure_setting);
+			}
+
 			const storage: ExtensionStorage = {
-				pi_hole_settings: filtered_settings
+				pi_hole_settings: secure_settings
 			};
 
 			chrome.storage.local.set(storage);
