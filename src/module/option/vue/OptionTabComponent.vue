@@ -12,7 +12,6 @@
             <b-form-group :label="translate(i18nOptionsKeys.options_api_key)">
                 <b-form-input :state="is_invalid_api_key(pi_hole_setting.api_key)"
                               v-model="pi_hole_setting.api_key"
-                              required
                 ></b-form-input>
                 <b-form-invalid-feedback>{{translate(i18nOptionsKeys.options_api_key_invalid_warning)}}
                 </b-form-invalid-feedback>
