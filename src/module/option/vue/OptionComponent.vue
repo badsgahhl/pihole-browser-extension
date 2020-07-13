@@ -36,9 +36,9 @@
 		 * Wrapper for translation
 		 * @param string
 		 */
-		translate(string: i18nOptionsKeys, placeholder?: any): string
+		translate(string: i18nOptionsKeys): string
 		{
-			return i18nService.translate(string, placeholder);
+			return i18nService.translate(string);
 		}
 
 		/**
