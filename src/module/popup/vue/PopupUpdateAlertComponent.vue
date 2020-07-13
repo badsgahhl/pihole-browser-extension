@@ -80,11 +80,12 @@
 	}
 </script>
 
-<style lang="sass" scoped>
-.popup-update-alert
-    padding: 0 !important
-    font-size: 14px
-    margin-top: 5px
-    font-weight: bold
-    margin-bottom: 0 !important
+<style lang="scss" scoped>
+.popup-update-alert {
+    padding: 0 !important;
+    font-size: 14px;
+    margin-top: 5px;
+    font-weight: bold;
+    margin-bottom: 0 !important;
+}
 </style>

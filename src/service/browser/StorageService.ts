@@ -31,6 +31,43 @@ export module StorageService
 
 	}
 
+	/**
+	 * Function to save a pi_hole settings array
+	 * @param settings
+	 */
+	export function save_pi_hole_settings_array(settings: PiHoleSettingsStorage[]): void
+	{
+		if (settings.length > 0)
+		{
+			let filtered_settings: PiHoleSettingsStorage[] = settings.filter(value => value.pi_uri_base);
+
+			if (filtered_settings.length < 1)
+			{
+				chrome.storage.local.remove(ExtensionStorageEnum.pi_hole_settings);
+				return;
+			}
+
+			let secure_settings: PiHoleSettingsStorage[] = [];
+
+			// Type Assertion
+			for (const setting of filtered_settings)
+			{
+				const secure_setting: PiHoleSettingsStorage = {};
+
+				secure_setting.pi_uri_base = String(setting.pi_uri_base);
+				secure_setting.api_key = String(setting.api_key);
+
+				secure_settings.push(secure_setting);
+			}
+
+			const storage: ExtensionStorage = {
+				pi_hole_settings: secure_settings
+			};
+
+			chrome.storage.local.set(storage);
+		}
+	}
+
 	export function clear_pi_hole_settings(): void
 	{
 		chrome.storage.local.remove(ExtensionStorageEnum.pi_hole_settings.valueOf());
@@ -42,6 +79,7 @@ export module StorageService
 	 */
 	export function save_default_disable_time(time: number): void
 	{
+		time = Number(time);
 		if (time < 1)
 		{
 			return;
@@ -63,7 +101,7 @@ export module StorageService
 
 	/**
 	 * Enable disable beta feature
-	 * @param time
+	 * @param value
 	 */
 	export function save_beta_feature_flag(value: boolean): void
 	{

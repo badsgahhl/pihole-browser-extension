@@ -76,31 +76,37 @@
 
 </script>
 
-<style lang="sass">
-$card-padding: 5px
+<style lang="scss">
 
-#popup
-    margin: 1px 1px 1px 1px
-    text-align: center
+$card-padding: 5px;
 
-body
-    width: 150px
-    overflow: hidden
+#popup {
+    margin: 1px 1px 1px 1px;
+    text-align: center;
+}
 
-.card-body
-    padding: $card-padding !important
-    font-size: 14px
+body {
+    width: 150px;
+    overflow: hidden;
+}
 
-.card-header
-    padding: $card-padding !important
-    font-size: 16px
+.card-body {
+    padding: $card-padding !important;
+    font-size: 14px;
+}
 
+.card-header {
+    padding: $card-padding !important;
+    font-size: 16px;
+}
 
-.card-footer
-    padding: $card-padding !important
+.card-footer {
+    padding: $card-padding !important;
+}
 
-.status
-    font-size: 16px
-    text-align: center
-    font-weight: bold
+.status {
+    font-size: 16px;
+    text-align: center;
+    font-weight: bold;
+}
 </style>

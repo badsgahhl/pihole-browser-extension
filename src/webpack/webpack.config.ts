@@ -40,18 +40,12 @@ export function get_config(browser: string, production: boolean): webpack.Config
 					loader: "style-loader!css-loader",
 				},
 				{
-					test: /\.sass$/,
+					test: /\.scss$/,
 					use: [
 						'vue-style-loader',
 						'css-loader',
 						{
 							loader: 'sass-loader',
-							options: {
-								// sass-loader version >= 8
-								sassOptions: {
-									indentedSyntax: true
-								}
-							}
 						}
 					]
 				}
