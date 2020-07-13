@@ -202,7 +202,20 @@ export module PiHoleApiService
 				catch (e)
 				{
 					console.log(e);
-					response = {message: 'failed', success: false};
+					let string_response = this.response;
+					// Legacy Fallback for v5.0 or less
+					if (string_response.includes('skipped') || string_response.includes('Not adding'))
+					{
+						response = {message: 'Not adding', success: true};
+					}
+					else if (string_response.includes('added') || string_response.includes('Added'))
+					{
+						response = {message: 'Added', success: true};
+					}
+					else
+					{
+						response = {message: 'failed', success: false};
+					}
 				}
 
 				resolve(response);
