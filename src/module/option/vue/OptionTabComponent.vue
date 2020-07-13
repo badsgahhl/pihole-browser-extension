@@ -86,6 +86,7 @@
 		/**
 		 * Wrapper for translation
 		 * @param string
+		 * @param placeholder
 		 */
 		translate(string: i18nOptionsKeys, placeholder?: any): string
 		{
