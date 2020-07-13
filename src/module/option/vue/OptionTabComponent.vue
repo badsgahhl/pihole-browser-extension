@@ -21,12 +21,12 @@
 
         <!-- New Tab Button (Using tabs-end slot) -->
         <template style="font-size: 20px;" v-slot:tabs-end>
-            <b-nav-item v-if="tabs.length < 4" role="presentation"
+            <b-nav-item link-classes="no-white-hover-border" v-if="tabs.length < 4" role="presentation"
                         :title="translate(i18nOptionsKeys.options_add_button)" @click.prevent="add_new_settings_tab"
                         href="#">
                 <b-icon-plus-circle style="width: 20px;height: 20px" variant="success"></b-icon-plus-circle>
             </b-nav-item>
-            <b-nav-item v-if="tabs.length > 1"
+            <b-nav-item link-classes="no-white-hover-border" v-if="tabs.length > 1"
                         :title="translate(i18nOptionsKeys.options_remove_button)"
                         role="presentation" @click.prevent="remove_last_settings_tab"
                         href="#">
@@ -157,3 +157,14 @@
 	}
 
 </script>
+<style lang="scss" scoped>
+
+.no-white-hover-border:hover {
+    border-color: rgba(255, 255, 255, 0);
+}
+
+.no-white-hover-border:focus {
+    border-color: rgba(255, 255, 255, 0);
+}
+
+</style>
