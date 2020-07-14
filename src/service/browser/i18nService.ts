@@ -36,14 +36,11 @@ export module i18nService
 
 export enum i18nOptionsKeys
 {
-	options_title = 'options_title',
 	options_headline_info = "options_headline_info",
 	options_default_time_label = "options_default_time_label",
 	options_default_time_unit = "options_default_time_unit",
 	options_reload_after_disable = "options_reload_after_disable",
 	options_reload_after_white_list = "options_reload_after_white_list",
-	options_save_button = "options_save_button",
-	options_save_button_confirmed = "options_save_button_confirmed",
 	options_api_key = "options_api_key",
 	options_pi_hole_address = "options_pi_hole_address",
 	options_add_button = "options_add_button",

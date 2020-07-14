@@ -2,10 +2,6 @@
 	"manifest_description": {
 		"message": "Browser extension to control your PiHole. Built with Vue, Typescript and ❤"
 	},
-	"options_title": {
-		"message": "PiHole Remote Options",
-		"description": "Translation for the title tag in the options.html"
-	},
 	"options_headline_info": {
 		"message": "Enter the address and the API Key, which you can find under API/Web interface in your PiHole settings."
 	},
@@ -20,12 +16,6 @@
 	},
 	"options_reload_after_white_list": {
 		"message": "Reload current tab after Whitelisting"
-	},
-	"options_save_button": {
-		"message": "Save"
-	},
-	"options_save_button_confirmed": {
-		"message": "Saved!"
 	},
 	"options_api_key": {
 		"message": "API Key"

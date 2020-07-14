@@ -16,7 +16,7 @@
 	/**
 	 * Generic Component for a checkbox option
 	 **/
-	export default class OptionComponent extends Vue
+	export default class OptionGenericCheckboxComponent extends Vue
 	{
 		// Label Text key
 		@Prop({required: true})
