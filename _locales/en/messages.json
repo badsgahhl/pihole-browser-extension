@@ -26,9 +26,6 @@
 	"option_extension": {
 		"message": "Extension"
 	},
-	"option_about_os": {
-		"message": "Operating System"
-	},
 	"option_about_copy_debug": {
 		"message": "Please paste the following Debug-Information into the issue:"
 	},

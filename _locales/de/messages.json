@@ -26,9 +26,6 @@
 	"option_extension": {
 		"message": "Erweiterung"
 	},
-	"option_about_os": {
-		"message": "Betriebssystem"
-	},
 	"option_about_copy_debug": {
 		"message": "Bitte füge die folgenden Debug-Informationen deinem Problem hinzu:"
 	},

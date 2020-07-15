@@ -11,8 +11,8 @@
             </p>
             <p>{{translate(i18nOptionsKeys.option_about_copy_debug)}}</p>
             <p ref="versionInfo" class="float-left">
-                Switch for PiHole - {{extension_version}}
-                <br>{{translate(i18nOptionsKeys.option_about_os)}}: {{plattform}}
+                Switch for PiHole: {{extension_version}}
+                <br>Operating System: {{plattform}}
                 <br>Browser: {{browser}}
             </p>
             <b-button @click="copy_to_clipboard" type="success" class="btn btn btn-sm btn-primary ml-3">
