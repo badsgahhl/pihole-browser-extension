@@ -15,6 +15,7 @@ $black-mode-background-light: #334b5b;
 
   .card {
     background: $black-mode-background-light !important;
+    border-color: $black-mode-color-light-blue-grey;
   }
 
   .card-body {
@@ -25,15 +26,15 @@ $black-mode-background-light: #334b5b;
     background: $black-mode-background !important;
   }
 
-  .card {
-    border-color: $black-mode-color-light-blue-grey;
-  }
-
   .nav-link:not(.active) {
     color: white !important;
   }
 
   pre {
+    color: white !important;
+  }
+
+  .dark-mode-light-link {
     color: white !important;
   }
 }
