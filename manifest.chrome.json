@@ -18,9 +18,7 @@
 		},
 		"default_popup": "popup.html"
 	},
-	"options_ui": {
-		"page": "options.html"
-	},
+	"options_page": "options.html",
 	"background": {
 		"persistent": true,
 		"page": "background.html"

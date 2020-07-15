@@ -41,8 +41,8 @@
 <script lang="ts">
 	import Vue from 'vue';
 	import {Component, Prop, Watch} from "vue-property-decorator";
-	import {PiHoleSettingsDefaults, PiHoleSettingsStorage, StorageService} from "../../../service/browser/StorageService";
-	import {i18nOptionsKeys, i18nService} from "../../../service/browser/i18nService";
+	import {PiHoleSettingsDefaults, PiHoleSettingsStorage, StorageService} from "../../../../service/browser/StorageService";
+	import {i18nOptionsKeys, i18nService} from "../../../../service/browser/i18nService";
 
 	@Component
 	/**

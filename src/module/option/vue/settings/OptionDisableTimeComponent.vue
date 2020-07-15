@@ -13,8 +13,8 @@
 
 	import {Component, Prop, Watch} from "vue-property-decorator";
 	import Vue from "vue";
-	import {i18nOptionsKeys, i18nService} from "../../../service/browser/i18nService";
-	import {PiHoleSettingsDefaults, StorageService} from "../../../service/browser/StorageService";
+	import {i18nOptionsKeys, i18nService} from "../../../../service/browser/i18nService";
+	import {PiHoleSettingsDefaults, StorageService} from "../../../../service/browser/StorageService";
 
 	@Component
 	/**
@@ -22,20 +22,10 @@
 	 **/
 	export default class OptionDisableTimeComponent extends Vue
 	{
-		@Watch('disable_time')
-		private on_disable_time_changes(): void
-		{
-			if (this.disable_time >= 10)
-			{
-				StorageService.save_default_disable_time(this.disable_time);
-			}
-		}
-
-		// Data Prop fpr the disable time
-		private disable_time: number = PiHoleSettingsDefaults.default_disable_time;
-
 		@Prop({default: () => i18nOptionsKeys})
 		i18nOptionsKeys!: typeof i18nOptionsKeys;
+		// Data Prop fpr the disable time
+		private disable_time: number = PiHoleSettingsDefaults.default_disable_time;
 
 		/**
 		 * Wrapper for translation
@@ -49,6 +39,15 @@
 		mounted()
 		{
 			this.update_disable_time();
+		}
+
+		@Watch('disable_time')
+		private on_disable_time_changes(): void
+		{
+			if (this.disable_time >= 10)
+			{
+				StorageService.save_default_disable_time(this.disable_time);
+			}
 		}
 
 		/**

@@ -10,7 +10,7 @@
 <script lang="ts">
 	import Vue from 'vue';
 	import {Component, Prop, Watch} from 'vue-property-decorator';
-	import {i18nOptionsKeys, i18nService} from "../../../service/browser/i18nService";
+	import {i18nOptionsKeys, i18nService} from "../../../../service/browser/i18nService";
 
 	@Component
 	/**

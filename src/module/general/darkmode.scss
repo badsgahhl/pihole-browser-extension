@@ -13,6 +13,10 @@ $black-mode-background-light: #334b5b;
     background: $black-mode-background !important;
   }
 
+  .card {
+    background: $black-mode-background-light !important;
+  }
+
   .card-body {
     background: $black-mode-background-light;
   }
@@ -26,6 +30,10 @@ $black-mode-background-light: #334b5b;
   }
 
   .nav-link:not(.active) {
+    color: white !important;
+  }
+
+  pre {
     color: white !important;
   }
 }

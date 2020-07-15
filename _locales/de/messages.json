@@ -2,6 +2,39 @@
 	"manifest_description": {
 		"message": "Browser Erweiterung um dein PiHole zu steuern. Gebaut mit Vue, Typescript und ❤"
 	},
+	"options_title": {
+		"message": "Einstellungen - Switch for PiHole"
+	},
+	"options_settings": {
+		"message": "Einstellungen"
+	},
+	"options_about": {
+		"message": "Über"
+	},
+	"options_report_error": {
+		"message": "Fehler melden"
+	},
+	"options_about_licences": {
+		"message": "Lizenzen"
+	},
+	"option_report_error_github": {
+		"message": "Problem auf Github erstellen"
+	},
+	"option_troubleshooting": {
+		"message": "Fehlerbehandlung"
+	},
+	"option_extension": {
+		"message": "Erweiterung"
+	},
+	"option_about_os": {
+		"message": "Betriebssystem"
+	},
+	"option_about_copy_debug": {
+		"message": "Bitte füge die folgenden Debug-Informationen deinem Problem hinzu:"
+	},
+	"option_contributors": {
+		"message": "Beitragende:"
+	},
 	"options_headline_info": {
 		"message": "Gebe die Adresse und den API Key ein, welchen du unter API/Web interface in deinen PiHole Einstellungen findest."
 	},

@@ -19,7 +19,9 @@
 		"default_popup": "popup.html"
 	},
 	"options_ui": {
-		"page": "options.html"
+		"page": "options.html",
+		"browser_style": true,
+		"open_in_tab": true
 	},
 	"background": {
 		"persistent": true,
