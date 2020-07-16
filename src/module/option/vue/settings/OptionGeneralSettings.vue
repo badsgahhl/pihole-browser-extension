@@ -61,11 +61,13 @@
 					getter_function: StorageService.get_reload_after_white_list,
 					setter_function: StorageService.save_reload_after_white_list
 				},
-				{
-					label_text_key: i18nOptionsKeys.options_beta_feature_flag,
-					getter_function: StorageService.get_beta_feature_flag,
-					setter_function: StorageService.save_beta_feature_flag
-				}
+				/*
+                 {
+                     label_text_key: i18nOptionsKeys.options_beta_feature_flag,
+                     getter_function: StorageService.get_beta_feature_flag,
+                     setter_function: StorageService.save_beta_feature_flag
+                 }
+                 */
 			]
 		}
 	}
