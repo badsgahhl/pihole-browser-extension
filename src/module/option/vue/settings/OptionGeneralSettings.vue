@@ -77,7 +77,7 @@
 	interface GenericCheckboxComponent
 	{
 		label_text_key: i18nOptionsKeys,
-		getter_function: () => Promise<boolean>,
+		getter_function: () => Promise<boolean | undefined>,
 		setter_function: (value: boolean) => void
 	}
 </script>

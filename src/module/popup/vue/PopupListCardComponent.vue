@@ -179,7 +179,7 @@
 						setTimeout(async () => {
 							const reload_after_white_black_list = (await StorageService.get_reload_after_white_list());
 
-							if (reload_after_white_black_list && mode === ApiListMode.whitelist && pi_hole_result.success && pi_hole_result.message.includes('Added'))
+							if (typeof reload_after_white_black_list !== "undefined" && reload_after_white_black_list && mode === ApiListMode.whitelist && pi_hole_result.success && pi_hole_result.message.includes('Added'))
 							{
 								TabService.reload_current_tab(250);
 							}
@@ -219,3 +219,8 @@
 		}
 	}
 </script>
+<style lang="scss" scoped>
+#current_url {
+    -webkit-transition: background-color 500ms ease;
+}
+</style>

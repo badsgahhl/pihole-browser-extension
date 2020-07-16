@@ -36,7 +36,7 @@
 	import {TabService} from "../../../service/browser/TabService";
 
 	@Component
-	export default class PopupComponent extends Vue
+	export default class PopupStatusCardComponent extends Vue
 	{
 		@Prop({default: () => i18nPopupKeys})
 		i18nPopupKeys!: typeof i18nPopupKeys;
@@ -75,9 +75,14 @@
 		/**
 		 * Updates the disable time with the time in the storage
 		 */
-		private async update_default_disable_time(): Promise<void>
+		private update_default_disable_time(): void
 		{
-			this.default_disable_time = await StorageService.get_default_disable_time();
+			StorageService.get_default_disable_time().then(time => {
+				if (typeof time !== "undefined")
+				{
+					this.default_disable_time = time;
+				}
+			})
 		}
 
 		/**
@@ -105,12 +110,12 @@
 		{
 			if (data.status === PiHoleApiStatusEnum.disabled)
 			{
-					this.default_disable_time_disabled = true;
-					this.slider_checked = false;
-					this.slider_disabled = false;
-					BadgeService.set_badge_text(ExtensionBadgeText.disabled);
-					this.$emit('update:is_active_by_status', false);
-				}
+				this.default_disable_time_disabled = true;
+				this.slider_checked = false;
+				this.slider_disabled = false;
+				BadgeService.set_badge_text(ExtensionBadgeText.disabled);
+				this.$emit('update:is_active_by_status', false);
+			}
 			else if (data.status === PiHoleApiStatusEnum.enabled)
 			{
 				this.default_disable_time_disabled = false;
@@ -163,8 +168,8 @@
 			this.update_components_by_data(data);
 			if (data.status === PiHoleApiStatusEnum.disabled)
 			{
-				const reload_after_disable_callback = (is_enabled: boolean) => {
-					if (is_enabled)
+				const reload_after_disable_callback = (is_enabled: boolean | undefined) => {
+					if (typeof is_enabled !== "undefined" && is_enabled)
 					{
 						TabService.reload_current_tab(1000);
 					}
@@ -284,6 +289,10 @@ input:checked {
     border-color: #ced4da;
     box-shadow: unset;
     outline: none;
+}
+
+.input-group {
+    margin-bottom: 10px !important;
 }
 
 </style>

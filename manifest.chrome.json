@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Switch for PiHole",
-	"version": "2.2.6",
+	"version": "2.2.7",
 	"author": "Pascal Glaser",
 	"description": "__MSG_manifest_description__",
 	"default_locale": "en",

@@ -9,30 +9,6 @@ export module i18nService
 	{
 		return chrome.i18n.getMessage(key, substitutions);
 	}
-
-	/**
-	 * Legacy function to translate a html page template without adding every key dynamically
-	 * @use i18nService::translate
-	 * @deprecated
-	 */
-	export function translate_html_page(): void
-	{
-		const objects = document.getElementsByTagName('html');
-		for (let j = 0; j < objects.length; j++)
-		{
-			const obj = objects[j];
-
-			const inner_html_untranslated = obj.innerHTML.toString();
-			const inner_html_translated = inner_html_untranslated.replace(/__MSG_(\w+)__/g, function(match, v1) {
-				return v1 ? chrome.i18n.getMessage(v1) : "";
-			});
-
-			if (inner_html_translated != inner_html_untranslated)
-			{
-				obj.innerHTML = inner_html_translated;
-			}
-		}
-	}
 }
 
 export enum i18nOptionsKeys

@@ -90,7 +90,7 @@ export module StorageService
 		chrome.storage.local.set(storage);
 	}
 
-	export function get_default_disable_time(): Promise<number>
+	export function get_default_disable_time(): Promise<number | undefined>
 	{
 		return new Promise((resolve) => {
 			chrome.storage.local.get(ExtensionStorageEnum.default_disable_time, function(obj) {
@@ -114,7 +114,7 @@ export module StorageService
 	/**
 	 * Gets the status of the beta feature
 	 */
-	export function get_beta_feature_flag(): Promise<boolean>
+	export function get_beta_feature_flag(): Promise<boolean | undefined>
 	{
 		return new Promise((resolve) => {
 			chrome.storage.local.get(ExtensionStorageEnum.beta_feature_flag, function(obj) {
@@ -135,7 +135,7 @@ export module StorageService
 		chrome.storage.local.set(storage);
 	}
 
-	export function get_reload_after_disable(): Promise<boolean>
+	export function get_reload_after_disable(): Promise<boolean | undefined>
 	{
 		return new Promise((resolve) => {
 			chrome.storage.local.get(ExtensionStorageEnum.reload_after_disable, function(obj) {
@@ -156,7 +156,7 @@ export module StorageService
 		chrome.storage.local.set(storage);
 	}
 
-	export function get_reload_after_white_list(): Promise<boolean>
+	export function get_reload_after_white_list(): Promise<boolean | undefined>
 	{
 		return new Promise((resolve) => {
 			chrome.storage.local.get(ExtensionStorageEnum.reload_after_white_list, function(obj) {
@@ -178,7 +178,7 @@ export module StorageService
 		});
 	}
 
-	export function get_pi_hole_settings_array(): Promise<PiHoleSettingsStorage[]> | undefined
+	export function get_pi_hole_settings_array(): Promise<PiHoleSettingsStorage[] | undefined>
 	{
 		return new Promise((resolve) => {
 			chrome.storage.local.get(ExtensionStorageEnum.pi_hole_settings, function(obj) {

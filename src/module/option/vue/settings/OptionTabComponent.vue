@@ -147,7 +147,7 @@
 		 */
 		private update_tabs_settings(): void
 		{
-			StorageService.get_pi_hole_settings_array()?.then(results => {
+			StorageService.get_pi_hole_settings_array().then(results => {
 				if (typeof results !== "undefined" && results.length > 0)
 				{
 					this.tabs = results;
