@@ -20,7 +20,7 @@
             <template v-slot:tabs-end>
                 <b-nav-item link-classes="text-light"
                             href="https://github.com/badsgahhl/pihole-chrome-extension#troubleshooting"
-                            role="presentation" target="_blank">💣 {{translate(i18nOptionsKeys.option_troubleshooting)}}
+                            role="presentation" target="_blank">🧯 {{translate(i18nOptionsKeys.option_troubleshooting)}}
                 </b-nav-item>
                 <footer style="bottom: 10px"
                         class="d-md-flex px-3 mt-4 mb-1 text-uppercase position-absolute small text-muted">

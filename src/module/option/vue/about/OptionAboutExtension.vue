@@ -6,9 +6,7 @@
             <hr class="mt-0">
             <p>{{translate(i18nOptionsKeys.option_contributors)}}
                 <br>
-                <b-link class="dark-mode-light-link" target="_blank" href="https://github.com/badsgahhl">Pascal Glaser
-                </b-link>
-                ,
+                <b-link class="dark-mode-light-link" target="_blank" href="https://github.com/badsgahhl">Pascal Glaser</b-link>,
                 <b-link class="dark-mode-light-link" target="_blank" href="https://github.com/erikr729">Erik Rill
                 </b-link>
             </p>
