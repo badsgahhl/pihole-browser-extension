@@ -19,7 +19,7 @@
             </b-tab>
             <template v-slot:tabs-end>
                 <b-nav-item link-classes="text-light"
-                            href="https://github.com/badsgahhl/pihole-chrome-extension#troubleshooting"
+                            href="https://github.com/badsgahhl/pihole-browser-extension#troubleshooting"
                             role="presentation" target="_blank">🧯 {{translate(i18nOptionsKeys.option_troubleshooting)}}
                 </b-nav-item>
                 <footer style="bottom: 10px"

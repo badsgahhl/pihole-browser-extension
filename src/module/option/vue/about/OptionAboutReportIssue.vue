@@ -4,7 +4,7 @@
         <b-card-body>
             <p>
                 <b-button size="small" target="_blank"
-                          href="https://github.com/badsgahhl/pihole-chrome-extension/issues"
+                          href="https://github.com/badsgahhl/pihole-browser-extension/issues"
                           class="text-light font-weight-bold">
                     {{translate(i18nOptionsKeys.option_report_error_github)}}
                 </b-button>

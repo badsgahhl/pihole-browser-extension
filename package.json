@@ -1,5 +1,5 @@
 {
-	"name": "switch-for-pihole-chrome",
+	"name": "pihole-browser-extension",
 	"version": "2.2.6",
 	"dependencies": {
 		"bootstrap": "^4.5.0",
@@ -40,7 +40,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/badsgahhl/pihole-chrome-extension.git"
+		"url": "git+https://github.com/badsgahhl/pihole-browser-extension.git"
 	},
 	"keywords": [
 		"pihole",
@@ -50,7 +50,7 @@
 	"author": "Pascal Glaser",
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/badsgahhl/pihole-chrome-extension/issues"
+		"url": "https://github.com/badsgahhl/pihole-browser-extension/issues"
 	},
-	"homepage": "https://github.com/badsgahhl/pihole-chrome-extension/#readme"
+	"homepage": "https://github.com/badsgahhl/pihole-browser-extension/#readme"
 }

@@ -1,10 +1,10 @@
-# Switch-for-PiHole ![t](https://github.com/badsgahhl/pihole-chrome-extension/blob/master/icon/icon-48.png?raw=true)
+# Switch-for-PiHole ![t](https://github.com/badsgahhl/pihole-browser-extension/blob/master/icon/icon-48.png?raw=true)
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/ngoafjpapneaopfkpboebcahajopcifi)](https://chrome.google.com/webstore/detail/switch-for-pihole/ngoafjpapneaopfkpboebcahajopcifi)
 [![Mozilla Add-on](https://img.shields.io/amo/v/switch-for-pihole)](https://addons.mozilla.org/firefox/addon/switch-for-pihole/)
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/users/ngoafjpapneaopfkpboebcahajopcifi?label=chrome%20users)](https://chrome.google.com/webstore/detail/switch-for-pihole/ngoafjpapneaopfkpboebcahajopcifi)
 [![Mozilla Add-on](https://img.shields.io/amo/users/switch-for-pihole?color=green&label=mozilla%20users)](https://addons.mozilla.org/firefox/addon/switch-for-pihole/)
 [![Mozilla Add-on](https://img.shields.io/amo/rating/switch-for-pihole)](https://addons.mozilla.org/firefox/addon/switch-for-pihole/reviews/)
-![GitHub](https://img.shields.io/github/license/badsgahhl/pihole-chrome-extension)
+![GitHub](https://img.shields.io/github/license/badsgahhl/pihole-browser-extension)
 <br><br>
 Switch-for-PiHole is a small browser extension for Chrome and Firefox. It's written with Vue and Typescript. With this extension you can control your PiHole remotely (e.g. Turning it on/off, black/white listing current tab, etc.).
 
@@ -35,7 +35,7 @@ Switch-for-PiHole is a small browser extension for Chrome and Firefox. It's writ
 
 If you want to use several PiHoles please read the following information page first:
 
-[Multiple PiHoles Documentation](https://github.com/badsgahhl/pihole-chrome-extension/blob/master/documentation/multiple-pihole.md)
+[Multiple PiHoles Documentation](https://github.com/badsgahhl/pihole-browser-extension/blob/master/documentation/multiple-pihole.md)
 
 ### Using Beta features
 

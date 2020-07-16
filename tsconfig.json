@@ -12,10 +12,8 @@
 		"rootDir": "src/",
 		"outDir": "dist",
 		"types": [
-			//(various types, e.g. jquery, core-js),
 			"chrome",
 			"firefox-webext-browser",
-			"jquery",
 			"bootstrap"
 		],
 		"moduleResolution": "node",
