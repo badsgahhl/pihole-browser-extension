@@ -3,6 +3,7 @@ export module i18nService
 	/**
 	 * Wrapper Function for the chrome.i18n.getMessage Function
 	 * @param key
+	 * @param substitutions
 	 */
 	export function translate(key: string, substitutions?: any): string
 	{
@@ -36,14 +37,21 @@ export module i18nService
 
 export enum i18nOptionsKeys
 {
-	options_title = 'options_title',
+	options_title = "options_title",
+	options_settings = "options_settings",
+	options_about = "options_about",
+	options_report_error = "options_report_error",
+	options_about_licences = "options_about_licences",
+	option_report_error_github = "option_report_error_github",
+	option_troubleshooting = "option_troubleshooting",
+	option_extension = "option_extension",
+	option_about_copy_debug = "option_about_copy_debug",
+	option_contributors = "option_contributors",
 	options_headline_info = "options_headline_info",
 	options_default_time_label = "options_default_time_label",
 	options_default_time_unit = "options_default_time_unit",
 	options_reload_after_disable = "options_reload_after_disable",
 	options_reload_after_white_list = "options_reload_after_white_list",
-	options_save_button = "options_save_button",
-	options_save_button_confirmed = "options_save_button_confirmed",
 	options_api_key = "options_api_key",
 	options_pi_hole_address = "options_pi_hole_address",
 	options_add_button = "options_add_button",

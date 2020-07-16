@@ -13,6 +13,11 @@ $black-mode-background-light: #334b5b;
     background: $black-mode-background !important;
   }
 
+  .card {
+    background: $black-mode-background-light !important;
+    border-color: $black-mode-color-light-blue-grey;
+  }
+
   .card-body {
     background: $black-mode-background-light;
   }
@@ -21,11 +26,15 @@ $black-mode-background-light: #334b5b;
     background: $black-mode-background !important;
   }
 
-  .card {
-    border-color: $black-mode-color-light-blue-grey;
+  .nav-link:not(.active) {
+    color: white !important;
   }
 
-  .nav-link:not(.active) {
+  pre {
+    color: white !important;
+  }
+
+  .dark-mode-light-link {
     color: white !important;
   }
 }

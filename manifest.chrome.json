@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Switch for PiHole",
-	"version": "2.2.5",
+	"version": "2.2.6",
 	"author": "Pascal Glaser",
 	"description": "__MSG_manifest_description__",
 	"default_locale": "en",
@@ -18,9 +18,7 @@
 		},
 		"default_popup": "popup.html"
 	},
-	"options_ui": {
-		"page": "options.html"
-	},
+	"options_page": "options.html",
 	"background": {
 		"persistent": true,
 		"page": "background.html"

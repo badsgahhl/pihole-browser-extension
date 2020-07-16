@@ -10,13 +10,13 @@
 <script lang="ts">
 	import Vue from 'vue';
 	import {Component, Prop, Watch} from 'vue-property-decorator';
-	import {i18nOptionsKeys, i18nService} from "../../../service/browser/i18nService";
+	import {i18nOptionsKeys, i18nService} from "../../../../service/browser/i18nService";
 
 	@Component
 	/**
 	 * Generic Component for a checkbox option
 	 **/
-	export default class OptionComponent extends Vue
+	export default class OptionGenericCheckboxComponent extends Vue
 	{
 		// Label Text key
 		@Prop({required: true})
