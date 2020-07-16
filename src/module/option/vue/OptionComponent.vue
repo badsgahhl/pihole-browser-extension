@@ -92,5 +92,6 @@
 
 .sidebar {
     width: 240px;
+    margin-left: -1px;
 }
 </style>
