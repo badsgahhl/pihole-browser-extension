@@ -26,6 +26,9 @@ Switch-for-PiHole is a small browser extension for Chrome and Firefox. It's writ
 
 - Install the extension
 - Right click the "Raspberry" Icon in the top navigation fo your browser and click 'Settings'
+    - In Firefox right click the "Raspberry" Icon and press "Manage extension"
+    - In the top right corner you can find an icon with 3 dots.
+    - Click the 3 dots icon and click on settings
 - Enter your host address (including http:// or https://)
 - Go to your Pihole settings. Click 'Api/Web interface' and then on 'Show Api token' at the bottom of your screen.
 - Copy the token to the settings. Press save.
