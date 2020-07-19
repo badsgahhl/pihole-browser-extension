@@ -19,7 +19,11 @@
             </b-tab>
             <template v-slot:tabs-end>
                 <b-nav-item link-classes="text-light"
-                            href="https://github.com/badsgahhl/pihole-browser-extension#troubleshooting"
+                            :href="LinkConfig.paypal_donation_link"
+                            role="presentation" target="_blank">❤ {{translate(i18nOptionsKeys.option_donation)}}
+                </b-nav-item>
+                <b-nav-item link-classes="text-light"
+                            :href="LinkConfig.github_troubleshooting"
                             role="presentation" target="_blank">🧯 {{translate(i18nOptionsKeys.option_troubleshooting)}}
                 </b-nav-item>
                 <footer style="bottom: 10px"
@@ -35,7 +39,7 @@
 <script lang="ts">
 	import Vue from 'vue';
 	import {Component, Prop} from 'vue-property-decorator';
-	import {i18nOptionsKeys, i18nService} from "../../../service/browser/i18nService";
+	import {i18nOptionsKeys, i18nService, LinkConfig} from "../../../service/browser/i18nService";
 	import OptionGeneralSettings from "./settings/OptionGeneralSettings.vue";
 	import OptionAboutTab from "./about/OptionAboutTab.vue";
 
@@ -53,6 +57,9 @@
 	{
 		@Prop({default: () => i18nOptionsKeys})
 		i18nOptionsKeys!: typeof i18nOptionsKeys;
+
+		@Prop({default: () => LinkConfig})
+		LinkConfig!: typeof LinkConfig;
 
 		/**
 		 * Wrapper for translation

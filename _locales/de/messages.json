@@ -32,6 +32,9 @@
 	"option_contributors": {
 		"message": "Beitragende:"
 	},
+	"option_donation": {
+		"message": "Spenden"
+	},
 	"options_headline_info": {
 		"message": "Gebe die Adresse und den API Key ein, welchen du unter API/Web interface in deinen PiHole Einstellungen findest."
 	},
