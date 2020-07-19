@@ -1,6 +1,6 @@
 {
 	"name": "pihole-browser-extension",
-	"version": "2.2.6",
+	"version": "2.2.8",
 	"dependencies": {
 		"bootstrap": "^4.5.0",
 		"bootstrap-vue": "^2.15.0",
@@ -36,7 +36,8 @@
 	"scripts": {
 		"start-chrome": "webpack --mode=development -w --config src/webpack/webpack.chrome.ts",
 		"start-firefox": "webpack --mode=development -w --config src/webpack/webpack.firefox.ts",
-		"build": "webpack -p --config src/webpack/webpack.firefox.ts && webpack -p --config src/webpack/webpack.chrome.ts"
+		"build": "webpack -p --config src/webpack/webpack.firefox.ts && webpack -p --config src/webpack/webpack.chrome.ts",
+		"rebuild-package-lock": "npm install --package-lock"
 	},
 	"repository": {
 		"type": "git",
