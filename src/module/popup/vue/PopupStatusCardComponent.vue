@@ -8,10 +8,10 @@
                 {{translate(i18nPopupKeys.popup_status_card_info_text)}}
             </div>
             <b-input-group class="justify-content-center">
-                <b-form-input v-model.number:value="default_disable_time" id="time" type="number" min="0"
+                <b-form-input v-model.number:value="default_disable_time" class="fs-16" id="time" type="number" min="0"
                               :disabled="default_disable_time_disabled"/>
                 <b-input-group-append>
-                    <b-input-group-text class="time_unit">{{time_unit}}</b-input-group-text>
+                    <b-input-group-text class="time_unit fs-16">{{time_unit}}</b-input-group-text>
                 </b-input-group-append>
             </b-input-group>
         </b-card-body>
@@ -277,6 +277,10 @@ input:checked {
 
 .time_unit {
     min-width: 40px;
+}
+
+.fs-16{
+    font-size: 16px;
 }
 
 #time {

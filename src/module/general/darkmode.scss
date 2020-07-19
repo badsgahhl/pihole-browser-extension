@@ -8,6 +8,9 @@ $black-mode-background-light: #334b5b;
     background: $black-mode-background !important;
     color: white !important;
   }
+  .option-body {
+    background: $black-mode-background-light !important;
+  }
 
   .card-header {
     background: $black-mode-background !important;

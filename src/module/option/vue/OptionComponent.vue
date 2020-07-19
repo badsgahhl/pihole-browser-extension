@@ -1,7 +1,7 @@
 <template>
-    <b-card no-body class="h-100">
-        <b-tabs nav-class="bg-dark" active-nav-item-class="bg-light text-dark" pills card vertical
-                nav-wrapper-class="sidebar mr-5" class="h-100">
+    <div id="option">
+        <b-tabs nav-class="bg-dark sidebar-nav" active-nav-item-class="bg-light text-dark" pills card vertical
+                nav-wrapper-class="sidebar mr-5">
             <template v-slot:tabs-start>
                 <b-row class="mb-3">
                     <b-img width="60px" height="60px" src="icon/icon-128.png"></b-img>
@@ -28,7 +28,7 @@
                 </footer>
             </template>
         </b-tabs>
-    </b-card>
+    </div>
 
 </template>
 
@@ -54,30 +54,30 @@
 		@Prop({default: () => i18nOptionsKeys})
 		i18nOptionsKeys!: typeof i18nOptionsKeys;
 
-		 /**
-		  * Wrapper for translation
-		  * @param string
-		  */
-		 translate(string: i18nOptionsKeys): string
-		 {
-			 return i18nService.translate(string);
-		 }
+		/**
+		 * Wrapper for translation
+		 * @param string
+		 */
+		translate(string: i18nOptionsKeys): string
+		{
+			return i18nService.translate(string);
+		}
 
-		 mounted()
-		 {
-			 this.set_site_title();
-		 }
+		mounted()
+		{
+			this.set_site_title();
+		}
 
-		 /**
-		  * Sets the page title
-		  */
-		 private set_site_title(): void
-		 {
-			 document.title = this.translate(i18nOptionsKeys.options_title);
-		 }
+		/**
+		 * Sets the page title
+		 */
+		private set_site_title(): void
+		{
+			document.title = this.translate(i18nOptionsKeys.options_title);
+		}
 
 
-	 }
+	}
 
 </script>
 
@@ -90,8 +90,16 @@
     }
 }
 
+$sidebar-width: 240px;
+
 .sidebar {
-    width: 240px;
-    margin-left: -1px;
+    width: $sidebar-width;
+}
+
+.sidebar-nav {
+    position: fixed;
+    bottom: 0;
+    top: 0;
+    width: $sidebar-width;
 }
 </style>
