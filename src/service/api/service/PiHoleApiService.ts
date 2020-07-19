@@ -61,6 +61,12 @@ export module PiHoleApiService
 					Object.entries(data).forEach(([key, value]) => {
 						if (key in versions)
 						{
+							if (typeof value === "boolean")
+							{
+								//@ts-ignore
+								versions[key] = value;
+								return;
+							}
 							let version: number | string = String(value).replace('v', '');
 							if (version === 'Dev')
 							{
@@ -68,7 +74,7 @@ export module PiHoleApiService
 							}
 							else
 							{
-								version = Number(version);
+								version = Number(version.charAt(0));
 							}
 							//@ts-ignore
 							versions[key] = version;
