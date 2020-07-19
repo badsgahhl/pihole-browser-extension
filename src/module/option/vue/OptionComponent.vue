@@ -102,4 +102,8 @@ $sidebar-width: 240px;
     top: 0;
     width: $sidebar-width;
 }
+
+.option-body {
+    max-width: 1440px;
+}
 </style>
