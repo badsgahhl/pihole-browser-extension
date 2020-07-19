@@ -1,7 +1,10 @@
 <template>
     <b-card no-body>
         <b-card-header class="status">
-            {{ translate(i18nPopupKeys.popup_status_card_title)}}
+            {{ translate(i18nPopupKeys.popup_status_card_title)}} <span
+                :title="translate(i18nOptionsKeys.options_settings)"
+                class="settings-link"
+                @click="open_options">⚙</span>
         </b-card-header>
         <b-card-body>
             <div class="text">
@@ -28,7 +31,7 @@
 <script lang="ts">
 	import Vue from 'vue';
 	import {Component, Prop} from 'vue-property-decorator';
-	import {i18nPopupKeys, i18nService} from "../../../service/browser/i18nService";
+	import {i18nOptionsKeys, i18nPopupKeys, i18nService} from "../../../service/browser/i18nService";
 	import {PiHoleSettingsDefaults, StorageService} from "../../../service/browser/StorageService";
 	import {BadgeService, ExtensionBadgeText} from "../../../service/browser/BadgeService";
 	import {PiHoleApiService} from "../../../service/api/service/PiHoleApiService";
@@ -40,6 +43,9 @@
 	{
 		@Prop({default: () => i18nPopupKeys})
 		i18nPopupKeys!: typeof i18nPopupKeys;
+
+		@Prop({default: () => i18nOptionsKeys})
+		i18nOptionsKeys!: typeof i18nOptionsKeys;
 
 		// Prop which is emitted to the parent. Gets updates after a pihole status check
 		@Prop({default: false})
@@ -200,9 +206,17 @@
 		 * Wrapper for translation
 		 * @param string
 		 */
-		translate(string: i18nPopupKeys): string
+		translate(string: i18nOptionsKeys | i18nPopupKeys): string
 		{
 			return i18nService.translate(string);
+		}
+
+		/**
+		 * Helper function to open the settings
+		 */
+		private open_options(): void
+		{
+			chrome.runtime.openOptionsPage()
 		}
 	}
 </script>
@@ -279,7 +293,7 @@ input:checked {
     min-width: 40px;
 }
 
-.fs-16{
+.fs-16 {
     font-size: 16px;
 }
 
@@ -297,6 +311,11 @@ input:checked {
 
 .input-group {
     margin-bottom: 10px !important;
+}
+
+.settings-link {
+    margin-right: -5px;
+    cursor: pointer;
 }
 
 </style>
