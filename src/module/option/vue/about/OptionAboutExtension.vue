@@ -6,8 +6,8 @@
             <hr class="mt-0">
             <p>{{translate(i18nOptionsKeys.option_contributors)}}
                 <br>
-                <b-link class="dark-mode-light-link" target="_blank" href="https://github.com/badsgahhl">Pascal Glaser</b-link>,
-                <b-link class="dark-mode-light-link" target="_blank" href="https://github.com/erikr729">Erik Rill
+                <b-link class="dark-mode-light-link" target="_blank" :href="LinkConfig.github_user_badsgahhl">Pascal Glaser</b-link>,
+                <b-link class="dark-mode-light-link" target="_blank" :href="LinkConfig.github_user_erikr729">Erik Rill
                 </b-link>
             </p>
         </b-card-body>
@@ -17,13 +17,16 @@
 <script lang="ts">
 	import Vue from "vue";
 	import {Component, Prop} from "vue-property-decorator";
-	import {i18nOptionsKeys, i18nService} from "../../../../service/browser/i18nService";
+    import {i18nOptionsKeys, i18nService, LinkConfig} from "../../../../service/browser/i18nService";
 
 	@Component
 	export default class OptionAboutExtension extends Vue
 	{
 		@Prop({default: () => i18nOptionsKeys})
 		i18nOptionsKeys!: typeof i18nOptionsKeys;
+
+		@Prop({default: () => LinkConfig})
+		LinkConfig!: typeof LinkConfig;
 
 		/**
 		 * Wrapper for translation

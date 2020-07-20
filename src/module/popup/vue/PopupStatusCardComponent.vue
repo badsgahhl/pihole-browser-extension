@@ -1,17 +1,20 @@
 <template>
     <b-card no-body>
         <b-card-header class="status">
-            {{ translate(i18nPopupKeys.popup_status_card_title)}}
+            {{ translate(i18nPopupKeys.popup_status_card_title)}} <span
+                :title="translate(i18nOptionsKeys.options_settings)"
+                class="settings-link"
+                @click="open_options">⚙</span>
         </b-card-header>
         <b-card-body>
             <div class="text">
                 {{translate(i18nPopupKeys.popup_status_card_info_text)}}
             </div>
             <b-input-group class="justify-content-center">
-                <b-form-input v-model.number:value="default_disable_time" id="time" type="number" min="0"
+                <b-form-input v-model.number:value="default_disable_time" class="fs-16" id="time" type="number" min="0"
                               :disabled="default_disable_time_disabled"/>
                 <b-input-group-append>
-                    <b-input-group-text class="time_unit">{{time_unit}}</b-input-group-text>
+                    <b-input-group-text class="time_unit fs-16">{{time_unit}}</b-input-group-text>
                 </b-input-group-append>
             </b-input-group>
         </b-card-body>
@@ -28,7 +31,7 @@
 <script lang="ts">
 	import Vue from 'vue';
 	import {Component, Prop} from 'vue-property-decorator';
-	import {i18nPopupKeys, i18nService} from "../../../service/browser/i18nService";
+	import {i18nOptionsKeys, i18nPopupKeys, i18nService} from "../../../service/browser/i18nService";
 	import {PiHoleSettingsDefaults, StorageService} from "../../../service/browser/StorageService";
 	import {BadgeService, ExtensionBadgeText} from "../../../service/browser/BadgeService";
 	import {PiHoleApiService} from "../../../service/api/service/PiHoleApiService";
@@ -36,10 +39,13 @@
 	import {TabService} from "../../../service/browser/TabService";
 
 	@Component
-	export default class PopupComponent extends Vue
+	export default class PopupStatusCardComponent extends Vue
 	{
 		@Prop({default: () => i18nPopupKeys})
 		i18nPopupKeys!: typeof i18nPopupKeys;
+
+		@Prop({default: () => i18nOptionsKeys})
+		i18nOptionsKeys!: typeof i18nOptionsKeys;
 
 		// Prop which is emitted to the parent. Gets updates after a pihole status check
 		@Prop({default: false})
@@ -75,9 +81,14 @@
 		/**
 		 * Updates the disable time with the time in the storage
 		 */
-		private async update_default_disable_time(): Promise<void>
+		private update_default_disable_time(): void
 		{
-			this.default_disable_time = await StorageService.get_default_disable_time();
+			StorageService.get_default_disable_time().then(time => {
+				if (typeof time !== "undefined")
+				{
+					this.default_disable_time = time;
+				}
+			})
 		}
 
 		/**
@@ -105,12 +116,12 @@
 		{
 			if (data.status === PiHoleApiStatusEnum.disabled)
 			{
-					this.default_disable_time_disabled = true;
-					this.slider_checked = false;
-					this.slider_disabled = false;
-					BadgeService.set_badge_text(ExtensionBadgeText.disabled);
-					this.$emit('update:is_active_by_status', false);
-				}
+				this.default_disable_time_disabled = true;
+				this.slider_checked = false;
+				this.slider_disabled = false;
+				BadgeService.set_badge_text(ExtensionBadgeText.disabled);
+				this.$emit('update:is_active_by_status', false);
+			}
 			else if (data.status === PiHoleApiStatusEnum.enabled)
 			{
 				this.default_disable_time_disabled = false;
@@ -163,8 +174,8 @@
 			this.update_components_by_data(data);
 			if (data.status === PiHoleApiStatusEnum.disabled)
 			{
-				const reload_after_disable_callback = (is_enabled: boolean) => {
-					if (is_enabled)
+				const reload_after_disable_callback = (is_enabled: boolean | undefined) => {
+					if (typeof is_enabled !== "undefined" && is_enabled)
 					{
 						TabService.reload_current_tab(1000);
 					}
@@ -195,9 +206,17 @@
 		 * Wrapper for translation
 		 * @param string
 		 */
-		translate(string: i18nPopupKeys): string
+		translate(string: i18nOptionsKeys | i18nPopupKeys): string
 		{
 			return i18nService.translate(string);
+		}
+
+		/**
+		 * Helper function to open the settings
+		 */
+		private open_options(): void
+		{
+			chrome.runtime.openOptionsPage()
 		}
 	}
 </script>
@@ -274,6 +293,10 @@ input:checked {
     min-width: 40px;
 }
 
+.fs-16 {
+    font-size: 16px;
+}
+
 #time {
     max-width: 80px;
     border-top-left-radius: 5px !important;
@@ -284,6 +307,15 @@ input:checked {
     border-color: #ced4da;
     box-shadow: unset;
     outline: none;
+}
+
+.input-group {
+    margin-bottom: 10px !important;
+}
+
+.settings-link {
+    margin-right: -5px;
+    cursor: pointer;
 }
 
 </style>

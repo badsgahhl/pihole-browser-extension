@@ -15,8 +15,8 @@ Switch-for-PiHole is a small browser extension for Chrome and Firefox. It's writ
 
 
 ### Features:
-- Disable your pihole easily with one click
-- Individual url to your pihole
+- Disable your PiHole easily with one click
+- Individual url to your PiHole
 - Dark Mode depending on your OS Settings
 - Compact UI
 - Settable default disable time
@@ -24,31 +24,17 @@ Switch-for-PiHole is a small browser extension for Chrome and Firefox. It's writ
 
 ### How to use:
 
-- Install the extension
-- Right click the "Raspberry" Icon in the top navigation fo your browser and click 'Settings'
-    - In Firefox right click the "Raspberry" Icon and press "Manage extension"
-    - In the top right corner you can find an icon with 3 dots.
-    - Click the 3 dots icon and click on settings
-- Enter your host address (including http:// or https://)
-- Go to your Pihole settings. Click 'Api/Web interface' and then on 'Show Api token' at the bottom of your screen.
-- Copy the token to the settings. Press save.
-- Congratulations you successfully installed and configured the extension.
+1. Open the popup by clicking the "Raspberry" Icon in the top navigation of your browser
+2. Click on the setting wheel in the top right corner     
+3. Enter your host address (including http:// or https:// and the directory. You can find more info about that [here](https://github.com/badsgahhl/pihole-browser-extension#status--slider-are-not-working))
+4. Go to your PiHole settings. Click "Api/Web interface" and then on "Show Api token" at the bottom of your screen.
+5. Copy the api key into the settings
 
-### Using multiple piholes
+### Using multiple PiHole(s)
 
 If you want to use several PiHoles please read the following information page first:
 
 [Multiple PiHoles Documentation](https://github.com/badsgahhl/pihole-browser-extension/blob/master/documentation/multiple-pihole.md)
-
-### Using Beta features
-
-Starting with version v2.2.4 there is a new setting in the options. This activates the beta functionality if currently available.
-
-Please read the release note on github (matching your version). There you can see which features are currently available as beta.
-
-Please note that this is a beta. It is not guaranteed that the extension will work completely once the feature is activated.
-
-If you have problems please create an issue on github or deactivate the beta mode.
 
 ### Troubleshooting
 
@@ -61,25 +47,21 @@ For example if your pihole is located at http://192.168.178.2, but you can see y
 This indicates that your API key is probably wrong. In the version >2.0.6 the options will show you if your key is wrong.
 Check that you copied the key correctly and that there are no whitespaces, etc. in it.
 
-#### PiHole doesn't block ads after turning it on
-
-Disabling your pihole works seamlessly. Turning it on, or turning on automatically after the timeout will need some seconds.
-During the start ads will show up, and the popup won't show any status until the pihole is back online. Be patient.
-
 #### Black- / Whitelisting domains
-With the extension version v2.1 you are able to black and whitelist the current tabs url. This feature requires PiHole v5.
+The extension is able to black and whitelist the current tabs url. This feature requires PiHole v5+.
 <br>Meaning of colors:
- - Orange: The domain wasn't added to any list
+ - Red: An error occurred
+ - Orange: The domain wasn't added to any list (skipped)
  - Green: The domain was successfully added to the list
  
-**Known Bug:** Domains which you have manually added to one of the both lists cannot be added/changed via the extension.
-This will be fixed in the next version of PiHole.
-
-**What does that mean:** For example you added a domain to your blacklist (example.com), then you visit this domain in your browser.
-You want to whitelist this domain with the extension now. If you click onto the whitelist button it will respond with orange and
-the domain cannot be added to the whitelist (cannot be moved from the black to the whitelist). This will work in a future update of PiHole.
-
+ **Handling in PiHole v5:**
+ <br>
+It is only possible to add a domain to one of the lists (white and black list). This means that if you have added the domain "example.com" with the extension or manually blacklisted it, you cannot whitelist it with the extension. You will see an orange background.
  
+ **Handling in PiHole v5.1:**
+ <br>
+ In v5.1 it is possible to have a domain on the white and blacklist at the same time. In this case the whitelist before the blacklist applies. The extension **only adds** domains. So it does not delete any of your lists or keep them persistent. So theoretically you can add a domain to the whitelist and blacklist with the extension.
 
-### This is not an official Pi-Hole application.
+
+### This is not an official PiHole application.
 Please use the issue templates in **this** repository for bugs. The main PiHole project **is not responsible** for any malfunction that is caused by the use of the extension!

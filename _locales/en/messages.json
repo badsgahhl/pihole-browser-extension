@@ -32,6 +32,9 @@
 	"option_contributors": {
 		"message": "Contributors:"
 	},
+	"option_donation": {
+		"message": "Donate"
+	},
 	"options_headline_info": {
 		"message": "Enter the address and the API Key, which you can find under API/Web interface in your PiHole settings."
 	},

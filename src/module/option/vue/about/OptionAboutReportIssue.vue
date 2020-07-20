@@ -4,7 +4,7 @@
         <b-card-body>
             <p>
                 <b-button size="small" target="_blank"
-                          href="https://github.com/badsgahhl/pihole-browser-extension/issues"
+                          :href="LinkConfig.github_issue"
                           class="text-light font-weight-bold">
                     {{translate(i18nOptionsKeys.option_report_error_github)}}
                 </b-button>
@@ -25,13 +25,16 @@
 <script lang="ts">
 	import Vue from "vue";
 	import {Component, Prop} from "vue-property-decorator";
-	import {i18nOptionsKeys, i18nService} from "../../../../service/browser/i18nService";
+	import {i18nOptionsKeys, i18nService, LinkConfig} from "../../../../service/browser/i18nService";
 
 	@Component
 	export default class OptionAboutReportIssue extends Vue
 	{
 		@Prop({default: () => i18nOptionsKeys})
 		i18nOptionsKeys!: typeof i18nOptionsKeys;
+
+		@Prop({default: () => LinkConfig})
+		LinkConfig!: typeof LinkConfig;
 
 		/**
 		 * Wrapper for translation

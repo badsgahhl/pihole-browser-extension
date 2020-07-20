@@ -2,6 +2,7 @@ import {StorageService} from "../../service/browser/StorageService";
 import {PiHoleApiService} from "../../service/api/service/PiHoleApiService";
 import {BadgeService, ExtensionBadgeText} from "../../service/browser/BadgeService";
 import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../service/api/models/pihole/PiHoleApiStatus";
+import {LinkConfig} from "../../service/browser/i18nService";
 
 
 chrome.runtime.onInstalled.addListener(function(details) {
@@ -30,7 +31,7 @@ chrome.runtime.onInstalled.addListener(function(details) {
 });
 
 // Hook to show a survey after uninstalling the extension
-chrome.runtime.setUninstallURL('https://forms.gle/RsGUyrmB1jtsGhYQ9');
+chrome.runtime.setUninstallURL(LinkConfig.uninstall_survey);
 
 /**
  * Background Service

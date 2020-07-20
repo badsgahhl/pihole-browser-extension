@@ -95,6 +95,10 @@ body {
     font-size: 14px;
 }
 
+.card:nth-child(n+2) {
+    margin-top: 5px;
+}
+
 .card-header {
     padding: $card-padding !important;
     font-size: 16px;

@@ -96,65 +96,6 @@ export module PiHoleApiService
 	 * Sends a request to list a domain on all pi-holes
 	 * @param domain
 	 * @param mode
-	 * @deprecated with PiHole v.5.1
-	 */
-	export async function list_domain_old(domain: string, mode: ApiListMode): Promise<string[]>
-	{
-		const request_promises = [];
-		const storage = (await StorageService.get_pi_hole_settings_array());
-		if (typeof storage === "undefined")
-		{
-			return [];
-		}
-		for (const pi_hole of storage)
-		{
-			request_promises.push(new Promise<string>(resolve => list_domain_promise_function_old(pi_hole, mode, domain, resolve)));
-		}
-
-		return await Promise.all<string>(request_promises);
-	}
-
-	/**
-	 * Promise function for PiHoleApiService::list_domain
-	 * @param pi_hole_settings
-	 * @param mode
-	 * @param domain
-	 * @param resolve
-	 * @deprecated with pihole v5.1
-	 */
-	function list_domain_promise_function_old(pi_hole_settings: PiHoleSettingsStorage, mode: ApiListMode, domain: string, resolve: (value: string) => void): void
-	{
-		const pi_uri_base = pi_hole_settings.pi_uri_base;
-		const api_key = pi_hole_settings.api_key;
-		if (typeof pi_uri_base === "undefined" || typeof api_key === "undefined")
-		{
-			resolve('error');
-			return;
-		}
-
-		const api_request = new PiHoleApiRequest(pi_uri_base, api_key);
-
-		api_request.method = ApiRequestMethodEnum.POST;
-		api_request.add_get_param('list', mode);
-		api_request.add_get_param('add', domain);
-		api_request.add_post_param('comment', 'Added via PiHole Remote Extension');
-
-		api_request.onreadystatechange = function(this: XMLHttpRequest) {
-			if (this.readyState === 4 && this.status === 200)
-			{
-				const response: string = this.response;
-
-				resolve(response);
-			}
-		}
-
-		api_request.send().then();
-	}
-
-	/**
-	 * Sends a request to list a domain on all pi-holes
-	 * @param domain
-	 * @param mode
 	 */
 	export async function list_domain(domain: string, mode: ApiListMode): Promise<PiHoleListStatus[]>
 	{
