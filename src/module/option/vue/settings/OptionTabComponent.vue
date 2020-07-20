@@ -3,7 +3,7 @@
         <b-tab v-for="(pi_hole_setting, index) in tabs" :key="'dyn-tab-' + index" :title="'PiHole ' + (index + 1)">
             <b-form-group style="margin-top: 1rem" :label="translate(i18nOptionsKeys.options_pi_hole_address)">
                 <b-form-input :state="is_invalid_url_schema(pi_hole_setting.pi_uri_base)"
-                              v-model="pi_hole_setting.pi_uri_base"
+                              v-model="pi_hole_setting.pi_uri_base" :placeholder="PiHoleSettingsDefaults.pi_uri_base"
                               required
                 ></b-form-input>
                 <b-form-invalid-feedback>{{translate(i18nOptionsKeys.options_url_invalid_warning)}}
@@ -83,6 +83,9 @@
 		@Prop({default: () => i18nOptionsKeys})
 		i18nOptionsKeys!: typeof i18nOptionsKeys;
 
+		@Prop({default: () => PiHoleSettingsDefaults})
+		PiHoleSettingsDefaults!: typeof PiHoleSettingsDefaults;
+
 		/**
 		 * Wrapper for translation
 		 * @param string
@@ -115,8 +118,8 @@
 		private default_empty_option_tab(): PiHoleSettingsStorage
 		{
 			return {
-				pi_uri_base: String(PiHoleSettingsDefaults.pi_uri_base),
-				api_key: String(PiHoleSettingsDefaults.api_key)
+				pi_uri_base: '',
+				api_key: ''
 			}
 		}
 
