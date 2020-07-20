@@ -58,10 +58,6 @@ async function checkStatus(): Promise<void>
 				{
 					BadgeService.set_badge_text(ExtensionBadgeText.enabled);
 				}
-				else
-				{
-					BadgeService.set_badge_text(ExtensionBadgeText.empty);
-				}
 			}
 		})
 	};
