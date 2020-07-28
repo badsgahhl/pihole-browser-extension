@@ -8,29 +8,18 @@
 </template>
 
 <script lang="ts">
-	import {Component, Prop} from "vue-property-decorator";
-	import Vue from "vue";
-	import {i18nOptionsKeys, i18nService} from "../../../../service/browser/i18nService";
+	import {Component} from "vue-property-decorator";
 	import OptionAboutLicenses from "./OptionAboutLicenses.vue";
 	import OptionAboutExtension from "./OptionAboutExtension.vue";
 	import OptionAboutReportIssue from "./OptionAboutReportIssue.vue";
+	import BaseComponent from "../../../general/BaseComponent.vue";
 
 	@Component({
 					  components: {OptionAboutReportIssue, OptionAboutExtension, OptionAboutLicenses}
 				  })
-	export default class OptionAboutTab extends Vue
+	export default class OptionAboutTab extends BaseComponent
 	{
-		@Prop({default: () => i18nOptionsKeys})
-		i18nOptionsKeys!: typeof i18nOptionsKeys;
-
-		/**
-		 * Wrapper for translation
-		 * @param string
-		 */
-		translate(string: i18nOptionsKeys): string
-		{
-			return i18nService.translate(string);
-		}
+		// Empty class
 	}
 </script>
 

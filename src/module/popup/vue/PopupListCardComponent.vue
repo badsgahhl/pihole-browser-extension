@@ -24,22 +24,18 @@
 </template>
 
 <script lang="ts">
-	import Vue from 'vue';
 	import {Component, Prop} from "vue-property-decorator";
-	import {i18nPopupKeys, i18nService} from "../../../service/browser/i18nService";
 	import {ApiListMode} from "../../../service/api/models/pihole/PiHoleListStatus";
 	import {StorageService} from "../../../service/browser/StorageService";
 	import {PiHoleApiService} from "../../../service/api/service/PiHoleApiService";
 	import {TabService} from "../../../service/browser/TabService";
+	import BaseComponent from "../../general/BaseComponent.vue";
 	import WebRequestHeadersDetails = chrome.webRequest.WebRequestHeadersDetails;
 	import BlockingResponse = chrome.webRequest.BlockingResponse;
 
 	@Component
-	export default class PopupListCardComponent extends Vue
+	export default class PopupListCardComponent extends BaseComponent
 	{
-		@Prop({default: () => i18nPopupKeys})
-		i18nPopupKeys!: typeof i18nPopupKeys;
-
 		// Current URL passed by the parent
 		@Prop({required: true})
 		current_url!: string;
@@ -55,16 +51,6 @@
 
 		// Data prop: Which background classes are currently used to show a status.
 		private background_classes: string = '';
-
-
-		/**
-		 * Wrapper for translation
-		 * @param string
-		 */
-		translate(string: i18nPopupKeys): string
-		{
-			return i18nService.translate(string);
-		}
 
 		/**
 		 * Wrapper function for the onclick button event

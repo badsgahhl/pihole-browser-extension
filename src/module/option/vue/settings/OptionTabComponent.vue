@@ -39,16 +39,15 @@
 </template>
 
 <script lang="ts">
-	import Vue from 'vue';
-	import {Component, Prop, Watch} from "vue-property-decorator";
-	import {PiHoleSettingsDefaults, PiHoleSettingsStorage, StorageService} from "../../../../service/browser/StorageService";
-	import {i18nOptionsKeys, i18nService} from "../../../../service/browser/i18nService";
+	import {Component, Watch} from "vue-property-decorator";
+	import {PiHoleSettingsStorage, StorageService} from "../../../../service/browser/StorageService";
+	import BaseComponent from "../../../general/BaseComponent.vue";
 
 	@Component
 	/**
 	 * Component for the different PiHole Settings
 	 **/
-	export default class OptionTabComponent extends Vue
+	export default class OptionTabComponent extends BaseComponent
 	{
 		// Data prop of the current tabs as array
 		private tabs: Array<PiHoleSettingsStorage> = [this.default_empty_option_tab()];
@@ -78,21 +77,6 @@
 				}
 			}
 			StorageService.save_pi_hole_settings_array(this.tabs);
-		}
-
-		@Prop({default: () => i18nOptionsKeys})
-		i18nOptionsKeys!: typeof i18nOptionsKeys;
-
-		@Prop({default: () => PiHoleSettingsDefaults})
-		PiHoleSettingsDefaults!: typeof PiHoleSettingsDefaults;
-
-		/**
-		 * Wrapper for translation
-		 * @param string
-		 */
-		translate(string: i18nOptionsKeys,): string
-		{
-			return i18nService.translate(string);
 		}
 
 		/**

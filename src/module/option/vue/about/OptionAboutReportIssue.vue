@@ -23,28 +23,12 @@
 </template>
 
 <script lang="ts">
-	import Vue from "vue";
-	import {Component, Prop} from "vue-property-decorator";
-	import {i18nOptionsKeys, i18nService, LinkConfig} from "../../../../service/browser/i18nService";
+	import {Component} from "vue-property-decorator";
+	import BaseComponent from "../../../general/BaseComponent.vue";
 
 	@Component
-	export default class OptionAboutReportIssue extends Vue
+	export default class OptionAboutReportIssue extends BaseComponent
 	{
-		@Prop({default: () => i18nOptionsKeys})
-		i18nOptionsKeys!: typeof i18nOptionsKeys;
-
-		@Prop({default: () => LinkConfig})
-		LinkConfig!: typeof LinkConfig;
-
-		/**
-		 * Wrapper for translation
-		 * @param string
-		 */
-		translate(string: i18nOptionsKeys): string
-		{
-			return i18nService.translate(string);
-		}
-
 		private get extension_version(): string
 		{
 			return chrome.runtime.getManifest().version;

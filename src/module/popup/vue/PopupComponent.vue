@@ -11,13 +11,13 @@
 
 <script lang="ts">
 
-	import Vue from 'vue';
 	import {Component} from 'vue-property-decorator';
 	import PopupStatusCardComponent from "./PopupStatusCardComponent.vue";
 	import PopupListCardComponent from "./PopupListCardComponent.vue";
 	import {BadgeService, ExtensionBadgeText} from "../../../service/browser/BadgeService";
 	import {TabService} from "../../../service/browser/TabService";
 	import PopupUpdateAlertComponent from "./PopupUpdateAlertComponent.vue";
+	import BaseComponent from "../../general/BaseComponent.vue";
 
 	@Component({
 					  components: {PopupUpdateAlertComponent, PopupListCardComponent, PopupStatusCardComponent}
@@ -25,7 +25,7 @@
 	/**
 	 * The Main PopupComponent.
 	 */
-	export default class PopupComponent extends Vue
+	export default class PopupComponent extends BaseComponent
 	{
 		// Data Prop: is the pi-hole active by using the status of the badge
 		private is_active_by_badge: boolean = false;

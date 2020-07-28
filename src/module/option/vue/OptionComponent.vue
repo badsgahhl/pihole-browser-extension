@@ -37,11 +37,11 @@
 </template>
 
 <script lang="ts">
-	import Vue from 'vue';
-	import {Component, Prop} from 'vue-property-decorator';
-	import {i18nOptionsKeys, i18nService, LinkConfig} from "../../../service/browser/i18nService";
+	import {Component} from 'vue-property-decorator';
+	import {i18nOptionsKeys} from "../../../service/browser/i18nService";
 	import OptionGeneralSettings from "./settings/OptionGeneralSettings.vue";
 	import OptionAboutTab from "./about/OptionAboutTab.vue";
+	import BaseComponent from "../../general/BaseComponent.vue";
 
 	@Component({
 					  components: {
@@ -53,23 +53,8 @@
 	/**
 	 * The main option component.
 	 **/
-	export default class OptionComponent extends Vue
+	export default class OptionComponent extends BaseComponent
 	{
-		@Prop({default: () => i18nOptionsKeys})
-		i18nOptionsKeys!: typeof i18nOptionsKeys;
-
-		@Prop({default: () => LinkConfig})
-		LinkConfig!: typeof LinkConfig;
-
-		/**
-		 * Wrapper for translation
-		 * @param string
-		 */
-		translate(string: i18nOptionsKeys): string
-		{
-			return i18nService.translate(string);
-		}
-
 		mounted()
 		{
 			this.set_site_title();

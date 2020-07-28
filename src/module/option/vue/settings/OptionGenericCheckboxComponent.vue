@@ -8,15 +8,15 @@
 </template>
 
 <script lang="ts">
-	import Vue from 'vue';
 	import {Component, Prop, Watch} from 'vue-property-decorator';
-	import {i18nOptionsKeys, i18nService} from "../../../../service/browser/i18nService";
+	import {i18nOptionsKeys} from "../../../../service/browser/i18nService";
+	import BaseComponent from "../../../general/BaseComponent.vue";
 
 	@Component
 	/**
 	 * Generic Component for a checkbox option
 	 **/
-	export default class OptionGenericCheckboxComponent extends Vue
+	export default class OptionGenericCheckboxComponent extends BaseComponent
 	{
 		// Label Text key
 		@Prop({required: true})
@@ -38,16 +38,6 @@
 
 		// Data Prop: is the checkbox checked?
 		private is_checked: boolean = false;
-
-
-		/**
-		 * Wrapper for translation
-		 * @param string
-		 */
-		translate(string: i18nOptionsKeys): string
-		{
-			return i18nService.translate(string);
-		}
 
 		mounted()
 		{

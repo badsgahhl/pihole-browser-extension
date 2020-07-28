@@ -11,30 +11,18 @@
 
 <script lang="ts">
 
-	import {Component, Prop, Watch} from "vue-property-decorator";
-	import Vue from "vue";
-	import {i18nOptionsKeys, i18nService} from "../../../../service/browser/i18nService";
+	import {Component, Watch} from "vue-property-decorator";
 	import {PiHoleSettingsDefaults, StorageService} from "../../../../service/browser/StorageService";
+	import BaseComponent from "../../../general/BaseComponent.vue";
 
 	@Component
 	/**
 	 * Component for the setting 'default_disable_time'
 	 **/
-	export default class OptionDisableTimeComponent extends Vue
+	export default class OptionDisableTimeComponent extends BaseComponent
 	{
-		@Prop({default: () => i18nOptionsKeys})
-		i18nOptionsKeys!: typeof i18nOptionsKeys;
 		// Data Prop fpr the disable time
 		private disable_time: number = PiHoleSettingsDefaults.default_disable_time;
-
-		/**
-		 * Wrapper for translation
-		 * @param string
-		 */
-		translate(string: i18nOptionsKeys): string
-		{
-			return i18nService.translate(string);
-		}
 
 		mounted()
 		{

@@ -18,60 +18,44 @@
 </template>
 
 <script lang="ts">
-	import {Component, Prop} from "vue-property-decorator";
-	import Vue from "vue";
-	import {i18nOptionsKeys, i18nService} from "../../../../service/browser/i18nService";
+	import {Component} from "vue-property-decorator";
+	import {i18nOptionsKeys} from "../../../../service/browser/i18nService";
 	import {StorageService} from "../../../../service/browser/StorageService";
 	import OptionDisableTimeComponent from "./OptionDisableTimeComponent.vue";
 	import OptionTabComponent from "./OptionTabComponent.vue";
 	import OptionGenericCheckboxComponent from "./OptionGenericCheckboxComponent.vue";
+	import BaseComponent from "../../../general/BaseComponent.vue";
 
 	@Component({
 					  components: {
 						  OptionDisableTimeComponent, OptionTabComponent, OptionGenericCheckboxComponent
 					  }
 				  })
-	export default class OptionGeneralSettings extends Vue
+	export default class OptionGeneralSettings extends BaseComponent
 	{
-		@Prop({default: () => i18nOptionsKeys})
-		i18nOptionsKeys!: typeof i18nOptionsKeys;
-
-		/**
-		 * Wrapper for translation
-		 * @param string
-		 */
-		translate(string: i18nOptionsKeys): string
-		{
-			return i18nService.translate(string);
-		}
-
 		/**
 		 * Gets an array of checkbox options
 		 */
-		get checkbox_options(): GenericCheckboxComponent[]
-		{
-			return [
-				{
-					label_text_key: i18nOptionsKeys.options_reload_after_disable,
-					getter_function: StorageService.get_reload_after_disable,
-					setter_function: StorageService.save_reload_after_disable
-				},
-				{
-					label_text_key: i18nOptionsKeys.options_reload_after_white_list,
-					getter_function: StorageService.get_reload_after_white_list,
-					setter_function: StorageService.save_reload_after_white_list
-				},
-				/*
-                 {
-                     label_text_key: i18nOptionsKeys.options_beta_feature_flag,
-                     getter_function: StorageService.get_beta_feature_flag,
-                     setter_function: StorageService.save_beta_feature_flag
-                 }
-                 */
-			]
-		}
+		private checkbox_options: GenericCheckboxComponent[] = [
+			{
+				label_text_key: i18nOptionsKeys.options_reload_after_disable,
+				getter_function: StorageService.get_reload_after_disable,
+				setter_function: StorageService.save_reload_after_disable
+			},
+			{
+				label_text_key: i18nOptionsKeys.options_reload_after_white_list,
+				getter_function: StorageService.get_reload_after_white_list,
+				setter_function: StorageService.save_reload_after_white_list
+			},
+			/*
+                {
+                    label_text_key: i18nOptionsKeys.options_beta_feature_flag,
+                    getter_function: StorageService.get_beta_feature_flag,
+                    setter_function: StorageService.save_beta_feature_flag
+                }
+                */
+		];
 	}
-
 
 	/**
 	 * Interface that represents a checkbox option in the settings

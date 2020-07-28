@@ -31,26 +31,12 @@
 </template>
 
 <script lang="ts">
-	import {Component, Prop} from "vue-property-decorator";
-	import Vue from "vue";
-	import {i18nOptionsKeys, i18nService} from "../../../../service/browser/i18nService";
+	import {Component} from "vue-property-decorator";
+	import BaseComponent from "../../../general/BaseComponent.vue";
 
 	@Component
-	export default class OptionAboutLicenses extends Vue
+	export default class OptionAboutLicenses extends BaseComponent
 	{
-		@Prop({default: () => i18nOptionsKeys})
-		i18nOptionsKeys!: typeof i18nOptionsKeys;
-
-		/**
-		 * Wrapper for translation
-		 * @param string
-		 */
-		translate(string: i18nOptionsKeys): string
-		{
-			return i18nService.translate(string);
-		}
-
-
 		private get vue_licence(): string
 		{
 			return `                      The MIT License (MIT)

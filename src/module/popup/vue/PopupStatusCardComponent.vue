@@ -29,24 +29,17 @@
 </template>
 
 <script lang="ts">
-	import Vue from 'vue';
 	import {Component, Prop} from 'vue-property-decorator';
-	import {i18nOptionsKeys, i18nPopupKeys, i18nService} from "../../../service/browser/i18nService";
 	import {PiHoleSettingsDefaults, StorageService} from "../../../service/browser/StorageService";
 	import {BadgeService, ExtensionBadgeText} from "../../../service/browser/BadgeService";
 	import {PiHoleApiService} from "../../../service/api/service/PiHoleApiService";
 	import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../../service/api/models/pihole/PiHoleApiStatus";
 	import {TabService} from "../../../service/browser/TabService";
+	import BaseComponent from "../../general/BaseComponent.vue";
 
 	@Component
-	export default class PopupStatusCardComponent extends Vue
+	export default class PopupStatusCardComponent extends BaseComponent
 	{
-		@Prop({default: () => i18nPopupKeys})
-		i18nPopupKeys!: typeof i18nPopupKeys;
-
-		@Prop({default: () => i18nOptionsKeys})
-		i18nOptionsKeys!: typeof i18nOptionsKeys;
-
 		// Prop which is emitted to the parent. Gets updates after a pihole status check
 		@Prop({default: false})
 		is_active_by_status!: boolean;
@@ -200,15 +193,6 @@
 					PiHoleApiService.refresh_pi_hole_status((data => this.update_components_by_data(data))).then();
 				}, 1500);
 			}
-		}
-
-		/**
-		 * Wrapper for translation
-		 * @param string
-		 */
-		translate(string: i18nOptionsKeys | i18nPopupKeys): string
-		{
-			return i18nService.translate(string);
 		}
 
 		/**
