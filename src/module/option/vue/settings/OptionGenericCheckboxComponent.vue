@@ -19,15 +19,15 @@
 	export default class OptionGenericCheckboxComponent extends BaseComponent
 	{
 		// Label Text key
-		@Prop({required: true})
+		@Prop()
 		label_text_key!: i18nOptionsKeys;
 
 		// Getter function to get the data from the storage
-		@Prop({required: true})
+		@Prop()
 		getter_function!: () => Promise<boolean>;
 
 		// Setter function to save the data to the storage
-		@Prop({required: true})
+		@Prop()
 		setter_function!: (value: boolean) => void;
 
 		@Watch('is_checked')
