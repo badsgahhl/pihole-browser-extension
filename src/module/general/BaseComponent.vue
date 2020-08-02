@@ -1,9 +1,10 @@
 <script lang="ts">
 	import Vue from "vue";
-	import {Prop} from "vue-property-decorator";
+  import {Component, Prop} from "vue-property-decorator";
 	import {i18nOptionsKeys, i18nPopupKeys, i18nService, LinkConfig} from "../../service/browser/i18nService";
 	import {PiHoleSettingsDefaults} from "../../service/browser/StorageService";
 
+	@Component
 	export default abstract class BaseComponent extends Vue
 	{
 

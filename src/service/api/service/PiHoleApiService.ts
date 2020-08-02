@@ -93,6 +93,59 @@ export module PiHoleApiService
 	}
 
 	/**
+	 * Function to remove a domain from a list
+	 * @param domain
+	 * @param list
+	 */
+	export async function sub_domain_from_list(domain: string, list: ApiListMode): Promise<void>
+	{
+		const request_promises = [];
+		const storage = (await StorageService.get_pi_hole_settings_array());
+		if (typeof storage === "undefined")
+		{
+			return;
+		}
+		for (const pi_hole of storage)
+		{
+			request_promises.push(new Promise<void>(resolve => sub_domain_from_list_promise_function(pi_hole, list, domain, resolve)));
+		}
+
+		await Promise.all<void>(request_promises);
+	}
+
+	/**
+	 * Removes a domain from a list
+	 * @param pi_hole_settings
+	 * @param mode
+	 * @param domain
+	 * @private
+	 */
+	function sub_domain_from_list_promise_function(pi_hole_settings: PiHoleSettingsStorage, mode: ApiListMode, domain: string, resolve: () => void): void
+	{
+		const pi_uri_base = pi_hole_settings.pi_uri_base;
+		const api_key = pi_hole_settings.api_key;
+		if (typeof pi_uri_base === "undefined" || typeof api_key === "undefined")
+		{
+			return;
+		}
+
+		const api_request = new PiHoleApiRequest(pi_uri_base, api_key);
+
+		api_request.method = ApiRequestMethodEnum.GET;
+		api_request.add_get_param('list', mode);
+		api_request.add_get_param('sub', domain);
+
+		api_request.onreadystatechange = function(this: XMLHttpRequest) {
+			if (this.readyState === 4 && this.status === 200)
+			{
+				resolve();
+			}
+		}
+
+		api_request.send().then();
+	}
+
+	/**
 	 * Sends a request to list a domain on all pi-holes
 	 * @param domain
 	 * @param mode
