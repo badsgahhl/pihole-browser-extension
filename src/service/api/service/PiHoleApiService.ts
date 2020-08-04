@@ -118,6 +118,7 @@ export module PiHoleApiService
 	 * @param pi_hole_settings
 	 * @param mode
 	 * @param domain
+	 * @param resolve
 	 * @private
 	 */
 	function sub_domain_from_list_promise_function(pi_hole_settings: PiHoleSettingsStorage, mode: ApiListMode, domain: string, resolve: () => void): void
@@ -138,6 +139,12 @@ export module PiHoleApiService
 		api_request.onreadystatechange = function(this: XMLHttpRequest) {
 			if (this.readyState === 4 && this.status === 200)
 			{
+				resolve();
+			}
+			// Legacy for PiHole v5.0 or less
+			if (this.readyState === 4 && this.status === 500)
+			{
+				console.warn("You don't use PiHole v5.1+ or higher. Please consider upgrading!");
 				resolve();
 			}
 		}

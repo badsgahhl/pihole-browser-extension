@@ -60,7 +60,7 @@ It is only possible to add a domain to one of the lists (white and black list). 
  
  **Handling in PiHole v5.1:**
  <br>
- In v5.1 it is possible to have a domain on the white and blacklist at the same time. In this case the whitelist before the blacklist applies. The extension **only adds** domains. So it does not delete any of your lists or keep them persistent. So theoretically you can add a domain to the whitelist and blacklist with the extension.
+ In v5.1 the extension works as you would expect. Adding the current domain to a list will first remove the domain from the other list to keep both lists consistent.
 
 
 ### This is not an official PiHole application.
