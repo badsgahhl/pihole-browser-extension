@@ -38,13 +38,13 @@ export default class OptionGeneralSettings extends BaseComponent
    private checkbox_options: GenericCheckboxComponent[] = [
       {
          label_text_key: i18nOptionsKeys.options_reload_after_disable,
-         getter_function: this.get_storage_service().get_reload_after_disable,
-         setter_function: this.get_storage_service().save_reload_after_disable
+         getter_function: () => this.get_storage_service().get_reload_after_disable(),
+         setter_function: (value: boolean) => this.get_storage_service().save_reload_after_disable(value)
       },
       {
          label_text_key: i18nOptionsKeys.options_reload_after_white_list,
-         getter_function: this.get_storage_service().get_reload_after_white_list,
-         setter_function: this.get_storage_service().save_reload_after_white_list
+         getter_function: () => this.get_storage_service().get_reload_after_white_list(),
+         setter_function: (value: boolean) => this.get_storage_service().save_reload_after_white_list(value)
       },
       /*
              {
