@@ -29,7 +29,7 @@ export module TabService
 			'pi.hole'
 		];
 
-		let pi_hole_urls = (await StorageService.get_pi_hole_settings_array());
+		let pi_hole_urls = (await StorageService.getInstance().get_pi_hole_settings_array());
 		let pi_hole_urls_array: Array<string> = [];
 		if (typeof pi_hole_urls !== "undefined")
 		{

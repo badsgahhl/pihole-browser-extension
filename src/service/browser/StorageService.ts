@@ -1,41 +1,30 @@
 /**
  * Service Module to access the local chrome storage
  */
-export module StorageService
+export class StorageService
 {
-	/**
-	 * Function to save one settings object according to its id
-	 * @param settings
-	 * @param callback
-	 */
-	export async function add_pi_hole_settings(settings: PiHoleSettingsStorage, callback?: () => void): Promise<void>
+
+	private static instance: StorageService;
+
+	private constructor()
 	{
-		let current_settings = await get_pi_hole_settings_array();
-		if (typeof current_settings !== "undefined" && current_settings.length > 0)
+	}
+
+	public static getInstance(): StorageService
+	{
+		if (!StorageService.instance)
 		{
-			current_settings.push(settings);
-		}
-		else
-		{
-			current_settings = [settings];
+			StorageService.instance = new StorageService();
 		}
 
-		let storage: ExtensionStorage = {
-			pi_hole_settings: current_settings,
-		}
-
-		if (storage)
-		{
-			chrome.storage.local.set(storage, callback);
-		}
-
+		return StorageService.instance;
 	}
 
 	/**
 	 * Function to save a pi_hole settings array
 	 * @param settings
 	 */
-	export function save_pi_hole_settings_array(settings: PiHoleSettingsStorage[]): void
+	public save_pi_hole_settings_array(settings: PiHoleSettingsStorage[]): void
 	{
 		if (settings.length > 0)
 		{
@@ -68,16 +57,11 @@ export module StorageService
 		}
 	}
 
-	export function clear_pi_hole_settings(): void
-	{
-		chrome.storage.local.remove(ExtensionStorageEnum.pi_hole_settings.valueOf());
-	}
-
 	/**
 	 * Function to disable the default disable time
 	 * @param time
 	 */
-	export function save_default_disable_time(time: number): void
+	public save_default_disable_time(time: number): void
 	{
 		time = Number(time);
 		if (time < 1)
@@ -90,44 +74,16 @@ export module StorageService
 		chrome.storage.local.set(storage);
 	}
 
-	export function get_default_disable_time(): Promise<number | undefined>
+	public get_default_disable_time(): Promise<number | undefined>
 	{
-		return new Promise((resolve) => {
-			chrome.storage.local.get(ExtensionStorageEnum.default_disable_time, function(obj) {
-				resolve((<ExtensionStorage> obj).default_disable_time)
-			});
-		});
-	}
-
-	/**
-	 * Enable disable beta feature
-	 * @param value
-	 */
-	export function save_beta_feature_flag(value: boolean): void
-	{
-		const storage: ExtensionStorage = {
-			beta_feature_flag: value
-		}
-		chrome.storage.local.set(storage);
-	}
-
-	/**
-	 * Gets the status of the beta feature
-	 */
-	export function get_beta_feature_flag(): Promise<boolean | undefined>
-	{
-		return new Promise((resolve) => {
-			chrome.storage.local.get(ExtensionStorageEnum.beta_feature_flag, function(obj) {
-				resolve((<ExtensionStorage> obj).beta_feature_flag)
-			});
-		});
+		return this.get_storage_value<number>(ExtensionStorageEnum.default_disable_time);
 	}
 
 	/**
 	 * Function to set the state for reload_after_enable_disable
 	 * @param state
 	 */
-	export function save_reload_after_disable(state: boolean): void
+	public save_reload_after_disable(state: boolean): void
 	{
 		const storage: ExtensionStorage = {
 			reload_after_disable: state
@@ -135,20 +91,16 @@ export module StorageService
 		chrome.storage.local.set(storage);
 	}
 
-	export function get_reload_after_disable(): Promise<boolean | undefined>
+	public get_reload_after_disable(): Promise<boolean | undefined>
 	{
-		return new Promise((resolve) => {
-			chrome.storage.local.get(ExtensionStorageEnum.reload_after_disable, function(obj) {
-				resolve((<ExtensionStorage> obj).reload_after_disable)
-			});
-		});
+		return this.get_storage_value<boolean>(ExtensionStorageEnum.reload_after_disable);
 	}
 
 	/**
 	 * Function to set the state for reload_after_white_black_list
 	 * @param state
 	 */
-	export function save_reload_after_white_list(state: boolean): void
+	public save_reload_after_white_list(state: boolean): void
 	{
 		const storage: ExtensionStorage = {
 			reload_after_white_list: state
@@ -156,69 +108,30 @@ export module StorageService
 		chrome.storage.local.set(storage);
 	}
 
-	export function get_reload_after_white_list(): Promise<boolean | undefined>
+	public get_reload_after_white_list(): Promise<boolean | undefined>
 	{
-		return new Promise((resolve) => {
-			chrome.storage.local.get(ExtensionStorageEnum.reload_after_white_list, function(obj) {
-				resolve((<ExtensionStorage> obj).reload_after_white_list)
-			});
-		});
+		return this.get_storage_value<boolean>(ExtensionStorageEnum.reload_after_white_list);
+	}
+
+
+	public get_pi_hole_settings_array(): Promise<PiHoleSettingsStorage[] | undefined>
+	{
+		return this.get_storage_value<PiHoleSettingsStorage[]>(ExtensionStorageEnum.pi_hole_settings);
 	}
 
 	/**
-	 * Gets the current extension settings.
-	 * @deprecated
+	 * Base Function to get data from the storage
+	 * @param key
 	 */
-	export function get_pi_hole_settings(): Promise<PiHoleSettingsStorageOld>
+	private get_storage_value<T>(key: ExtensionStorageEnum): Promise<T | undefined>
 	{
-		return new Promise((resolve) => {
-			chrome.storage.local.get(null, function(obj) {
-				resolve(obj)
+		return new Promise<T | undefined>((resolve) => {
+			chrome.storage.local.get(key, function(obj) {
+				resolve(obj[key]);
 			});
 		});
 	}
 
-	export function get_pi_hole_settings_array(): Promise<PiHoleSettingsStorage[] | undefined>
-	{
-		return new Promise((resolve) => {
-			chrome.storage.local.get(ExtensionStorageEnum.pi_hole_settings, function(obj) {
-				resolve((<ExtensionStorage> obj).pi_hole_settings)
-			});
-		});
-	}
-
-
-	/**
-	 * Function to migrate the local storage to the new version for supporting multiple piholes
-	 */
-	export function process_storage_migration(): void
-	{
-		get_pi_hole_settings().then(oldStorage => {
-			chrome.storage.local.clear();
-			const migration_storage: PiHoleSettingsStorage = {
-				pi_uri_base: oldStorage.pi_uri_base,
-				api_key: oldStorage.api_key
-			}
-
-			add_pi_hole_settings(migration_storage);
-			const old_default_disable_time = oldStorage.default_disable_time;
-			if (old_default_disable_time)
-			{
-				save_default_disable_time(old_default_disable_time);
-			}
-		})
-
-	}
-}
-
-/**
- * Interface for the local settings storage structure.
- */
-export interface PiHoleSettingsStorageOld
-{
-	pi_uri_base?: string;
-	api_key?: string;
-	default_disable_time?: number;
 }
 
 export interface PiHoleSettingsStorage
@@ -237,7 +150,6 @@ export interface ExtensionStorage
 {
 	pi_hole_settings?: PiHoleSettingsStorage[],
 	default_disable_time?: number,
-	storage_version?: number,
 	reload_after_disable?: boolean,
 	reload_after_white_list?: boolean,
 	beta_feature_flag?: boolean
@@ -246,9 +158,7 @@ export interface ExtensionStorage
 export enum ExtensionStorageEnum
 {
 	pi_hole_settings = 'pi_hole_settings',
-	storage_version = 'storage_version',
 	default_disable_time = 'default_disable_time',
 	reload_after_disable = 'reload_after_disable',
 	reload_after_white_list = 'reload_after_white_list',
-	beta_feature_flag = 'beta_feature_flag'
 }

@@ -12,7 +12,7 @@ export module PiHoleApiService
 	 */
 	export async function get_pi_hole_version(): Promise<PiHoleVersions[]>
 	{
-		const storage = (await StorageService.get_pi_hole_settings_array());
+		const storage = (await StorageService.getInstance().get_pi_hole_settings_array());
 		if (typeof storage === "undefined")
 		{
 			return [];
@@ -100,7 +100,7 @@ export module PiHoleApiService
 	export async function sub_domain_from_list(domain: string, list: ApiListMode): Promise<void>
 	{
 		const request_promises = [];
-		const storage = (await StorageService.get_pi_hole_settings_array());
+		const storage = (await StorageService.getInstance().get_pi_hole_settings_array());
 		if (typeof storage === "undefined")
 		{
 			return;
@@ -160,7 +160,7 @@ export module PiHoleApiService
 	export async function list_domain(domain: string, mode: ApiListMode): Promise<PiHoleListStatus[]>
 	{
 		const request_promises = [];
-		const storage = (await StorageService.get_pi_hole_settings_array());
+		const storage = (await StorageService.getInstance().get_pi_hole_settings_array());
 		if (typeof storage === "undefined")
 		{
 			return [];
@@ -241,7 +241,7 @@ export module PiHoleApiService
 	 */
 	export async function change_pi_hole_status(status: PiHoleApiStatusEnum, time: number, successCallback: (data: PiHoleApiStatus) => void, errorCallback: (data: string) => void): Promise<void>
 	{
-		const pi_hole_storage = (await StorageService.get_pi_hole_settings_array());
+		const pi_hole_storage = (await StorageService.getInstance().get_pi_hole_settings_array());
 		if (typeof pi_hole_storage === "undefined")
 		{
 			return;
@@ -298,7 +298,7 @@ export module PiHoleApiService
 	export async function refresh_pi_hole_status(successCallback: (data: PiHoleApiStatus) => void): Promise<void>
 	{
 		const request_promises = [];
-		const storage = (await StorageService.get_pi_hole_settings_array());
+		const storage = (await StorageService.getInstance().get_pi_hole_settings_array());
 		if (typeof storage === "undefined")
 		{
 			return;

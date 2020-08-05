@@ -1,4 +1,3 @@
-import {StorageService} from "../../service/browser/StorageService";
 import {PiHoleApiService} from "../../service/api/service/PiHoleApiService";
 import {BadgeService, ExtensionBadgeText} from "../../service/browser/BadgeService";
 import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../service/api/models/pihole/PiHoleApiStatus";
@@ -15,18 +14,6 @@ chrome.runtime.onInstalled.addListener(function(details) {
 		const previousVersion = Number(details.previousVersion.split('.').join(''));
 		const thisVersion = Number(chrome.runtime.getManifest().version.split('.').join(''));
 		console.log("Updated from " + previousVersion + " to " + thisVersion + "!");
-
-		/**
-		 * Update Roadmap:
-		 * 2.1.1 Pushing new codebase for storage service
-		 * 2.1.2 Migration + Making Methods ready to work with multiple pi holes
-		 * 2.2.0 Allowing multiple pihole in the settings
-		 */
-		if (previousVersion <= 211 && thisVersion > 211)
-		{
-			console.log("Running migration");
-			StorageService.process_storage_migration();
-		}
 	}
 });
 

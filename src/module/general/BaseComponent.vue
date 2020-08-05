@@ -2,7 +2,7 @@
 import Vue from "vue";
 import {Component} from "vue-property-decorator";
 import {i18nOptionsKeys, i18nPopupKeys, i18nService, LinkConfig} from "../../service/browser/i18nService";
-import {PiHoleSettingsDefaults} from "../../service/browser/StorageService";
+import {PiHoleSettingsDefaults, StorageService} from "../../service/browser/StorageService";
 
 @Component
 export default class BaseComponent extends Vue
@@ -19,15 +19,20 @@ export default class BaseComponent extends Vue
   // Default Settings
   protected PiHoleSettingsDefaults = PiHoleSettingsDefaults;
 
-  /**
-   * Wrapper for translation
-   * @param string
-   * @param substitutions
-   */
-  protected translate(string: string, substitutions?: any): string
-  {
-    return i18nService.translate(string, substitutions);
-  }
+   /**
+    * Wrapper for translation
+    * @param string
+    * @param substitutions
+    */
+   protected translate(string: string, substitutions?: any): string
+   {
+      return i18nService.translate(string, substitutions);
+   }
+
+   protected get_storage_service(): StorageService
+   {
+      return StorageService.getInstance();
+   }
 
 }
 </script>
