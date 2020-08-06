@@ -4,7 +4,6 @@ import * as ZipPlugin from "zip-webpack-plugin";
 import {VueLoaderPlugin} from "vue-loader";
 import * as path from "path";
 import * as CopyWebpackPlugin from "copy-webpack-plugin";
-import * as TerserJSPlugin from 'terser-webpack-plugin';
 
 export default class WebpackConfig
 {
@@ -77,10 +76,6 @@ export default class WebpackConfig
 				splitChunks: {
 					chunks: 'all',
 				},
-				minimizer: [
-					new TerserJSPlugin(),
-				],
-
 			},
 			plugins: [
 				new CopyWebpackPlugin([
