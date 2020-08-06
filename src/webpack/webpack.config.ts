@@ -77,7 +77,6 @@ export default class WebpackConfig
 				splitChunks: {
 					chunks: 'all',
 				},
-				minimize: true,
 				minimizer: [
 					new TerserJSPlugin(),
 				],
