@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"target": "ES2015",
+		"target": "ES6",
 		"sourceMap": false,
 		"lib": [
 			"dom",
@@ -19,7 +19,8 @@
 		"moduleResolution": "node",
 		"module": "CommonJS",
 		"experimentalDecorators": true,
-		"strict": true
+		"strict": true,
+		"allowSyntheticDefaultImports": true
 	},
 	"exclude": [
 		"node_modules"

@@ -1,11 +1,14 @@
-import {get_config} from "./webpack.config";
 import * as webpack from "webpack";
+import WebpackConfig from "./webpack.config";
 
+const BROWSER = 'chrome';
 
 module.exports = (env: string, argv: webpack.loader.LoaderContext) => {
+	let is_production = false;
 	if (argv.mode === 'production')
 	{
-		return get_config('chrome', true);
+		is_production = true;
 	}
-	return get_config('chrome', false)
+
+	return new WebpackConfig(BROWSER, is_production).get_config();
 }
