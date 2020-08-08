@@ -3,7 +3,7 @@ import WebpackConfig from "./webpack.config";
 
 const BROWSER = 'chrome';
 
-module.exports = (env: string, argv: webpack.loader.LoaderContext) => {
+module.exports = (env: string, argv: webpack.WebpackOptionsNormalized) => {
 	let is_production = false;
 	if (argv.mode === 'production')
 	{

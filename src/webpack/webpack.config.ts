@@ -78,18 +78,20 @@ export default class WebpackConfig
 				},
 			},
 			plugins: [
-				new CopyWebpackPlugin([
-												 {
-													 from: "manifest." + browser + ".json",
-													 to: "manifest.json"
-												 },
-												 {
-													 from: "_locales", to: '_locales'
-												 },
-												 {
-													 from: "icon", to: 'icon',
-												 }
-											 ]),
+				new CopyWebpackPlugin({
+												 patterns: [
+													 {
+														 from: "manifest." + browser + ".json",
+														 to: "manifest.json"
+													 },
+													 {
+														 from: "_locales", to: '_locales'
+													 },
+													 {
+														 from: "icon", to: 'icon',
+													 }
+												 ]
+											 }),
 				new HtmlWebpackPlugin({
 												 template: path.join(__dirname, "../", "module/popup", "popup.html"),
 												 filename: "popup.html",
@@ -113,10 +115,11 @@ export default class WebpackConfig
 		{
 			if (config.plugins)
 			{
-				const zip_options = {
+				const zip_options:ZipPlugin.Options = {
 					filename: "package." + browser + ".zip",
 					path: path.join(__dirname, '../../')
 				};
+				// @ts-ignore
 				config.plugins.push(new ZipPlugin(zip_options));
 			}
 		}
