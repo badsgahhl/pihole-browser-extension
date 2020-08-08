@@ -26,8 +26,6 @@
 <script lang="ts">
 import {Component, Prop} from "vue-property-decorator";
 import {ApiListMode} from "../../../service/api/models/pihole/PiHoleListStatus";
-import {PiHoleApiService} from "../../../service/api/service/PiHoleApiService";
-import {TabService} from "../../../service/browser/TabService";
 import BaseComponent from "../../general/BaseComponent.vue";
 import WebRequestHeadersDetails = chrome.webRequest.WebRequestHeadersDetails;
 import BlockingResponse = chrome.webRequest.BlockingResponse;
@@ -126,9 +124,9 @@ export default class PopupListCardComponent extends BaseComponent
 
       // We remove the domain from the oposite list
 
-      await PiHoleApiService.sub_domain_from_list(domain, mode === ApiListMode.whitelist ? ApiListMode.blacklist : ApiListMode.whitelist);
+      await this.get_api_service().sub_domain_from_list(domain, mode === ApiListMode.whitelist ? ApiListMode.blacklist : ApiListMode.whitelist);
 
-      const pi_hole_list_results = (await PiHoleApiService.list_domain(domain, mode));
+      const pi_hole_list_results = (await this.get_api_service().list_domain(domain, mode));
 
       if (typeof browser === 'undefined')
       {
@@ -170,7 +168,7 @@ export default class PopupListCardComponent extends BaseComponent
 
                   if (typeof reload_after_white_black_list !== "undefined" && reload_after_white_black_list && mode === ApiListMode.whitelist && pi_hole_result.success && pi_hole_result.message.includes('Added'))
                   {
-                     TabService.reload_current_tab(250);
+                     this.get_tab_service().reload_current_tab(250);
                   }
 
                   this.buttons_disabled = false;

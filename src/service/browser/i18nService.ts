@@ -1,11 +1,11 @@
-export module i18nService
+export class i18nService
 {
 	/**
 	 * Wrapper Function for the chrome.i18n.getMessage Function
 	 * @param key
 	 * @param substitutions
 	 */
-	export function translate(key: string, substitutions?: any): string
+	public translate(key: string, substitutions?: any): string
 	{
 		return chrome.i18n.getMessage(key, substitutions);
 	}

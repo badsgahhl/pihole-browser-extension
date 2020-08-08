@@ -1,4 +1,5 @@
-import {BadgeService, ExtensionBadgeText} from "../../browser/BadgeService";
+import {ExtensionBadgeText} from "../../browser/BadgeService";
+import ServiceLocator from "../../ServiceLocator";
 
 /**
  * Class to access the pihole api with get,post params etc.
@@ -101,7 +102,7 @@ export class PiHoleApiRequest
 		}
 
 		httpResponse.onerror = function(this: XMLHttpRequest) {
-			BadgeService.set_badge_text(ExtensionBadgeText.error);
+			ServiceLocator.getInstance().get_badge_service().set_badge_text(ExtensionBadgeText.error);
 		}
 
 		httpResponse.open(this.method, url, this.is_async);

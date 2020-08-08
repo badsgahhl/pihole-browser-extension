@@ -1,13 +1,14 @@
 import {PiHoleSettingsStorage, StorageService} from "./StorageService";
+import ServiceLocator from "../ServiceLocator";
+import Tab = chrome.tabs.Tab;
 
-export module TabService
+export class TabService
 {
-	import Tab = chrome.tabs.Tab;
 
 	/**
 	 * Returns the current tab url. Cleaned only the real domain without the parameters etc.
 	 */
-	export async function get_current_tab_url_cleaned(): Promise<string>
+	public async get_current_tab_url_cleaned(): Promise<string>
 	{
 		const current_tab_url_promise: Promise<string> = new Promise((resolve) => {
 			chrome.tabs.query({'active': true, 'lastFocusedWindow': true, 'currentWindow': true}, function(tabs) {
@@ -29,7 +30,7 @@ export module TabService
 			'pi.hole'
 		];
 
-		let pi_hole_urls = (await StorageService.getInstance().get_pi_hole_settings_array());
+		let pi_hole_urls = (await this.get_storage_service().get_pi_hole_settings_array());
 		let pi_hole_urls_array: Array<string> = [];
 		if (typeof pi_hole_urls !== "undefined")
 		{
@@ -63,7 +64,7 @@ export module TabService
 	 * Function to reload the current tab
 	 * @param delay in ms
 	 */
-	export function reload_current_tab(delay: number = 0): void
+	public reload_current_tab(delay: number = 0): void
 	{
 		const query_info = {
 			'active': true,
@@ -74,7 +75,7 @@ export module TabService
 
 			if (tabs[0])
 			{
-				get_current_tab_url_cleaned().then((url) => {
+				this.get_current_tab_url_cleaned().then((url) => {
 					if (url && tabs[0].id)
 					{
 						chrome.tabs.reload(tabs[0].id);
@@ -92,5 +93,10 @@ export module TabService
 		{
 			tabs_function();
 		}
+	}
+
+	private get_storage_service(): StorageService
+	{
+		return ServiceLocator.getInstance().get_storage_service();
 	}
 }

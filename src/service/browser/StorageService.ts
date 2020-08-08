@@ -6,9 +6,6 @@ export class StorageService
 
 	private static instance: StorageService;
 
-	private constructor()
-	{
-	}
 
 	public static getInstance(): StorageService
 	{

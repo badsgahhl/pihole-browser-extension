@@ -1,7 +1,7 @@
-import {PiHoleApiService} from "../../service/api/service/PiHoleApiService";
-import {BadgeService, ExtensionBadgeText} from "../../service/browser/BadgeService";
+import {ExtensionBadgeText} from "../../service/browser/BadgeService";
 import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../service/api/models/pihole/PiHoleApiStatus";
 import {LinkConfig} from "../../service/browser/i18nService";
+import ServiceLocator from "../../service/ServiceLocator";
 
 
 chrome.runtime.onInstalled.addListener(function(details) {
@@ -33,20 +33,22 @@ window.setInterval(checkStatus, 15000); //Keep checking every 15 seconds
  */
 async function checkStatus(): Promise<void>
 {
+	const badge_service = ServiceLocator.getInstance().get_badge_service();
+	const api_service = ServiceLocator.getInstance().get_api_service();
 	const success_callback = (data: PiHoleApiStatus) => {
-		BadgeService.get_badge_text().then(function(result) {
-			if (!(BadgeService.compare_badge_to_api_status(result, data.status)))
+		badge_service.get_badge_text().then(function(result) {
+			if (!(badge_service.compare_badge_to_api_status(result, data.status)))
 			{
 				if (data.status === PiHoleApiStatusEnum.disabled)
 				{
-					BadgeService.set_badge_text(ExtensionBadgeText.disabled);
+					badge_service.set_badge_text(ExtensionBadgeText.disabled);
 				}
 				else if (data.status === PiHoleApiStatusEnum.enabled)
 				{
-					BadgeService.set_badge_text(ExtensionBadgeText.enabled);
+					badge_service.set_badge_text(ExtensionBadgeText.enabled);
 				}
 			}
 		})
 	};
-	PiHoleApiService.refresh_pi_hole_status(success_callback).then();
+	api_service.refresh_pi_hole_status(success_callback).then();
 }

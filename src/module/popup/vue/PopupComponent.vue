@@ -14,8 +14,7 @@
 import {Component} from 'vue-property-decorator';
 import PopupStatusCardComponent from "./PopupStatusCardComponent.vue";
 import PopupListCardComponent from "./PopupListCardComponent.vue";
-import {BadgeService, ExtensionBadgeText} from "../../../service/browser/BadgeService";
-import {TabService} from "../../../service/browser/TabService";
+import {ExtensionBadgeText} from "../../../service/browser/BadgeService";
 import PopupUpdateAlertComponent from "./PopupUpdateAlertComponent.vue";
 import BaseComponent from "../../general/BaseComponent.vue";
 
@@ -53,7 +52,7 @@ export default class PopupComponent extends BaseComponent
     */
    private update_is_active_by_badge(): void
    {
-      BadgeService.get_badge_text().then((text: string) => {
+      this.get_badge_service().get_badge_text().then((text: string) => {
          this.is_active_by_badge = text === ExtensionBadgeText.enabled;
          this.is_active_by_badge_loaded = true;
       })
@@ -64,7 +63,7 @@ export default class PopupComponent extends BaseComponent
     */
    private update_current_url(): void
    {
-      TabService.get_current_tab_url_cleaned().then((url: string) => {
+      this.get_tab_service().get_current_tab_url_cleaned().then((url: string) => {
          if (url.length > 0)
          {
             this.current_url = url;

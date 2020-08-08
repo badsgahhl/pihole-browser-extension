@@ -31,10 +31,8 @@
 <script lang="ts">
 import {Component, Prop} from 'vue-property-decorator';
 import {PiHoleSettingsDefaults} from "../../../service/browser/StorageService";
-import {BadgeService, ExtensionBadgeText} from "../../../service/browser/BadgeService";
-import {PiHoleApiService} from "../../../service/api/service/PiHoleApiService";
+import {ExtensionBadgeText} from "../../../service/browser/BadgeService";
 import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../../service/api/models/pihole/PiHoleApiStatus";
-import {TabService} from "../../../service/browser/TabService";
 import BaseComponent from "../../general/BaseComponent.vue";
 
 @Component
@@ -89,7 +87,7 @@ export default class PopupStatusCardComponent extends BaseComponent
     */
    private async update_status(): Promise<void>
    {
-      const pi_hole_enabled_from_badge = (await BadgeService.get_badge_text() === ExtensionBadgeText.enabled);
+      const pi_hole_enabled_from_badge = (await this.get_badge_service().get_badge_text() === ExtensionBadgeText.enabled);
 
       if (pi_hole_enabled_from_badge)
       {
@@ -98,7 +96,7 @@ export default class PopupStatusCardComponent extends BaseComponent
          this.default_disable_time_disabled = false;
       }
 
-      PiHoleApiService.refresh_pi_hole_status(((data: PiHoleApiStatus) => this.update_components_by_data(data))).then();
+      this.get_api_service().refresh_pi_hole_status(((data: PiHoleApiStatus) => this.update_components_by_data(data))).then();
    }
 
    /**
@@ -112,7 +110,7 @@ export default class PopupStatusCardComponent extends BaseComponent
          this.default_disable_time_disabled = true;
          this.slider_checked = false;
          this.slider_disabled = false;
-         BadgeService.set_badge_text(ExtensionBadgeText.disabled);
+         this.get_badge_service().set_badge_text(ExtensionBadgeText.disabled);
          this.$emit('update:is_active_by_status', false);
       }
       else if (data.status === PiHoleApiStatusEnum.enabled)
@@ -120,7 +118,7 @@ export default class PopupStatusCardComponent extends BaseComponent
          this.default_disable_time_disabled = false;
          this.slider_disabled = false;
          this.slider_checked = true;
-         BadgeService.set_badge_text(ExtensionBadgeText.enabled);
+         this.get_badge_service().set_badge_text(ExtensionBadgeText.enabled);
          this.$emit('update:is_active_by_status', true)
 
       }
@@ -129,7 +127,7 @@ export default class PopupStatusCardComponent extends BaseComponent
          this.default_disable_time_disabled = true;
          this.slider_disabled = true;
          this.slider_checked = false;
-         BadgeService.set_badge_text(ExtensionBadgeText.error);
+         this.get_badge_service().set_badge_text(ExtensionBadgeText.error);
          this.$emit('update:is_active_by_status', false)
       }
    }
@@ -149,7 +147,7 @@ export default class PopupStatusCardComponent extends BaseComponent
       {
          const success_callback = (data: PiHoleApiStatus) => this.on_slider_click_success_handler(data);
          const error_callback = (data: string) => this.throw_console_badge_error(data);
-         PiHoleApiService.change_pi_hole_status(status_mode, time, success_callback, error_callback);
+         this.get_api_service().change_pi_hole_status(status_mode, time, success_callback, error_callback);
       }
       else
       {
@@ -170,7 +168,7 @@ export default class PopupStatusCardComponent extends BaseComponent
          const reload_after_disable_callback = (is_enabled: boolean | undefined) => {
             if (typeof is_enabled !== "undefined" && is_enabled)
             {
-               TabService.reload_current_tab(1000);
+               this.get_tab_service().reload_current_tab(1000);
             }
          }
          this.get_storage_service().get_reload_after_disable().then(reload_after_disable_callback);
@@ -190,7 +188,7 @@ export default class PopupStatusCardComponent extends BaseComponent
       if (refresh_status)
       {
          setTimeout(() => {
-            PiHoleApiService.refresh_pi_hole_status((data => this.update_components_by_data(data))).then();
+            this.get_api_service().refresh_pi_hole_status((data => this.update_components_by_data(data))).then();
          }, 1500);
       }
    }

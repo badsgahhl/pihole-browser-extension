@@ -12,7 +12,6 @@
 <script lang="ts">
 
 import {Component, Prop} from "vue-property-decorator";
-import {PiHoleApiService} from "../../../service/api/service/PiHoleApiService";
 import {PiHoleVersions} from "../../../service/api/models/pihole/PiHoleVersions";
 import BaseComponent from "../../general/BaseComponent.vue";
 
@@ -66,7 +65,7 @@ export default class PopupUpdateAlertComponent extends BaseComponent
             this.amount_of_piholes = pi_hole_versions_array.length;
          }
       })
-      PiHoleApiService.get_pi_hole_version().then(get_pi_hole_version_callback);
+      this.get_api_service().get_pi_hole_version().then(get_pi_hole_version_callback);
 
    }
 }
