@@ -3,20 +3,6 @@
  */
 export class StorageService
 {
-
-	private static instance: StorageService;
-
-
-	public static getInstance(): StorageService
-	{
-		if (!StorageService.instance)
-		{
-			StorageService.instance = new StorageService();
-		}
-
-		return StorageService.instance;
-	}
-
 	/**
 	 * Function to save a pi_hole settings array
 	 * @param settings
