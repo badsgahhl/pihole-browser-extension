@@ -50,22 +50,19 @@ export default class WebpackConfig
 						}
 					},
 					{
-						test: /\.scss$/,
+						test: /\.s[ac]ss$/i,
 						use: [
-							'vue-style-loader',
+							'style-loader',
 							'css-loader',
-							{
-								loader: 'sass-loader',
-							}
-						]
-					}
+							'sass-loader',
+						],
+					},
 				]
 			},
 			resolve: {
 				extensions: [
-					".tsx",
-					".ts",
 					".js",
+					".ts",
 					".vue"
 				],
 				alias: {
