@@ -34,7 +34,6 @@
 		"zip-webpack-plugin": "^3.0.0"
 	},
 	"description": "Browser extension to control your PiHole. Built with Vue, Typescript and ❤",
-	"main": "src/module/background/background.ts",
 	"scripts": {
 		"start-chrome": "webpack --mode=development -w --config src/webpack/webpack.chrome.ts",
 		"start-firefox": "webpack --mode=development -w --config src/webpack/webpack.firefox.ts",
