@@ -1,5 +1,5 @@
 import * as webpack from "webpack";
-import WebpackConfig from "./webpack.config";
+import WebpackConfig from "./WebpackConfig";
 
 const BROWSER = 'chrome';
 
