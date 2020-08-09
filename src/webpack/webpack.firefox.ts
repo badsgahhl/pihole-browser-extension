@@ -1,9 +1,8 @@
-import * as webpack from "webpack";
 import WebpackConfig from "./WebpackConfig";
 
 const BROWSER = 'firefox';
 
-module.exports = (env: string, argv: webpack.WebpackOptionsNormalized) => {
+module.exports = (env: string, argv: any) => {
 	let is_production = false;
 	if (argv.mode === 'production')
 	{
