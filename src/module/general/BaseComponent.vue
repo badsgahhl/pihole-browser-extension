@@ -1,6 +1,5 @@
 <script lang="ts">
-import Vue from "vue";
-import {Component} from "vue-property-decorator";
+import {Component, Vue} from "vue-property-decorator";
 import {i18nOptionsKeys, i18nPopupKeys, LinkConfig} from "../../service/browser/i18nService";
 import {PiHoleSettingsDefaults, StorageService} from "../../service/browser/StorageService";
 import ServiceLocator from "../../service/ServiceLocator";
