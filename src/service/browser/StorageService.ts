@@ -102,6 +102,19 @@ export class StorageService
 		return this.get_storage_value<PiHoleSettingsStorage[]>(ExtensionStorageEnum.pi_hole_settings);
 	}
 
+	public get_disable_list_feature(): Promise<boolean | undefined>
+	{
+		return this.get_storage_value<boolean>(ExtensionStorageEnum.disable_list_feature)
+	}
+
+	public save_disable_list_feature(state: boolean): void
+	{
+		const storage: ExtensionStorage = {
+			disable_list_feature: state
+		}
+		chrome.storage.local.set(storage);
+	}
+
 	/**
 	 * Base Function to get data from the storage
 	 * @param key
@@ -135,6 +148,7 @@ export interface ExtensionStorage
 	default_disable_time?: number,
 	reload_after_disable?: boolean,
 	reload_after_white_list?: boolean,
+	disable_list_feature?: boolean,
 	beta_feature_flag?: boolean
 }
 
@@ -144,4 +158,5 @@ export enum ExtensionStorageEnum
 	default_disable_time = 'default_disable_time',
 	reload_after_disable = 'reload_after_disable',
 	reload_after_white_list = 'reload_after_white_list',
+	disable_list_feature = 'disable_list_feature'
 }

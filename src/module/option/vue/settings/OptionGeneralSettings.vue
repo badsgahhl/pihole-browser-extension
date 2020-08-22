@@ -46,13 +46,11 @@ export default class OptionGeneralSettings extends BaseComponent
          getter_function: () => this.get_storage_service().get_reload_after_white_list(),
          setter_function: (value: boolean) => this.get_storage_service().save_reload_after_white_list(value)
       },
-      /*
-             {
-                 label_text_key: i18nOptionsKeys.options_beta_feature_flag,
-                 getter_function: this.get_storage_service().get_beta_feature_flag,
-                 setter_function: this.get_storage_service().save_beta_feature_flag
-             }
-             */
+      {
+         label_text_key: i18nOptionsKeys.option_disable_feature,
+         getter_function: () => this.get_storage_service().get_disable_list_feature(),
+         setter_function: (value: boolean) => this.get_storage_service().save_disable_list_feature(value)
+      }
    ];
 }
 

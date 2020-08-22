@@ -89,6 +89,9 @@
 	"options_beta_feature_flag": {
 		"message": "Aktiviere Beta Features (Achtung!)"
 	},
+	"options_disable_list_feature": {
+		"message": "Deaktiviere das List Feature im Popup"
+	},
 	"popup_update_card_info": {
 		"message": "PiHole Update verfügbar! ($updates$/$piholes$)",
 		"placeholders": {

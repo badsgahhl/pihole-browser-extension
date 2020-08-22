@@ -3,7 +3,7 @@
       <PopupStatusCardComponent :is_active_by_status.sync="is_active_by_real_status"
                                 v-if="is_active_by_badge_loaded" :is_active_by_badge="is_active_by_badge"/>
       <PopupListCardComponent
-         v-if="is_pi_hole_version_5_or_higher && is_active_by_real_status && current_url.length > 0"
+         v-if="is_list_feature_active()"
          :current_url="current_url" :is_pi_hole_version_5_or_higher.sync="is_pi_hole_version_5_or_higher"/>
       <PopupUpdateAlertComponent v-if="is_active_by_real_status"/>
    </div>
@@ -41,10 +41,14 @@ export default class PopupComponent extends BaseComponent
    // Data Prop of the current url
    private current_url: string = '';
 
+   // Is the list feature disabled by the settings?
+   private list_feature_disabled = false
+
    mounted()
    {
       this.update_is_active_by_badge();
       this.update_current_url();
+      this.update_list_feature_disabled();
    }
 
    /**
@@ -69,6 +73,27 @@ export default class PopupComponent extends BaseComponent
             this.current_url = url;
          }
       })
+   }
+
+   /**
+    * Updates the prop by the storage
+    */
+   private update_list_feature_disabled(): void
+   {
+      this.get_storage_service().get_disable_list_feature().then((state: boolean | undefined) => {
+         if (typeof state !== "undefined")
+         {
+            this.list_feature_disabled = state;
+         }
+      })
+   }
+
+   /**
+    * Determines if the list feature should be shown or not
+    */
+   private is_list_feature_active(): boolean
+   {
+      return !this.list_feature_disabled && this.is_pi_hole_version_5_or_higher && this.is_active_by_real_status && this.current_url.length > 0;
    }
 }
 
