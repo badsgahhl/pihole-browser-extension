@@ -36,7 +36,8 @@ export enum i18nOptionsKeys
 	options_beta_feature_flag = "options_beta_feature_flag",
 	options_url_invalid_warning = "options_url_invalid_warning",
 	option_donation = "option_donation",
-	option_disable_feature = "options_disable_list_feature"
+	option_disable_feature = "options_disable_list_feature",
+	option_disable_update_notification = "option_disable_update_notification"
 }
 
 export enum i18nPopupKeys

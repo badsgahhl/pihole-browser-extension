@@ -1,5 +1,5 @@
 <template>
-   <b-alert v-if="updates_available" class="popup-update-alert" variant="danger" show>
+   <b-alert v-if="updates_available && !notification_is_disabled" class="popup-update-alert" variant="danger" show>
       {{
          translate(i18nPopupKeys.popup_update_card_info, [
             updates_available_amount,
@@ -31,9 +31,26 @@ export default class PopupUpdateAlertComponent extends BaseComponent
    // Data Prop: How many PiHoles does the user use
    private amount_of_piholes: number = 0;
 
+   // Is the notification disabled by the settings?
+   private notification_is_disabled: boolean = false;
+
    mounted()
    {
+      this.update_is_notification_disabled();
       this.check_for_updates();
+   }
+
+   /**
+    * Updates the value from the storage
+    */
+   private update_is_notification_disabled(): void
+   {
+      this.get_storage_service().get_disable_update_notification().then((state: boolean | undefined) => {
+         if (typeof state !== "undefined")
+         {
+            this.notification_is_disabled = state;
+         }
+      })
    }
 
    /**

@@ -71,6 +71,9 @@
 	"options_disable_list_feature": {
 		"message": "Disable the list feature in the popup"
 	},
+	"option_disable_update_notification": {
+		"message": "Disable the update notification in the popup"
+	},
 	"popup_title": {
 		"message": "PiHole Remote Popup"
 	},

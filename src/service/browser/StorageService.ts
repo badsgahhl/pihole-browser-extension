@@ -115,6 +115,19 @@ export class StorageService
 		chrome.storage.local.set(storage);
 	}
 
+	public get_disable_update_notification(): Promise<boolean | undefined>
+	{
+		return this.get_storage_value<boolean>(ExtensionStorageEnum.disable_update_notification)
+	}
+
+	public save_disable_update_notification(state: boolean): void
+	{
+		const storage: ExtensionStorage = {
+			disable_update_notification: state
+		}
+		chrome.storage.local.set(storage);
+	}
+
 	/**
 	 * Base Function to get data from the storage
 	 * @param key
@@ -149,6 +162,7 @@ export interface ExtensionStorage
 	reload_after_disable?: boolean,
 	reload_after_white_list?: boolean,
 	disable_list_feature?: boolean,
+	disable_update_notification?: boolean,
 	beta_feature_flag?: boolean
 }
 
@@ -158,5 +172,6 @@ export enum ExtensionStorageEnum
 	default_disable_time = 'default_disable_time',
 	reload_after_disable = 'reload_after_disable',
 	reload_after_white_list = 'reload_after_white_list',
-	disable_list_feature = 'disable_list_feature'
+	disable_list_feature = 'disable_list_feature',
+	disable_update_notification = 'disable_update_notification'
 }

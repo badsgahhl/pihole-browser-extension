@@ -1,6 +1,6 @@
 {
 	"name": "pihole-browser-extension",
-	"version": "2.2.10",
+	"version": "2.2.11",
 	"dependencies": {
 		"bootstrap": "^4.5.2",
 		"bootstrap-vue": "^2.16.0",

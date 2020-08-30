@@ -50,6 +50,11 @@ export default class OptionGeneralSettings extends BaseComponent
          label_text_key: i18nOptionsKeys.option_disable_feature,
          getter_function: () => this.get_storage_service().get_disable_list_feature(),
          setter_function: (value: boolean) => this.get_storage_service().save_disable_list_feature(value)
+      },
+      {
+         label_text_key: i18nOptionsKeys.option_disable_update_notification,
+         getter_function: () => this.get_storage_service().get_disable_update_notification(),
+         setter_function: (value: boolean) => this.get_storage_service().save_disable_update_notification(value)
       }
    ];
 }

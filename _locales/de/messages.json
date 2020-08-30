@@ -92,6 +92,9 @@
 	"options_disable_list_feature": {
 		"message": "Deaktiviere das List Feature im Popup"
 	},
+	"option_disable_update_notification": {
+		"message": "Deaktiviere die Update Benachrichtigung im Popup"
+	},
 	"popup_update_card_info": {
 		"message": "PiHole Update verfügbar! ($updates$/$piholes$)",
 		"placeholders": {
