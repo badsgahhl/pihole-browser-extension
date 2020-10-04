@@ -24,8 +24,6 @@ export default class BaseComponent extends Vue
 
    /**
     * Wrapper for translation
-    * @param string
-    * @param substitutions
     */
    protected translate(string: string, substitutions?: any): string
    {

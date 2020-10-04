@@ -16,7 +16,12 @@
 			"firefox-webext-browser",
 			"bootstrap"
 		],
-		"moduleResolution": "node",
+		"baseUrl": ".",
+		"paths": {
+			"webpack": [
+				"./node_modules/@types/webpack/index.d.ts"
+			]
+		},
 		"module": "CommonJS",
 		"experimentalDecorators": true,
 		"strict": true,

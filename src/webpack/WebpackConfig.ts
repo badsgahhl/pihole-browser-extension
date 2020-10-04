@@ -112,7 +112,7 @@ export default class WebpackConfig
 		{
 			if (config.plugins)
 			{
-				const zip_options:ZipPlugin.Options = {
+				const zip_options: ZipPlugin.Options = {
 					filename: "package." + browser + ".zip",
 					path: path.join(__dirname, '../../')
 				};
