@@ -1,9 +1,9 @@
 import * as webpack from 'webpack';
-import * as HtmlWebpackPlugin from "html-webpack-plugin";
-import * as ZipPlugin from "zip-webpack-plugin";
+import HtmlWebpackPlugin from "html-webpack-plugin";
+import ZipPlugin from "zip-webpack-plugin";
 import {VueLoaderPlugin} from "vue-loader";
 import * as path from "path";
-import * as CopyWebpackPlugin from "copy-webpack-plugin";
+import CopyWebpackPlugin from "copy-webpack-plugin";
 
 export default class WebpackConfig {
     private readonly browser: string;

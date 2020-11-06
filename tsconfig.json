@@ -17,17 +17,15 @@
 			"bootstrap"
 		],
 		"baseUrl": ".",
-		"paths": {
-			"webpack": [
-				"./node_modules/@types/webpack/index.d.ts"
-			]
-		},
-		"module": "CommonJS",
+		"module": "ESNext",
+		"moduleResolution": "Node",
+		"esModuleInterop": true,
 		"experimentalDecorators": true,
 		"strict": true,
 		"allowSyntheticDefaultImports": true
 	},
 	"exclude": [
-		"node_modules"
+		"node_modules",
+		"./src/webpack"
 	]
 }
