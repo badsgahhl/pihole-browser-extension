@@ -4,8 +4,7 @@ const BROWSER = 'chrome';
 
 module.exports = (env: string, argv: any) => {
 	let is_production = false;
-	if (argv.mode === 'production')
-	{
+	if (argv.mode === 'production') {
 		is_production = true;
 	}
 

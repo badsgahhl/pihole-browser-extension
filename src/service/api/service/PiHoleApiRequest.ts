@@ -4,143 +4,119 @@ import ServiceLocator from "../../ServiceLocator";
 /**
  * Class to access the pihole api with get,post params etc.
  */
-export class PiHoleApiRequest
-{
-	private _onreadystatechange: ((this: XMLHttpRequest, ev: Event) => any) | null = null;
-	private _method: ApiRequestMethodEnum = ApiRequestMethodEnum.GET;
-	private _async: boolean = true;
-	private _get_params: Array<ApiParameter> = [];
-	private _post_params: Array<ApiParameter> = [];
-	private readonly _pi_hole_url: string;
-	private readonly _api_key: string;
+export class PiHoleApiRequest {
+    private _async: boolean = true;
+    private _get_params: Array<ApiParameter> = [];
+    private _post_params: Array<ApiParameter> = [];
+    private readonly _pi_hole_url: string;
+    private readonly _api_key: string;
 
-	constructor(pi_hole_url: string, api_key: string)
-	{
-		this._pi_hole_url = pi_hole_url;
-		this._api_key = api_key;
-	}
+    constructor(pi_hole_url: string, api_key: string) {
+        this._pi_hole_url = pi_hole_url;
+        this._api_key = api_key;
+    }
 
+    private _onreadystatechange: ((this: XMLHttpRequest, ev: Event) => any) | null = null;
 
-	public get onreadystatechange(): ((this: XMLHttpRequest, ev: Event) => any) | null
-	{
-		return this._onreadystatechange;
-	}
+    public get onreadystatechange(): ((this: XMLHttpRequest, ev: Event) => any) | null {
+        return this._onreadystatechange;
+    }
 
-	public set onreadystatechange(value: ((this: XMLHttpRequest, ev: Event) => any) | null)
-	{
-		this._onreadystatechange = value;
-	}
+    public set onreadystatechange(value: ((this: XMLHttpRequest, ev: Event) => any) | null) {
+        this._onreadystatechange = value;
+    }
 
-	public get method(): ApiRequestMethodEnum
-	{
-		return this._method;
-	}
+    private _method: ApiRequestMethodEnum = ApiRequestMethodEnum.GET;
 
-	public set method(value: ApiRequestMethodEnum)
-	{
-		this._method = value;
-	}
+    public get method(): ApiRequestMethodEnum {
+        return this._method;
+    }
 
-	public get is_async(): boolean
-	{
-		return this._async;
-	}
+    public set method(value: ApiRequestMethodEnum) {
+        this._method = value;
+    }
 
-	public set is_async(async: boolean)
-	{
-		this._async = async;
-	}
+    public get is_async(): boolean {
+        return this._async;
+    }
 
-	public add_get_param(key: string, value?: string): void
-	{
-		if (!value)
-		{
-			value = undefined;
-		}
-		this._get_params.push(<ApiParameter> {[key]: value})
-	}
+    public set is_async(async: boolean) {
+        this._async = async;
+    }
 
-	public add_post_param(key: string, value?: string): void
-	{
-		if (!value)
-		{
-			value = undefined;
-		}
-		this._post_params.push(<ApiParameter> {[key]: value})
-	}
+    public add_get_param(key: string, value?: string): void {
+        if (!value) {
+            value = undefined;
+        }
+        this._get_params.push(<ApiParameter>{[key]: value})
+    }
 
-	public async send(): Promise<void>
-	{
-		const httpResponse = new XMLHttpRequest();    //Make a new object to accept return from server
-		const url_base = this._pi_hole_url;
-		const api_key = this._api_key;
+    public add_post_param(key: string, value?: string): void {
+        if (!value) {
+            value = undefined;
+        }
+        this._post_params.push(<ApiParameter>{[key]: value})
+    }
 
-		if (!url_base)
-		{
-			console.log("Settings haven't been set. Cancled API Request")
-			return;
-		}
+    public async send(): Promise<void> {
+        const httpResponse = new XMLHttpRequest();    //Make a new object to accept return from server
+        const url_base = this._pi_hole_url;
+        const api_key = this._api_key;
 
-		let url: string = url_base + "/api.php?auth=" + api_key;
+        if (!url_base) {
+            console.log("Settings haven't been set. Cancled API Request")
+            return;
+        }
 
-		for (let i = 0; i < this._get_params.length; i++)
-		{
-			const params: ApiParameter = this._get_params[i];
-			if (params)
-			{
-				const key: string = Object.keys(params)[0];
-				const value = Object.keys(params).map(value_key => params[value_key])[0];
+        let url: string = url_base + "/api.php?auth=" + api_key;
+
+        for (let i = 0; i < this._get_params.length; i++) {
+            const params: ApiParameter = this._get_params[i];
+            if (params) {
+                const key: string = Object.keys(params)[0];
+                const value = Object.keys(params).map(value_key => params[value_key])[0];
 
 
-				url += "&" + key + (value ? '=' + value : '');
-			}
-		}
+                url += "&" + key + (value ? '=' + value : '');
+            }
+        }
 
-		if (this.onreadystatechange)
-		{
-			httpResponse.onreadystatechange = this.onreadystatechange;
-		}
+        if (this.onreadystatechange) {
+            httpResponse.onreadystatechange = this.onreadystatechange;
+        }
 
-		httpResponse.onerror = function(this: XMLHttpRequest) {
-			ServiceLocator.getInstance().get_badge_service().set_badge_text(ExtensionBadgeText.error);
-		}
+        httpResponse.onerror = function (this: XMLHttpRequest) {
+            ServiceLocator.getInstance().get_badge_service().set_badge_text(ExtensionBadgeText.error);
+        }
 
-		httpResponse.open(this.method, url, this.is_async);
+        httpResponse.open(this.method, url, this.is_async);
 
-		if (this.method === ApiRequestMethodEnum.POST)
-		{
-			let post_params = '';
-			for (let i = 0; i < this._post_params.length; i++)
-			{
-				const params: ApiParameter = this._post_params[i];
-				if (params)
-				{
-					const key: string = Object.keys(params)[0];
-					const value = Object.keys(params).map(value_key => params[value_key])[0];
-					if (i > 0)
-					{
-						post_params += '&'
-					}
-					post_params += key + (value ? '=' + value : '')
-				}
-			}
-			httpResponse.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-			httpResponse.send(post_params);
-		}
-		else
-		{
-			httpResponse.send();
-		}
-	}
+        if (this.method === ApiRequestMethodEnum.POST) {
+            let post_params = '';
+            for (let i = 0; i < this._post_params.length; i++) {
+                const params: ApiParameter = this._post_params[i];
+                if (params) {
+                    const key: string = Object.keys(params)[0];
+                    const value = Object.keys(params).map(value_key => params[value_key])[0];
+                    if (i > 0) {
+                        post_params += '&'
+                    }
+                    post_params += key + (value ? '=' + value : '')
+                }
+            }
+            httpResponse.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            httpResponse.send(post_params);
+        } else {
+            httpResponse.send();
+        }
+    }
 }
 
-interface ApiParameter
-{
-	[key: string]: string | null;
+interface ApiParameter {
+    [key: string]: string | null;
 }
 
-export enum ApiRequestMethodEnum
-{
-	GET = 'GET',
-	POST = 'POST'
+export enum ApiRequestMethodEnum {
+    GET = 'GET',
+    POST = 'POST'
 }

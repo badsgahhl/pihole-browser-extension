@@ -1,25 +1,25 @@
 <template>
-    <b-card class="shadow" no-body>
-        <b-card-header class="h6">📝 {{translate(i18nOptionsKeys.options_about_licences)}}</b-card-header>
-        <b-card-body>
-            <details>
-                <summary>Vue</summary>
-                <pre>{{vue_licence}}</pre>
-            </details>
-            <details>
-                <summary>Bootstrap</summary>
-                <pre>{{bootstrap_licence}}</pre>
-            </details>
-            <details>
-                <summary>Bootstrap Icons</summary>
-                <pre>{{bootstrap_icons_licence}}</pre>
-            </details>
-            <details>
-                <summary>Vue Bootstrap</summary>
-                <pre>{{vue_bootstrap_licence}}</pre>
-            </details>
-        </b-card-body>
-    </b-card>
+  <b-card class="shadow" no-body>
+    <b-card-header class="h6">📝 {{ translate(i18nOptionsKeys.options_about_licences) }}</b-card-header>
+    <b-card-body>
+      <details>
+        <summary>Vue</summary>
+        <pre>{{ vue_licence }}</pre>
+      </details>
+      <details>
+        <summary>Bootstrap</summary>
+        <pre>{{ bootstrap_licence }}</pre>
+      </details>
+      <details>
+        <summary>Bootstrap Icons</summary>
+        <pre>{{ bootstrap_icons_licence }}</pre>
+      </details>
+      <details>
+        <summary>Vue Bootstrap</summary>
+        <pre>{{ vue_bootstrap_licence }}</pre>
+      </details>
+    </b-card-body>
+  </b-card>
 </template>
 
 <script lang="ts">
@@ -27,11 +27,9 @@ import {Component} from "vue-property-decorator";
 import BaseComponent from "../../../general/BaseComponent.vue";
 
 @Component
-export default class OptionAboutLicenses extends BaseComponent
-{
-   private get vue_licence(): string
-   {
-      return `                      The MIT License (MIT)
+export default class OptionAboutLicenses extends BaseComponent {
+  private get vue_licence(): string {
+    return `                      The MIT License (MIT)
 
                       Copyright (c) 2013-present, Yuxi (Evan) You
 
@@ -53,11 +51,10 @@ export default class OptionAboutLicenses extends BaseComponent
                       OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
                       THE SOFTWARE.`
 
-		}
+  }
 
-		private get bootstrap_icons_licence(): string
-		{
-			return `                      The MIT License (MIT)
+  private get bootstrap_icons_licence(): string {
+    return `                      The MIT License (MIT)
 
                       Copyright (c) 2019 The Bootstrap Authors
 
@@ -78,11 +75,10 @@ export default class OptionAboutLicenses extends BaseComponent
                       LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
                       OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
                       THE SOFTWARE.`
-		}
+  }
 
-		private get vue_bootstrap_licence(): string
-		{
-			return `                      The MIT License (MIT)
+  private get vue_bootstrap_licence(): string {
+    return `                      The MIT License (MIT)
 
                       Copyright (c) 2016-2020 - BootstrapVue
 
@@ -103,11 +99,10 @@ export default class OptionAboutLicenses extends BaseComponent
                       LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
                       OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
                       SOFTWARE.`
-		}
+  }
 
-		private get bootstrap_licence(): string
-		{
-			return `                      The MIT License (MIT)
+  private get bootstrap_licence(): string {
+    return `                      The MIT License (MIT)
 
                       Copyright (c) 2011-2018 Twitter, Inc.
                       Copyright (c) 2011-2018 The Bootstrap Authors
@@ -129,7 +124,7 @@ export default class OptionAboutLicenses extends BaseComponent
                       LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
                       OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
                       THE SOFTWARE.`;
-		}
-	}
+  }
+}
 </script>
 

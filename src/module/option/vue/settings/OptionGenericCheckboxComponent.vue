@@ -1,9 +1,9 @@
 <template>
-   <b-form-group>
-      <b-form-checkbox switch v-model:checked="is_checked">
-         {{ translate(label_text_key) }}
-      </b-form-checkbox>
-   </b-form-group>
+  <b-form-group>
+    <b-form-checkbox v-model:checked="is_checked" switch>
+      {{ translate(label_text_key) }}
+    </b-form-checkbox>
+  </b-form-group>
 
 </template>
 
@@ -16,50 +16,42 @@ import BaseComponent from "../../../general/BaseComponent.vue";
 /**
  * Generic Component for a checkbox option
  **/
-export default class OptionGenericCheckboxComponent extends BaseComponent
-{
-   // Label Text key
-   @Prop()
-   label_text_key!: i18nOptionsKeys;
+export default class OptionGenericCheckboxComponent extends BaseComponent {
+  // Label Text key
+  @Prop()
+  label_text_key!: i18nOptionsKeys;
 
-   // Getter function to get the data from the storage
-   @Prop()
-   getter_function!: () => Promise<boolean>;
+  // Getter function to get the data from the storage
+  @Prop()
+  getter_function!: () => Promise<boolean>;
 
-   // Setter function to save the data to the storage
-   @Prop()
-   setter_function!: (value: boolean) => void;
+  // Setter function to save the data to the storage
+  @Prop()
+  setter_function!: (value: boolean) => void;
+  // Data Prop: is the checkbox checked?
+  private is_checked: boolean = false;
 
-   @Watch('is_checked')
-   private on_is_checked_changed(): void
-   {
-      this.setter_function(this.is_checked);
-   }
+  mounted() {
+    this.update_status();
+  }
 
-   // Data Prop: is the checkbox checked?
-   private is_checked: boolean = false;
+  @Watch('is_checked')
+  private on_is_checked_changed(): void {
+    this.setter_function(this.is_checked);
+  }
 
-   mounted()
-   {
-      this.update_status();
-   }
-
-   /**
-    * Function to update the current status of the checkbox
-    */
-   private update_status(): void
-   {
-      this.getter_function().then(value => {
-         if (typeof value === "undefined")
-         {
-            this.is_checked = false;
-         }
-         else
-         {
-            this.is_checked = value;
-         }
-      });
-   }
+  /**
+   * Function to update the current status of the checkbox
+   */
+  private update_status(): void {
+    this.getter_function().then(value => {
+      if (typeof value === "undefined") {
+        this.is_checked = false;
+      } else {
+        this.is_checked = value;
+      }
+    });
+  }
 
 }
 </script>
