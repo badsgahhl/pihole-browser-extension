@@ -11,10 +11,19 @@
         </b-form-invalid-feedback>
       </b-form-group>
       <b-form-group :label="translate(i18nOptionsKeys.options_api_key)">
-        <b-form-input v-model="pi_hole_setting.api_key"
-                      :state="is_invalid_api_key(pi_hole_setting.api_key)"
-        ></b-form-input>
-        <b-form-invalid-feedback>{{ translate(i18nOptionsKeys.options_api_key_invalid_warning) }}
+        <b-input-group>
+          <b-form-input :type="password_input_type" v-model="pi_hole_setting.api_key"
+                        :state="is_invalid_api_key(pi_hole_setting.api_key)"
+          ></b-form-input>
+          <b-input-group-append class="clickable">
+            <b-input-group-text @click="switch_api_key_input_type">
+              <b-icon-eye v-if="password_input_type === 'password'"></b-icon-eye>
+              <b-icon-eye-slash v-else></b-icon-eye-slash>
+            </b-input-group-text>
+          </b-input-group-append>
+        </b-input-group>
+        <b-form-invalid-feedback :state="is_invalid_api_key(pi_hole_setting.api_key)">
+          {{ translate(i18nOptionsKeys.options_api_key_invalid_warning) }}
         </b-form-invalid-feedback>
       </b-form-group>
 
@@ -53,9 +62,16 @@ export default class OptionTabComponent extends BaseComponent {
   private tabs: Array<PiHoleSettingsStorage> = [this.default_empty_option_tab()];
   // Data prop of the currents tab index
   private current_tab_index = 0;
+  // Type of the API Key input field
+  private password_input_type: "password" | "text" = "password";
 
   mounted() {
     this.update_tabs_settings();
+  }
+
+  @Watch('current_tab_index', {deep: true})
+  private tab_switched(): void {
+    this.password_input_type = "password";
   }
 
   @Watch('tabs', {deep: true})
@@ -100,6 +116,16 @@ export default class OptionTabComponent extends BaseComponent {
     }
   }
 
+  private switch_api_key_input_type() {
+    const current_state = this.password_input_type;
+
+    if (current_state === "password") {
+      this.password_input_type = "text";
+    } else {
+      this.password_input_type = "password";
+    }
+  }
+
   /**
    * Adds a new tab
    */
@@ -136,6 +162,10 @@ export default class OptionTabComponent extends BaseComponent {
 
 .no-white-hover-border:focus {
   border-color: rgba(255, 255, 255, 0);
+}
+
+.clickable {
+  cursor: pointer;
 }
 
 </style>

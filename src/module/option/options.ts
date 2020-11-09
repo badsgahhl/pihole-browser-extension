@@ -1,6 +1,6 @@
 import "../general/general.scss";
 import Vue from "vue";
-import {BIconClipboard, BIconPlusCircle, BIconXCircle, BootstrapVue} from "bootstrap-vue";
+import {BIconClipboard, BIconEye, BIconEyeSlash, BIconPlusCircle, BIconXCircle, BootstrapVue} from "bootstrap-vue";
 import OptionComponent from "./vue/OptionComponent.vue";
 
 /**
@@ -16,6 +16,8 @@ function init(): void {
     Vue.component('BIconPlusCircle', BIconPlusCircle);
     Vue.component('BIconXCircle', BIconXCircle);
     Vue.component('BIconClipboard', BIconClipboard);
+    Vue.component('BIconEye', BIconEye);
+    Vue.component('BIconEyeSlash', BIconEyeSlash);
     new Vue(option_vue_component);
 }
 
