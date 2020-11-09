@@ -33,10 +33,5 @@
 		"activeTab",
 		"webRequest",
 		"webRequestBlocking"
-	],
-	"browser_specific_settings": {
-		"gecko": {
-			"id": "pihole-extension@pascal.glaser.casa"
-		}
-	}
+	]
 }
