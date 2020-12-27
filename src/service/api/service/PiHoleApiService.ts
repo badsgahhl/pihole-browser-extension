@@ -139,11 +139,10 @@ export class PiHoleApiService {
      * @param pi_hole_settings
      * @param resolve
      */
-    private pi_hole_version_promise_function(pi_hole_settings: PiHoleSettingsStorage, resolve: (value?: PiHoleVersions) => void): void {
+    private pi_hole_version_promise_function(pi_hole_settings: PiHoleSettingsStorage, resolve: (value: PiHoleVersions) => void): void {
         const pi_uri_base = pi_hole_settings.pi_uri_base;
         const api_key = pi_hole_settings.api_key;
         if (typeof pi_uri_base === "undefined" || typeof api_key === "undefined") {
-            resolve(undefined);
             return;
         }
 

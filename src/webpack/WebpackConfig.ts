@@ -1,9 +1,9 @@
 import * as webpack from 'webpack';
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import ZipPlugin from "zip-webpack-plugin";
-import {VueLoaderPlugin} from "vue-loader";
 import * as path from "path";
 import CopyWebpackPlugin from "copy-webpack-plugin";
+import VueLoaderPlugin from 'vue-loader/lib/plugin';
 
 export default class WebpackConfig {
     private readonly browser: string;
@@ -101,7 +101,7 @@ export default class WebpackConfig {
                     filename: "background.html",
                     chunks: ["background"]
                 }),
-                new VueLoaderPlugin(),
+                new VueLoaderPlugin()
             ]
         };
 

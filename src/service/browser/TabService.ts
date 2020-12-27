@@ -11,7 +11,7 @@ export class TabService {
         const current_tab_url_promise: Promise<string> = new Promise((resolve) => {
             chrome.tabs.query({'active': true, 'lastFocusedWindow': true, 'currentWindow': true}, function (tabs) {
                 if (tabs[0]) {
-                    const tab_url = tabs[0].url;
+                    const tab_url = tabs[0].url ?? '';
                     resolve(tab_url);
                 }
             });
