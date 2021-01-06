@@ -27,6 +27,9 @@
 import {Component, Prop} from "vue-property-decorator";
 import {ApiListMode} from "../../../service/api/models/pihole/PiHoleListStatus";
 import BaseComponent from "../../general/BaseComponent.vue";
+import {StorageService} from "../../../service/browser/StorageService";
+import {TabService} from "../../../service/browser/TabService";
+import {LegacyPiHoleApiService} from "../../../service/api/service/LegacyPiHoleApiService";
 import WebRequestHeadersDetails = chrome.webRequest.WebRequestHeadersDetails;
 import BlockingResponse = chrome.webRequest.BlockingResponse;
 
@@ -67,7 +70,7 @@ export default class PopupListCardComponent extends BaseComponent {
    * @param mode
    */
   private async list_domain(mode: ApiListMode): Promise<void> {
-    let pi_hole_urls = (await this.get_storage_service().get_pi_hole_settings_array());
+    let pi_hole_urls = (await StorageService.getPiHoleSettingsArray());
     let pi_hole_urls_array = [];
     if (typeof pi_hole_urls !== "undefined") {
       for (const pi_hole_url of pi_hole_urls) {
@@ -111,9 +114,9 @@ export default class PopupListCardComponent extends BaseComponent {
 
     // We remove the domain from the oposite list
 
-    await this.get_api_service().sub_domain_from_list(domain, mode === ApiListMode.whitelist ? ApiListMode.blacklist : ApiListMode.whitelist);
+    await LegacyPiHoleApiService.subDomainFromList(domain, mode === ApiListMode.whitelist ? ApiListMode.blacklist : ApiListMode.whitelist);
 
-    const pi_hole_list_results = (await this.get_api_service().list_domain(domain, mode));
+    const pi_hole_list_results = (await LegacyPiHoleApiService.listDomain(domain, mode));
 
     if (typeof browser === 'undefined') {
       chrome.webRequest.onBeforeSendHeaders.removeListener(this.get_web_request_origin_modifier_callback);
@@ -143,10 +146,10 @@ export default class PopupListCardComponent extends BaseComponent {
         // After the last one we enable the button again and remove the spinning circle
         if (index + 1 === pi_hole_list_results.length) {
           setTimeout(async () => {
-            const reload_after_white_black_list = (await this.get_storage_service().get_reload_after_white_list());
+            const reload_after_white_black_list = (await StorageService.getReloadAfterWhitelist());
 
             if (typeof reload_after_white_black_list !== "undefined" && reload_after_white_black_list && mode === ApiListMode.whitelist && pi_hole_result.success && pi_hole_result.message.includes('Added')) {
-              this.get_tab_service().reload_current_tab(250);
+              TabService.reloadCurrentTab(250);
             }
 
             this.buttons_disabled = false;

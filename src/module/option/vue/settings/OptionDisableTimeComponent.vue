@@ -12,7 +12,7 @@
 <script lang="ts">
 
 import {Component, Watch} from "vue-property-decorator";
-import {PiHoleSettingsDefaults} from "../../../../service/browser/StorageService";
+import {PiHoleSettingsDefaults, StorageService} from "../../../../service/browser/StorageService";
 import BaseComponent from "../../../general/BaseComponent.vue";
 
 @Component
@@ -30,7 +30,7 @@ export default class OptionDisableTimeComponent extends BaseComponent {
   @Watch('disable_time')
   private on_disable_time_changes(): void {
     if (this.disable_time >= 10) {
-      this.get_storage_service().save_default_disable_time(this.disable_time);
+      StorageService.saveDefaultDisableTime(this.disable_time);
     }
   }
 
@@ -38,7 +38,7 @@ export default class OptionDisableTimeComponent extends BaseComponent {
    * Function to update the disable time
    */
   private update_disable_time(): void {
-    this.get_storage_service().get_default_disable_time().then(time => {
+    StorageService.getDefaultDisableTime().then(time => {
       if (typeof time !== "undefined") {
         this.disable_time = time;
       }

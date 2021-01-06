@@ -8,16 +8,16 @@ import VueLoaderPlugin from 'vue-loader/lib/plugin';
 export default class WebpackConfig {
     private readonly browser: string;
 
-    private readonly is_production: boolean;
+    private readonly isProduction: boolean;
 
     public constructor(browser: string, is_production: boolean) {
         this.browser = browser;
-        this.is_production = is_production;
+        this.isProduction = is_production;
     }
 
 
-    public get_config(): webpack.Configuration {
-        const production = this.is_production;
+    public getConfig(): webpack.Configuration {
+        const production = this.isProduction;
         const browser = this.browser;
 
         let config: webpack.Configuration = {

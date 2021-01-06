@@ -14,6 +14,8 @@
 import {Component, Prop} from "vue-property-decorator";
 import {PiHoleVersions} from "../../../service/api/models/pihole/PiHoleVersions";
 import BaseComponent from "../../general/BaseComponent.vue";
+import {StorageService} from "../../../service/browser/StorageService";
+import {LegacyPiHoleApiService} from "../../../service/api/service/LegacyPiHoleApiService";
 
 @Component
 export default class PopupUpdateAlertComponent extends BaseComponent {
@@ -42,7 +44,7 @@ export default class PopupUpdateAlertComponent extends BaseComponent {
    * Updates the value from the storage
    */
   private update_is_notification_disabled(): void {
-    this.get_storage_service().get_disable_update_notification().then((state: boolean | undefined) => {
+    StorageService.getDisableUpdateNotification().then((state: boolean | undefined) => {
       if (typeof state !== "undefined") {
         this.notification_is_disabled = state;
       }
@@ -73,7 +75,7 @@ export default class PopupUpdateAlertComponent extends BaseComponent {
         this.amount_of_piholes = pi_hole_versions_array.length;
       }
     })
-    this.get_api_service().get_pi_hole_version().then(get_pi_hole_version_callback);
+    LegacyPiHoleApiService.getPiHoleVersions().then(get_pi_hole_version_callback);
 
   }
 }

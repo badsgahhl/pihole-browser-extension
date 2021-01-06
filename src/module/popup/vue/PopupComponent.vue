@@ -15,9 +15,11 @@
 import {Component} from 'vue-property-decorator';
 import PopupStatusCardComponent from "./PopupStatusCardComponent.vue";
 import PopupListCardComponent from "./PopupListCardComponent.vue";
-import {ExtensionBadgeText} from "../../../service/browser/BadgeService";
+import {BadgeService, ExtensionBadgeTextEnum} from "../../../service/browser/BadgeService";
 import PopupUpdateAlertComponent from "./PopupUpdateAlertComponent.vue";
 import BaseComponent from "../../general/BaseComponent.vue";
+import {StorageService} from "../../../service/browser/StorageService";
+import {TabService} from "../../../service/browser/TabService";
 
 @Component({
   components: {PopupUpdateAlertComponent, PopupListCardComponent, PopupStatusCardComponent}
@@ -54,8 +56,8 @@ export default class PopupComponent extends BaseComponent {
    * Gets the prop by the badge status
    */
   private update_is_active_by_badge(): void {
-    this.get_badge_service().get_badge_text().then((text: string) => {
-      this.is_active_by_badge = text === ExtensionBadgeText.enabled;
+    BadgeService.getBadgeText().then((text: string) => {
+      this.is_active_by_badge = text === ExtensionBadgeTextEnum.enabled;
       this.is_active_by_badge_loaded = true;
     })
   }
@@ -64,7 +66,7 @@ export default class PopupComponent extends BaseComponent {
    * Gets the current url and saves it to the prop
    */
   private update_current_url(): void {
-    this.get_tab_service().get_current_tab_url_cleaned().then((url: string) => {
+    TabService.getCurrentTabUrlCleaned().then((url: string) => {
       if (url.length > 0) {
         this.current_url = url;
       }
@@ -75,7 +77,7 @@ export default class PopupComponent extends BaseComponent {
    * Updates the prop by the storage
    */
   private update_list_feature_disabled(): void {
-    this.get_storage_service().get_disable_list_feature().then((state: boolean | undefined) => {
+    StorageService.getDisableListFeature().then((state: boolean | undefined) => {
       if (typeof state !== "undefined") {
         this.list_feature_disabled = state;
       }

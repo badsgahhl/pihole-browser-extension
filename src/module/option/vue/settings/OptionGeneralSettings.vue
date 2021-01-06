@@ -19,11 +19,12 @@
 
 <script lang="ts">
 import {Component} from "vue-property-decorator";
-import {i18nOptionsKeys} from "../../../../service/browser/i18nService";
+import {i18nOptionsKeys} from "../../../../service/browser/I18nService";
 import OptionDisableTimeComponent from "./OptionDisableTimeComponent.vue";
 import OptionTabComponent from "./OptionTabComponent.vue";
 import OptionGenericCheckboxComponent from "./OptionGenericCheckboxComponent.vue";
 import BaseComponent from "../../../general/BaseComponent.vue";
+import {StorageService} from "../../../../service/browser/StorageService";
 
 @Component({
   components: {
@@ -37,23 +38,23 @@ export default class OptionGeneralSettings extends BaseComponent {
   private checkbox_options: GenericCheckboxComponent[] = [
     {
       label_text_key: i18nOptionsKeys.options_reload_after_disable,
-      getter_function: () => this.get_storage_service().get_reload_after_disable(),
-      setter_function: (value: boolean) => this.get_storage_service().save_reload_after_disable(value)
+      getter_function: () => StorageService.getReloadAfterDisable(),
+      setter_function: (value: boolean) => StorageService.saveReloadAfterDisable(value)
     },
     {
       label_text_key: i18nOptionsKeys.options_reload_after_white_list,
-      getter_function: () => this.get_storage_service().get_reload_after_white_list(),
-      setter_function: (value: boolean) => this.get_storage_service().save_reload_after_white_list(value)
+      getter_function: () => StorageService.getReloadAfterWhitelist(),
+      setter_function: (value: boolean) => StorageService.saveReloadAfterWhitelist(value)
     },
     {
       label_text_key: i18nOptionsKeys.option_disable_feature,
-      getter_function: () => this.get_storage_service().get_disable_list_feature(),
-      setter_function: (value: boolean) => this.get_storage_service().save_disable_list_feature(value)
+      getter_function: () => StorageService.getDisableListFeature(),
+      setter_function: (value: boolean) => StorageService.saveDisableListFeature(value)
     },
     {
       label_text_key: i18nOptionsKeys.option_disable_update_notification,
-      getter_function: () => this.get_storage_service().get_disable_update_notification(),
-      setter_function: (value: boolean) => this.get_storage_service().save_disable_update_notification(value)
+      getter_function: () => StorageService.getDisableUpdateNotification(),
+      setter_function: (value: boolean) => StorageService.saveDisableUpdateNotification(value)
     }
   ];
 }

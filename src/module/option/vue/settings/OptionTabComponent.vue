@@ -50,7 +50,7 @@
 
 <script lang="ts">
 import {Component, Watch} from "vue-property-decorator";
-import {PiHoleSettingsStorage} from "../../../../service/browser/StorageService";
+import {PiHoleSettingsStorage, StorageService} from "../../../../service/browser/StorageService";
 import BaseComponent from "../../../general/BaseComponent.vue";
 
 @Component
@@ -88,7 +88,7 @@ export default class OptionTabComponent extends BaseComponent {
         pi_hole_setting.api_key = '';
       }
     }
-    this.get_storage_service().save_pi_hole_settings_array(this.tabs);
+    StorageService.savePiHoleSettingsArray(this.tabs);
   }
 
   /**
@@ -145,7 +145,7 @@ export default class OptionTabComponent extends BaseComponent {
    * Updates the tabs with the storage settings
    */
   private update_tabs_settings(): void {
-    this.get_storage_service().get_pi_hole_settings_array().then(results => {
+    StorageService.getPiHoleSettingsArray().then(results => {
       if (typeof results !== "undefined" && results.length > 0) {
         this.tabs = results;
       }

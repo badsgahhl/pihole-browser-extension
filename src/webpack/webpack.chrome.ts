@@ -3,10 +3,10 @@ import WebpackConfig from "./WebpackConfig";
 const BROWSER = 'chrome';
 
 module.exports = (env: string, argv: any) => {
-	let is_production = false;
+	let isProduction = false;
 	if (argv.mode === 'production') {
-		is_production = true;
+		isProduction = true;
 	}
 
-	return new WebpackConfig(BROWSER, is_production).get_config();
+	return new WebpackConfig(BROWSER, isProduction).getConfig();
 }

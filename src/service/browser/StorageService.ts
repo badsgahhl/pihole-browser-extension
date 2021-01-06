@@ -6,7 +6,7 @@ export class StorageService {
      * Function to save a pi_hole settings array
      * @param settings
      */
-    public save_pi_hole_settings_array(settings: PiHoleSettingsStorage[]): void {
+    public static savePiHoleSettingsArray(settings: PiHoleSettingsStorage[]): void {
         if (settings.length > 0) {
             let filtered_settings: PiHoleSettingsStorage[] = settings.filter(value => value.pi_uri_base);
 
@@ -39,7 +39,7 @@ export class StorageService {
      * Function to disable the default disable time
      * @param time
      */
-    public save_default_disable_time(time: number): void {
+    public static saveDefaultDisableTime(time: number): void {
         time = Number(time);
         if (time < 1) {
             return;
@@ -50,61 +50,61 @@ export class StorageService {
         chrome.storage.local.set(storage);
     }
 
-    public get_default_disable_time(): Promise<number | undefined> {
-        return this.get_storage_value<number>(ExtensionStorageEnum.default_disable_time);
+    public static getDefaultDisableTime(): Promise<number | undefined> {
+        return this.getStorageValue<number>(ExtensionStorageEnum.default_disable_time);
     }
 
     /**
      * Function to set the state for reload_after_enable_disable
      * @param state
      */
-    public save_reload_after_disable(state: boolean): void {
+    public static saveReloadAfterDisable(state: boolean): void {
         const storage: ExtensionStorage = {
             reload_after_disable: state
         }
         chrome.storage.local.set(storage);
     }
 
-    public get_reload_after_disable(): Promise<boolean | undefined> {
-        return this.get_storage_value<boolean>(ExtensionStorageEnum.reload_after_disable);
+    public static getReloadAfterDisable(): Promise<boolean | undefined> {
+        return this.getStorageValue<boolean>(ExtensionStorageEnum.reload_after_disable);
     }
 
     /**
      * Function to set the state for reload_after_white_black_list
      * @param state
      */
-    public save_reload_after_white_list(state: boolean): void {
+    public static saveReloadAfterWhitelist(state: boolean): void {
         const storage: ExtensionStorage = {
             reload_after_white_list: state
         }
         chrome.storage.local.set(storage);
     }
 
-    public get_reload_after_white_list(): Promise<boolean | undefined> {
-        return this.get_storage_value<boolean>(ExtensionStorageEnum.reload_after_white_list);
+    public static getReloadAfterWhitelist(): Promise<boolean | undefined> {
+        return this.getStorageValue<boolean>(ExtensionStorageEnum.reload_after_white_list);
     }
 
 
-    public get_pi_hole_settings_array(): Promise<PiHoleSettingsStorage[] | undefined> {
-        return this.get_storage_value<PiHoleSettingsStorage[]>(ExtensionStorageEnum.pi_hole_settings);
+    public static getPiHoleSettingsArray(): Promise<PiHoleSettingsStorage[] | undefined> {
+        return this.getStorageValue<PiHoleSettingsStorage[]>(ExtensionStorageEnum.pi_hole_settings);
     }
 
-    public get_disable_list_feature(): Promise<boolean | undefined> {
-        return this.get_storage_value<boolean>(ExtensionStorageEnum.disable_list_feature)
+    public static getDisableListFeature(): Promise<boolean | undefined> {
+        return this.getStorageValue<boolean>(ExtensionStorageEnum.disable_list_feature)
     }
 
-    public save_disable_list_feature(state: boolean): void {
+    public static saveDisableListFeature(state: boolean): void {
         const storage: ExtensionStorage = {
             disable_list_feature: state
         }
         chrome.storage.local.set(storage);
     }
 
-    public get_disable_update_notification(): Promise<boolean | undefined> {
-        return this.get_storage_value<boolean>(ExtensionStorageEnum.disable_update_notification)
+    public static getDisableUpdateNotification(): Promise<boolean | undefined> {
+        return this.getStorageValue<boolean>(ExtensionStorageEnum.disable_update_notification)
     }
 
-    public save_disable_update_notification(state: boolean): void {
+    public static saveDisableUpdateNotification(state: boolean): void {
         const storage: ExtensionStorage = {
             disable_update_notification: state
         }
@@ -115,7 +115,7 @@ export class StorageService {
      * Base Function to get data from the storage
      * @param key
      */
-    private get_storage_value<T>(key: ExtensionStorageEnum): Promise<T | undefined> {
+    private static getStorageValue<T>(key: ExtensionStorageEnum): Promise<T | undefined> {
         return new Promise<T | undefined>((resolve) => {
             chrome.storage.local.get(key, function (obj) {
                 resolve(obj[key]);

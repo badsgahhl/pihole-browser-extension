@@ -7,15 +7,14 @@ export class BadgeService {
 
     /**
      * Sets the badge text.
-     * @param text
      */
-    public set_badge_text(text: ExtensionBadgeText): void {
+    public static setBadgeText(text: ExtensionBadgeTextEnum): void {
         // Firefox needs white text color.
         if (typeof browser !== 'undefined') {
             browser.browserAction.setBadgeTextColor({color: "white"}).then();
         }
 
-        chrome.browserAction.setBadgeBackgroundColor({color: this.get_color_for_badge_text(text)});
+        chrome.browserAction.setBadgeBackgroundColor({color: this.getColorForBadgeTextEnum(text)});
 
         chrome.browserAction.setBadgeText({text: text});
     }
@@ -23,10 +22,10 @@ export class BadgeService {
     /**
      * Returns the badge text as enum value.
      */
-    public get_badge_text(): Promise<ExtensionBadgeText> {
+    public static getBadgeText(): Promise<ExtensionBadgeTextEnum> {
         return new Promise((resolve) => {
             chrome.browserAction.getBadgeText({}, (result: string) => {
-                resolve(this.convert_string_to_badge_text(result));
+                resolve(this.convertStringToBadgeTextEnum(result));
             })
         });
 
@@ -35,15 +34,12 @@ export class BadgeService {
     /**
      * Compares the badge text with the PiHoleApiStatus
      * Returns false if they are not equal
-     *
-     * @param badge_text
-     * @param api_status
      */
-    public compare_badge_to_api_status(badge_text: ExtensionBadgeText, api_status: PiHoleApiStatusEnum): boolean {
+    public static compareBadgeTextToApiStatusEnum(badge_text: ExtensionBadgeTextEnum, api_status: PiHoleApiStatusEnum): boolean {
         switch (badge_text) {
-            case ExtensionBadgeText.disabled:
+            case ExtensionBadgeTextEnum.disabled:
                 return api_status === PiHoleApiStatusEnum.disabled;
-            case ExtensionBadgeText.enabled:
+            case ExtensionBadgeTextEnum.enabled:
                 return api_status === PiHoleApiStatusEnum.enabled;
             default:
                 return false;
@@ -52,24 +48,23 @@ export class BadgeService {
 
     /**
      * Converts an input string to the correct ExtensionBadgeText Enum
-     * @param input
      */
-    private convert_string_to_badge_text(input: string): ExtensionBadgeText {
+    private static convertStringToBadgeTextEnum(input: string): ExtensionBadgeTextEnum {
         switch (input) {
-            case ExtensionBadgeText.disabled:
-                return ExtensionBadgeText.disabled;
-            case ExtensionBadgeText.enabled:
-                return ExtensionBadgeText.enabled
+            case ExtensionBadgeTextEnum.disabled:
+                return ExtensionBadgeTextEnum.disabled;
+            case ExtensionBadgeTextEnum.enabled:
+                return ExtensionBadgeTextEnum.enabled
             default:
-                return ExtensionBadgeText.error;
+                return ExtensionBadgeTextEnum.error;
         }
     }
 
-    private get_color_for_badge_text(input: ExtensionBadgeText): string {
+    private static getColorForBadgeTextEnum(input: ExtensionBadgeTextEnum): string {
         switch (input) {
-            case ExtensionBadgeText.disabled:
+            case ExtensionBadgeTextEnum.disabled:
                 return 'gray';
-            case ExtensionBadgeText.enabled:
+            case ExtensionBadgeTextEnum.enabled:
                 return '#1ea23d';
             default:
                 return 'red'
@@ -77,7 +72,7 @@ export class BadgeService {
     }
 }
 
-export enum ExtensionBadgeText {
+export enum ExtensionBadgeTextEnum {
     enabled = 'On',
     disabled = 'Off',
     error = 'Err'

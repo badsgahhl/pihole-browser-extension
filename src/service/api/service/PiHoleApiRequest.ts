@@ -1,7 +1,7 @@
-import {ExtensionBadgeText} from "../../browser/BadgeService";
-import ServiceLocator from "../../ServiceLocator";
+import {BadgeService, ExtensionBadgeTextEnum} from "../../browser/BadgeService";
 
 /**
+ * @deprecated Use Api-Access via axios
  * Class to access the pihole api with get,post params etc.
  */
 export class PiHoleApiRequest {
@@ -86,7 +86,7 @@ export class PiHoleApiRequest {
         }
 
         httpResponse.onerror = function (this: XMLHttpRequest) {
-            ServiceLocator.getInstance().get_badge_service().set_badge_text(ExtensionBadgeText.error);
+            BadgeService.setBadgeText(ExtensionBadgeTextEnum.error);
         }
 
         httpResponse.open(this.method, url, this.is_async);

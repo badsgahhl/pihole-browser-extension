@@ -1,5 +1,4 @@
 import {PiHoleSettingsStorage, StorageService} from "./StorageService";
-import ServiceLocator from "../ServiceLocator";
 import Tab = chrome.tabs.Tab;
 
 export class TabService {
@@ -7,7 +6,7 @@ export class TabService {
     /**
      * Returns the current tab url. Cleaned only the real domain without the parameters etc.
      */
-    public async get_current_tab_url_cleaned(): Promise<string> {
+    public static async getCurrentTabUrlCleaned(): Promise<string> {
         const current_tab_url_promise: Promise<string> = new Promise((resolve) => {
             chrome.tabs.query({'active': true, 'lastFocusedWindow': true, 'currentWindow': true}, function (tabs) {
                 if (tabs[0]) {
@@ -27,7 +26,7 @@ export class TabService {
             'pi.hole'
         ];
 
-        let pi_hole_urls = (await this.get_storage_service().get_pi_hole_settings_array());
+        let pi_hole_urls = (await StorageService.getPiHoleSettingsArray());
         let pi_hole_urls_array: Array<string> = [];
         if (typeof pi_hole_urls !== "undefined") {
             pi_hole_urls.forEach(((value: PiHoleSettingsStorage) => {
@@ -56,7 +55,7 @@ export class TabService {
      * Function to reload the current tab
      * @param delay in ms
      */
-    public reload_current_tab(delay: number = 0): void {
+    public static reloadCurrentTab(delay: number = 0): void {
         const query_info = {
             'active': true,
             'lastFocusedWindow': true,
@@ -65,7 +64,7 @@ export class TabService {
         const query_function = (tabs: Tab[]) => {
 
             if (tabs[0]) {
-                this.get_current_tab_url_cleaned().then((url) => {
+                this.getCurrentTabUrlCleaned().then((url) => {
                     if (url && tabs[0].id) {
                         chrome.tabs.reload(tabs[0].id);
                     }
@@ -79,9 +78,5 @@ export class TabService {
         } else {
             tabs_function();
         }
-    }
-
-    private get_storage_service(): StorageService {
-        return ServiceLocator.getInstance().get_storage_service();
     }
 }

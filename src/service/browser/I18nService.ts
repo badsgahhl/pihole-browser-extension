@@ -1,10 +1,8 @@
-export class i18nService {
+export class I18nService {
     /**
      * Wrapper Function for the chrome.i18n.getMessage Function
-     * @param key
-     * @param substitutions
      */
-    public translate(key: string, substitutions?: any): string {
+    public static translate(key: string, substitutions?: any): string {
         return chrome.i18n.getMessage(key, substitutions);
     }
 }
