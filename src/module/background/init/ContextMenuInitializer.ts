@@ -52,6 +52,10 @@ export default class ContextMenuInitializer implements Initializer {
                 }
             },
             {
+                type: "separator",
+                contexts: ["page"]
+            },
+            {
                 title: I18nService.translate(i18nContextMenuKeys.blacklist_current_domain),
                 contexts: ["page"],
                 onclick: () => {
@@ -62,6 +66,10 @@ export default class ContextMenuInitializer implements Initializer {
                 contexts: ["page"],
                 onclick: () => {
                 }
+            },
+            {
+                type: "separator",
+                contexts: ["page"]
             },
             {
                 title: I18nService.translate(i18nContextMenuKeys.open_settings),
