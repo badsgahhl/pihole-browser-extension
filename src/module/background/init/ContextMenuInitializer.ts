@@ -1,4 +1,4 @@
-import {Initializer} from "./Initializer";
+import {Initializer} from "../../general/Initializer";
 import {BadgeService, ExtensionBadgeTextEnum} from "../../../service/browser/BadgeService";
 import {PiHoleApiStatusEnum} from "../../../service/api/models/pihole/PiHoleApiStatus";
 import {PiHoleSettingsDefaults, StorageService} from "../../../service/browser/StorageService";

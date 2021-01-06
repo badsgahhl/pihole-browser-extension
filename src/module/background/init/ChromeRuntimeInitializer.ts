@@ -1,4 +1,4 @@
-import {Initializer} from "./Initializer";
+import {Initializer} from "../../general/Initializer";
 import {LinkConfig} from "../../../service/browser/I18nService";
 
 export default class ChromeRuntimeInitializer implements Initializer {

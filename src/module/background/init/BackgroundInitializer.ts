@@ -2,7 +2,7 @@ import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../../service/api/models/
 import {BadgeService, ExtensionBadgeTextEnum} from "../../../service/browser/BadgeService";
 import ContextMenuInitializer from "./ContextMenuInitializer";
 import ChromeRuntimeInitializer from "./ChromeRuntimeInitializer";
-import {Initializer} from "./Initializer";
+import {Initializer} from "../../general/Initializer";
 import {LegacyPiHoleApiService} from "../../../service/api/service/LegacyPiHoleApiService";
 
 export default class BackgroundInitializer implements Initializer {
