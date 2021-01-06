@@ -59,47 +59,6 @@ export class LegacyPiHoleApiService {
     }
 
     /**
-     * Changes the status of all pi-hole to the given status
-     */
-    public static async changePiHoleStatus(status: PiHoleApiStatusEnum, time: number, successCallback: (data: PiHoleApiStatus) => void, errorCallback: (data: string) => void): Promise<void> {
-        const pi_hole_storage = (await StorageService.getPiHoleSettingsArray());
-        if (typeof pi_hole_storage === "undefined") {
-            return;
-        }
-
-        for (const pi_hole of pi_hole_storage) {
-            if (typeof pi_hole.pi_uri_base === "undefined" || typeof pi_hole.api_key === "undefined") {
-                return;
-            }
-            const api_request: PiHoleApiRequest = new PiHoleApiRequest(pi_hole.pi_uri_base, pi_hole.api_key);
-
-            api_request.onreadystatechange = function (this: XMLHttpRequest) {
-                if (this.readyState === 4 && this.status === 200) {
-                    // Action to be performed when the document is read;
-                    let data: PiHoleApiStatus;
-                    try {
-                        data = JSON.parse(this.response);   //parse the return JSON
-                    } catch (e) {
-                        errorCallback(ApiJsonErrorMessages.invalid + " - Pihole:" + pi_hole.pi_uri_base);
-                        return;
-                    }
-                    successCallback(data);
-                } else if (this.status !== 200 && this.status !== 0) {
-                    console.error(this.status);
-                    errorCallback('API Call failed. Check the address.' + " - Pihole:" + pi_hole.pi_uri_base);
-                }
-            };
-
-            if (status === PiHoleApiStatusEnum.disabled) {
-                api_request.add_get_param('disable', String(time));
-            } else if (status === PiHoleApiStatusEnum.enabled) {
-                api_request.add_get_param('enable');
-            }
-            await api_request.send();
-        }
-    }
-
-    /**
      * Function to refresh the current PiHoleStatus
      */
     public static async refreshPiHoleStatus(successCallback: (data: PiHoleApiStatus) => void): Promise<void> {

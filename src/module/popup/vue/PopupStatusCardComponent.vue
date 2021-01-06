@@ -37,6 +37,8 @@ import BaseComponent from "../../general/BaseComponent.vue";
 import {BadgeService, ExtensionBadgeTextEnum} from "../../../service/browser/BadgeService";
 import {TabService} from "../../../service/browser/TabService";
 import {LegacyPiHoleApiService} from "../../../service/api/service/LegacyPiHoleApiService";
+import PiHoleApiService from "../../../service/api/service/PiHoleApiService";
+import {ApiJsonErrorMessages} from "../../../service/api/errors/ApiErrorMessages";
 
 @Component
 export default class PopupStatusCardComponent extends BaseComponent {
@@ -127,19 +129,24 @@ export default class PopupStatusCardComponent extends BaseComponent {
    * Enables/Disables all PiHoles
    */
   private sliderClicked(): void {
-    console.log(this.slider_checked);
-
     const status_mode = this.slider_checked ? PiHoleApiStatusEnum.enabled : PiHoleApiStatusEnum.disabled;
     let time: number = this.default_disable_time;
 
     if (time >= 0) {
-      const success_callback = (data: PiHoleApiStatus) => this.on_slider_click_success_handler(data);
-      const error_callback = (data: string) => this.throw_console_badge_error(data);
-      LegacyPiHoleApiService.changePiHoleStatus(status_mode, time, success_callback, error_callback);
+      PiHoleApiService.changePiHoleStatus(status_mode, time).then(value => {
+        for (let piHoleStatus of value) {
+          if (piHoleStatus.data.status === PiHoleApiStatusEnum.error || piHoleStatus.data.status !== status_mode) {
+            this.throw_console_badge_error(ApiJsonErrorMessages.error_returned, true);
+            return;
+          }
+        }
+        this.on_slider_click_success_handler(value[0].data);
+      }).catch(reason => {
+        this.throw_console_badge_error(reason);
+      })
     } else {
       this.throw_console_badge_error('Time cannot be smaller than 0. Canceling api request.', true);
     }
-
   }
 
   /**

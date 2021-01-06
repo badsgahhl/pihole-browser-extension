@@ -105,5 +105,17 @@
 				"content": "$2"
 			}
 		}
+	},
+	"context_menu_toggle_pi_holes": {
+		"message": "Toggle PiHole(s)"
+	},
+	"context_menu_blacklist_current_domain": {
+		"message": "Blacklist current domain"
+	},
+	"context_menu_whitelist_current_domain": {
+		"message": "Whitelist current domain"
+	},
+	"context_menu_open_settings": {
+		"message": "Open Settings"
 	}
 }

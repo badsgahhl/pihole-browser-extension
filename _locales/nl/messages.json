@@ -105,5 +105,17 @@
 				"content": "$2"
 			}
 		}
+	},
+	"context_menu_toggle_pi_holes": {
+		"message": "Schakelen tussen PiHole(s)"
+	},
+	"context_menu_blacklist_current_domain": {
+		"message": "Zwarte lijst huidig domein"
+	},
+	"context_menu_whitelist_current_domain": {
+		"message": "Whitelist huidige domein"
+	},
+	"context_menu_open_settings": {
+		"message": "Open instellingen"
 	}
 }

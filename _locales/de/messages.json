@@ -105,5 +105,17 @@
 				"content": "$2"
 			}
 		}
+	},
+	"context_menu_toggle_pi_holes": {
+		"message": "PiHole(s) umschalten"
+	},
+	"context_menu_blacklist_current_domain": {
+		"message": "Aktuelle URL blacklisten"
+	},
+	"context_menu_whitelist_current_domain": {
+		"message": "Aktuelle URL whitelisten"
+	},
+	"context_menu_open_settings": {
+		"message": "Einstellungen öffnen"
 	}
 }

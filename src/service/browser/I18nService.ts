@@ -53,3 +53,10 @@ export enum LinkConfig {
     github_user_badsgahhl = 'https://github.com/badsgahhl',
     github_user_erikr729 = 'https://github.com/erikr729'
 }
+
+export enum i18nContextMenuKeys {
+    toggle_pi_holes = 'context_menu_toggle_pi_holes',
+    blacklist_current_domain = 'context_menu_blacklist_current_domain',
+    whitelist_current_domain = 'context_menu_whitelist_current_domain',
+    open_settings = 'context_menu_open_settings'
+}
