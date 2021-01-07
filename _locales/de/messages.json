@@ -95,6 +95,9 @@
 	"option_disable_update_notification": {
 		"message": "Deaktiviere die Update Benachrichtigung im Popup"
 	},
+	"option_hotkey_settings": {
+		"message": "Hotkey Einstellungen"
+	},
 	"popup_update_card_info": {
 		"message": "PiHole Update verfügbar! ($updates$/$piholes$)",
 		"placeholders": {

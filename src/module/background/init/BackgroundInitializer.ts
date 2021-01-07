@@ -4,6 +4,7 @@ import ChromeRuntimeInitializer from "./ChromeRuntimeInitializer";
 import {Initializer} from "../../general/Initializer";
 import PiHoleApiService from "../../../service/PiHoleApiService";
 import {PiHoleApiStatusEnum} from "../../../api/enum/PiHoleApiStatusEnum";
+import {HotKeyInitializer} from "./HotKeyInitializer";
 
 export default class BackgroundInitializer implements Initializer {
 
@@ -13,6 +14,7 @@ export default class BackgroundInitializer implements Initializer {
 
         (new ContextMenuInitializer()).init();
         (new ChromeRuntimeInitializer()).init();
+        (new HotKeyInitializer().init())
 
         this.checkStatus().then();
         window.setInterval(() => this.checkStatus(), this.INTERVAL_TIMEOUT);

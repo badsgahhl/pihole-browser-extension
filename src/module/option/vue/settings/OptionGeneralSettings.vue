@@ -12,6 +12,9 @@
                                         :getter_function="item.getter_function"
                                         :label_text_key="item.label_text_key"
                                         :setter_function="item.setter_function"/>
+        <b-button v-if="!isFirefox" class="btn mt-3" @click="openHotKeySettings">
+          {{ translate(i18nOptionsKeys.option_hotkey_settings) }}
+        </b-button>
       </b-card-body>
     </b-card>
   </b-card-text>
@@ -19,7 +22,7 @@
 
 <script lang="ts">
 import {Component} from "vue-property-decorator";
-import {i18nOptionsKeys} from "../../../../service/I18nService";
+import {i18nOptionsKeys} from "../../../../service/i18nService";
 import OptionDisableTimeComponent from "./OptionDisableTimeComponent.vue";
 import OptionTabComponent from "./OptionTabComponent.vue";
 import OptionGenericCheckboxComponent from "./OptionGenericCheckboxComponent.vue";
@@ -57,6 +60,16 @@ export default class OptionGeneralSettings extends BaseComponent {
       setter_function: (value: boolean) => StorageService.saveDisableUpdateNotification(value)
     }
   ];
+
+  private get isFirefox(): boolean {
+    return typeof browser !== "undefined"
+  }
+
+  private openHotKeySettings(): void {
+    chrome.tabs.create({
+      url: 'chrome://extensions/shortcuts'
+    })
+  }
 }
 
 /**

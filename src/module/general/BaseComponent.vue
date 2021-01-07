@@ -1,6 +1,6 @@
 <script lang="ts">
 import {Component, Vue} from "vue-property-decorator";
-import {i18nOptionsKeys, i18nPopupKeys, I18nService, LinkConfig} from "../../service/I18nService";
+import {i18nOptionsKeys, i18nPopupKeys, i18nService, LinkConfig} from "../../service/i18nService";
 import {PiHoleSettingsDefaults} from "../../service/StorageService";
 
 @Component
@@ -21,7 +21,7 @@ export default class BaseComponent extends Vue {
    * Wrapper for translation
    */
   protected translate(string: string, substitutions?: any): string {
-    return I18nService.translate(string, substitutions);
+    return i18nService.translate(string, substitutions);
   }
 
 }

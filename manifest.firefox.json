@@ -34,5 +34,19 @@
 		"webRequest",
 		"webRequestBlocking",
 		"contextMenus"
-	]
+	],
+	"commands": {
+		"hotkey-toggle-pihole": {
+			"description": "__MSG_context_menu_toggle_pi_holes__"
+		},
+		"hotkey-blacklist-current-domain": {
+			"description": "__MSG_context_menu_blacklist_current_domain__"
+		},
+		"hotkey-whitelist-current-domain": {
+			"description": "__MSG_context_menu_whitelist_current_domain__"
+		},
+		"hotkey-open-settings": {
+			"description": "__MSG_context_menu_open_settings__"
+		}
+	}
 }

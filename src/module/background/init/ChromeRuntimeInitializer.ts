@@ -1,5 +1,5 @@
 import {Initializer} from "../../general/Initializer";
-import {LinkConfig} from "../../../service/I18nService";
+import {LinkConfig} from "../../../service/i18nService";
 import {PiHoleSettingsDefaults, StorageService} from "../../../service/StorageService";
 
 export default class ChromeRuntimeInitializer implements Initializer {

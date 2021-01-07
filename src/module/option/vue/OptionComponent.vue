@@ -39,7 +39,7 @@
 
 <script lang="ts">
 import {Component} from 'vue-property-decorator';
-import {i18nOptionsKeys} from "../../../service/I18nService";
+import {i18nOptionsKeys} from "../../../service/i18nService";
 import OptionGeneralSettings from "./settings/OptionGeneralSettings.vue";
 import OptionAboutTab from "./about/OptionAboutTab.vue";
 import BaseComponent from "../../general/BaseComponent.vue";
@@ -48,7 +48,6 @@ import BaseComponent from "../../general/BaseComponent.vue";
   components: {
     OptionAboutTab,
     OptionGeneralSettings,
-
   }
 })
 /**

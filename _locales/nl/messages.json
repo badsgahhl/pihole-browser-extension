@@ -95,6 +95,9 @@
 	"options_beta_feature_flag": {
 		"message": "Bètafuncties inschakelen (attentie!)"
 	},
+	"option_hotkey_settings": {
+		"message": "Hotkey Settings"
+	},
 	"popup_update_card_info": {
 		"message": "PiHole Update beschikbaar! ($updates$/$piholes$)",
 		"placeholders": {

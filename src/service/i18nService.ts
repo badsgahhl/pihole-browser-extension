@@ -1,4 +1,4 @@
-export class I18nService {
+export class i18nService {
     /**
      * Wrapper Function for the chrome.i18n.getMessage Function
      */
@@ -32,7 +32,8 @@ export enum i18nOptionsKeys {
     options_url_invalid_warning = "options_url_invalid_warning",
     option_donation = "option_donation",
     option_disable_feature = "options_disable_list_feature",
-    option_disable_update_notification = "option_disable_update_notification"
+    option_disable_update_notification = "option_disable_update_notification",
+    option_hotkey_settings = "option_hotkey_settings"
 }
 
 export enum i18nPopupKeys {
