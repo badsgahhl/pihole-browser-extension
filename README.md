@@ -11,7 +11,7 @@ extension you can control your PiHole remotely (e.g. Turning it on/off, black/wh
 
 <br>
 
-[![chrome](https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_206x58.png)](https://chrome.google.com/webstore/detail/switch-for-pihole/ngoafjpapneaopfkpboebcahajopcifi)
+[![chrome](https://cdn.glaser.casa/s/ChromeWebStore_BadgeWBorder.png)](https://chrome.google.com/webstore/detail/switch-for-pihole/ngoafjpapneaopfkpboebcahajopcifi)
 [![firefox](https://cdn.glaser.casa/tp/firefox4.png)](https://addons.mozilla.org/firefox/addon/switch-for-pihole/)
 
 ### Disclaimer:
