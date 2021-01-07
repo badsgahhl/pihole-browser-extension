@@ -9,7 +9,7 @@
 
 <script lang="ts">
 import {Component, Prop, Watch} from 'vue-property-decorator';
-import {i18nOptionsKeys} from "../../../../service/browser/I18nService";
+import {i18nOptionsKeys} from "../../../../service/I18nService";
 import BaseComponent from "../../../general/BaseComponent.vue";
 
 @Component

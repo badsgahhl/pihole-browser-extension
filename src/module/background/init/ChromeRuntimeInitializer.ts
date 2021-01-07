@@ -1,11 +1,14 @@
 import {Initializer} from "../../general/Initializer";
-import {LinkConfig} from "../../../service/browser/I18nService";
+import {LinkConfig} from "../../../service/I18nService";
+import {PiHoleSettingsDefaults, StorageService} from "../../../service/StorageService";
 
 export default class ChromeRuntimeInitializer implements Initializer {
     public init(): void {
         chrome.runtime.onInstalled.addListener(function (details) {
             if (details.reason == "install") {
-                console.log("This is a first install!");
+                StorageService.saveDefaultDisableTime(PiHoleSettingsDefaults.default_disable_time);
+                StorageService.saveReloadAfterDisable(true);
+                StorageService.saveReloadAfterWhitelist(true);
             } else if (details.reason == "update" && details.previousVersion) {
                 const previousVersion = Number(details.previousVersion.split('.').join(''));
                 const thisVersion = Number(chrome.runtime.getManifest().version.split('.').join(''));

@@ -1,4 +1,4 @@
-import {PiHoleApiStatusEnum} from "../api/models/pihole/PiHoleApiStatus";
+import {PiHoleApiStatusEnum} from "../api/enum/PiHoleApiStatusEnum";
 
 /**
  * Service Module for the extension icon badge.
@@ -66,6 +66,8 @@ export class BadgeService {
                 return 'gray';
             case ExtensionBadgeTextEnum.enabled:
                 return '#1ea23d';
+            case ExtensionBadgeTextEnum.ok:
+                return '#4577d7';
             default:
                 return 'red'
         }
@@ -75,7 +77,8 @@ export class BadgeService {
 export enum ExtensionBadgeTextEnum {
     enabled = 'On',
     disabled = 'Off',
-    error = 'Err'
+    error = 'Err',
+    ok = 'Ok'
 }
 
 

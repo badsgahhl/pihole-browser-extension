@@ -6,35 +6,35 @@
 [![Mozilla Add-on](https://img.shields.io/amo/rating/switch-for-pihole)](https://addons.mozilla.org/firefox/addon/switch-for-pihole/reviews/)
 ![GitHub](https://img.shields.io/github/license/badsgahhl/pihole-browser-extension)
 <br><br>
-Switch-for-PiHole is a small browser extension for Chrome and Firefox. It's written with Vue and Typescript. With this extension you can control your PiHole remotely (e.g. Turning it on/off, black/white listing current tab, etc.).
+Switch-for-PiHole is a small browser extension for Chrome and Firefox. It's written with Vue and Typescript. With this
+extension you can control your PiHole remotely (e.g. Turning it on/off, black/white listing current tab, etc.).
 
 <br>
 
 [![chrome](https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_206x58.png)](https://chrome.google.com/webstore/detail/switch-for-pihole/ngoafjpapneaopfkpboebcahajopcifi)
 [![firefox](https://cdn.glaser.casa/tp/firefox4.png)](https://addons.mozilla.org/firefox/addon/switch-for-pihole/)
 
+### Disclaimer:
+
+The support for PiHole **5.0** or less is **dropped** with **v2.3**. Please consider upgrading your PiHole(s) to be able
+to use the extension fully.
 
 ### Features:
-- Disable your PiHole easily with one click
-- Individual url to your PiHole
+
+- Disable your PiHole(s) easily with one click
+- Individual configuration for multiple PiHoles
 - Dark Mode depending on your OS Settings
 - Compact UI
-- Settable default disable time
-- White-/Blacklist your current tabs url with one click (PiHole v5.0+)
+- White-/Blacklist your current tabs url with one click
 
 ### How to use:
 
 1. Open the popup by clicking the "Raspberry" Icon in the top navigation of your browser
-2. Click on the setting wheel in the top right corner     
-3. Enter your host address (including http:// or https:// and the directory. You can find more info about that [here](https://github.com/badsgahhl/pihole-browser-extension#status--slider-are-not-working))
+2. Click on the setting wheel in the top right corner
+3. Enter your host address (including http:// or https:// and the directory. You can find more info about
+   that [here](https://github.com/badsgahhl/pihole-browser-extension#status--slider-are-not-working))
 4. Go to your PiHole settings. Click "Api/Web interface" and then on "Show Api token" at the bottom of your screen.
 5. Copy the api key into the settings
-
-### Using multiple PiHole(s)
-
-If you want to use several PiHoles please read the following information page first:
-
-[Multiple PiHoles Documentation](https://github.com/badsgahhl/pihole-browser-extension/blob/master/documentation/multiple-pihole.md)
 
 ### Troubleshooting
 
@@ -53,15 +53,6 @@ The extension is able to black and whitelist the current tabs url. This feature 
  - Red: An error occurred
  - Orange: The domain wasn't added to any list (skipped)
  - Green: The domain was successfully added to the list
- 
- **Handling in PiHole v5:**
- <br>
-It is only possible to add a domain to one of the lists (white and black list). This means that if you have added the domain "example.com" with the extension or manually blacklisted it, you cannot whitelist it with the extension. You will see an orange background.
- 
- **Handling in PiHole v5.1:**
- <br>
- In v5.1 the extension works as you would expect. Adding the current domain to a list will first remove the domain from the other list to keep both lists consistent.
-
 
 ### This is not an official PiHole application.
 Please use the issue templates in **this** repository for bugs. The main PiHole project **is not responsible** for any malfunction that is caused by the use of the extension!

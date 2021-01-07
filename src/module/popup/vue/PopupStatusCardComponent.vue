@@ -31,14 +31,13 @@
 
 <script lang="ts">
 import {Component, Prop} from 'vue-property-decorator';
-import {PiHoleSettingsDefaults, StorageService} from "../../../service/browser/StorageService";
-import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../../service/api/models/pihole/PiHoleApiStatus";
+import {PiHoleSettingsDefaults, StorageService} from "../../../service/StorageService";
+import {PiHoleApiStatus} from "../../../api/models/PiHoleApiStatus";
 import BaseComponent from "../../general/BaseComponent.vue";
-import {BadgeService, ExtensionBadgeTextEnum} from "../../../service/browser/BadgeService";
-import {TabService} from "../../../service/browser/TabService";
-import {LegacyPiHoleApiService} from "../../../service/api/service/LegacyPiHoleApiService";
-import PiHoleApiService from "../../../service/api/service/PiHoleApiService";
-import {ApiJsonErrorMessages} from "../../../service/api/errors/ApiErrorMessages";
+import {BadgeService, ExtensionBadgeTextEnum} from "../../../service/BadgeService";
+import {TabService} from "../../../service/TabService";
+import PiHoleApiService from "../../../service/PiHoleApiService";
+import {PiHoleApiStatusEnum} from "../../../api/enum/PiHoleApiStatusEnum";
 
 @Component
 export default class PopupStatusCardComponent extends BaseComponent {
@@ -94,7 +93,9 @@ export default class PopupStatusCardComponent extends BaseComponent {
       this.default_disable_time_disabled = false;
     }
 
-    LegacyPiHoleApiService.refreshPiHoleStatus(((data: PiHoleApiStatus) => this.update_components_by_data(data))).then();
+    PiHoleApiService.getPiHoleStatusCombined().then(value => {
+      this.update_components_by_data({status: value});
+    }).catch(() => this.update_components_by_data({status: PiHoleApiStatusEnum.error}));
   }
 
   /**
@@ -136,7 +137,7 @@ export default class PopupStatusCardComponent extends BaseComponent {
       PiHoleApiService.changePiHoleStatus(status_mode, time).then(value => {
         for (let piHoleStatus of value) {
           if (piHoleStatus.data.status === PiHoleApiStatusEnum.error || piHoleStatus.data.status !== status_mode) {
-            this.throw_console_badge_error(ApiJsonErrorMessages.error_returned, true);
+            this.throw_console_badge_error('One PiHole returned Error from its request. Please check the API Key.', true);
             return;
           }
         }
@@ -176,7 +177,8 @@ export default class PopupStatusCardComponent extends BaseComponent {
     this.update_components_by_data({status: PiHoleApiStatusEnum.error})
     if (refresh_status) {
       setTimeout(() => {
-        LegacyPiHoleApiService.refreshPiHoleStatus((data => this.update_components_by_data(data))).then();
+        PiHoleApiService.getPiHoleStatusCombined().then(data => this.update_components_by_data({status: data}))
+            .catch(() => this.update_components_by_data({status: PiHoleApiStatusEnum.error}));
       }, 1500);
     }
   }

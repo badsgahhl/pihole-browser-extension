@@ -5,7 +5,7 @@
                               :is_active_by_status.sync="is_active_by_real_status"/>
     <PopupListCardComponent
         v-if="is_list_feature_active()"
-        :current_url="current_url" :is_pi_hole_version_5_or_higher.sync="is_pi_hole_version_5_or_higher"/>
+        :current_url="current_url"/>
     <PopupUpdateAlertComponent v-if="is_active_by_real_status"/>
   </div>
 </template>
@@ -15,11 +15,11 @@
 import {Component} from 'vue-property-decorator';
 import PopupStatusCardComponent from "./PopupStatusCardComponent.vue";
 import PopupListCardComponent from "./PopupListCardComponent.vue";
-import {BadgeService, ExtensionBadgeTextEnum} from "../../../service/browser/BadgeService";
+import {BadgeService, ExtensionBadgeTextEnum} from "../../../service/BadgeService";
 import PopupUpdateAlertComponent from "./PopupUpdateAlertComponent.vue";
 import BaseComponent from "../../general/BaseComponent.vue";
-import {StorageService} from "../../../service/browser/StorageService";
-import {TabService} from "../../../service/browser/TabService";
+import {StorageService} from "../../../service/StorageService";
+import {TabService} from "../../../service/TabService";
 
 @Component({
   components: {PopupUpdateAlertComponent, PopupListCardComponent, PopupStatusCardComponent}
@@ -36,9 +36,6 @@ export default class PopupComponent extends BaseComponent {
 
   // Data Prop: How is the real status of the pi hole
   private is_active_by_real_status: boolean = false;
-
-  // Data Prop: Has every pihole version 5 or higher?
-  private is_pi_hole_version_5_or_higher: boolean = true;
 
   // Data Prop of the current url
   private current_url: string = '';
@@ -88,7 +85,7 @@ export default class PopupComponent extends BaseComponent {
    * Determines if the list feature should be shown or not
    */
   private is_list_feature_active(): boolean {
-    return !this.list_feature_disabled && this.is_pi_hole_version_5_or_higher && this.is_active_by_real_status && this.current_url.length > 0;
+    return !this.list_feature_disabled && this.is_active_by_real_status && this.current_url.length > 0;
   }
 }
 

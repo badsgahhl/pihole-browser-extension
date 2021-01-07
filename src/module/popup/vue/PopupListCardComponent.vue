@@ -25,11 +25,11 @@
 
 <script lang="ts">
 import {Component, Prop} from "vue-property-decorator";
-import {ApiListMode} from "../../../service/api/models/pihole/PiHoleListStatus";
 import BaseComponent from "../../general/BaseComponent.vue";
-import {StorageService} from "../../../service/browser/StorageService";
-import {TabService} from "../../../service/browser/TabService";
-import {LegacyPiHoleApiService} from "../../../service/api/service/LegacyPiHoleApiService";
+import {StorageService} from "../../../service/StorageService";
+import {TabService} from "../../../service/TabService";
+import PiHoleApiService from "../../../service/PiHoleApiService";
+import {ApiList} from "../../../api/enum/ApiList";
 import WebRequestHeadersDetails = chrome.webRequest.WebRequestHeadersDetails;
 import BlockingResponse = chrome.webRequest.BlockingResponse;
 
@@ -55,21 +55,21 @@ export default class PopupListCardComponent extends BaseComponent {
    * Wrapper function for the onclick button event
    */
   private whitelist_url(): void {
-    this.list_domain(ApiListMode.whitelist);
+    this.list_domain(ApiList.whitelist);
   }
 
   /**
    * Wrapper function for the onclick button event
    */
   private blacklist_url(): void {
-    this.list_domain(ApiListMode.blacklist);
+    this.list_domain(ApiList.blacklist);
   }
 
   /**
    * This function will add a domain to the whitelist or block list
    * @param mode
    */
-  private async list_domain(mode: ApiListMode): Promise<void> {
+  private async list_domain(mode: ApiList): Promise<void> {
     let pi_hole_urls = (await StorageService.getPiHoleSettingsArray());
     let pi_hole_urls_array = [];
     if (typeof pi_hole_urls !== "undefined") {
@@ -102,7 +102,7 @@ export default class PopupListCardComponent extends BaseComponent {
 
     this.buttons_disabled = true;
 
-    if (mode === ApiListMode.whitelist) {
+    if (mode === ApiList.whitelist) {
       this.whitelisting_active = true
     } else {
       this.blacklisting_active = true;
@@ -112,25 +112,25 @@ export default class PopupListCardComponent extends BaseComponent {
     const delay_increment = 2000;
     let delay = 0;
 
-    // We remove the domain from the oposite list
+    // We remove the domain from the opposite list
+    await PiHoleApiService.subDomainFromList(mode === ApiList.whitelist ? ApiList.blacklist : ApiList.whitelist, domain);
 
-    await LegacyPiHoleApiService.subDomainFromList(domain, mode === ApiListMode.whitelist ? ApiListMode.blacklist : ApiListMode.whitelist);
-
-    const pi_hole_list_results = (await LegacyPiHoleApiService.listDomain(domain, mode));
+    const pi_hole_list_results = (await PiHoleApiService.addDomainToList(mode, domain));
 
     if (typeof browser === 'undefined') {
       chrome.webRequest.onBeforeSendHeaders.removeListener(this.get_web_request_origin_modifier_callback);
     }
 
-    pi_hole_list_results.forEach((pi_hole_result, index) => {
+    pi_hole_list_results.forEach((response, index) => {
       setTimeout(() => {
-        if (pi_hole_result.success) {
-          if (pi_hole_result.message.includes('Not adding')) {
+        const responseData = response.data;
+        if (responseData.success) {
+          if (responseData.message.includes('Not adding')) {
             this.background_classes = 'bg-warning text-dark';
             setTimeout(() => {
               this.background_classes = '';
             }, 1500)
-          } else if (pi_hole_result.message.includes('Added')) {
+          } else if (responseData.message.includes('Added')) {
             this.background_classes = 'bg-success text-white';
             setTimeout(() => {
               this.background_classes = '';
@@ -148,7 +148,7 @@ export default class PopupListCardComponent extends BaseComponent {
           setTimeout(async () => {
             const reload_after_white_black_list = (await StorageService.getReloadAfterWhitelist());
 
-            if (typeof reload_after_white_black_list !== "undefined" && reload_after_white_black_list && mode === ApiListMode.whitelist && pi_hole_result.success && pi_hole_result.message.includes('Added')) {
+            if (typeof reload_after_white_black_list !== "undefined" && reload_after_white_black_list && mode === ApiList.whitelist && responseData.success && responseData.message.includes('Added')) {
               TabService.reloadCurrentTab(250);
             }
 

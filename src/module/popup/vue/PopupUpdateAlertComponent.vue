@@ -1,9 +1,9 @@
 <template>
-  <b-alert v-if="updates_available && !notification_is_disabled" class="popup-update-alert" show variant="danger">
+  <b-alert v-if="updatesAvailable" class="popup-update-alert" show variant="danger">
     {{
       translate(i18nPopupKeys.popup_update_card_info, [
-        updates_available_amount,
-        amount_of_piholes
+        updatesAvailableAmount,
+        amountOfPiHoles
       ])
     }}
   </b-alert>
@@ -11,72 +11,51 @@
 
 <script lang="ts">
 
-import {Component, Prop} from "vue-property-decorator";
-import {PiHoleVersions} from "../../../service/api/models/pihole/PiHoleVersions";
+import {Component} from "vue-property-decorator";
 import BaseComponent from "../../general/BaseComponent.vue";
-import {StorageService} from "../../../service/browser/StorageService";
-import {LegacyPiHoleApiService} from "../../../service/api/service/LegacyPiHoleApiService";
+import {StorageService} from "../../../service/StorageService";
+import PiHoleApiService from "../../../service/PiHoleApiService";
 
 @Component
 export default class PopupUpdateAlertComponent extends BaseComponent {
-  // Prop which is emitted to the parent. Gets updates after a version check
-  @Prop({default: false})
-  is_pi_hole_version_5_or_higher!: boolean;
-
   // Data Prop: Is an update needed?
-  private updates_available: boolean = false;
+  private updatesAvailable: boolean = false;
 
   // Data Prop: How many Updates are available
-  private updates_available_amount: number = 0;
+  private updatesAvailableAmount: number = 0;
 
   // Data Prop: How many PiHoles does the user use
-  private amount_of_piholes: number = 0;
-
-  // Is the notification disabled by the settings?
-  private notification_is_disabled: boolean = false;
+  private amountOfPiHoles: number = 0;
 
   mounted() {
-    this.update_is_notification_disabled();
-    this.check_for_updates();
-  }
-
-  /**
-   * Updates the value from the storage
-   */
-  private update_is_notification_disabled(): void {
-    StorageService.getDisableUpdateNotification().then((state: boolean | undefined) => {
-      if (typeof state !== "undefined") {
-        this.notification_is_disabled = state;
-      }
-    })
+    this.checkForUpdates();
   }
 
   /**
    * Checks the pihole(s) for updates
    * Activates the alert if an update is available
    */
-  private check_for_updates(): void {
-    const get_pi_hole_version_callback = ((pi_hole_versions_array: PiHoleVersions[]) => {
-      let update_available = false;
-      let amount_updatable = 0;
-      for (const pi_hole_version of pi_hole_versions_array) {
-        if (pi_hole_version.core_update || pi_hole_version.web_update || pi_hole_version.FTL_update) {
-          update_available = true;
-          amount_updatable++;
-        }
-
-        if (!this.is_pi_hole_version_5_or_higher && pi_hole_version.FTL_current < 5 && pi_hole_version.FTL_current !== -1) {
-          this.$emit('update:is_pi_hole_version_5_or_higher', false);
-        }
-      }
-      if (update_available) {
-        this.updates_available = update_available;
-        this.updates_available_amount = amount_updatable;
-        this.amount_of_piholes = pi_hole_versions_array.length;
+  private checkForUpdates(): void {
+    StorageService.getDisableUpdateNotification().then((state: boolean | undefined) => {
+      if (typeof state !== "undefined" && !state) {
+        PiHoleApiService.getPiHoleVersions().then(data => {
+          let updatesAvailable = false;
+          let amountAvailable = 0;
+          for (const response of data) {
+            const responseData = response.data;
+            if (responseData.core_update || responseData.web_update || responseData.FTL_update) {
+              updatesAvailable = true;
+              amountAvailable++;
+            }
+          }
+          if (updatesAvailable) {
+            this.updatesAvailable = updatesAvailable;
+            this.updatesAvailableAmount = amountAvailable;
+            this.amountOfPiHoles = data.length;
+          }
+        });
       }
     })
-    LegacyPiHoleApiService.getPiHoleVersions().then(get_pi_hole_version_callback);
-
   }
 }
 </script>

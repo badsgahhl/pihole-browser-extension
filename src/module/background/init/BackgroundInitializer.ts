@@ -1,18 +1,21 @@
-import {PiHoleApiStatus, PiHoleApiStatusEnum} from "../../../service/api/models/pihole/PiHoleApiStatus";
-import {BadgeService, ExtensionBadgeTextEnum} from "../../../service/browser/BadgeService";
+import {BadgeService, ExtensionBadgeTextEnum} from "../../../service/BadgeService";
 import ContextMenuInitializer from "./ContextMenuInitializer";
 import ChromeRuntimeInitializer from "./ChromeRuntimeInitializer";
 import {Initializer} from "../../general/Initializer";
-import {LegacyPiHoleApiService} from "../../../service/api/service/LegacyPiHoleApiService";
+import PiHoleApiService from "../../../service/PiHoleApiService";
+import {PiHoleApiStatusEnum} from "../../../api/enum/PiHoleApiStatusEnum";
 
 export default class BackgroundInitializer implements Initializer {
+
+    private readonly INTERVAL_TIMEOUT = 15000;
+
     public init(): void {
 
         (new ContextMenuInitializer()).init();
         (new ChromeRuntimeInitializer()).init();
 
         this.checkStatus().then();
-        window.setInterval(() => this.checkStatus(), 15000);
+        window.setInterval(() => this.checkStatus(), this.INTERVAL_TIMEOUT);
     }
 
     /**
@@ -20,18 +23,16 @@ export default class BackgroundInitializer implements Initializer {
      *
      */
     private async checkStatus(): Promise<void> {
-        const success_callback = (data: PiHoleApiStatus) => {
-            BadgeService.getBadgeText().then(function (result) {
-                if (!(BadgeService.compareBadgeTextToApiStatusEnum(result, data.status))) {
-                    if (data.status === PiHoleApiStatusEnum.disabled) {
+        PiHoleApiService.getPiHoleStatusCombined().then(value => {
+            BadgeService.getBadgeText().then(result => {
+                if (!(BadgeService.compareBadgeTextToApiStatusEnum(result, value))) {
+                    if (value === PiHoleApiStatusEnum.disabled) {
                         BadgeService.setBadgeText(ExtensionBadgeTextEnum.disabled);
-                    } else if (data.status === PiHoleApiStatusEnum.enabled) {
+                    } else if (value === PiHoleApiStatusEnum.enabled) {
                         BadgeService.setBadgeText(ExtensionBadgeTextEnum.enabled);
                     }
                 }
-            })
-        };
-        LegacyPiHoleApiService.refreshPiHoleStatus(success_callback).then();
-
+            });
+        })
     }
 }

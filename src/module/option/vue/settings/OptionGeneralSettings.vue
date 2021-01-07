@@ -19,12 +19,12 @@
 
 <script lang="ts">
 import {Component} from "vue-property-decorator";
-import {i18nOptionsKeys} from "../../../../service/browser/I18nService";
+import {i18nOptionsKeys} from "../../../../service/I18nService";
 import OptionDisableTimeComponent from "./OptionDisableTimeComponent.vue";
 import OptionTabComponent from "./OptionTabComponent.vue";
 import OptionGenericCheckboxComponent from "./OptionGenericCheckboxComponent.vue";
 import BaseComponent from "../../../general/BaseComponent.vue";
-import {StorageService} from "../../../../service/browser/StorageService";
+import {StorageService} from "../../../../service/StorageService";
 
 @Component({
   components: {

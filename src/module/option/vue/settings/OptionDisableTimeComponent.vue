@@ -12,7 +12,7 @@
 <script lang="ts">
 
 import {Component, Watch} from "vue-property-decorator";
-import {PiHoleSettingsDefaults, StorageService} from "../../../../service/browser/StorageService";
+import {PiHoleSettingsDefaults, StorageService} from "../../../../service/StorageService";
 import BaseComponent from "../../../general/BaseComponent.vue";
 
 @Component
