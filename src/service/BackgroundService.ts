@@ -31,6 +31,11 @@ export class BackgroundService {
                         }
                     }
                     BadgeService.setBadgeText(newStatus === PiHoleApiStatusEnum.disabled ? ExtensionBadgeTextEnum.disabled : ExtensionBadgeTextEnum.enabled);
+                    StorageService.getReloadAfterDisable().then(state => {
+                        if (typeof state !== "undefined" && state) {
+                            TabService.reloadCurrentTab(1500);
+                        }
+                    });
                 }).catch(reason => {
                     console.warn(reason);
                     BadgeService.setBadgeText(ExtensionBadgeTextEnum.error);

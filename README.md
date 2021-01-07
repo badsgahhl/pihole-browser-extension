@@ -26,6 +26,7 @@ to use the extension fully.
 - Dark Mode depending on your OS Settings
 - Compact UI
 - White-/Blacklist your current tabs url with one click
+- Shortcuts - Use features quickly with a hotkey shortcut or pages context menu
 
 ### How to use:
 
