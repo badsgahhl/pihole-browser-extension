@@ -39,7 +39,10 @@ export default class PiHoleApiService {
             if (typeof piHole.pi_uri_base === "undefined" || typeof piHole.api_key === "undefined") {
                 return Promise.reject('Some PiHoleSettings are undefined.');
             }
-            promiseArray.push(axios.get<PiHoleApiStatus>(`${this.getPiHoleBaseUrl(piHole.pi_uri_base, piHole.api_key)}&status`, this.getAxiosConfig()))
+
+            const url = this.getPiHoleBaseUrl(piHole.pi_uri_base, piHole.api_key);
+            url.searchParams.append('status', '');
+            promiseArray.push(axios.get<PiHoleApiStatus>(url.href, this.getAxiosConfig()))
         }
 
         return Promise.all(promiseArray);
@@ -57,7 +60,9 @@ export default class PiHoleApiService {
             if (typeof piHole.pi_uri_base === "undefined" || typeof piHole.api_key === "undefined") {
                 return Promise.reject('Some PiHoleSettings are undefined.');
             }
-            promiseArray.push(axios.get<PiHoleVersions>(`${this.getPiHoleBaseUrl(piHole.pi_uri_base, piHole.api_key)}&versions`, this.getAxiosConfig()))
+            const url = this.getPiHoleBaseUrl(piHole.pi_uri_base, piHole.api_key);
+            url.searchParams.append('versions', '');
+            promiseArray.push(axios.get<PiHoleVersions>(url.href, this.getAxiosConfig()))
         }
 
         return Promise.all(promiseArray);
@@ -73,14 +78,7 @@ export default class PiHoleApiService {
             return Promise.reject('Disable time smaller than allowed:' + time);
         }
 
-        let urlAction: string;
-        if (mode === PiHoleApiStatusEnum.disabled) {
-            urlAction = `disable=${time}`;
-        } else if (mode === PiHoleApiStatusEnum.enabled) {
-            urlAction = 'enable';
-        } else {
-            return Promise.reject('Mode ' + mode + ' not allowed for this function.');
-        }
+
         const promiseArray = new Array<Promise<AxiosResponse<PiHoleApiStatus>>>();
 
         for (const piHole of piHoleSettingsArray) {
@@ -88,7 +86,17 @@ export default class PiHoleApiService {
                 return Promise.reject('Some PiHoleSettings are undefined.');
             }
 
-            promiseArray.push(axios.get<PiHoleApiStatus>(`${this.getPiHoleBaseUrl(piHole.pi_uri_base, piHole.api_key)}&${urlAction}`, this.getAxiosConfig()))
+            const url = this.getPiHoleBaseUrl(piHole.pi_uri_base, piHole.api_key);
+
+            if (mode === PiHoleApiStatusEnum.disabled) {
+                url.searchParams.append('disable', time.toString());
+            } else if (mode === PiHoleApiStatusEnum.enabled) {
+                url.searchParams.append('enable', '');
+            } else {
+                return Promise.reject('Mode ' + mode + ' not allowed for this function.');
+            }
+
+            promiseArray.push(axios.get<PiHoleApiStatus>(url.href, this.getAxiosConfig()))
         }
 
         return Promise.all(promiseArray);
@@ -119,8 +127,10 @@ export default class PiHoleApiService {
             if (typeof piHole.pi_uri_base === "undefined" || typeof piHole.api_key === "undefined") {
                 return Promise.reject('Some PiHoleSettings are undefined.');
             }
-
-            promiseArray.push(axios.get<PiHoleListStatus>(`${this.getPiHoleBaseUrl(piHole.pi_uri_base, piHole.api_key)}&list=${list}&${mode}=${domain}`, this.getAxiosConfig()));
+            const url = this.getPiHoleBaseUrl(piHole.pi_uri_base, piHole.api_key);
+            url.searchParams.append('list', list);
+            url.searchParams.append(mode, domain);
+            promiseArray.push(axios.get<PiHoleListStatus>(url.href, this.getAxiosConfig()));
         }
 
         return Promise.all(promiseArray);
@@ -132,11 +142,16 @@ export default class PiHoleApiService {
         }
     }
 
-    private static getPiHoleBaseUrl(url: string, apiKey?: string) {
-        let baseUrl = new URL('api.php?', url).toString();
-        if (typeof apiKey !== "undefined" && apiKey.length > 0) {
-            baseUrl = `${baseUrl}auth=${apiKey}`;
+    private static getPiHoleBaseUrl(domain: string, apiKey?: string): URL {
+        if (domain.slice(-1) !== '/') {
+            domain = domain + '/'
         }
+        let baseUrl = new URL('api.php?', domain);
+
+        if (typeof apiKey !== "undefined" && apiKey.length > 0) {
+            baseUrl.searchParams.append('auth', apiKey);
+        }
+
         return baseUrl;
     }
 }

@@ -37,7 +37,10 @@ export default class PopupUpdateAlertComponent extends BaseComponent {
    */
   private checkForUpdates(): void {
     StorageService.getDisableUpdateNotification().then((state: boolean | undefined) => {
-      if (typeof state !== "undefined" && !state) {
+      if (typeof state !== "undefined") {
+        state = false;
+      }
+      if (!state) {
         PiHoleApiService.getPiHoleVersions().then(data => {
           let updatesAvailable = false;
           let amountAvailable = 0;
