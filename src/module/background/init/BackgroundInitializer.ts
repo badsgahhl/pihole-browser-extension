@@ -11,6 +11,7 @@ export default class BackgroundInitializer implements Initializer {
     private readonly INTERVAL_TIMEOUT = 15000;
 
     public init(): void {
+        BadgeService.setBadgeText('');
 
         (new ContextMenuInitializer()).init();
         (new ChromeRuntimeInitializer()).init();
@@ -21,8 +22,7 @@ export default class BackgroundInitializer implements Initializer {
     }
 
     /**
-     * Checking the current status of the pihole
-     *
+     * Checking the current status of the PiHole(s)
      */
     private async checkStatus(): Promise<void> {
         PiHoleApiService.getPiHoleStatusCombined().then(value => {

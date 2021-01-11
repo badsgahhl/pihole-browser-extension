@@ -8,7 +8,7 @@ export class BadgeService {
     /**
      * Sets the badge text.
      */
-    public static setBadgeText(text: ExtensionBadgeTextEnum): void {
+    public static setBadgeText(text: ExtensionBadgeTextEnum | string): void {
         // Firefox needs white text color.
         if (typeof browser !== 'undefined') {
             browser.browserAction.setBadgeTextColor({color: "white"}).then();
@@ -60,7 +60,7 @@ export class BadgeService {
         }
     }
 
-    private static getColorForBadgeTextEnum(input: ExtensionBadgeTextEnum): string {
+    private static getColorForBadgeTextEnum(input: ExtensionBadgeTextEnum | string): string {
         switch (input) {
             case ExtensionBadgeTextEnum.disabled:
                 return 'gray';
