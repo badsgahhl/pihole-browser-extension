@@ -1,6 +1,6 @@
 {
 	"name": "pihole-browser-extension",
-	"version": "2.3.0",
+	"version": "2.3.1",
 	"dependencies": {
 		"axios": "^0.21.1",
 		"bootstrap": "4.5.3",
