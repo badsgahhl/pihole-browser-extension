@@ -146,12 +146,15 @@ export default class PiHoleApiService {
         if (domain.slice(-1) !== '/') {
             domain = domain + '/'
         }
-        let baseUrl = new URL('api.php?', domain);
+        let baseUrl = new URL('api.php', domain);
 
-        if (typeof apiKey !== "undefined" && apiKey.length > 0) {
-            baseUrl.searchParams.append('auth', apiKey);
+        let correctApiKey;
+        if (typeof apiKey === "undefined" || apiKey.length < 1) {
+            correctApiKey = '';
+        } else {
+            correctApiKey = apiKey;
         }
-
+        baseUrl.searchParams.append('auth', correctApiKey);
         return baseUrl;
     }
 }
