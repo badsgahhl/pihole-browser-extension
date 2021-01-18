@@ -1,6 +1,6 @@
 import {PiHoleApiStatus} from "../api/models/PiHoleApiStatus";
 import axios, {AxiosRequestConfig, AxiosResponse} from "axios";
-import {PiHoleSettingsDefaults, StorageService} from "./StorageService";
+import {StorageService} from "./StorageService";
 import {PiHoleListStatus} from "../api/models/PiHoleListStatus";
 import {PiHoleVersions} from "../api/models/PiHoleVersions";
 import {ApiListMode} from "../api/enum/ApiListMode";
@@ -74,7 +74,7 @@ export default class PiHoleApiService {
             return Promise.reject('PiHoleSettings empty');
         }
 
-        if (time < PiHoleSettingsDefaults.default_disable_time) {
+        if (time < 0) {
             return Promise.reject('Disable time smaller than allowed:' + time);
         }
 
