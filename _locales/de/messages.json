@@ -3,7 +3,12 @@
 		"message": "Browser Erweiterung um dein PiHole zu steuern. Gebaut mit Vue, Typescript und ❤"
 	},
 	"options_title": {
-		"message": "Einstellungen - Switch for PiHole"
+		"message": "$page$ - Switch for PiHole",
+		"placeholders": {
+			"page": {
+				"content": "$1"
+			}
+		}
 	},
 	"options_settings": {
 		"message": "Einstellungen"
@@ -68,9 +73,6 @@
 	"options_url_invalid_warning": {
 		"message": "Die URL ist invalide. (Fehlendes http(s), ungültiges Format oder leer)"
 	},
-	"popup_title": {
-		"message": "PiHole Remote Popup"
-	},
 	"popup_status_card_title": {
 		"message": "PiHole Switch"
 	},
@@ -86,9 +88,6 @@
 	"popup_second_card_blacklist": {
 		"message": "Blacklist"
 	},
-	"options_beta_feature_flag": {
-		"message": "Aktiviere Beta Features (Achtung!)"
-	},
 	"options_disable_list_feature": {
 		"message": "Deaktiviere das List Feature im Popup"
 	},
@@ -97,6 +96,9 @@
 	},
 	"option_hotkey_settings": {
 		"message": "Hotkey Einstellungen"
+	},
+	"option_disable_context_menu": {
+		"message": "Deaktiviere die Context Menu Shortcuts"
 	},
 	"popup_update_card_info": {
 		"message": "PiHole Update verfügbar! ($updates$/$piholes$)",

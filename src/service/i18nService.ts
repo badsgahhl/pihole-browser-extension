@@ -2,7 +2,7 @@ export class i18nService {
     /**
      * Wrapper Function for the chrome.i18n.getMessage Function
      */
-    public static translate(key: string, substitutions?: any): string {
+    public static translate(key: string, substitutions?: Array<string | number>): string {
         return chrome.i18n.getMessage(key, substitutions);
     }
 }
@@ -28,16 +28,15 @@ export enum i18nOptionsKeys {
     options_add_button = "options_add_button",
     options_remove_button = "options_remove_button",
     options_api_key_invalid_warning = "options_api_key_invalid_warning",
-    options_beta_feature_flag = "options_beta_feature_flag",
     options_url_invalid_warning = "options_url_invalid_warning",
     option_donation = "option_donation",
     option_disable_feature = "options_disable_list_feature",
     option_disable_update_notification = "option_disable_update_notification",
-    option_hotkey_settings = "option_hotkey_settings"
+    option_hotkey_settings = "option_hotkey_settings",
+    option_disable_context_menu = "option_disable_context_menu"
 }
 
 export enum i18nPopupKeys {
-    popup_title = "popup_title",
     popup_status_card_title = "popup_status_card_title",
     popup_status_card_info_text = "popup_status_card_info_text",
     popup_second_card_current_url = "popup_second_card_current_url",

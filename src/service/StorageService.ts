@@ -111,14 +111,30 @@ export class StorageService {
         chrome.storage.local.set(storage);
     }
 
+    public static getDisableContextMenu(): Promise<boolean> {
+        return <Promise<boolean>>this.getStorageValue<boolean>(ExtensionStorageEnum.disable_context_menu, false)
+    }
+
+    public static saveDisableContextMenu(state: boolean): void {
+        const storage: ExtensionStorage = {
+            disable_context_menu: state
+        }
+        chrome.storage.local.set(storage);
+    }
+
     /**
      * Base Function to get data from the storage
-     * @param key
      */
-    private static getStorageValue<T>(key: ExtensionStorageEnum): Promise<T | undefined> {
+    private static getStorageValue<T>(key: ExtensionStorageEnum, defaultUnsetValue?: any): Promise<T | undefined> {
         return new Promise<T | undefined>((resolve) => {
             chrome.storage.local.get(key, function (obj) {
-                resolve(obj[key]);
+                const storageValue: any = obj[key];
+
+                if (typeof defaultUnsetValue !== "undefined" && typeof storageValue === "undefined") {
+                    resolve(defaultUnsetValue);
+                }
+
+                resolve(storageValue);
             });
         });
     }
@@ -142,7 +158,8 @@ export interface ExtensionStorage {
     reload_after_white_list?: boolean,
     disable_list_feature?: boolean,
     disable_update_notification?: boolean,
-    beta_feature_flag?: boolean
+    beta_feature_flag?: boolean,
+    disable_context_menu?: boolean
 }
 
 export enum ExtensionStorageEnum {
@@ -151,5 +168,6 @@ export enum ExtensionStorageEnum {
     reload_after_disable = 'reload_after_disable',
     reload_after_white_list = 'reload_after_white_list',
     disable_list_feature = 'disable_list_feature',
-    disable_update_notification = 'disable_update_notification'
+    disable_update_notification = 'disable_update_notification',
+    disable_context_menu = 'disable_context_menu'
 }

@@ -2,6 +2,7 @@
   <div id="option">
     <b-tabs active-nav-item-class="bg-light text-dark" card nav-class="bg-dark sidebar-nav"
             nav-wrapper-class="sidebar mr-5" pills
+            v-model="tab"
             vertical>
       <template v-slot:tabs-start>
         <b-row class="mb-3">
@@ -29,7 +30,7 @@
         </b-nav-item>
         <footer class="d-md-flex px-3 mt-4 mb-1 text-uppercase position-absolute small text-muted"
                 style="bottom: 10px">
-          (C) 2020 - Pascal Glaser
+          {{ getCopyrightText() }}
         </footer>
       </template>
     </b-tabs>
@@ -38,7 +39,7 @@
 </template>
 
 <script lang="ts">
-import {Component} from 'vue-property-decorator';
+import {Component, Watch} from 'vue-property-decorator';
 import {i18nOptionsKeys} from "../../../service/i18nService";
 import OptionGeneralSettings from "./settings/OptionGeneralSettings.vue";
 import OptionAboutTab from "./about/OptionAboutTab.vue";
@@ -54,15 +55,31 @@ import BaseComponent from "../../general/BaseComponent.vue";
  * The main option component.
  **/
 export default class OptionComponent extends BaseComponent {
+  private tab: number = 0;
+
   mounted() {
-    this.set_site_title();
+    this.setSiteTitle();
   }
 
-  /**
-   * Sets the page title
-   */
-  private set_site_title(): void {
-    document.title = this.translate(i18nOptionsKeys.options_title);
+  @Watch('tab')
+  private setSiteTitle(): void {
+    document.title = this.translate(i18nOptionsKeys.options_title, [this.getTitleForTab(this.tab)]);
+  }
+
+  private getTitleForTab(id: number): string {
+    switch (id) {
+      case 0:
+        return this.translate(i18nOptionsKeys.options_settings)
+      case 1:
+        return this.translate(i18nOptionsKeys.options_about)
+      default:
+        return "x";
+    }
+  }
+
+  private getCopyrightText(): string {
+    const year = new Date().getFullYear();
+    return `(C) ${year} - Pascal Glaser`
   }
 
 

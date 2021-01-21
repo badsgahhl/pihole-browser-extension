@@ -20,7 +20,7 @@ export default class BaseComponent extends Vue {
   /**
    * Wrapper for translation
    */
-  protected translate(string: string, substitutions?: any): string {
+  protected translate(string: string, substitutions?: Array<string | number>): string {
     return i18nService.translate(string, substitutions);
   }
 

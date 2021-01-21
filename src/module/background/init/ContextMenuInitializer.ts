@@ -1,10 +1,36 @@
 import {Initializer} from "../../general/Initializer";
 import {i18nContextMenuKeys, i18nService} from "../../../service/i18nService";
 import {BackgroundService} from "../../../service/BackgroundService";
+import {ContextMenuSwitchMessage, MessageEnum} from "../../../service/MessageBusService";
+import {StorageService} from "../../../service/StorageService";
 import CreateProperties = chrome.contextMenus.CreateProperties;
 
 export default class ContextMenuInitializer implements Initializer {
     init(): void {
+        StorageService.getDisableContextMenu().then(value => {
+            this.removeOrCreateContextMenuByBoolean(value);
+        });
+        this.initMessageListener();
+    }
+
+
+    private initMessageListener(): void {
+        chrome.runtime.onMessage.addListener((request: ContextMenuSwitchMessage) => {
+            if (request.message === MessageEnum.ContextMenuSwitch) {
+                this.removeOrCreateContextMenuByBoolean(request.payload);
+            }
+        })
+    }
+
+    private removeOrCreateContextMenuByBoolean(state: boolean): void {
+        if (!state) {
+            this.createContextMenu();
+        } else {
+            chrome.contextMenus.removeAll();
+        }
+    }
+
+    private createContextMenu(): void {
         for (const contextMenusConfiguration of this.contextMenusConfigurations) {
             chrome.contextMenus.create(contextMenusConfiguration);
         }

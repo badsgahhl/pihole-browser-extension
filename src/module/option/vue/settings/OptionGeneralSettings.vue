@@ -28,6 +28,7 @@ import OptionTabComponent from "./OptionTabComponent.vue";
 import OptionGenericCheckboxComponent from "./OptionGenericCheckboxComponent.vue";
 import BaseComponent from "../../../general/BaseComponent.vue";
 import {StorageService} from "../../../../service/StorageService";
+import MessageBusService from "../../../../service/MessageBusService";
 
 @Component({
   components: {
@@ -58,6 +59,13 @@ export default class OptionGeneralSettings extends BaseComponent {
       label_text_key: i18nOptionsKeys.option_disable_update_notification,
       getter_function: () => StorageService.getDisableUpdateNotification(),
       setter_function: (value: boolean) => StorageService.saveDisableUpdateNotification(value)
+    }, {
+      label_text_key: i18nOptionsKeys.option_disable_context_menu,
+      getter_function: () => StorageService.getDisableContextMenu(),
+      setter_function: (value: boolean) => {
+        MessageBusService.sendContextMenuSwitchMessage(value);
+        StorageService.saveDisableContextMenu(value);
+      }
     }
   ];
 
@@ -77,7 +85,7 @@ export default class OptionGeneralSettings extends BaseComponent {
  */
 interface GenericCheckboxComponent {
   label_text_key: i18nOptionsKeys,
-  getter_function: () => Promise<boolean | undefined>,
+  getter_function: () => Promise<boolean | undefined> | Promise<boolean>,
   setter_function: (value: boolean) => void
 }
 </script>
