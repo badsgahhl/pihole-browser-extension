@@ -31,8 +31,6 @@
 		"storage",
 		"<all_urls>",
 		"activeTab",
-		"webRequest",
-		"webRequestBlocking",
 		"contextMenus"
 	],
 	"commands": {

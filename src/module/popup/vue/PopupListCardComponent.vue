@@ -30,8 +30,6 @@ import {StorageService} from "../../../service/StorageService";
 import {TabService} from "../../../service/TabService";
 import PiHoleApiService from "../../../service/PiHoleApiService";
 import {ApiList} from "../../../api/enum/ApiList";
-import WebRequestHeadersDetails = chrome.webRequest.WebRequestHeadersDetails;
-import BlockingResponse = chrome.webRequest.BlockingResponse;
 
 @Component
 export default class PopupListCardComponent extends BaseComponent {
@@ -67,37 +65,12 @@ export default class PopupListCardComponent extends BaseComponent {
 
   /**
    * This function will add a domain to the whitelist or block list
-   * @param mode
    */
   private async list_domain(mode: ApiList): Promise<void> {
-    let pi_hole_urls = (await StorageService.getPiHoleSettingsArray());
-    let pi_hole_urls_array = [];
-    if (typeof pi_hole_urls !== "undefined") {
-      for (const pi_hole_url of pi_hole_urls) {
-        pi_hole_urls_array.push(pi_hole_url.pi_uri_base + "/*");
-      }
-    } else {
-      return;
-    }
-
     const domain = this.current_url;
 
-    if (!pi_hole_urls_array || !domain) {
+    if (!domain) {
       return;
-    }
-
-    // Registering the handler only after the button click. We dont want to change the headers of anything else
-    // This is only needed in chrome! -.-
-    if (typeof browser === 'undefined') {
-      chrome.webRequest.onBeforeSendHeaders.addListener(
-          this.get_web_request_origin_modifier_callback, {
-            urls: pi_hole_urls_array
-          },
-          [
-            "blocking",
-            "requestHeaders",
-            "extraHeaders"
-          ]);
     }
 
     this.buttons_disabled = true;
@@ -116,10 +89,6 @@ export default class PopupListCardComponent extends BaseComponent {
     await PiHoleApiService.subDomainFromList(mode === ApiList.whitelist ? ApiList.blacklist : ApiList.whitelist, domain);
 
     const pi_hole_list_results = (await PiHoleApiService.addDomainToList(mode, domain));
-
-    if (typeof browser === 'undefined') {
-      chrome.webRequest.onBeforeSendHeaders.removeListener(this.get_web_request_origin_modifier_callback);
-    }
 
     pi_hole_list_results.forEach((response, index) => {
       setTimeout(() => {
@@ -161,25 +130,6 @@ export default class PopupListCardComponent extends BaseComponent {
       }, delay);
       delay += delay_increment;
     })
-  }
-
-  /**
-   * Function to override the webrequest header.
-   * This is needed to go around the pihole cors security policies.
-   * @param details
-   */
-  private get_web_request_origin_modifier_callback(details: WebRequestHeadersDetails): BlockingResponse {
-    for (let i = 0; !(details.requestHeaders) || i < details.requestHeaders.length; ++i) {
-      if (!(details.requestHeaders) || details.requestHeaders[i].name === 'Origin') {
-        if (details.requestHeaders) {
-          details.requestHeaders[i].value = '';
-        }
-      }
-    }
-
-    return {
-      requestHeaders: details.requestHeaders
-    }
   }
 }
 </script>
