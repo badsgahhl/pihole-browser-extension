@@ -1,33 +1,21 @@
-import * as webpack from 'webpack';
+import {Configuration} from "webpack";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import ZipPlugin from "zip-webpack-plugin";
 import * as path from "path";
 import CopyWebpackPlugin from "copy-webpack-plugin";
 import VueLoaderPlugin from 'vue-loader/lib/plugin';
 
-export default class WebpackConfig {
-    private readonly browser: string;
+export class WebpackConfigFactory {
+    public static createConfig(browser: Browsers, isProduction: boolean): Configuration {
 
-    private readonly isProduction: boolean;
-
-    public constructor(browser: string, is_production: boolean) {
-        this.browser = browser;
-        this.isProduction = is_production;
-    }
-
-
-    public getConfig(): webpack.Configuration {
-        const production = this.isProduction;
-        const browser = this.browser;
-
-        let config: webpack.Configuration = {
-            mode: production ? "production" : "development",
+        let config: Configuration = {
+            mode: isProduction ? "production" : "development",
             entry: {
                 popup: path.join(__dirname, "../", "module/popup", "popup.ts"),
                 options: path.join(__dirname, "../", "module/option", "options.ts"),
                 background: path.join(__dirname, "../", "module/background", "background.ts")
             },
-            devtool: production ? false : 'inline-source-map',
+            devtool: isProduction ? false : 'inline-source-map',
             output: {
                 path: path.join(__dirname, "../../dist/" + browser),
                 filename: "[name].js"
@@ -105,17 +93,32 @@ export default class WebpackConfig {
             ]
         };
 
-        if (production) {
+        if (isProduction) {
             if (config.plugins) {
                 const zip_options: ZipPlugin.Options = {
                     filename: "package." + browser + ".zip",
                     path: path.join(__dirname, '../../')
                 };
-                // @ts-ignore
                 config.plugins.push(new ZipPlugin(zip_options));
             }
         }
 
         return config;
     }
+
+}
+
+export interface CliConfigOptions {
+    config?: string;
+    mode?: Configuration["mode"];
+    env?: string;
+    'config-register'?: string;
+    configRegister?: string;
+    'config-name'?: string;
+    configName?: string;
+}
+
+export enum Browsers {
+    Chrome = 'chrome',
+    Firefox = 'firefox'
 }

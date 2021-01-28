@@ -2,10 +2,7 @@
  * Service Module to access the local chrome storage
  */
 export class StorageService {
-    /**
-     * Function to save a pi_hole settings array
-     * @param settings
-     */
+
     public static savePiHoleSettingsArray(settings: PiHoleSettingsStorage[]): void {
         if (settings.length > 0) {
             let filtered_settings: PiHoleSettingsStorage[] = settings.filter(value => value.pi_uri_base);
@@ -35,10 +32,6 @@ export class StorageService {
         }
     }
 
-    /**
-     * Function to disable the default disable time
-     * @param time
-     */
     public static saveDefaultDisableTime(time: number): void {
         time = Number(time);
         if (time < 1) {
@@ -54,10 +47,6 @@ export class StorageService {
         return this.getStorageValue<number>(ExtensionStorageEnum.default_disable_time);
     }
 
-    /**
-     * Function to set the state for reload_after_enable_disable
-     * @param state
-     */
     public static saveReloadAfterDisable(state: boolean): void {
         const storage: ExtensionStorage = {
             reload_after_disable: state
@@ -69,10 +58,6 @@ export class StorageService {
         return this.getStorageValue<boolean>(ExtensionStorageEnum.reload_after_disable);
     }
 
-    /**
-     * Function to set the state for reload_after_white_black_list
-     * @param state
-     */
     public static saveReloadAfterWhitelist(state: boolean): void {
         const storage: ExtensionStorage = {
             reload_after_white_list: state
@@ -112,7 +97,7 @@ export class StorageService {
     }
 
     public static getDisableContextMenu(): Promise<boolean> {
-        return <Promise<boolean>>this.getStorageValue<boolean>(ExtensionStorageEnum.disable_context_menu, false)
+        return this.getStorageValue<boolean>(ExtensionStorageEnum.disable_context_menu, false);
     }
 
     public static saveDisableContextMenu(state: boolean): void {
@@ -122,13 +107,12 @@ export class StorageService {
         chrome.storage.local.set(storage);
     }
 
-    /**
-     * Base Function to get data from the storage
-     */
-    private static getStorageValue<T>(key: ExtensionStorageEnum, defaultUnsetValue?: any): Promise<T | undefined> {
-        return new Promise<T | undefined>((resolve) => {
-            chrome.storage.local.get(key, function (obj) {
-                const storageValue: any = obj[key];
+    private static getStorageValue<T>(key: ExtensionStorageEnum): Promise<T | undefined>;
+    private static getStorageValue<T>(key: ExtensionStorageEnum, defaultUnsetValue: T): Promise<T>;
+    private static getStorageValue<T>(key: ExtensionStorageEnum, defaultUnsetValue?: T): Promise<T | undefined> | Promise<T> {
+        return new Promise((resolve) => {
+            chrome.storage.local.get(key, (obj) => {
+                const storageValue: T | undefined = obj[key];
 
                 if (typeof defaultUnsetValue !== "undefined" && typeof storageValue === "undefined") {
                     resolve(defaultUnsetValue);
