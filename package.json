@@ -37,7 +37,7 @@
 	"scripts": {
 		"start-chrome": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack --mode=development -w --config src/webpack/webpack.chrome.ts --progress",
 		"start-firefox": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack --mode=development -w --config src/webpack/webpack.firefox.ts --progress",
-		"build": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack --mode=production --config src/webpack/webpack.firefox.ts && cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack --mode=production --config src/webpack/webpack.chrome.ts",
+		"build": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack --mode=production --config src/webpack/webpack.firefox.ts --progress && cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack --mode=production --config src/webpack/webpack.chrome.ts --progress",
 		"rebuild-package-lock": "npm install --package-lock"
 	},
 	"repository": {
