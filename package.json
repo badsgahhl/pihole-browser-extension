@@ -35,8 +35,8 @@
 	},
 	"description": "Browser extension to control your PiHole. Built with Vue, Typescript and ❤",
 	"scripts": {
-		"start-chrome": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack --mode=development -w --config src/webpack/webpack.chrome.ts",
-		"start-firefox": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack --mode=development -w --config src/webpack/webpack.firefox.ts",
+		"start-chrome": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack --mode=development -w --config src/webpack/webpack.chrome.ts --progress",
+		"start-firefox": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack --mode=development -w --config src/webpack/webpack.firefox.ts --progress",
 		"build": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack --mode=production --config src/webpack/webpack.firefox.ts && cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack --mode=production --config src/webpack/webpack.chrome.ts",
 		"rebuild-package-lock": "npm install --package-lock"
 	},
