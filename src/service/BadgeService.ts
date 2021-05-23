@@ -17,12 +17,12 @@ export class BadgeService {
   public static setBadgeText(text: ExtensionBadgeTextEnum | string): void {
     // Firefox needs white text color.
     if (typeof browser !== 'undefined') {
-      browser.browserAction.setBadgeTextColor({color: 'white'}).then();
+      browser.browserAction.setBadgeTextColor({ color: 'white' }).then();
     }
 
-    chrome.browserAction.setBadgeBackgroundColor({color: this.getColorForBadgeTextEnum(text)});
+    chrome.browserAction.setBadgeBackgroundColor({ color: this.getColorForBadgeTextEnum(text) });
 
-    chrome.browserAction.setBadgeText({text});
+    chrome.browserAction.setBadgeText({ text });
   }
 
   /**
@@ -41,7 +41,7 @@ export class BadgeService {
    * Returns false if they are not equal
    */
   public static compareBadgeTextToApiStatusEnum(badge_text: ExtensionBadgeTextEnum,
-                                                api_status: PiHoleApiStatusEnum): boolean {
+    api_status: PiHoleApiStatusEnum): boolean {
     switch (badge_text) {
       case ExtensionBadgeTextEnum.disabled:
         return api_status === PiHoleApiStatusEnum.disabled;

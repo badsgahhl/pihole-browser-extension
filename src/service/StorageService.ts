@@ -33,7 +33,7 @@ export class StorageService {
   public static savePiHoleSettingsArray(settings: PiHoleSettingsStorage[]): void {
     if (settings.length > 0) {
       const filteredSettings: PiHoleSettingsStorage[] = settings
-          .filter((value) => value.pi_uri_base);
+        .filter((value) => value.pi_uri_base);
 
       if (filteredSettings.length < 1) {
         chrome.storage.local.remove(ExtensionStorageEnum.pi_hole_settings);
@@ -136,7 +136,7 @@ export class StorageService {
   private static getStorageValue<T>(key: ExtensionStorageEnum): Promise<T | undefined>;
   private static getStorageValue<T>(key: ExtensionStorageEnum, defaultUnsetValue: T): Promise<T>;
   private static getStorageValue<T>(key: ExtensionStorageEnum, defaultUnsetValue?: T)
-      : Promise<T | undefined> | Promise<T> {
+    : Promise<T | undefined> | Promise<T> {
     return new Promise((resolve) => {
       chrome.storage.local.get(key, (obj) => {
         const storageValue: T | undefined = obj[key];
