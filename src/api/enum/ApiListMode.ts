@@ -1,6 +1,6 @@
 enum ApiListMode {
-    add = 'add',
-    sub = 'sub',
+  add = 'add',
+  sub = 'sub',
 }
 
 export default ApiListMode;
