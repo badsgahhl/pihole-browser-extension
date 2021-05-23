@@ -1,4 +1,4 @@
-import {PiHoleSettingsStorage, StorageService} from './StorageService';
+import { PiHoleSettingsStorage, StorageService } from './StorageService';
 import Tab = chrome.tabs.Tab;
 
 export default class TabService {
@@ -7,7 +7,7 @@ export default class TabService {
    */
   public static async getCurrentTabUrlCleaned(): Promise<string> {
     const currentTabUrlPromise: Promise<string> = new Promise((resolve) => {
-      chrome.tabs.query({active: true, lastFocusedWindow: true, currentWindow: true}, (tabs) => {
+      chrome.tabs.query({ active: true, lastFocusedWindow: true, currentWindow: true }, (tabs) => {
         if (tabs[0]) {
           const tabUrl = tabs[0].url ?? '';
           resolve(tabUrl);
@@ -41,7 +41,7 @@ export default class TabService {
 
     // Checking regex
     if (urlValidityRegex.test(fullUrl)) {
-      const {hostname} = new URL(fullUrl);
+      const { hostname } = new URL(fullUrl);
       // Check if url is on the excluded list
       if (!excludesDomains.includes(hostname)) {
         url = hostname;
