@@ -4,10 +4,7 @@
 		"sourceMap": true,
 		"lib": [
 			"dom",
-			"es2015",
-			"es2016",
-			"es2017",
-			"es2015.promise"
+			"ESNext"
 		],
 		"rootDir": "src/",
 		"outDir": "dist",
@@ -26,6 +23,10 @@
 	},
 	"exclude": [
 		"node_modules",
-		"./src/webpack"
+		"src/webpack",
+		".eslintrc.js"
+	],
+	"include": [
+		"src/**/*"
 	]
 }

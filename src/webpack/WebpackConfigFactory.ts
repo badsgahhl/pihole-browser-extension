@@ -4,6 +4,7 @@ import ZipPlugin from "zip-webpack-plugin";
 import * as path from "path";
 import CopyWebpackPlugin from "copy-webpack-plugin";
 import VueLoaderPlugin from 'vue-loader/lib/plugin';
+import ESLintWebpackPlugin from "eslint-webpack-plugin";
 
 export class WebpackConfigFactory {
     public static createConfig(browser: Browsers, isProduction: boolean): Configuration {
@@ -89,7 +90,10 @@ export class WebpackConfigFactory {
                     filename: "background.html",
                     chunks: ["background"]
                 }),
-                new VueLoaderPlugin()
+                new VueLoaderPlugin(),
+                new ESLintWebpackPlugin({
+                    extensions: ['ts', 'vue']
+                })
             ]
         };
 

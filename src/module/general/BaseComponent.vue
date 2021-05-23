@@ -1,15 +1,15 @@
 <script lang="ts">
-import {Component, Vue} from "vue-property-decorator";
-import {i18nOptionsKeys, i18nPopupKeys, i18nService, LinkConfig} from "../../service/i18nService";
-import {PiHoleSettingsDefaults} from "../../service/StorageService";
+import {Component, Vue} from 'vue-property-decorator';
+import {I18NOptionKeys, I18NPopupKeys, I18NService, LinkConfig,} from '../../service/i18NService';
+import {PiHoleSettingsDefaults} from '../../service/StorageService';
 
 @Component
 export default class BaseComponent extends Vue {
   // Translation Keys for the Options. Needed for the vue template
-  protected i18nOptionsKeys = i18nOptionsKeys;
+  protected i18nOptionsKeys = I18NOptionKeys;
 
   // Translation Keys for the Popup
-  protected i18nPopupKeys = i18nPopupKeys;
+  protected i18nPopupKeys = I18NPopupKeys;
 
   // Enum with some Links
   protected LinkConfig = LinkConfig;
@@ -21,8 +21,7 @@ export default class BaseComponent extends Vue {
    * Wrapper for translation
    */
   protected translate(string: string, substitutions?: Array<string | number>): string {
-    return i18nService.translate(string, substitutions);
+    return I18NService.translate(string, substitutions);
   }
-
 }
 </script>

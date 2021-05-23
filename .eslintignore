@@ -1,0 +1,8 @@
+dist
+_locales
+node_modules
+.github
+icon
+icon_raw
+src/webpack
+.eslintrc.js

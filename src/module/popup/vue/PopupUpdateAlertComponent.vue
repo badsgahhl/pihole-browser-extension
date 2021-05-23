@@ -1,5 +1,10 @@
 <template>
-  <b-alert v-if="updatesAvailable" class="popup-update-alert" show variant="danger">
+  <b-alert
+      v-if="updatesAvailable"
+      class="popup-update-alert"
+      show
+      variant="danger"
+  >
     {{
       translate(i18nPopupKeys.popup_update_card_info, [
         updatesAvailableAmount,
@@ -11,10 +16,10 @@
 
 <script lang="ts">
 
-import {Component} from "vue-property-decorator";
-import BaseComponent from "../../general/BaseComponent.vue";
-import {StorageService} from "../../../service/StorageService";
-import PiHoleApiService from "../../../service/PiHoleApiService";
+import {Component} from 'vue-property-decorator';
+import BaseComponent from '../../general/BaseComponent.vue';
+import {StorageService} from '../../../service/StorageService';
+import PiHoleApiService from '../../../service/PiHoleApiService';
 
 @Component
 export default class PopupUpdateAlertComponent extends BaseComponent {
@@ -37,11 +42,12 @@ export default class PopupUpdateAlertComponent extends BaseComponent {
    */
   private checkForUpdates(): void {
     StorageService.getDisableUpdateNotification().then((state: boolean | undefined) => {
-      if (typeof state !== "undefined") {
-        state = false;
+      let isDisabled = state;
+      if (typeof isDisabled !== 'undefined') {
+        isDisabled = false;
       }
-      if (!state) {
-        PiHoleApiService.getPiHoleVersions().then(data => {
+      if (!isDisabled) {
+        PiHoleApiService.getPiHoleVersions().then((data) => {
           let updatesAvailable = false;
           let amountAvailable = 0;
           for (const response of data) {
@@ -58,7 +64,7 @@ export default class PopupUpdateAlertComponent extends BaseComponent {
           }
         });
       }
-    })
+    });
   }
 }
 </script>

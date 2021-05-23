@@ -1,35 +1,64 @@
 <template>
   <b-card no-body>
-    <b-card-header class="status" id="list_card">
+    <b-card-header
+        id="list_card"
+        class="status"
+    >
       {{ translate(i18nPopupKeys.popup_second_card_current_url) }}
     </b-card-header>
-    <b-card-body id="current_url" class="text-center" :class="background_classes">{{ current_url }}
+    <b-card-body
+        id="current_url"
+        :class="background_classes"
+        class="text-center"
+    >
+      {{ current_url }}
     </b-card-body>
     <b-card-footer class="text-center">
-      <b-button variant="success" size="sm" :disabled="buttons_disabled"
-                :title="translate(i18nPopupKeys.popup_second_card_whitelist)"
-                v-on:click="whitelist_url" id="list_action_white">
-        <b-icon-check-circle v-if="!whitelisting_active" style="height: 20px;width: 20px"></b-icon-check-circle>
-        <b-spinner v-else style="width:20px;height: 20px"></b-spinner>
+      <b-button
+          id="list_action_white"
+          :disabled="buttons_disabled"
+          :title="translate(i18nPopupKeys.popup_second_card_whitelist)"
+          size="sm"
+          variant="success"
+          @click="whitelist_url"
+      >
+        <b-icon-check-circle
+            v-if="!whitelisting_active"
+            style="height: 20px;width: 20px"
+        />
+        <b-spinner
+            v-else
+            style="width:20px;height: 20px"
+        />
       </b-button>
-      <b-button variant="danger" size="sm" :disabled="buttons_disabled"
-                :title="translate(i18nPopupKeys.popup_second_card_blacklist)"
-                v-on:click="blacklist_url"
-                id="list_action_black">
-        <b-icon-x-circle v-if="!blacklisting_active" style="height: 20px;width: 20px"></b-icon-x-circle>
-        <b-spinner v-else style="width:20px;height: 20px"></b-spinner>
+      <b-button
+          id="list_action_black"
+          :disabled="buttons_disabled"
+          :title="translate(i18nPopupKeys.popup_second_card_blacklist)"
+          size="sm"
+          variant="danger"
+          @click="blacklist_url"
+      >
+        <b-icon-x-circle
+            v-if="!blacklisting_active"
+            style="height: 20px;width: 20px"
+        />
+        <b-spinner
+            v-else
+            style="width:20px;height: 20px"
+        />
       </b-button>
     </b-card-footer>
   </b-card>
 </template>
 
 <script lang="ts">
-import {Component, Prop} from "vue-property-decorator";
-import BaseComponent from "../../general/BaseComponent.vue";
-import {StorageService} from "../../../service/StorageService";
-import {TabService} from "../../../service/TabService";
-import PiHoleApiService from "../../../service/PiHoleApiService";
-import {ApiList} from "../../../api/enum/ApiList";
+import {Component, Prop} from 'vue-property-decorator';
+import BaseComponent from '../../general/BaseComponent.vue';
+import {StorageService} from '../../../service/StorageService';
+import TabService from '../../../service/TabService';
+import PiHoleApiService from '../../../service/PiHoleApiService';
+import ApiList from '../../../api/enum/ApiList';
 
 @Component
 export default class PopupListCardComponent extends BaseComponent {
@@ -76,21 +105,22 @@ export default class PopupListCardComponent extends BaseComponent {
     this.buttons_disabled = true;
 
     if (mode === ApiList.whitelist) {
-      this.whitelisting_active = true
+      this.whitelisting_active = true;
     } else {
       this.blacklisting_active = true;
     }
 
     // Delay between each call to one of multiple piholes
-    const delay_increment = 2000;
+    const delayIncrement = 2000;
     let delay = 0;
 
     // We remove the domain from the opposite list
-    await PiHoleApiService.subDomainFromList(mode === ApiList.whitelist ? ApiList.blacklist : ApiList.whitelist, domain);
+    await PiHoleApiService.subDomainFromList(mode === ApiList.whitelist
+        ? ApiList.blacklist : ApiList.whitelist, domain);
 
-    const pi_hole_list_results = (await PiHoleApiService.addDomainToList(mode, domain));
+    const piHoleListResults = (await PiHoleApiService.addDomainToList(mode, domain));
 
-    pi_hole_list_results.forEach((response, index) => {
+    piHoleListResults.forEach((response, index) => {
       setTimeout(() => {
         const responseData = response.data;
         if (responseData.success) {
@@ -98,7 +128,7 @@ export default class PopupListCardComponent extends BaseComponent {
             this.background_classes = 'bg-warning text-dark';
             setTimeout(() => {
               this.background_classes = '';
-            }, 1500)
+            }, 1500);
           } else if (responseData.message.includes('Added')) {
             this.background_classes = 'bg-success text-white';
             setTimeout(() => {
@@ -113,23 +143,22 @@ export default class PopupListCardComponent extends BaseComponent {
         }
 
         // After the last one we enable the button again and remove the spinning circle
-        if (index + 1 === pi_hole_list_results.length) {
+        if (index + 1 === piHoleListResults.length) {
           setTimeout(async () => {
-            const reload_after_white_black_list = (await StorageService.getReloadAfterWhitelist());
+            const reloadAfterWhitelist = (await StorageService.getReloadAfterWhitelist());
 
-            if (typeof reload_after_white_black_list !== "undefined" && reload_after_white_black_list && mode === ApiList.whitelist && responseData.success && responseData.message.includes('Added')) {
+            if (typeof reloadAfterWhitelist !== 'undefined' && reloadAfterWhitelist && mode === ApiList.whitelist && responseData.success && responseData.message.includes('Added')) {
               TabService.reloadCurrentTab(250);
             }
 
             this.buttons_disabled = false;
             this.whitelisting_active = false;
             this.blacklisting_active = false;
-
           }, 1500);
         }
       }, delay);
-      delay += delay_increment;
-    })
+      delay += delayIncrement;
+    });
   }
 }
 </script>

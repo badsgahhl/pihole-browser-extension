@@ -1,11 +1,14 @@
 <template>
   <div id="popup">
-    <PopupStatusCardComponent v-if="is_active_by_badge_loaded"
-                              :is_active_by_badge="is_active_by_badge"
-                              :is_active_by_status.sync="is_active_by_real_status"/>
+    <PopupStatusCardComponent
+        v-if="is_active_by_badge_loaded"
+        :is_active_by_badge="is_active_by_badge"
+        :is_active_by_status.sync="is_active_by_real_status"
+    />
     <PopupListCardComponent
         v-if="is_list_feature_active()"
-        :current_url="current_url"/>
+        :current_url="current_url"
+    />
     <PopupUpdateAlertComponent v-if="is_active_by_real_status"/>
   </div>
 </template>
@@ -13,16 +16,16 @@
 <script lang="ts">
 
 import {Component} from 'vue-property-decorator';
-import PopupStatusCardComponent from "./PopupStatusCardComponent.vue";
-import PopupListCardComponent from "./PopupListCardComponent.vue";
-import {BadgeService, ExtensionBadgeTextEnum} from "../../../service/BadgeService";
-import PopupUpdateAlertComponent from "./PopupUpdateAlertComponent.vue";
-import BaseComponent from "../../general/BaseComponent.vue";
-import {StorageService} from "../../../service/StorageService";
-import {TabService} from "../../../service/TabService";
+import PopupStatusCardComponent from './PopupStatusCardComponent.vue';
+import PopupListCardComponent from './PopupListCardComponent.vue';
+import {BadgeService, ExtensionBadgeTextEnum} from '../../../service/BadgeService';
+import PopupUpdateAlertComponent from './PopupUpdateAlertComponent.vue';
+import BaseComponent from '../../general/BaseComponent.vue';
+import {StorageService} from '../../../service/StorageService';
+import TabService from '../../../service/TabService';
 
 @Component({
-  components: {PopupUpdateAlertComponent, PopupListCardComponent, PopupStatusCardComponent}
+  components: {PopupUpdateAlertComponent, PopupListCardComponent, PopupStatusCardComponent},
 })
 /**
  * The Main PopupComponent.
@@ -32,7 +35,7 @@ export default class PopupComponent extends BaseComponent {
   private is_active_by_badge: boolean = false;
 
   // Data Prop: Is the the badge status loaded. true will start rendering the cards
-  private is_active_by_badge_loaded: boolean = false
+  private is_active_by_badge_loaded: boolean = false;
 
   // Data Prop: How is the real status of the pi hole
   private is_active_by_real_status: boolean = false;
@@ -41,7 +44,7 @@ export default class PopupComponent extends BaseComponent {
   private current_url: string = '';
 
   // Is the list feature disabled by the settings?
-  private list_feature_disabled = false
+  private list_feature_disabled = false;
 
   mounted() {
     this.update_is_active_by_badge();
@@ -56,7 +59,7 @@ export default class PopupComponent extends BaseComponent {
     BadgeService.getBadgeText().then((text: string) => {
       this.is_active_by_badge = text === ExtensionBadgeTextEnum.enabled;
       this.is_active_by_badge_loaded = true;
-    })
+    });
   }
 
   /**
@@ -67,7 +70,7 @@ export default class PopupComponent extends BaseComponent {
       if (url.length > 0) {
         this.current_url = url;
       }
-    })
+    });
   }
 
   /**
@@ -75,20 +78,21 @@ export default class PopupComponent extends BaseComponent {
    */
   private update_list_feature_disabled(): void {
     StorageService.getDisableListFeature().then((state: boolean | undefined) => {
-      if (typeof state !== "undefined") {
+      if (typeof state !== 'undefined') {
         this.list_feature_disabled = state;
       }
-    })
+    });
   }
 
   /**
    * Determines if the list feature should be shown or not
    */
   private is_list_feature_active(): boolean {
-    return !this.list_feature_disabled && this.is_active_by_real_status && this.current_url.length > 0;
+    return !this.list_feature_disabled
+        && this.is_active_by_real_status
+        && this.current_url.length > 0;
   }
 }
-
 
 </script>
 

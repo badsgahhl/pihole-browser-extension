@@ -1,6 +1,11 @@
 <template>
-  <b-card class="shadow" no-body>
-    <b-card-header class="h6">📝 {{ translate(i18nOptionsKeys.options_about_licences) }}</b-card-header>
+  <b-card
+      class="shadow"
+      no-body
+  >
+    <b-card-header class="h6">
+      📝 {{ translate(i18nOptionsKeys.options_about_licences) }}
+    </b-card-header>
     <b-card-body>
       <details>
         <summary>Vue</summary>
@@ -23,8 +28,8 @@
 </template>
 
 <script lang="ts">
-import {Component} from "vue-property-decorator";
-import BaseComponent from "../../../general/BaseComponent.vue";
+import {Component} from 'vue-property-decorator';
+import BaseComponent from '../../../general/BaseComponent.vue';
 
 @Component
 export default class OptionAboutLicenses extends BaseComponent {
@@ -49,8 +54,7 @@ export default class OptionAboutLicenses extends BaseComponent {
                       AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
                       LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
                       OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-                      THE SOFTWARE.`
-
+                      THE SOFTWARE.`;
   }
 
   private get bootstrap_icons_licence(): string {
@@ -74,7 +78,7 @@ export default class OptionAboutLicenses extends BaseComponent {
                       AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
                       LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
                       OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-                      THE SOFTWARE.`
+                      THE SOFTWARE.`;
   }
 
   private get vue_bootstrap_licence(): string {
@@ -98,7 +102,7 @@ export default class OptionAboutLicenses extends BaseComponent {
                       AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
                       LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
                       OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-                      SOFTWARE.`
+                      SOFTWARE.`;
   }
 
   private get bootstrap_licence(): string {
@@ -127,4 +131,3 @@ export default class OptionAboutLicenses extends BaseComponent {
   }
 }
 </script>
-

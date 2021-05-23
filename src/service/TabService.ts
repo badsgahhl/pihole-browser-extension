@@ -1,82 +1,80 @@
-import {PiHoleSettingsStorage, StorageService} from "./StorageService";
+import {PiHoleSettingsStorage, StorageService} from './StorageService';
 import Tab = chrome.tabs.Tab;
 
-export class TabService {
+export default class TabService {
+  /**
+   * Returns the current tab url. Cleaned only the real domain without the parameters etc.
+   */
+  public static async getCurrentTabUrlCleaned(): Promise<string> {
+    const currentTabUrlPromise: Promise<string> = new Promise((resolve) => {
+      chrome.tabs.query({active: true, lastFocusedWindow: true, currentWindow: true}, (tabs) => {
+        if (tabs[0]) {
+          const tabUrl = tabs[0].url ?? '';
+          resolve(tabUrl);
+        }
+      });
+    });
+    let url = '';
+    const fullUrl = (await currentTabUrlPromise);
+    const urlValidityRegex = new RegExp('^(http|https):\\/\\/[^ "]+$');
 
-    /**
-     * Returns the current tab url. Cleaned only the real domain without the parameters etc.
-     */
-    public static async getCurrentTabUrlCleaned(): Promise<string> {
-        const current_tab_url_promise: Promise<string> = new Promise((resolve) => {
-            chrome.tabs.query({'active': true, 'lastFocusedWindow': true, 'currentWindow': true}, function (tabs) {
-                if (tabs[0]) {
-                    const tab_url = tabs[0].url ?? '';
-                    resolve(tab_url);
-                }
-            });
+    // Domains that should not be listed anyway.
+    let excludesDomains: Array<string> = [
+      'localhost',
+      '127.0.0.1',
+      'pi.hole',
+    ];
+
+    const piHoleUrls = (await StorageService.getPiHoleSettingsArray());
+    const piHoleUrlsArray: Array<string> = [];
+    if (typeof piHoleUrls !== 'undefined') {
+      piHoleUrls.forEach(((value: PiHoleSettingsStorage) => {
+        if (value.pi_uri_base) {
+          piHoleUrlsArray.push((new URL(value.pi_uri_base).hostname));
+        }
+      }));
+    }
+
+    if (piHoleUrlsArray.length > 0) {
+      excludesDomains = excludesDomains.concat(piHoleUrlsArray);
+    }
+
+    // Checking regex
+    if (urlValidityRegex.test(fullUrl)) {
+      const {hostname} = new URL(fullUrl);
+      // Check if url is on the excluded list
+      if (!excludesDomains.includes(hostname)) {
+        url = hostname;
+      }
+    }
+    return url;
+  }
+
+  /**
+   * Function to reload the current tab
+   * @param delay in ms
+   */
+  public static reloadCurrentTab(delay: number = 0): void {
+    const queryInfo = {
+      active: true,
+      lastFocusedWindow: true,
+      currentWindow: true,
+    };
+    const queryFunction = (tabs: Tab[]) => {
+      if (tabs[0]) {
+        this.getCurrentTabUrlCleaned().then((url) => {
+          if (url && tabs[0].id) {
+            chrome.tabs.reload(tabs[0].id);
+          }
         });
-        let url = '';
-        let full_url = (await current_tab_url_promise);
-        const url_validity_regex = new RegExp('^(http|https):\\/\\/[^ "]+$');
+      }
+    };
+    const tabsFunction = () => chrome.tabs.query(queryInfo, queryFunction);
 
-        // Domains that should not be listed anyway.
-        let excluded_domains: Array<string> = [
-            'localhost',
-            '127.0.0.1',
-            'pi.hole'
-        ];
-
-        let pi_hole_urls = (await StorageService.getPiHoleSettingsArray());
-        let pi_hole_urls_array: Array<string> = [];
-        if (typeof pi_hole_urls !== "undefined") {
-            pi_hole_urls.forEach(((value: PiHoleSettingsStorage) => {
-                if (value.pi_uri_base) {
-                    pi_hole_urls_array.push((new URL(value.pi_uri_base).hostname));
-                }
-            }))
-        }
-
-        if (pi_hole_urls_array.length > 0) {
-            excluded_domains = excluded_domains.concat(pi_hole_urls_array);
-        }
-
-        // Checking regex
-        if (url_validity_regex.test(full_url)) {
-            const hostname = new URL(full_url).hostname;
-            // Check if url is on the excluded list
-            if (!excluded_domains.includes(hostname)) {
-                url = hostname
-            }
-        }
-        return url;
+    if (delay > 0) {
+      setTimeout(tabsFunction, delay);
+    } else {
+      tabsFunction();
     }
-
-    /**
-     * Function to reload the current tab
-     * @param delay in ms
-     */
-    public static reloadCurrentTab(delay: number = 0): void {
-        const query_info = {
-            'active': true,
-            'lastFocusedWindow': true,
-            'currentWindow': true
-        };
-        const query_function = (tabs: Tab[]) => {
-
-            if (tabs[0]) {
-                this.getCurrentTabUrlCleaned().then((url) => {
-                    if (url && tabs[0].id) {
-                        chrome.tabs.reload(tabs[0].id);
-                    }
-                });
-            }
-        };
-        const tabs_function = () => chrome.tabs.query(query_info, query_function);
-
-        if (delay > 0) {
-            setTimeout(tabs_function, delay);
-        } else {
-            tabs_function();
-        }
-    }
+  }
 }

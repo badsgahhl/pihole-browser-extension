@@ -1,4 +1,6 @@
-export enum ApiListMode {
+enum ApiListMode {
     add = 'add',
-    sub = 'sub'
+    sub = 'sub',
 }
+
+export default ApiListMode;

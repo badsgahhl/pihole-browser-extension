@@ -1,6 +1,5 @@
-import {PiHoleApiStatusEnum} from "../enum/PiHoleApiStatusEnum";
+import PiHoleApiStatusEnum from '../enum/PiHoleApiStatusEnum';
 
 export interface PiHoleApiStatus {
-    status: PiHoleApiStatusEnum;
+  status: PiHoleApiStatusEnum;
 }
-
