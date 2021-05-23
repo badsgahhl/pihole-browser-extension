@@ -1,7 +1,7 @@
 <template>
   <b-card
-      class="shadow"
-      no-body
+    class="shadow"
+    no-body
   >
     <b-card-header class="h6">
       🖥️ {{ translate(i18nOptionsKeys.option_extension) }}
@@ -13,17 +13,17 @@
         {{ translate(i18nOptionsKeys.option_contributors) }}
         <br>
         <b-link
-            :href="LinkConfig.github_user_badsgahhl"
-            class="dark-mode-light-link"
-            target="_blank"
+          :href="LinkConfig.github_user_badsgahhl"
+          class="dark-mode-light-link"
+          target="_blank"
         >
           Pascal Glaser
         </b-link>
         ,
         <b-link
-            :href="LinkConfig.github_user_erikr729"
-            class="dark-mode-light-link"
-            target="_blank"
+          :href="LinkConfig.github_user_erikr729"
+          class="dark-mode-light-link"
+          target="_blank"
         >
           Erik Rill
         </b-link>
@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import {Component} from 'vue-property-decorator';
+import { Component } from 'vue-property-decorator';
 import BaseComponent from '../../../general/BaseComponent.vue';
 
 @Component

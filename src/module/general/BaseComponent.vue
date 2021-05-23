@@ -1,7 +1,9 @@
 <script lang="ts">
-import {Component, Vue} from 'vue-property-decorator';
-import {I18NOptionKeys, I18NPopupKeys, I18NService, LinkConfig,} from '../../service/i18NService';
-import {PiHoleSettingsDefaults} from '../../service/StorageService';
+import { Component, Vue } from 'vue-property-decorator';
+import {
+  I18NOptionKeys, I18NPopupKeys, I18NService, LinkConfig,
+} from '../../service/i18NService';
+import { PiHoleSettingsDefaults } from '../../service/StorageService';
 
 @Component
 export default class BaseComponent extends Vue {

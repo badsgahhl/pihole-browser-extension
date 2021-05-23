@@ -1,7 +1,7 @@
 <template>
   <b-card
-      class="shadow"
-      no-body
+    class="shadow"
+    no-body
   >
     <b-card-header class="h6">
       📝 {{ translate(i18nOptionsKeys.options_about_licences) }}
@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import {Component} from 'vue-property-decorator';
+import { Component } from 'vue-property-decorator';
 import BaseComponent from '../../../general/BaseComponent.vue';
 
 @Component

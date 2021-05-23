@@ -1,6 +1,6 @@
 import PiHoleApiStatusEnum from '../api/enum/PiHoleApiStatusEnum';
-import {BadgeService, ExtensionBadgeTextEnum} from './BadgeService';
-import {PiHoleSettingsDefaults, StorageService} from './StorageService';
+import { BadgeService, ExtensionBadgeTextEnum } from './BadgeService';
+import { PiHoleSettingsDefaults, StorageService } from './StorageService';
 import PiHoleApiService from './PiHoleApiService';
 import TabService from './TabService';
 import ApiList from '../api/enum/ApiList';
@@ -33,7 +33,7 @@ export default class BackgroundService {
             }
           }
           BadgeService.setBadgeText(newStatus === PiHoleApiStatusEnum.disabled
-              ? ExtensionBadgeTextEnum.disabled : ExtensionBadgeTextEnum.enabled);
+            ? ExtensionBadgeTextEnum.disabled : ExtensionBadgeTextEnum.enabled);
 
           StorageService.getReloadAfterDisable().then((state) => {
             if (typeof state !== 'undefined' && state) {

@@ -1,7 +1,7 @@
-import {BadgeService, ExtensionBadgeTextEnum} from '../../../service/BadgeService';
+import { BadgeService, ExtensionBadgeTextEnum } from '../../../service/BadgeService';
 import ContextMenuInitializer from './ContextMenuInitializer';
 import ChromeRuntimeInitializer from './ChromeRuntimeInitializer';
-import {Initializer} from '../../general/Initializer';
+import { Initializer } from '../../general/Initializer';
 import PiHoleApiService from '../../../service/PiHoleApiService';
 import PiHoleApiStatusEnum from '../../../api/enum/PiHoleApiStatusEnum';
 import HotKeyInitializer from './HotKeyInitializer';

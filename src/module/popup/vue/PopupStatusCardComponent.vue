@@ -5,7 +5,7 @@
         :title="translate(i18nOptionsKeys.options_settings)"
         class="settings-link"
         @click="open_options"
-    >⚙</span>
+      >⚙</span>
     </b-card-header>
     <b-card-body>
       <div class="text">
@@ -13,12 +13,12 @@
       </div>
       <b-input-group class="justify-content-center">
         <b-form-input
-            id="time"
-            v-model.number:value="default_disable_time"
-            :disabled="default_disable_time_disabled"
-            class="fs-16"
-            min="0"
-            type="number"
+          id="time"
+          v-model.number:value="default_disable_time"
+          :disabled="default_disable_time_disabled"
+          class="fs-16"
+          min="0"
+          type="number"
         />
         <b-input-group-append>
           <b-input-group-text class="time_unit fs-16">
@@ -28,29 +28,29 @@
       </b-input-group>
     </b-card-body>
     <b-card-footer
-        class="text-center"
-        style="max-height: 45px;"
+      class="text-center"
+      style="max-height: 45px;"
     >
       <label id="switch">
         <input
-            id="sliderBox"
-            v-model="slider_checked"
-            :disabled="slider_disabled"
-            type="checkbox"
-            @change="sliderClicked()"
+          id="sliderBox"
+          v-model="slider_checked"
+          :disabled="slider_disabled"
+          type="checkbox"
+          @change="sliderClicked()"
         >
-        <span class="slider justify-content-center"/>
+        <span class="slider justify-content-center" />
       </label>
     </b-card-footer>
   </b-card>
 </template>
 
 <script lang="ts">
-import {Component, Prop} from 'vue-property-decorator';
-import {PiHoleSettingsDefaults, StorageService} from '../../../service/StorageService';
-import {PiHoleApiStatus} from '../../../api/models/PiHoleApiStatus';
+import { Component, Prop } from 'vue-property-decorator';
+import { PiHoleSettingsDefaults, StorageService } from '../../../service/StorageService';
+import { PiHoleApiStatus } from '../../../api/models/PiHoleApiStatus';
 import BaseComponent from '../../general/BaseComponent.vue';
-import {BadgeService, ExtensionBadgeTextEnum} from '../../../service/BadgeService';
+import { BadgeService, ExtensionBadgeTextEnum } from '../../../service/BadgeService';
 import TabService from '../../../service/TabService';
 import PiHoleApiService from '../../../service/PiHoleApiService';
 import PiHoleApiStatusEnum from '../../../api/enum/PiHoleApiStatusEnum';
@@ -58,11 +58,11 @@ import PiHoleApiStatusEnum from '../../../api/enum/PiHoleApiStatusEnum';
 @Component
 export default class PopupStatusCardComponent extends BaseComponent {
   // Prop which is emitted to the parent. Gets updates after a pihole status check
-  @Prop({default: false})
+  @Prop({ default: false })
   is_active_by_status!: boolean;
 
   // Is the pihole active by badge text.
-  @Prop({required: true})
+  @Prop({ required: true })
   is_active_by_badge!: boolean;
 
   // Data Prop if the slider is checked
@@ -110,8 +110,8 @@ export default class PopupStatusCardComponent extends BaseComponent {
     }
 
     PiHoleApiService.getPiHoleStatusCombined().then((value) => {
-      this.update_components_by_data({status: value});
-    }).catch(() => this.update_components_by_data({status: PiHoleApiStatusEnum.error}));
+      this.update_components_by_data({ status: value });
+    }).catch(() => this.update_components_by_data({ status: PiHoleApiStatusEnum.error }));
   }
 
   /**
@@ -146,7 +146,7 @@ export default class PopupStatusCardComponent extends BaseComponent {
    */
   private sliderClicked(): void {
     const currentMode = this.slider_checked
-        ? PiHoleApiStatusEnum.enabled : PiHoleApiStatusEnum.disabled;
+      ? PiHoleApiStatusEnum.enabled : PiHoleApiStatusEnum.disabled;
 
     const time: number = this.default_disable_time;
 
@@ -192,12 +192,12 @@ export default class PopupStatusCardComponent extends BaseComponent {
   private throw_console_badge_error(error_message: string, refresh_status: boolean = false): void {
     console.warn(error_message);
 
-    this.update_components_by_data({status: PiHoleApiStatusEnum.error});
+    this.update_components_by_data({ status: PiHoleApiStatusEnum.error });
     if (refresh_status) {
       setTimeout(() => {
         PiHoleApiService.getPiHoleStatusCombined()
-            .then((data) => this.update_components_by_data({status: data}))
-            .catch(() => this.update_components_by_data({status: PiHoleApiStatusEnum.error}));
+          .then((data) => this.update_components_by_data({ status: data }))
+          .catch(() => this.update_components_by_data({ status: PiHoleApiStatusEnum.error }));
       }, 1500);
     }
   }

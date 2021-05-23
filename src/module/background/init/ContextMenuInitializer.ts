@@ -1,8 +1,8 @@
-import {Initializer} from '../../general/Initializer';
-import {I18NContextMenuKeys, I18NService} from '../../../service/i18NService';
+import { Initializer } from '../../general/Initializer';
+import { I18NContextMenuKeys, I18NService } from '../../../service/i18NService';
 import BackgroundService from '../../../service/BackgroundService';
-import {ContextMenuSwitchMessage, MessageEnum} from '../../../service/MessageBusService';
-import {StorageService} from '../../../service/StorageService';
+import { ContextMenuSwitchMessage, MessageEnum } from '../../../service/MessageBusService';
+import { StorageService } from '../../../service/StorageService';
 import CreateProperties = chrome.contextMenus.CreateProperties;
 
 export default class ContextMenuInitializer implements Initializer {

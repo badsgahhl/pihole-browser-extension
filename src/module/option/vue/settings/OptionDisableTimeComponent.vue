@@ -2,9 +2,9 @@
   <b-form-group :label="translate(i18nOptionsKeys.options_default_time_label)">
     <b-input-group>
       <b-input
-          v-model.number="disable_time"
-          min="10"
-          type="number"
+        v-model.number="disable_time"
+        min="10"
+        type="number"
       />
       <b-input-group-append>
         <b-input-group-text>
@@ -17,8 +17,8 @@
 
 <script lang="ts">
 
-import {Component, Watch} from 'vue-property-decorator';
-import {PiHoleSettingsDefaults, StorageService} from '../../../../service/StorageService';
+import { Component, Watch } from 'vue-property-decorator';
+import { PiHoleSettingsDefaults, StorageService } from '../../../../service/StorageService';
 import BaseComponent from '../../../general/BaseComponent.vue';
 
 @Component

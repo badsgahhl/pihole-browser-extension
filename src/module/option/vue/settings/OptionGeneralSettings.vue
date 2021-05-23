@@ -4,28 +4,28 @@
       {{ translate(i18nOptionsKeys.options_settings) }}
     </h2>
     <b-card
-        class="shadow"
-        no-body
+      class="shadow"
+      no-body
     >
       <b-card-header class="h6">
         👉🏼 {{ translate(i18nOptionsKeys.options_headline_info) }}
       </b-card-header>
       <b-card-body>
-        <OptionTabComponent/>
+        <OptionTabComponent />
 
-        <OptionDisableTimeComponent/>
+        <OptionDisableTimeComponent />
 
         <OptionGenericCheckboxComponent
-            v-for="item in checkbox_options"
-            :key="item.key"
-            :getter_function="item.getter_function"
-            :label_text_key="item.label_text_key"
-            :setter_function="item.setter_function"
+          v-for="item in checkbox_options"
+          :key="item.key"
+          :getter_function="item.getter_function"
+          :label_text_key="item.label_text_key"
+          :setter_function="item.setter_function"
         />
         <b-button
-            v-if="!isFirefox"
-            class="btn mt-3"
-            @click="openHotKeySettings"
+          v-if="!isFirefox"
+          class="btn mt-3"
+          @click="openHotKeySettings"
         >
           {{ translate(i18nOptionsKeys.option_hotkey_settings) }}
         </b-button>
@@ -35,13 +35,13 @@
 </template>
 
 <script lang="ts">
-import {Component} from 'vue-property-decorator';
-import {I18NOptionKeys} from '../../../../service/i18NService';
+import { Component } from 'vue-property-decorator';
+import { I18NOptionKeys } from '../../../../service/i18NService';
 import OptionDisableTimeComponent from './OptionDisableTimeComponent.vue';
 import OptionTabComponent from './OptionTabComponent.vue';
 import OptionGenericCheckboxComponent from './OptionGenericCheckboxComponent.vue';
 import BaseComponent from '../../../general/BaseComponent.vue';
-import {StorageService} from '../../../../service/StorageService';
+import { StorageService } from '../../../../service/StorageService';
 import MessageBusService from '../../../../service/MessageBusService';
 
 @Component({

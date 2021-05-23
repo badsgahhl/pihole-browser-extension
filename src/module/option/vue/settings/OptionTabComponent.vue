@@ -1,19 +1,19 @@
 <template>
   <b-tabs v-model="current_tab_index">
     <b-tab
-        v-for="(pi_hole_setting, index) in tabs"
-        :key="'dyn-tab-' + index"
-        :title="'PiHole ' + (index + 1)"
+      v-for="(pi_hole_setting, index) in tabs"
+      :key="'dyn-tab-' + index"
+      :title="'PiHole ' + (index + 1)"
     >
       <b-form-group
-          :label="translate(i18nOptionsKeys.options_pi_hole_address)"
-          style="margin-top: 1rem"
+        :label="translate(i18nOptionsKeys.options_pi_hole_address)"
+        style="margin-top: 1rem"
       >
         <b-form-input
-            v-model="pi_hole_setting.pi_uri_base"
-            :placeholder="PiHoleSettingsDefaults.pi_uri_base"
-            :state="is_invalid_url_schema(pi_hole_setting.pi_uri_base)"
-            required
+          v-model="pi_hole_setting.pi_uri_base"
+          :placeholder="PiHoleSettingsDefaults.pi_uri_base"
+          :state="is_invalid_url_schema(pi_hole_setting.pi_uri_base)"
+          required
         />
         <b-form-invalid-feedback>
           {{ translate(i18nOptionsKeys.options_url_invalid_warning) }}
@@ -22,14 +22,14 @@
       <b-form-group :label="translate(i18nOptionsKeys.options_api_key)">
         <b-input-group>
           <b-form-input
-              v-model="pi_hole_setting.api_key"
-              :state="is_invalid_api_key(pi_hole_setting.api_key)"
-              :type="password_input_type"
+            v-model="pi_hole_setting.api_key"
+            :state="is_invalid_api_key(pi_hole_setting.api_key)"
+            :type="password_input_type"
           />
           <b-input-group-append class="clickable">
             <b-input-group-text @click="switch_api_key_input_type">
-              <b-icon-eye v-if="password_input_type === 'password'"/>
-              <b-icon-eye-slash v-else/>
+              <b-icon-eye v-if="password_input_type === 'password'" />
+              <b-icon-eye-slash v-else />
             </b-input-group-text>
           </b-input-group-append>
         </b-input-group>
@@ -41,33 +41,33 @@
 
     <!-- New Tab Button (Using tabs-end slot) -->
     <template
-        #tabs-end
-        style="font-size: 20px;"
+      #tabs-end
+      style="font-size: 20px;"
     >
       <b-nav-item
-          v-if="tabs.length < 4"
-          :title="translate(i18nOptionsKeys.options_add_button)"
-          href="#"
-          link-classes="no-white-hover-border"
-          role="presentation"
-          @click.prevent="add_new_settings_tab"
+        v-if="tabs.length < 4"
+        :title="translate(i18nOptionsKeys.options_add_button)"
+        href="#"
+        link-classes="no-white-hover-border"
+        role="presentation"
+        @click.prevent="add_new_settings_tab"
       >
         <b-icon-plus-circle
-            style="width: 20px;height: 20px"
-            variant="success"
+          style="width: 20px;height: 20px"
+          variant="success"
         />
       </b-nav-item>
       <b-nav-item
-          v-if="tabs.length > 1"
-          :title="translate(i18nOptionsKeys.options_remove_button)"
-          href="#"
-          link-classes="no-white-hover-border"
-          role="presentation"
-          @click.prevent="remove_last_settings_tab"
+        v-if="tabs.length > 1"
+        :title="translate(i18nOptionsKeys.options_remove_button)"
+        href="#"
+        link-classes="no-white-hover-border"
+        role="presentation"
+        @click.prevent="remove_last_settings_tab"
       >
         <b-icon-x-circle
-            style="width: 20px;height: 20px"
-            variant="danger"
+          style="width: 20px;height: 20px"
+          variant="danger"
         />
       </b-nav-item>
     </template>
@@ -75,8 +75,8 @@
 </template>
 
 <script lang="ts">
-import {Component, Watch} from 'vue-property-decorator';
-import {PiHoleSettingsStorage, StorageService} from '../../../../service/StorageService';
+import { Component, Watch } from 'vue-property-decorator';
+import { PiHoleSettingsStorage, StorageService } from '../../../../service/StorageService';
 import BaseComponent from '../../../general/BaseComponent.vue';
 
 @Component
@@ -97,12 +97,12 @@ export default class OptionTabComponent extends BaseComponent {
     this.update_tabs_settings();
   }
 
-  @Watch('current_tab_index', {deep: true})
+  @Watch('current_tab_index', { deep: true })
   private tab_switched(): void {
     this.password_input_type = 'password';
   }
 
-  @Watch('tabs', {deep: true})
+  @Watch('tabs', { deep: true })
   private on_tabs_changed(): void {
     for (const piHoleSetting of this.tabs) {
       if (typeof piHoleSetting.pi_uri_base !== 'undefined') {

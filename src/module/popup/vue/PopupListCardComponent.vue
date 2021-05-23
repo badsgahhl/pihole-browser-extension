@@ -1,51 +1,51 @@
 <template>
   <b-card no-body>
     <b-card-header
-        id="list_card"
-        class="status"
+      id="list_card"
+      class="status"
     >
       {{ translate(i18nPopupKeys.popup_second_card_current_url) }}
     </b-card-header>
     <b-card-body
-        id="current_url"
-        :class="background_classes"
-        class="text-center"
+      id="current_url"
+      :class="background_classes"
+      class="text-center"
     >
       {{ current_url }}
     </b-card-body>
     <b-card-footer class="text-center">
       <b-button
-          id="list_action_white"
-          :disabled="buttons_disabled"
-          :title="translate(i18nPopupKeys.popup_second_card_whitelist)"
-          size="sm"
-          variant="success"
-          @click="whitelist_url"
+        id="list_action_white"
+        :disabled="buttons_disabled"
+        :title="translate(i18nPopupKeys.popup_second_card_whitelist)"
+        size="sm"
+        variant="success"
+        @click="whitelist_url"
       >
         <b-icon-check-circle
-            v-if="!whitelisting_active"
-            style="height: 20px;width: 20px"
+          v-if="!whitelisting_active"
+          style="height: 20px;width: 20px"
         />
         <b-spinner
-            v-else
-            style="width:20px;height: 20px"
+          v-else
+          style="width:20px;height: 20px"
         />
       </b-button>
       <b-button
-          id="list_action_black"
-          :disabled="buttons_disabled"
-          :title="translate(i18nPopupKeys.popup_second_card_blacklist)"
-          size="sm"
-          variant="danger"
-          @click="blacklist_url"
+        id="list_action_black"
+        :disabled="buttons_disabled"
+        :title="translate(i18nPopupKeys.popup_second_card_blacklist)"
+        size="sm"
+        variant="danger"
+        @click="blacklist_url"
       >
         <b-icon-x-circle
-            v-if="!blacklisting_active"
-            style="height: 20px;width: 20px"
+          v-if="!blacklisting_active"
+          style="height: 20px;width: 20px"
         />
         <b-spinner
-            v-else
-            style="width:20px;height: 20px"
+          v-else
+          style="width:20px;height: 20px"
         />
       </b-button>
     </b-card-footer>
@@ -53,9 +53,9 @@
 </template>
 
 <script lang="ts">
-import {Component, Prop} from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
 import BaseComponent from '../../general/BaseComponent.vue';
-import {StorageService} from '../../../service/StorageService';
+import { StorageService } from '../../../service/StorageService';
 import TabService from '../../../service/TabService';
 import PiHoleApiService from '../../../service/PiHoleApiService';
 import ApiList from '../../../api/enum/ApiList';
@@ -63,7 +63,7 @@ import ApiList from '../../../api/enum/ApiList';
 @Component
 export default class PopupListCardComponent extends BaseComponent {
   // Current URL passed by the parent
-  @Prop({required: true})
+  @Prop({ required: true })
   current_url!: string;
 
   // Data prop: Are the buttons disabled?
@@ -116,7 +116,7 @@ export default class PopupListCardComponent extends BaseComponent {
 
     // We remove the domain from the opposite list
     await PiHoleApiService.subDomainFromList(mode === ApiList.whitelist
-        ? ApiList.blacklist : ApiList.whitelist, domain);
+      ? ApiList.blacklist : ApiList.whitelist, domain);
 
     const piHoleListResults = (await PiHoleApiService.addDomainToList(mode, domain));
 

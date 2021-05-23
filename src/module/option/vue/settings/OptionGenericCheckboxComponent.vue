@@ -1,8 +1,8 @@
 <template>
   <b-form-group>
     <b-form-checkbox
-        v-model="is_checked"
-        switch
+      v-model="is_checked"
+      switch
     >
       {{ translate(label_text_key) }}
     </b-form-checkbox>
@@ -10,8 +10,8 @@
 </template>
 
 <script lang="ts">
-import {Component, Prop, Watch} from 'vue-property-decorator';
-import {I18NOptionKeys} from '../../../../service/i18NService';
+import { Component, Prop, Watch } from 'vue-property-decorator';
+import { I18NOptionKeys } from '../../../../service/i18NService';
 import BaseComponent from '../../../general/BaseComponent.vue';
 
 @Component

@@ -1,31 +1,31 @@
 <template>
   <div id="popup">
     <PopupStatusCardComponent
-        v-if="is_active_by_badge_loaded"
-        :is_active_by_badge="is_active_by_badge"
-        :is_active_by_status.sync="is_active_by_real_status"
+      v-if="is_active_by_badge_loaded"
+      :is_active_by_badge="is_active_by_badge"
+      :is_active_by_status.sync="is_active_by_real_status"
     />
     <PopupListCardComponent
-        v-if="is_list_feature_active()"
-        :current_url="current_url"
+      v-if="is_list_feature_active()"
+      :current_url="current_url"
     />
-    <PopupUpdateAlertComponent v-if="is_active_by_real_status"/>
+    <PopupUpdateAlertComponent v-if="is_active_by_real_status" />
   </div>
 </template>
 
 <script lang="ts">
 
-import {Component} from 'vue-property-decorator';
+import { Component } from 'vue-property-decorator';
 import PopupStatusCardComponent from './PopupStatusCardComponent.vue';
 import PopupListCardComponent from './PopupListCardComponent.vue';
-import {BadgeService, ExtensionBadgeTextEnum} from '../../../service/BadgeService';
+import { BadgeService, ExtensionBadgeTextEnum } from '../../../service/BadgeService';
 import PopupUpdateAlertComponent from './PopupUpdateAlertComponent.vue';
 import BaseComponent from '../../general/BaseComponent.vue';
-import {StorageService} from '../../../service/StorageService';
+import { StorageService } from '../../../service/StorageService';
 import TabService from '../../../service/TabService';
 
 @Component({
-  components: {PopupUpdateAlertComponent, PopupListCardComponent, PopupStatusCardComponent},
+  components: { PopupUpdateAlertComponent, PopupListCardComponent, PopupStatusCardComponent },
 })
 /**
  * The Main PopupComponent.

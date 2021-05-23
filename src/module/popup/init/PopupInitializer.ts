@@ -1,6 +1,6 @@
 import Vue from 'vue';
-import {BIconCheckCircle, BIconXCircle, BootstrapVue} from 'bootstrap-vue';
-import {Initializer} from '../../general/Initializer';
+import { BIconCheckCircle, BIconXCircle, BootstrapVue } from 'bootstrap-vue';
+import { Initializer } from '../../general/Initializer';
 import PopupComponent from '../vue/PopupComponent.vue';
 
 export default class PopupInitializer implements Initializer {

@@ -1,20 +1,20 @@
 <template>
   <div id="option">
     <b-tabs
-        v-model="tab"
-        active-nav-item-class="bg-light text-dark"
-        card
-        nav-class="bg-dark sidebar-nav"
-        nav-wrapper-class="sidebar mr-5"
-        pills
-        vertical
+      v-model="tab"
+      active-nav-item-class="bg-light text-dark"
+      card
+      nav-class="bg-dark sidebar-nav"
+      nav-wrapper-class="sidebar mr-5"
+      pills
+      vertical
     >
       <template #tabs-start>
         <b-row class="mb-3">
           <b-img
-              height="60px"
-              src="icon/icon-128.png"
-              width="60px"
+            height="60px"
+            src="icon/icon-128.png"
+            width="60px"
           />
           <h5 class="mt-3 text-light">
             Switch for PiHole
@@ -22,40 +22,40 @@
         </b-row>
       </template>
       <b-tab
-          :title="'⚙️   '+translate(i18nOptionsKeys.options_settings)"
-          active
-          class="w-75"
-          title-link-class="text-light"
+        :title="'⚙️   '+translate(i18nOptionsKeys.options_settings)"
+        active
+        class="w-75"
+        title-link-class="text-light"
       >
-        <OptionGeneralSettings/>
+        <OptionGeneralSettings />
       </b-tab>
       <b-tab
-          :title="'📚    '+translate(i18nOptionsKeys.options_about)"
-          class="w-75"
-          title-link-class="text-light"
+        :title="'📚    '+translate(i18nOptionsKeys.options_about)"
+        class="w-75"
+        title-link-class="text-light"
       >
-        <OptionAboutTab/>
+        <OptionAboutTab />
       </b-tab>
       <template #tabs-end>
         <b-nav-item
-            :href="LinkConfig.paypal_donation_link"
-            link-classes="text-light"
-            role="presentation"
-            target="_blank"
+          :href="LinkConfig.paypal_donation_link"
+          link-classes="text-light"
+          role="presentation"
+          target="_blank"
         >
           ❤ {{ translate(i18nOptionsKeys.option_donation) }}
         </b-nav-item>
         <b-nav-item
-            :href="LinkConfig.github_troubleshooting"
-            link-classes="text-light"
-            role="presentation"
-            target="_blank"
+          :href="LinkConfig.github_troubleshooting"
+          link-classes="text-light"
+          role="presentation"
+          target="_blank"
         >
           🧯 {{ translate(i18nOptionsKeys.option_troubleshooting) }}
         </b-nav-item>
         <footer
-            class="d-md-flex px-3 mt-4 mb-1 text-uppercase position-absolute small text-muted"
-            style="bottom: 10px"
+          class="d-md-flex px-3 mt-4 mb-1 text-uppercase position-absolute small text-muted"
+          style="bottom: 10px"
         >
           {{ getCopyrightText() }}
         </footer>
@@ -65,8 +65,8 @@
 </template>
 
 <script lang="ts">
-import {Component, Watch} from 'vue-property-decorator';
-import {I18NOptionKeys} from '../../../service/i18NService';
+import { Component, Watch } from 'vue-property-decorator';
+import { I18NOptionKeys } from '../../../service/i18NService';
 import OptionGeneralSettings from './settings/OptionGeneralSettings.vue';
 import OptionAboutTab from './about/OptionAboutTab.vue';
 import BaseComponent from '../../general/BaseComponent.vue';

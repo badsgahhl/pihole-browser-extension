@@ -1,9 +1,9 @@
 <template>
   <b-alert
-      v-if="updatesAvailable"
-      class="popup-update-alert"
-      show
-      variant="danger"
+    v-if="updatesAvailable"
+    class="popup-update-alert"
+    show
+    variant="danger"
   >
     {{
       translate(i18nPopupKeys.popup_update_card_info, [
@@ -16,9 +16,9 @@
 
 <script lang="ts">
 
-import {Component} from 'vue-property-decorator';
+import { Component } from 'vue-property-decorator';
 import BaseComponent from '../../general/BaseComponent.vue';
-import {StorageService} from '../../../service/StorageService';
+import { StorageService } from '../../../service/StorageService';
 import PiHoleApiService from '../../../service/PiHoleApiService';
 
 @Component

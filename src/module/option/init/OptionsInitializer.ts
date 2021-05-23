@@ -1,6 +1,8 @@
 import Vue from 'vue';
-import {BIconClipboard, BIconEye, BIconEyeSlash, BIconPlusCircle, BIconXCircle, BootstrapVue,} from 'bootstrap-vue';
-import {Initializer} from '../../general/Initializer';
+import {
+  BIconClipboard, BIconEye, BIconEyeSlash, BIconPlusCircle, BIconXCircle, BootstrapVue,
+} from 'bootstrap-vue';
+import { Initializer } from '../../general/Initializer';
 import OptionComponent from '../vue/OptionComponent.vue';
 
 export default class OptionsInitializer implements Initializer {

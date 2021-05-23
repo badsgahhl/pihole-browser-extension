@@ -1,4 +1,4 @@
-import {Initializer} from '../../general/Initializer';
+import { Initializer } from '../../general/Initializer';
 import BackgroundService from '../../../service/BackgroundService';
 
 enum HotKeyEnum {

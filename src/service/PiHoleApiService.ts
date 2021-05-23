@@ -1,8 +1,8 @@
-import axios, {AxiosRequestConfig, AxiosResponse} from 'axios';
-import {PiHoleApiStatus} from '../api/models/PiHoleApiStatus';
-import {StorageService} from './StorageService';
-import {PiHoleListStatus} from '../api/models/PiHoleListStatus';
-import {PiHoleVersions} from '../api/models/PiHoleVersions';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { PiHoleApiStatus } from '../api/models/PiHoleApiStatus';
+import { StorageService } from './StorageService';
+import { PiHoleListStatus } from '../api/models/PiHoleListStatus';
+import { PiHoleVersions } from '../api/models/PiHoleVersions';
 import ApiListMode from '../api/enum/ApiListMode';
 import ApiList from '../api/enum/ApiList';
 import PiHoleApiStatusEnum from '../api/enum/PiHoleApiStatusEnum';
@@ -68,7 +68,7 @@ export default class PiHoleApiService {
   }
 
   public static async changePiHoleStatus(mode: PiHoleApiStatusEnum, time: number)
-      : Promise<AxiosResponse<PiHoleApiStatus>[]> {
+    : Promise<AxiosResponse<PiHoleApiStatus>[]> {
     const piHoleSettingsArray = (await StorageService.getPiHoleSettingsArray());
     if (typeof piHoleSettingsArray === 'undefined') {
       return Promise.reject('PiHoleSettings empty');
@@ -102,17 +102,17 @@ export default class PiHoleApiService {
   }
 
   public static async addDomainToList(list: ApiList, domain: string)
-      : Promise<AxiosResponse<PiHoleListStatus>[]> {
+    : Promise<AxiosResponse<PiHoleListStatus>[]> {
     return this.changeDomainOnList(list, ApiListMode.add, domain);
   }
 
   public static async subDomainFromList(list: ApiList, domain: string)
-      : Promise<AxiosResponse<PiHoleListStatus>[]> {
+    : Promise<AxiosResponse<PiHoleListStatus>[]> {
     return this.changeDomainOnList(list, ApiListMode.sub, domain);
   }
 
   private static async changeDomainOnList(list: ApiList, mode: ApiListMode, domain: string)
-      : Promise<AxiosResponse<PiHoleListStatus>[]> {
+    : Promise<AxiosResponse<PiHoleListStatus>[]> {
     const piHoleSettingsArray = (await StorageService.getPiHoleSettingsArray());
 
     if (typeof piHoleSettingsArray === 'undefined') {

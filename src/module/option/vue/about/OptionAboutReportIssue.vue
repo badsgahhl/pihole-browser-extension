@@ -1,7 +1,7 @@
 <template>
   <b-card
-      class="shadow"
-      no-body
+    class="shadow"
+    no-body
   >
     <b-card-header class="h6">
       💥 {{ translate(i18nOptionsKeys.options_report_error) }}
@@ -9,36 +9,36 @@
     <b-card-body>
       <p>
         <b-button
-            :href="LinkConfig.github_issue"
-            class="text-light font-weight-bold"
-            size="small"
-            target="_blank"
+          :href="LinkConfig.github_issue"
+          class="text-light font-weight-bold"
+          size="small"
+          target="_blank"
         >
           {{ translate(i18nOptionsKeys.option_report_error_github) }}
         </b-button>
       </p>
       <p>{{ translate(i18nOptionsKeys.option_about_copy_debug) }}</p>
       <p
-          ref="versionInfo"
-          class="float-left"
+        ref="versionInfo"
+        class="float-left"
       >
         Switch for PiHole: {{ extension_version }}
         <br>Operating System: {{ plattform }}
         <br>Browser: {{ browser }}
       </p>
       <b-button
-          class="btn btn btn-sm btn-primary ml-3"
-          type="success"
-          @click="copy_to_clipboard"
+        class="btn btn btn-sm btn-primary ml-3"
+        type="success"
+        @click="copy_to_clipboard"
       >
-        <b-icon-clipboard/>
+        <b-icon-clipboard />
       </b-button>
     </b-card-body>
   </b-card>
 </template>
 
 <script lang="ts">
-import {Component} from 'vue-property-decorator';
+import { Component } from 'vue-property-decorator';
 import BaseComponent from '../../../general/BaseComponent.vue';
 
 @Component
@@ -73,7 +73,7 @@ export default class OptionAboutReportIssue extends BaseComponent {
   }
 
   private copy_to_clipboard(): void {
-    navigator.clipboard.writeText((<HTMLElement>this.$refs.versionInfo).innerText);
+    navigator.clipboard.writeText((<HTMLElement> this.$refs.versionInfo).innerText);
   }
 }
 </script>
