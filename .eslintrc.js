@@ -12,7 +12,8 @@ module.exports = {
     ],
     extends: [
         'airbnb-typescript/base',
-        'plugin:vue/recommended'
+        'plugin:vue/recommended',
+        'prettier'
     ],
     "rules": {
         "import/no-extraneous-dependencies": "off",

@@ -1,9 +1,12 @@
-import { Initializer } from '../../general/Initializer';
-import { I18NContextMenuKeys, I18NService } from '../../../service/i18NService';
-import BackgroundService from '../../../service/BackgroundService';
-import { ContextMenuSwitchMessage, MessageEnum } from '../../../service/MessageBusService';
-import { StorageService } from '../../../service/StorageService';
-import CreateProperties = chrome.contextMenus.CreateProperties;
+import { Initializer } from '../../general/Initializer'
+import { I18NContextMenuKeys, I18NService } from '../../../service/i18NService'
+import BackgroundService from '../../../service/BackgroundService'
+import {
+  ContextMenuSwitchMessage,
+  MessageEnum
+} from '../../../service/MessageBusService'
+import { StorageService } from '../../../service/StorageService'
+import CreateProperties = chrome.contextMenus.CreateProperties
 
 export default class ContextMenuInitializer implements Initializer {
   private get contextMenusConfigurations(): CreateProperties[] {
@@ -12,65 +15,71 @@ export default class ContextMenuInitializer implements Initializer {
         title: I18NService.translate(I18NContextMenuKeys.toggle_pi_holes),
         contexts: ['page'],
         onclick: () => {
-          BackgroundService.togglePiHole();
-        },
+          BackgroundService.togglePiHole()
+        }
       },
       {
         type: 'separator',
-        contexts: ['page'],
+        contexts: ['page']
       },
       {
-        title: I18NService.translate(I18NContextMenuKeys.blacklist_current_domain),
+        title: I18NService.translate(
+          I18NContextMenuKeys.blacklist_current_domain
+        ),
         contexts: ['page'],
         onclick: () => {
-          BackgroundService.blacklistCurrentDomain();
-        },
+          BackgroundService.blacklistCurrentDomain()
+        }
       },
       {
-        title: I18NService.translate(I18NContextMenuKeys.whitelist_current_domain),
+        title: I18NService.translate(
+          I18NContextMenuKeys.whitelist_current_domain
+        ),
         contexts: ['page'],
         onclick: () => {
-          BackgroundService.whitelistCurrentDomain();
-        },
+          BackgroundService.whitelistCurrentDomain()
+        }
       },
       {
         type: 'separator',
-        contexts: ['page'],
+        contexts: ['page']
       },
       {
         title: I18NService.translate(I18NContextMenuKeys.open_settings),
         contexts: ['page'],
-        onclick: () => BackgroundService.openOptions(),
-      },
-    ];
+        onclick: () => BackgroundService.openOptions()
+      }
+    ]
   }
 
   init(): void {
-    StorageService.getDisableContextMenu().then((value) => {
-      this.removeOrCreateContextMenuByBoolean(value);
-    });
-    this.initMessageListener();
+    StorageService.getDisableContextMenu().then(value => {
+      this.removeOrCreateContextMenuByBoolean(value)
+    })
+    this.initMessageListener()
   }
 
   private initMessageListener(): void {
-    chrome.runtime.onMessage.addListener((request: ContextMenuSwitchMessage) => {
-      if (request.message === MessageEnum.ContextMenuSwitch) {
-        this.removeOrCreateContextMenuByBoolean(request.payload);
+    chrome.runtime.onMessage.addListener(
+      (request: ContextMenuSwitchMessage) => {
+        if (request.message === MessageEnum.ContextMenuSwitch) {
+          this.removeOrCreateContextMenuByBoolean(request.payload)
+        }
       }
-    });
+    )
   }
 
   private removeOrCreateContextMenuByBoolean(state: boolean): void {
     if (!state) {
-      this.createContextMenu();
+      this.createContextMenu()
     } else {
-      chrome.contextMenus.removeAll();
+      chrome.contextMenus.removeAll()
     }
   }
 
   private createContextMenu(): void {
     for (const contextMenusConfiguration of this.contextMenusConfigurations) {
-      chrome.contextMenus.create(contextMenusConfiguration);
+      chrome.contextMenus.create(contextMenusConfiguration)
     }
   }
 }

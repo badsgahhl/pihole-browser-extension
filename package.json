@@ -5,6 +5,8 @@
 		"axios": "^0.21.1",
 		"bootstrap": "^4.6.0",
 		"bootstrap-vue": "^2.21.2",
+		"eslint-config-prettier": "^8.3.0",
+		"prettier": "^1.19.1",
 		"vue": "^2.6.12"
 	},
 	"devDependencies": {
@@ -46,7 +48,9 @@
 		"start-firefox": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack --mode=development -w --progress --config src/webpack/webpack.firefox.ts",
 		"build": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack --mode=production --progress --config src/webpack/webpack.firefox.ts && cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack --mode=production --progress --config src/webpack/webpack.chrome.ts",
 		"rebuild-package-lock": "npm install --package-lock",
-		"eslint": "npx eslint . --ext .ts,.vue"
+		"eslint": "npx eslint . --ext .ts,.vue",
+		"prettier-check": "prettier --check ./**/*.{ts,vue,css,sccs}",
+		"prettier-format": "prettier --write ./**/*.{ts,vue,css,sccs}"
 	},
 	"repository": {
 		"type": "git",

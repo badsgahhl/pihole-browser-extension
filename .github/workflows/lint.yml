@@ -1,0 +1,25 @@
+name: LINT CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+jobs:
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install modules
+        run: npm ci
+      - name: Run ESLint
+        run: npm run-script lint
+  prettier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install modules
+        run: npm ci
+      - name: Run Prettier Check
+        run: npm run-script prettier-check

@@ -1,6 +1,6 @@
 enum ApiList {
   whitelist = 'white',
-  blacklist = 'black',
+  blacklist = 'black'
 }
 
-export default ApiList;
+export default ApiList

@@ -10,14 +10,18 @@
 </template>
 
 <script lang="ts">
-import { Component } from 'vue-property-decorator';
-import OptionAboutLicenses from './OptionAboutLicenses.vue';
-import OptionAboutExtension from './OptionAboutExtension.vue';
-import OptionAboutReportIssue from './OptionAboutReportIssue.vue';
-import BaseComponent from '../../../general/BaseComponent.vue';
+import { Component } from 'vue-property-decorator'
+import OptionAboutLicenses from './OptionAboutLicenses.vue'
+import OptionAboutExtension from './OptionAboutExtension.vue'
+import OptionAboutReportIssue from './OptionAboutReportIssue.vue'
+import BaseComponent from '../../../general/BaseComponent.vue'
 
 @Component({
-  components: { OptionAboutReportIssue, OptionAboutExtension, OptionAboutLicenses },
+  components: {
+    OptionAboutReportIssue,
+    OptionAboutExtension,
+    OptionAboutLicenses
+  }
 })
 export default class OptionAboutTab extends BaseComponent {
   // Empty class

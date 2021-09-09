@@ -1,3 +1,3 @@
-import BackgroundInitializer from './init/BackgroundInitializer';
+import BackgroundInitializer from './init/BackgroundInitializer'
 
-(new BackgroundInitializer()).init();
+new BackgroundInitializer().init()

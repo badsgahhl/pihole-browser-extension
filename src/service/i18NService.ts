@@ -2,8 +2,11 @@ export class I18NService {
   /**
    * Wrapper Function for the chrome.i18n.getMessage Function
    */
-  public static translate(key: string, substitutions?: Array<string | number>): string {
-    return chrome.i18n.getMessage(key, substitutions);
+  public static translate(
+    key: string,
+    substitutions?: Array<string | number>
+  ): string {
+    return chrome.i18n.getMessage(key, substitutions)
   }
 }
 
@@ -33,7 +36,7 @@ export enum I18NOptionKeys {
   option_disable_feature = 'options_disable_list_feature',
   option_disable_update_notification = 'option_disable_update_notification',
   option_hotkey_settings = 'option_hotkey_settings',
-  option_disable_context_menu = 'option_disable_context_menu',
+  option_disable_context_menu = 'option_disable_context_menu'
 }
 
 export enum I18NPopupKeys {
@@ -42,7 +45,7 @@ export enum I18NPopupKeys {
   popup_second_card_current_url = 'popup_second_card_current_url',
   popup_second_card_whitelist = 'popup_second_card_whitelist',
   popup_second_card_blacklist = 'popup_second_card_blacklist',
-  popup_update_card_info = 'popup_update_card_info',
+  popup_update_card_info = 'popup_update_card_info'
 }
 
 export enum LinkConfig {
@@ -51,12 +54,12 @@ export enum LinkConfig {
   uninstall_survey = 'https://forms.gle/RsGUyrmB1jtsGhYQ9',
   github_issue = 'https://github.com/badsgahhl/pihole-browser-extension/issues',
   github_user_badsgahhl = 'https://github.com/badsgahhl',
-  github_user_erikr729 = 'https://github.com/Limatationz',
+  github_user_erikr729 = 'https://github.com/Limatationz'
 }
 
 export enum I18NContextMenuKeys {
   toggle_pi_holes = 'context_menu_toggle_pi_holes',
   blacklist_current_domain = 'context_menu_blacklist_current_domain',
   whitelist_current_domain = 'context_menu_whitelist_current_domain',
-  open_settings = 'context_menu_open_settings',
+  open_settings = 'context_menu_open_settings'
 }

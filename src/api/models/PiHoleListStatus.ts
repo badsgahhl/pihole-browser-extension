@@ -1,4 +1,4 @@
 export interface PiHoleListStatus {
-  success: boolean,
+  success: boolean
   message: string
 }

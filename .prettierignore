@@ -1,0 +1,8 @@
+_locales
+.idea
+.github
+dist
+icon
+icon_raw
+node_modules
+

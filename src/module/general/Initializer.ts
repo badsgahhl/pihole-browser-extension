@@ -1,3 +1,3 @@
 export interface Initializer {
-  init(): void;
+  init(): void
 }
