@@ -14,7 +14,7 @@ jobs:
       - name: Install modules
         run: npm ci
       - name: Run ESLint
-        run: npm run-script lint
+        run: npm run-script eslint
   prettier:
     runs-on: ubuntu-latest
     steps:
