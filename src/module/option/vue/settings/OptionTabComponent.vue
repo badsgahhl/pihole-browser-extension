@@ -4,6 +4,7 @@
       v-for="(pi_hole_setting, index) in tabs"
       :key="'dyn-tab-' + index"
       :title="'PiHole ' + (index + 1)"
+      @click="resetConnectionCheckAndCheck"
     >
       <b-form-group
         :label="translate(i18nOptionsKeys.options_pi_hole_address)"
@@ -11,11 +12,28 @@
       >
         <b-form-input
           v-model="pi_hole_setting.pi_uri_base"
+          v-debounce:500ms="connectionCheck"
+          debounce-events="input"
           :placeholder="PiHoleSettingsDefaults.pi_uri_base"
           :state="is_invalid_url_schema(pi_hole_setting.pi_uri_base)"
           required
         />
-        <b-form-invalid-feedback>
+        <b-form-valid-feedback :force-show="connectionCheckStatus === 'IDLE'">
+          <b-spinner small />
+          Connection check in progress.
+        </b-form-valid-feedback>
+        <b-form-valid-feedback :force-show="connectionCheckStatus === 'OK'">
+          Connection successful<br />
+          {{ connectionCheckVersionText }}
+        </b-form-valid-feedback>
+        <b-form-invalid-feedback
+          :force-show="connectionCheckStatus === 'ERROR'"
+        >
+          Connection not successfully
+        </b-form-invalid-feedback>
+        <b-form-invalid-feedback
+          :state="is_invalid_url_schema(pi_hole_setting.pi_uri_base)"
+        >
           {{ translate(i18nOptionsKeys.options_url_invalid_warning) }}
         </b-form-invalid-feedback>
       </b-form-group>
@@ -23,7 +41,6 @@
         <b-input-group>
           <b-form-input
             v-model="pi_hole_setting.api_key"
-            :state="is_invalid_api_key(pi_hole_setting.api_key)"
             :type="password_input_type"
           />
           <b-input-group-append class="clickable">
@@ -72,32 +89,43 @@
 
 <script lang="ts">
 import { Component, Watch } from 'vue-property-decorator'
+import { debounce } from 'vue-debounce'
 import {
   PiHoleSettingsStorage,
   StorageService
 } from '../../../../service/StorageService'
 import BaseComponent from '../../../general/BaseComponent.vue'
+import { PiHoleVersions } from '../../../../api/models/PiHoleVersions'
+import PiHoleApiService from '../../../../service/PiHoleApiService'
+
+enum ConnectionCheckStatus {
+  OK = 'OK',
+  ERROR = 'ERROR',
+  IDLE = 'IDLE'
+}
 
 @Component
-/**
- * Component for the different PiHole Settings
- * */
 export default class OptionTabComponent extends BaseComponent {
-  // Data prop of the current tabs as array
   private tabs: Array<PiHoleSettingsStorage> = [this.default_empty_option_tab()]
 
-  // Data prop of the currents tab index
   private current_tab_index = 0
 
-  // Type of the API Key input field
   private password_input_type: 'password' | 'text' = 'password'
 
+  private connectionCheckStatus: ConnectionCheckStatus =
+    ConnectionCheckStatus.IDLE
+
+  private connectionCheckData: PiHoleVersions | null = null
+
   mounted() {
-    this.update_tabs_settings()
+    this.update_tabs_settings().then(() => this.resetConnectionCheckAndCheck())
   }
 
   @Watch('current_tab_index', { deep: true })
-  private tab_switched(): void {
+  private tab_switched(newValue: number, oldValue: number): void {
+    if (newValue === oldValue) {
+      return
+    }
     this.password_input_type = 'password'
   }
 
@@ -119,6 +147,39 @@ export default class OptionTabComponent extends BaseComponent {
       }
     }
     StorageService.savePiHoleSettingsArray(this.tabs)
+  }
+
+  private get connectionCheckVersionText() {
+    const data = this.connectionCheckData
+    return `Core: ${data?.core_current} FTL: ${data?.FTL_current} Web: ${data?.web_current}`
+  }
+
+  private resetConnectionCheckAndCheck() {
+    this.connectionCheckStatus = ConnectionCheckStatus.IDLE
+    this.connectionCheckData = null
+    debounce(() => {
+      this.connectionCheck()
+    }, '300ms')()
+  }
+
+  private connectionCheck() {
+    this.connectionCheckStatus = ConnectionCheckStatus.IDLE
+    PiHoleApiService.getPiHoleVersion(this.currentSelectedSettings)
+      .then(result => {
+        if (typeof result.data === 'object') {
+          this.connectionCheckStatus = ConnectionCheckStatus.OK
+          this.connectionCheckData = result.data
+        } else {
+          this.connectionCheckStatus = ConnectionCheckStatus.ERROR
+        }
+      })
+      .catch(() => {
+        this.connectionCheckStatus = ConnectionCheckStatus.ERROR
+      })
+  }
+
+  private get currentSelectedSettings(): PiHoleSettingsStorage {
+    return this.tabs[this.current_tab_index]
   }
 
   /**
@@ -178,15 +239,11 @@ export default class OptionTabComponent extends BaseComponent {
     this.tabs.pop()
   }
 
-  /**
-   * Updates the tabs with the storage settings
-   */
-  private update_tabs_settings(): void {
-    StorageService.getPiHoleSettingsArray().then(results => {
-      if (typeof results !== 'undefined' && results.length > 0) {
-        this.tabs = results
-      }
-    })
+  private async update_tabs_settings(): Promise<void> {
+    const results = await StorageService.getPiHoleSettingsArray()
+    if (typeof results !== 'undefined' && results.length > 0) {
+      this.tabs = results
+    }
   }
 }
 </script>
