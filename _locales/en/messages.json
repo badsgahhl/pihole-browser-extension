@@ -122,5 +122,14 @@
 	},
 	"context_menu_open_settings": {
 		"message": "Open Settings"
+	},
+	"option_connection_check_idle": {
+		"message": "Connection check in progress"
+	},
+	"option_connection_check_ok": {
+		"message": " Connection successful"
+	},
+	"option_connection_check_error": {
+		"message": "Connection not successfully"
 	}
 }

@@ -122,5 +122,14 @@
 	},
 	"context_menu_open_settings": {
 		"message": "Einstellungen öffnen"
+	},
+	"option_connection_check_idle": {
+		"message": "Prüfe Verbindung"
+	},
+	"option_connection_check_ok": {
+		"message": "Verbindung erfolgreich hergestellt"
+	},
+	"option_connection_check_error": {
+		"message": "Verbindung fehlerhaft"
 	}
 }

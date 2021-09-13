@@ -13,8 +13,8 @@
         <OptionDisableTimeComponent />
 
         <OptionGenericCheckboxComponent
-          v-for="item in checkbox_options"
-          :key="item.key"
+          v-for="(item, i) in checkbox_options"
+          :key="i"
           :getter_function="item.getter_function"
           :label_text_key="item.label_text_key"
           :setter_function="item.setter_function"

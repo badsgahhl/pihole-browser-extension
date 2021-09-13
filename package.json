@@ -2,12 +2,14 @@
 	"name": "pihole-browser-extension",
 	"version": "2.3.4",
 	"dependencies": {
+		"@vue/composition-api": "^1.1.5",
 		"axios": "^0.21.1",
 		"bootstrap": "^4.6.0",
 		"bootstrap-vue": "^2.21.2",
 		"eslint-config-prettier": "^8.3.0",
 		"prettier": "^1.19.1",
-		"vue": "^2.6.12"
+		"vue": "^2.6.12",
+		"vue-debounce": "^3.0.1"
 	},
 	"devDependencies": {
 		"@types/bootstrap": "^5.0.15",

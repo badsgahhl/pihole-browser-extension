@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import vueDebounce from 'vue-debounce'
 import {
   BIconClipboard,
   BIconEye,
@@ -17,6 +18,7 @@ export default class OptionsInitializer implements Initializer {
       render: (h: any) => h(OptionComponent)
     }
 
+    Vue.use(vueDebounce)
     Vue.use(BootstrapVue)
     Vue.component('BIconPlusCircle', BIconPlusCircle)
     Vue.component('BIconXCircle', BIconXCircle)

@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { PiHoleApiStatus } from '../api/models/PiHoleApiStatus'
-import { StorageService } from './StorageService'
+import { PiHoleSettingsStorage, StorageService } from './StorageService'
 import { PiHoleListStatus } from '../api/models/PiHoleListStatus'
 import { PiHoleVersions } from '../api/models/PiHoleVersions'
 import ApiListMode from '../api/enum/ApiListMode'
@@ -69,20 +69,25 @@ export default class PiHoleApiService {
     const promiseArray = new Array<Promise<AxiosResponse<PiHoleVersions>>>()
 
     for (const piHole of piHoleSettingsArray) {
-      if (
-        typeof piHole.pi_uri_base === 'undefined' ||
-        typeof piHole.api_key === 'undefined'
-      ) {
-        return Promise.reject('Some PiHoleSettings are undefined.')
-      }
-      const url = this.getPiHoleBaseUrl(piHole.pi_uri_base, piHole.api_key)
-      url.searchParams.append('versions', '')
-      promiseArray.push(
-        axios.get<PiHoleVersions>(url.href, this.getAxiosConfig())
-      )
+      promiseArray.push(this.getPiHoleVersion(piHole))
     }
 
     return Promise.all(promiseArray)
+  }
+
+  public static async getPiHoleVersion(
+    piHole: PiHoleSettingsStorage
+  ): Promise<AxiosResponse<PiHoleVersions>> {
+    if (
+      typeof piHole.pi_uri_base === 'undefined' ||
+      typeof piHole.api_key === 'undefined'
+    ) {
+      return Promise.reject('Some PiHoleSettings are undefined.')
+    }
+    const url = this.getPiHoleBaseUrl(piHole.pi_uri_base, piHole.api_key)
+
+    url.searchParams.append('versions', '')
+    return axios.get<PiHoleVersions>(url.href, this.getAxiosConfig())
   }
 
   public static async changePiHoleStatus(
