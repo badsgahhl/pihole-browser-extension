@@ -36,7 +36,10 @@ export enum I18NOptionKeys {
   option_disable_feature = 'options_disable_list_feature',
   option_disable_update_notification = 'option_disable_update_notification',
   option_hotkey_settings = 'option_hotkey_settings',
-  option_disable_context_menu = 'option_disable_context_menu'
+  option_disable_context_menu = 'option_disable_context_menu',
+  option_connection_check_idle = 'option_connection_check_idle',
+  option_connection_check_ok = 'option_connection_check_ok',
+  option_connection_check_error = 'option_connection_check_error'
 }
 
 export enum I18NPopupKeys {

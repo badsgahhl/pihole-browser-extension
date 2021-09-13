@@ -20,16 +20,16 @@
         />
         <b-form-valid-feedback :force-show="connectionCheckStatus === 'IDLE'">
           <b-spinner small />
-          Connection check in progress.
+          {{ translate(i18nOptionsKeys.option_connection_check_idle) }}
         </b-form-valid-feedback>
         <b-form-valid-feedback :force-show="connectionCheckStatus === 'OK'">
-          Connection successful<br />
+          {{ translate(i18nOptionsKeys.option_connection_check_ok) }}<br />
           {{ connectionCheckVersionText }}
         </b-form-valid-feedback>
         <b-form-invalid-feedback
           :force-show="connectionCheckStatus === 'ERROR'"
         >
-          Connection not successfully
+          {{ translate(i18nOptionsKeys.option_connection_check_error) }}
         </b-form-invalid-feedback>
         <b-form-invalid-feedback
           :state="is_invalid_url_schema(pi_hole_setting.pi_uri_base)"
