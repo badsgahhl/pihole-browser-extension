@@ -41,6 +41,7 @@
         <b-input-group>
           <b-form-input
             v-model="pi_hole_setting.api_key"
+            :state="is_invalid_api_key(pi_hole_setting.api_key)"
             :type="password_input_type"
           />
           <b-input-group-append class="clickable">
