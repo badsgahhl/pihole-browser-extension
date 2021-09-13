@@ -123,10 +123,7 @@ export default class OptionTabComponent extends BaseComponent {
   }
 
   @Watch('current_tab_index', { deep: true })
-  private tab_switched(newValue: number, oldValue: number): void {
-    if (newValue === oldValue) {
-      return
-    }
+  private tab_switched(): void {
     this.password_input_type = 'password'
   }
 
