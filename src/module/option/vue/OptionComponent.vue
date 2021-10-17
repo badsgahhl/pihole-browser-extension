@@ -1,5 +1,5 @@
 <template>
-  <div id="option">
+  <v-app id="option">
     <b-tabs
       v-model="tab"
       active-nav-item-class="bg-light text-dark"
@@ -57,7 +57,7 @@
         </footer>
       </template>
     </b-tabs>
-  </div>
+  </v-app>
 </template>
 
 <script lang="ts">

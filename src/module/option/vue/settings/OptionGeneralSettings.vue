@@ -1,110 +1,113 @@
 <template>
-  <b-card-text>
+  <div>
     <h2 class="pb-3 mt-0">
-      {{ translate(i18nOptionsKeys.options_settings) }}
+      {{ translate(I18NOptionKeys.options_settings) }}
     </h2>
-    <b-card class="shadow" no-body>
-      <b-card-header class="h6">
-        👉🏼 {{ translate(i18nOptionsKeys.options_headline_info) }}
-      </b-card-header>
-      <b-card-body>
+    <v-card>
+      <v-card-title>
+        👉🏼 {{ translate(I18NOptionKeys.options_headline_info) }}
+      </v-card-title>
+      <v-card-text>
         <OptionTabComponent />
 
         <OptionDisableTimeComponent />
 
         <OptionGenericCheckboxComponent
-          v-for="(item, i) in checkbox_options"
+          v-for="(item, i) in checkboxOptions"
           :key="i"
-          :getter_function="item.getter_function"
-          :label_text_key="item.label_text_key"
-          :setter_function="item.setter_function"
+          :getter-function="item.getterFunction"
+          :label-text-key="item.labelTextKey"
+          :setter-function="item.setterFunction"
         />
-        <b-button
-          v-if="!isFirefox"
-          class="btn mt-3"
-          @click="openHotKeySettings"
-        >
-          {{ translate(i18nOptionsKeys.option_hotkey_settings) }}
-        </b-button>
-      </b-card-body>
-    </b-card>
-  </b-card-text>
+
+        <v-btn v-if="!isFirefox" class="mt-3" @click="openHotKeySettings">
+          {{ translate(I18NOptionKeys.option_hotkey_settings) }}
+        </v-btn>
+      </v-card-text>
+    </v-card>
+  </div>
 </template>
 
 <script lang="ts">
-import { Component } from 'vue-property-decorator'
+import { computed, defineComponent } from '@vue/composition-api'
 import { I18NOptionKeys } from '../../../../service/i18NService'
 import OptionDisableTimeComponent from './OptionDisableTimeComponent.vue'
 import OptionTabComponent from './OptionTabComponent.vue'
 import OptionGenericCheckboxComponent from './OptionGenericCheckboxComponent.vue'
-import BaseComponent from '../../../general/BaseComponent.vue'
 import { StorageService } from '../../../../service/StorageService'
 import MessageBusService from '../../../../service/MessageBusService'
+import useTranslation from '../../../../hooks/translation'
 
-@Component({
+export default defineComponent({
+  name: 'OptionAboutExtension',
   components: {
     OptionDisableTimeComponent,
     OptionTabComponent,
     OptionGenericCheckboxComponent
+  },
+  setup: () => {
+    const { translate } = useTranslation()
+
+    const checkboxOptions: GenericCheckboxComponent[] = [
+      {
+        labelTextKey: I18NOptionKeys.options_reload_after_disable,
+        getterFunction: () => StorageService.getReloadAfterDisable(),
+        setterFunction: (value: boolean) =>
+          StorageService.saveReloadAfterDisable(value)
+      },
+      {
+        labelTextKey: I18NOptionKeys.options_reload_after_white_list,
+        getterFunction: () => StorageService.getReloadAfterWhitelist(),
+        setterFunction: (value: boolean) =>
+          StorageService.saveReloadAfterWhitelist(value)
+      },
+      {
+        labelTextKey: I18NOptionKeys.option_disable_feature,
+        getterFunction: () => StorageService.getDisableListFeature(),
+        setterFunction: (value: boolean) =>
+          StorageService.saveDisableListFeature(value)
+      },
+      {
+        labelTextKey: I18NOptionKeys.option_disable_update_notification,
+        getterFunction: () => StorageService.getDisableUpdateNotification(),
+        setterFunction: (value: boolean) =>
+          StorageService.saveDisableUpdateNotification(value)
+      },
+      {
+        labelTextKey: I18NOptionKeys.option_disable_context_menu,
+        getterFunction: () => StorageService.getDisableContextMenu(),
+        setterFunction: (value: boolean) => {
+          MessageBusService.sendContextMenuSwitchMessage(value)
+          StorageService.saveDisableContextMenu(value)
+        }
+      }
+    ]
+
+    const isFirefox = computed(() => typeof browser !== 'undefined')
+
+    const openHotKeySettings = () => {
+      // eslint-disable-next-line no-undef
+      chrome.tabs.create({
+        url: 'chrome://extensions/shortcuts'
+      })
+    }
+
+    return {
+      openHotKeySettings,
+      isFirefox,
+      checkboxOptions,
+      translate,
+      I18NOptionKeys
+    }
   }
 })
-export default class OptionGeneralSettings extends BaseComponent {
-  /**
-   * Gets an array of checkbox options
-   */
-  private checkbox_options: GenericCheckboxComponent[] = [
-    {
-      label_text_key: I18NOptionKeys.options_reload_after_disable,
-      getter_function: () => StorageService.getReloadAfterDisable(),
-      setter_function: (value: boolean) =>
-        StorageService.saveReloadAfterDisable(value)
-    },
-    {
-      label_text_key: I18NOptionKeys.options_reload_after_white_list,
-      getter_function: () => StorageService.getReloadAfterWhitelist(),
-      setter_function: (value: boolean) =>
-        StorageService.saveReloadAfterWhitelist(value)
-    },
-    {
-      label_text_key: I18NOptionKeys.option_disable_feature,
-      getter_function: () => StorageService.getDisableListFeature(),
-      setter_function: (value: boolean) =>
-        StorageService.saveDisableListFeature(value)
-    },
-    {
-      label_text_key: I18NOptionKeys.option_disable_update_notification,
-      getter_function: () => StorageService.getDisableUpdateNotification(),
-      setter_function: (value: boolean) =>
-        StorageService.saveDisableUpdateNotification(value)
-    },
-    {
-      label_text_key: I18NOptionKeys.option_disable_context_menu,
-      getter_function: () => StorageService.getDisableContextMenu(),
-      setter_function: (value: boolean) => {
-        MessageBusService.sendContextMenuSwitchMessage(value)
-        StorageService.saveDisableContextMenu(value)
-      }
-    }
-  ]
-
-  private get isFirefox(): boolean {
-    return typeof browser !== 'undefined'
-  }
-
-  private openHotKeySettings(): void {
-    // eslint-disable-next-line no-undef
-    chrome.tabs.create({
-      url: 'chrome://extensions/shortcuts'
-    })
-  }
-}
 
 /**
  * Interface that represents a checkbox option in the settings
  */
 interface GenericCheckboxComponent {
-  label_text_key: I18NOptionKeys
-  getter_function: () => Promise<boolean | undefined> | Promise<boolean>
-  setter_function: (value: boolean) => void
+  labelTextKey: I18NOptionKeys
+  getterFunction: () => Promise<boolean | undefined> | Promise<boolean>
+  setterFunction: (value: boolean) => void
 }
 </script>
