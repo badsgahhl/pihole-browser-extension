@@ -1,6 +1,6 @@
 <template>
-  <v-card class="shadow" no-body>
-    <v-card-title class="h6">
+  <v-card>
+    <v-card-title>
       🖥️ {{ translate(I18NOptionKeys.option_extension) }}
     </v-card-title>
     <v-card-text>
