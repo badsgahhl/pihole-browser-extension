@@ -1,79 +1,84 @@
 <template>
-  <b-card class="shadow" no-body>
-    <b-card-header class="h6">
-      💥 {{ translate(i18nOptionsKeys.options_report_error) }}
-    </b-card-header>
-    <b-card-body>
-      <p>
-        <b-button
-          :href="LinkConfig.github_issue"
-          class="text-light font-weight-bold"
-          size="small"
-          target="_blank"
-        >
-          {{ translate(i18nOptionsKeys.option_report_error_github) }}
-        </b-button>
-      </p>
-      <p>{{ translate(i18nOptionsKeys.option_about_copy_debug) }}</p>
-      <p ref="versionInfo" class="float-left">
-        Switch for PiHole: {{ extension_version }} <br />Operating System:
+  <v-card>
+    <v-card-title>
+      💥 {{ translate(I18NOptionKeys.options_report_error) }}
+    </v-card-title>
+    <v-card-text>
+      <v-btn class="mb-1" @click="openGithubReport">
+        {{ translate(I18NOptionKeys.option_report_error_github) }}
+      </v-btn>
+      <p>{{ translate(I18NOptionKeys.option_about_copy_debug) }}</p>
+      <p ref="versionInfoElement">
+        Switch for PiHole: {{ extensionVersion }} <br />Operating System:
         {{ plattform }} <br />Browser: {{ browser }}
       </p>
-      <b-button
-        class="btn btn btn-sm btn-primary ml-3"
-        type="success"
-        @click="copy_to_clipboard"
-      >
-        <b-icon-clipboard />
-      </b-button>
-    </b-card-body>
-  </b-card>
+      <v-btn @click="copyToClipboard">
+        <v-icon>
+          mdi-content-copy
+        </v-icon>
+      </v-btn>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script lang="ts">
-import { Component } from 'vue-property-decorator'
-import BaseComponent from '../../../general/BaseComponent.vue'
+import { computed, defineComponent, ref } from '@vue/composition-api'
+import useTranslation from '../../../../hooks/translation'
 
-@Component
-export default class OptionAboutReportIssue extends BaseComponent {
-  private get extension_version(): string {
-    // eslint-disable-next-line no-undef
-    return chrome.runtime.getManifest().version
-  }
+export default defineComponent({
+  name: 'OptionAboutReportIssue',
+  setup: () => {
+    const versionInfoElement = ref<HTMLElement | null>(null)
 
-  private get plattform(): string {
-    return window.navigator.platform
-  }
-
-  private get browser(): string {
-    if (navigator.userAgent.indexOf('Firefox') > -1) {
-      return `Mozilla Firefox ${navigator.userAgent.substr(
-        navigator.userAgent.lastIndexOf('/') + 1
-      )}`
-    }
-    if (navigator.userAgent.indexOf('Edg') > -1) {
-      let startPos = navigator.userAgent.indexOf('Edg')
-      startPos = navigator.userAgent.indexOf('/', startPos) + 1
-      const version = navigator.userAgent.substring(startPos)
-      return `Microsoft Edge ${version}`
-    }
-    if (navigator.userAgent.indexOf('Chrome') > -1) {
-      let startPos = navigator.userAgent.indexOf('Chrome')
-      startPos = navigator.userAgent.indexOf('/', startPos) + 1
-      const version = navigator.userAgent.substring(
-        startPos,
-        navigator.userAgent.indexOf('Safari')
-      )
-      return `Chrome/Chromium ${version}`
+    const { LinkConfig, translate, I18NOptionKeys } = useTranslation()
+    const openGithubReport = () => {
+      window.open(LinkConfig.github_issue, '_blank')
     }
 
-    return 'Other/Unknown'
-  }
-
-  private copy_to_clipboard(): void {
-    navigator.clipboard.writeText(
-      (<HTMLElement>this.$refs.versionInfo).innerText
+    const plattform = computed(() => window.navigator.platform)
+    const extensionVersion = computed(
+      // eslint-disable-next-line no-undef
+      () => chrome.runtime.getManifest().version
     )
+    const browser = computed(() => {
+      if (navigator.userAgent.indexOf('Firefox') > -1) {
+        return `Mozilla Firefox ${navigator.userAgent.substr(
+          navigator.userAgent.lastIndexOf('/') + 1
+        )}`
+      }
+      if (navigator.userAgent.indexOf('Edg') > -1) {
+        let startPos = navigator.userAgent.indexOf('Edg')
+        startPos = navigator.userAgent.indexOf('/', startPos) + 1
+        const version = navigator.userAgent.substring(startPos)
+        return `Microsoft Edge ${version}`
+      }
+      if (navigator.userAgent.indexOf('Chrome') > -1) {
+        let startPos = navigator.userAgent.indexOf('Chrome')
+        startPos = navigator.userAgent.indexOf('/', startPos) + 1
+        const version = navigator.userAgent.substring(
+          startPos,
+          navigator.userAgent.indexOf('Safari')
+        )
+        return `Chrome/Chromium ${version}`
+      }
+
+      return 'Other/Unknown'
+    })
+
+    const copyToClipboard = () => {
+      navigator.clipboard.writeText(versionInfoElement.value!.innerText)
+    }
+
+    return {
+      translate,
+      I18NOptionKeys,
+      browser,
+      extensionVersion,
+      openGithubReport,
+      copyToClipboard,
+      plattform,
+      versionInfoElement
+    }
   }
-}
+})
 </script>

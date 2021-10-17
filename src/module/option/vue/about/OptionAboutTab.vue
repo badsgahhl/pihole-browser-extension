@@ -1,35 +1,25 @@
 <template>
-  <b-card-text>
+  <div>
     <h2 class="pb-3 mt-0">
-      {{ translate(i18nOptionsKeys.options_about) }}
+      {{ translate(I18NOptionKeys.options_about) }}
     </h2>
-    <OptionAboutExtension />
+    <OptionAboutExtension class="mb-5" />
     <OptionAboutReportIssue />
-    <OptionAboutLicenses />
-  </b-card-text>
+  </div>
 </template>
 
 <script lang="ts">
-import { Component } from 'vue-property-decorator'
-import OptionAboutLicenses from './OptionAboutLicenses.vue'
+import { defineComponent } from '@vue/composition-api'
 import OptionAboutExtension from './OptionAboutExtension.vue'
 import OptionAboutReportIssue from './OptionAboutReportIssue.vue'
-import BaseComponent from '../../../general/BaseComponent.vue'
+import useTranslation from '../../../../hooks/translation'
 
-@Component({
+export default defineComponent({
+  name: 'OptionAboutTab',
   components: {
     OptionAboutReportIssue,
-    OptionAboutExtension,
-    OptionAboutLicenses
-  }
+    OptionAboutExtension
+  },
+  setup: () => ({ ...useTranslation() })
 })
-export default class OptionAboutTab extends BaseComponent {
-  // Empty class
-}
 </script>
-
-<style lang="scss" scoped>
-.card {
-  margin-bottom: 2rem;
-}
-</style>
