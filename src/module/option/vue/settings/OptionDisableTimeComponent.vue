@@ -1,52 +1,45 @@
 <template>
-  <b-form-group :label="translate(i18nOptionsKeys.options_default_time_label)">
-    <b-input-group>
-      <b-input v-model.number="disable_time" min="10" type="number" />
-      <b-input-group-append>
-        <b-input-group-text>
-          {{ translate(i18nOptionsKeys.options_default_time_unit) }}
-        </b-input-group-text>
-      </b-input-group-append>
-    </b-input-group>
-  </b-form-group>
+  <v-text-field
+    v-model="disableTime"
+    :label="translate(I18NOptionKeys.options_default_time_label)"
+    type="number"
+    min="10"
+    outlined
+    :suffix="translate(I18NOptionKeys.options_default_time_unit)"
+  ></v-text-field>
 </template>
 
 <script lang="ts">
-import { Component, Watch } from 'vue-property-decorator'
+import { defineComponent, onMounted, ref, watch } from '@vue/composition-api'
 import {
   PiHoleSettingsDefaults,
   StorageService
 } from '../../../../service/StorageService'
-import BaseComponent from '../../../general/BaseComponent.vue'
+import useTranslation from '../../../../hooks/translation'
 
-@Component
-/**
- * Component for the setting 'default_disable_time'
- * */
-export default class OptionDisableTimeComponent extends BaseComponent {
-  // Data Prop fpr the disable time
-  private disable_time: number = PiHoleSettingsDefaults.default_disable_time
+export default defineComponent({
+  name: 'OptionGenericCheckboxComponent',
+  setup: () => {
+    const { translate, I18NOptionKeys } = useTranslation()
+    const disableTime = ref(PiHoleSettingsDefaults.default_disable_time)
 
-  mounted() {
-    this.update_disable_time()
-  }
-
-  @Watch('disable_time')
-  private on_disable_time_changes(): void {
-    if (this.disable_time >= 10) {
-      StorageService.saveDefaultDisableTime(Number(this.disable_time))
+    const updateDisableTime = () => {
+      StorageService.getDefaultDisableTime().then(time => {
+        if (typeof time !== 'undefined') {
+          disableTime.value = time
+        }
+      })
     }
-  }
 
-  /**
-   * Function to update the disable time
-   */
-  private update_disable_time(): void {
-    StorageService.getDefaultDisableTime().then(time => {
-      if (typeof time !== 'undefined') {
-        this.disable_time = time
+    watch(disableTime, () => {
+      if (disableTime.value >= 10) {
+        StorageService.saveDefaultDisableTime(Number(disableTime.value))
       }
     })
+
+    onMounted(() => updateDisableTime())
+
+    return { translate, I18NOptionKeys, disableTime }
   }
-}
+})
 </script>
