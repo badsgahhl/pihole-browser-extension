@@ -1,91 +1,75 @@
 <template>
-  <b-tabs v-model="current_tab_index">
-    <b-tab
-      v-for="(pi_hole_setting, index) in tabs"
-      :key="'dyn-tab-' + index"
-      :title="'PiHole ' + (index + 1)"
-      @click="resetConnectionCheckAndCheck"
-    >
-      <b-form-group
-        :label="translate(i18nOptionsKeys.options_pi_hole_address)"
-        style="margin-top: 1rem"
+  <div>
+    <v-tabs v-model="current_tab_index">
+      <v-tab
+        v-for="(pi_hole_setting, index) in tabs"
+        :key="'dyn-tab-' + index"
+        @click="resetConnectionCheckAndCheck"
       >
-        <b-form-input
+        PiHole {{ index + 1 }}
+      </v-tab>
+    </v-tabs>
+    <v-tabs-items v-model="current_tab_index">
+      <v-tab-item v-for="(pi_hole_setting, index) in tabs" :key="index">
+        <v-text-field
           v-model="pi_hole_setting.pi_uri_base"
           v-debounce:500ms="connectionCheck"
+          outlined
           debounce-events="input"
           :placeholder="PiHoleSettingsDefaults.pi_uri_base"
-          :state="is_invalid_url_schema(pi_hole_setting.pi_uri_base)"
+          :rules="[
+            v =>
+              is_invalid_url_schema(v) ||
+              translate(i18nOptionsKeys.options_url_invalid_warning)
+          ]"
+          :label="translate(i18nOptionsKeys.options_pi_hole_address)"
           required
-        />
-        <b-form-valid-feedback :force-show="connectionCheckStatus === 'IDLE'">
-          <b-spinner small />
+        ></v-text-field>
+        <v-text-field
+          v-model="pi_hole_setting.api_key"
+          outlined
+          :type="password_input_type"
+          :append-icon="
+            password_input_type === 'password'
+              ? 'mdi-eye-outline'
+              : 'mdi-eye-off-outline'
+          "
+          :rules="[
+            v =>
+              is_invalid_api_key(v) ||
+              translate(i18nOptionsKeys.options_api_key_invalid_warning)
+          ]"
+          :label="translate(i18nOptionsKeys.options_api_key)"
+          @click:append="switch_api_key_input_type"
+        ></v-text-field>
+        <v-alert v-if="connectionCheckStatus === 'IDLE'" outlined type="info">
+          <v-progress-circular :width="3" indeterminate />
           {{ translate(i18nOptionsKeys.option_connection_check_idle) }}
-        </b-form-valid-feedback>
-        <b-form-valid-feedback :force-show="connectionCheckStatus === 'OK'">
+        </v-alert>
+        <v-alert v-if="connectionCheckStatus === 'OK'" type="success" outlined>
           {{ translate(i18nOptionsKeys.option_connection_check_ok) }}<br />
           {{ connectionCheckVersionText }}
-        </b-form-valid-feedback>
-        <b-form-invalid-feedback
-          :force-show="connectionCheckStatus === 'ERROR'"
-        >
+        </v-alert>
+        <v-alert v-if="connectionCheckStatus === 'ERROR'" outlined type="error">
           {{ translate(i18nOptionsKeys.option_connection_check_error) }}
-        </b-form-invalid-feedback>
-        <b-form-invalid-feedback
-          :state="is_invalid_url_schema(pi_hole_setting.pi_uri_base)"
-        >
-          {{ translate(i18nOptionsKeys.options_url_invalid_warning) }}
-        </b-form-invalid-feedback>
-      </b-form-group>
-      <b-form-group :label="translate(i18nOptionsKeys.options_api_key)">
-        <b-input-group>
-          <b-form-input
-            v-model="pi_hole_setting.api_key"
-            :state="is_invalid_api_key(pi_hole_setting.api_key)"
-            :type="password_input_type"
-          />
-          <b-input-group-append class="clickable">
-            <b-input-group-text @click="switch_api_key_input_type">
-              <b-icon-eye v-if="password_input_type === 'password'" />
-              <b-icon-eye-slash v-else />
-            </b-input-group-text>
-          </b-input-group-append>
-        </b-input-group>
-        <b-form-invalid-feedback
-          :state="is_invalid_api_key(pi_hole_setting.api_key)"
-        >
-          {{ translate(i18nOptionsKeys.options_api_key_invalid_warning) }}
-        </b-form-invalid-feedback>
-      </b-form-group>
-    </b-tab>
-
-    <!-- New Tab Button (Using tabs-end slot) -->
-    <template #tabs-end style="font-size: 20px;">
-      <b-nav-item
-        v-if="tabs.length < 4"
-        :title="translate(i18nOptionsKeys.options_add_button)"
-        href="#"
-        link-classes="no-white-hover-border"
-        role="presentation"
-        @click.prevent="add_new_settings_tab"
-      >
-        <b-icon-plus-circle
-          style="width: 20px;height: 20px"
-          variant="success"
-        />
-      </b-nav-item>
-      <b-nav-item
-        v-if="tabs.length > 1"
-        :title="translate(i18nOptionsKeys.options_remove_button)"
-        href="#"
-        link-classes="no-white-hover-border"
-        role="presentation"
-        @click.prevent="remove_last_settings_tab"
-      >
-        <b-icon-x-circle style="width: 20px;height: 20px" variant="danger" />
-      </b-nav-item>
-    </template>
-  </b-tabs>
+        </v-alert>
+        <div class="mb-5">
+          <v-btn v-if="tabs.length < 4" @click.prevent="add_new_settings_tab"
+            >{{ translate(i18nOptionsKeys.options_add_button) }}
+          </v-btn>
+          <v-btn
+            v-if="tabs.length > 1"
+            @click.prevent="removeSettingsTab(current_tab_index)"
+            >{{
+              translate(i18nOptionsKeys.options_remove_button, [
+                String(current_tab_index + 1)
+              ])
+            }}
+          </v-btn>
+        </div>
+      </v-tab-item>
+    </v-tabs-items>
+  </div>
 </template>
 
 <script lang="ts">
@@ -185,19 +169,18 @@ export default class OptionTabComponent extends BaseComponent {
    * @param api_key
    */
   private is_invalid_api_key(api_key: string): boolean | null {
-    return !api_key.match('^[a-f0-9]{64}$') && api_key.length !== 0
-      ? false
-      : null
+    return !(!api_key.match('^[a-f0-9]{64}$') && api_key.length !== 0)
   }
 
   /**
    * Validation Function for the pi hole url
    */
   private is_invalid_url_schema(pi_hole_uri: string): boolean | null {
-    return !pi_hole_uri.match('^(http|https):\\/\\/[^ "]+$') ||
+    console.log(pi_hole_uri)
+    return !(
+      !pi_hole_uri.match('^(http|https):\\/\\/[^ "]+$') ||
       pi_hole_uri.length < 1
-      ? false
-      : null
+    )
   }
 
   /**
@@ -224,17 +207,16 @@ export default class OptionTabComponent extends BaseComponent {
    * Adds a new tab
    */
   private add_new_settings_tab(): void {
+    this.resetConnectionCheckAndCheck()
     this.tabs.push(this.default_empty_option_tab())
     setTimeout(() => {
       this.current_tab_index = this.tabs.length - 1
     }, 0)
   }
 
-  /**
-   * Removes the last tab
-   */
-  private remove_last_settings_tab(): void {
-    this.tabs.pop()
+  private removeSettingsTab(index: number): void {
+    this.resetConnectionCheckAndCheck()
+    this.tabs.splice(index, 1)
   }
 
   private async update_tabs_settings(): Promise<void> {

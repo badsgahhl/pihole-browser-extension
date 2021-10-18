@@ -8,7 +8,7 @@
         👉🏼 {{ translate(I18NOptionKeys.options_headline_info) }}
       </v-card-title>
       <v-card-text>
-        <OptionTabComponent />
+        <OptionTabComponent class="mb-5" />
 
         <OptionDisableTimeComponent />
 

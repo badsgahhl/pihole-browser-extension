@@ -62,10 +62,15 @@
 		"message": "PiHole Address"
 	},
 	"options_add_button": {
-		"message": "Add"
+		"message": "Add PiHole"
 	},
 	"options_remove_button": {
-		"message": "Remove"
+		"message": "Remove PiHole $num$",
+		"placeholders": {
+			"num": {
+				"content": "$1"
+			}
+		}
 	},
 	"options_api_key_invalid_warning": {
 		"message": "Api Key doesn't match scheme (64 chars long). It may be invalid!"
