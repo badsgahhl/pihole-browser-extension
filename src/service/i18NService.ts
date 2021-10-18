@@ -15,6 +15,8 @@ export enum I18NOptionKeys {
   options_settings = 'options_settings',
   options_about = 'options_about',
   options_report_error = 'options_report_error',
+  option_settings_general_settings = 'option_settings_general_settings',
+  options_headline_additional_info = 'options_headline_additional_info',
   options_about_licences = 'options_about_licences',
   option_report_error_github = 'option_report_error_github',
   option_troubleshooting = 'option_troubleshooting',

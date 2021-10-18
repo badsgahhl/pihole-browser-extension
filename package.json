@@ -1,6 +1,6 @@
 {
 	"name": "pihole-browser-extension",
-	"version": "2.3.4",
+	"version": "3.0.0",
 	"dependencies": {
 		"@vue/composition-api": "^1.2.4",
 		"axios": "^0.21.1",
@@ -10,6 +10,7 @@
 		"prettier": "^1.19.1",
 		"vue": "^2.6.12",
 		"vue-debounce": "^3.0.1",
+		"vue-router": "^3.5.2",
 		"vuetify": "^2.5.10"
 	},
 	"devDependencies": {
@@ -44,8 +45,8 @@
 		"vue-loader": "^15.9.6",
 		"vue-property-decorator": "^9.1.2",
 		"vue-template-compiler": "^2.6.12",
-		"webpack": "5.37.1",
-		"webpack-cli": "^4.7.0",
+		"webpack": "^5.58.2",
+		"webpack-cli": "^4.9.1",
 		"zip-webpack-plugin": "^4.0.1"
 	},
 	"description": "Browser extension to control your PiHole. Built with Vue, Typescript and ❤",

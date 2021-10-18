@@ -1,8 +1,8 @@
 <template>
   <div>
-    <h2 class="pb-3 mt-0">
+    <h1 class="mb-5">
       {{ translate(I18NOptionKeys.options_about) }}
-    </h2>
+    </h1>
     <OptionAboutExtension class="mb-5" />
     <OptionAboutReportIssue />
   </div>
@@ -10,9 +10,9 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api'
-import OptionAboutExtension from './OptionAboutExtension.vue'
-import OptionAboutReportIssue from './OptionAboutReportIssue.vue'
 import useTranslation from '../../../../hooks/translation'
+import OptionAboutReportIssue from '../about/OptionAboutReportIssue.vue'
+import OptionAboutExtension from '../about/OptionAboutExtension.vue'
 
 export default defineComponent({
   name: 'OptionAboutTab',

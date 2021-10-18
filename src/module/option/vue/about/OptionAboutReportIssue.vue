@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title>
-      💥 {{ translate(I18NOptionKeys.options_report_error) }}
+      {{ translate(I18NOptionKeys.options_report_error) }}
     </v-card-title>
     <v-card-text>
       <v-btn class="mb-1" @click="openGithubReport">

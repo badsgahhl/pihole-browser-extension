@@ -1,18 +1,27 @@
 <template>
   <div>
-    <h2 class="pb-3 mt-0">
+    <h1 class="mb-5">
       {{ translate(I18NOptionKeys.options_settings) }}
-    </h2>
+    </h1>
+    <v-card class="mb-5">
+      <v-card-title>
+        {{ translate(I18NOptionKeys.options_headline_info) }}
+      </v-card-title>
+      <v-card-text style="min-height: 525px">
+        <v-alert outlined type="info">
+          {{ translate(I18NOptionKeys.options_headline_additional_info) }}
+        </v-alert>
+        <OptionTabComponent class="mb-5" />
+      </v-card-text>
+    </v-card>
     <v-card>
       <v-card-title>
-        👉🏼 {{ translate(I18NOptionKeys.options_headline_info) }}
+        {{ translate(I18NOptionKeys.option_settings_general_settings) }}
       </v-card-title>
       <v-card-text>
-        <OptionTabComponent class="mb-5" />
-
         <OptionDisableTimeComponent />
 
-        <OptionGenericCheckboxComponent
+        <OptionCheckboxComponent
           v-for="(item, i) in checkboxOptions"
           :key="i"
           :getter-function="item.getterFunction"
@@ -31,19 +40,19 @@
 <script lang="ts">
 import { computed, defineComponent } from '@vue/composition-api'
 import { I18NOptionKeys } from '../../../../service/i18NService'
-import OptionDisableTimeComponent from './OptionDisableTimeComponent.vue'
-import OptionTabComponent from './OptionTabComponent.vue'
-import OptionGenericCheckboxComponent from './OptionGenericCheckboxComponent.vue'
 import { StorageService } from '../../../../service/StorageService'
 import MessageBusService from '../../../../service/MessageBusService'
 import useTranslation from '../../../../hooks/translation'
+import OptionCheckboxComponent from '../settings/OptionCheckboxComponent.vue'
+import OptionTabComponent from '../settings/OptionTabComponent.vue'
+import OptionDisableTimeComponent from '../settings/OptionDisableTimeComponent.vue'
 
 export default defineComponent({
   name: 'OptionAboutExtension',
   components: {
     OptionDisableTimeComponent,
     OptionTabComponent,
-    OptionGenericCheckboxComponent
+    OptionCheckboxComponent
   },
   setup: () => {
     const { translate } = useTranslation()

@@ -13,6 +13,9 @@
 	"options_settings": {
 		"message": "Einstellungen"
 	},
+	"option_settings_general_settings": {
+		"message": "Allgemeine Einstellungen"
+	},
 	"options_about": {
 		"message": "Über"
 	},
@@ -41,6 +44,9 @@
 		"message": "Spenden"
 	},
 	"options_headline_info": {
+		"message": "PiHole Konfiguration"
+	},
+	"options_headline_additional_info": {
 		"message": "Gebe die Adresse und den API Key ein, welchen du unter API/Web interface in deinen PiHole Einstellungen findest."
 	},
 	"options_default_time_label": {

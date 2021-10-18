@@ -15,7 +15,7 @@ import useTranslation from '../../../../hooks/translation'
 import { I18NOptionKeys } from '../../../../service/i18NService'
 
 export default defineComponent({
-  name: 'OptionGenericCheckboxComponent',
+  name: 'OptionCheckboxComponent',
   props: {
     labelTextKey: {
       type: String as PropType<I18NOptionKeys>,

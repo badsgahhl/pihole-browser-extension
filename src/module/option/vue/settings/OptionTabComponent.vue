@@ -10,7 +10,11 @@
       </v-tab>
     </v-tabs>
     <v-tabs-items v-model="current_tab_index">
-      <v-tab-item v-for="(pi_hole_setting, index) in tabs" :key="index">
+      <v-tab-item
+        v-for="(pi_hole_setting, index) in tabs"
+        :key="index"
+        class="mt-5"
+      >
         <v-text-field
           v-model="pi_hole_setting.pi_uri_base"
           v-debounce:500ms="connectionCheck"
@@ -42,17 +46,7 @@
           :label="translate(i18nOptionsKeys.options_api_key)"
           @click:append="switch_api_key_input_type"
         ></v-text-field>
-        <v-alert v-if="connectionCheckStatus === 'IDLE'" outlined type="info">
-          <v-progress-circular :width="3" indeterminate />
-          {{ translate(i18nOptionsKeys.option_connection_check_idle) }}
-        </v-alert>
-        <v-alert v-if="connectionCheckStatus === 'OK'" type="success" outlined>
-          {{ translate(i18nOptionsKeys.option_connection_check_ok) }}<br />
-          {{ connectionCheckVersionText }}
-        </v-alert>
-        <v-alert v-if="connectionCheckStatus === 'ERROR'" outlined type="error">
-          {{ translate(i18nOptionsKeys.option_connection_check_error) }}
-        </v-alert>
+
         <div class="mb-5">
           <v-btn v-if="tabs.length < 4" @click.prevent="add_new_settings_tab"
             >{{ translate(i18nOptionsKeys.options_add_button) }}
@@ -67,6 +61,17 @@
             }}
           </v-btn>
         </div>
+        <v-alert v-if="connectionCheckStatus === 'IDLE'" outlined type="info">
+          <v-progress-circular :width="3" indeterminate />
+          {{ translate(i18nOptionsKeys.option_connection_check_idle) }}
+        </v-alert>
+        <v-alert v-if="connectionCheckStatus === 'OK'" type="success" outlined>
+          {{ translate(i18nOptionsKeys.option_connection_check_ok) }}<br />
+          {{ connectionCheckVersionText }}
+        </v-alert>
+        <v-alert v-if="connectionCheckStatus === 'ERROR'" outlined type="error">
+          {{ translate(i18nOptionsKeys.option_connection_check_error) }}
+        </v-alert>
       </v-tab-item>
     </v-tabs-items>
   </div>

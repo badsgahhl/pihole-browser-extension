@@ -1,11 +1,11 @@
 <template>
   <v-card>
     <v-card-title>
-      🖥️ {{ translate(I18NOptionKeys.option_extension) }}
+      {{ translate(I18NOptionKeys.option_extension) }}
     </v-card-title>
     <v-card-text>
       <p>{{ translate('manifest_description') }}</p>
-      <hr class="mt-0" />
+      <v-divider />
       <p>
         {{ translate(I18NOptionKeys.option_contributors) }}
         <br />

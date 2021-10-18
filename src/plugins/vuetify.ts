@@ -6,10 +6,17 @@ import { UserVuetifyPreset } from 'vuetify/types/services/presets'
 
 Vue.use(Vuetify)
 
+const mq = window.matchMedia('(prefers-color-scheme: dark)')
 const opts: Partial<UserVuetifyPreset> = {
   icons: {
     iconfont: 'mdi' // default - only for display purposes
-  }
+  },
+  theme: { dark: mq.matches }
 }
 
-export default new Vuetify(opts)
+const vuetify = new Vuetify(opts)
+
+mq.addEventListener('change', e => {
+  vuetify.framework.theme.dark = e.matches
+})
+export default vuetify
