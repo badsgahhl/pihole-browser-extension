@@ -34,9 +34,7 @@
           outlined
           :type="passwordInputType"
           :append-icon="
-            passwordInputType === 'password'
-              ? 'mdi-eye-outline'
-              : 'mdi-eye-off-outline'
+            passwordInputType === 'password' ? mdiEyeOutline : mdiEyeOffOutline
           "
           :rules="[
             v =>
@@ -49,28 +47,43 @@
 
         <div class="mb-5">
           <v-btn v-if="tabs.length < 4" @click.prevent="addNewPiHole"
-            >{{ translate(i18nOptionsKeys.options_add_button) }}
+            >{{ translate(I18NOptionKeys.options_add_button) }}
           </v-btn>
           <v-btn
             v-if="tabs.length > 1"
             @click.prevent="removePiHole(currentTab)"
             >{{
-              translate(i18nOptionsKeys.options_remove_button, [
+              translate(I18NOptionKeys.options_remove_button, [
                 String(currentTab + 1)
               ])
             }}
           </v-btn>
         </div>
         <v-alert v-if="connectionCheckStatus === 'IDLE'" outlined type="info">
-          <v-progress-circular :width="3" indeterminate />
-          {{ translate(i18nOptionsKeys.option_connection_check_idle) }}
+          <v-progress-circular color="primary" :width="3" indeterminate />
+          {{ translate(I18NOptionKeys.option_connection_check_idle) }}
         </v-alert>
         <v-alert v-if="connectionCheckStatus === 'OK'" type="success" outlined>
-          {{ translate(i18nOptionsKeys.option_connection_check_ok) }}<br />
+          {{ translate(I18NOptionKeys.option_connection_check_ok) }}<br />
           {{ connectionCheckVersionText }}
         </v-alert>
         <v-alert v-if="connectionCheckStatus === 'ERROR'" outlined type="error">
-          {{ translate(i18nOptionsKeys.option_connection_check_error) }}
+          {{ translate(I18NOptionKeys.option_connection_check_error) }}
+        </v-alert>
+        <v-alert
+          v-if="
+            connectionCheckStatus === 'OK' &&
+              connectionCheckData !== null &&
+              (connectionCheckData.core_update ||
+                connectionCheckData.web_update ||
+                connectionCheckData.FTL_update)
+          "
+          outlined
+          type="info"
+        >
+          {{
+            translate(I18NOptionKeys.option_connection_check_update_available)
+          }}
         </v-alert>
       </v-tab-item>
     </v-tabs-items>
@@ -86,6 +99,7 @@ import {
   ref,
   watch
 } from '@vue/composition-api'
+import { mdiEyeOffOutline, mdiEyeOutline } from '@mdi/js'
 import {
   PiHoleSettingsStorage,
   StorageService
@@ -165,24 +179,28 @@ export default defineComponent({
       passwordInputType.value = PasswordInputType.password
     })
 
-    watch(tabs, () => {
-      for (const piHoleSetting of tabs.value) {
-        if (typeof piHoleSetting.pi_uri_base !== 'undefined') {
-          piHoleSetting.pi_uri_base = piHoleSetting.pi_uri_base.replace(
-            /\s+/g,
-            ''
-          )
-        } else {
-          piHoleSetting.pi_uri_base = ''
+    watch(
+      tabs,
+      () => {
+        for (const piHoleSetting of tabs.value) {
+          if (typeof piHoleSetting.pi_uri_base !== 'undefined') {
+            piHoleSetting.pi_uri_base = piHoleSetting.pi_uri_base.replace(
+              /\s+/g,
+              ''
+            )
+          } else {
+            piHoleSetting.pi_uri_base = ''
+          }
+          if (typeof piHoleSetting.api_key !== 'undefined') {
+            piHoleSetting.api_key = piHoleSetting.api_key.replace(/\s+/g, '')
+          } else {
+            piHoleSetting.api_key = ''
+          }
         }
-        if (typeof piHoleSetting.api_key !== 'undefined') {
-          piHoleSetting.api_key = piHoleSetting.api_key.replace(/\s+/g, '')
-        } else {
-          piHoleSetting.api_key = ''
-        }
-      }
-      StorageService.savePiHoleSettingsArray(tabs.value)
-    })
+        StorageService.savePiHoleSettingsArray(tabs.value)
+      },
+      { deep: true }
+    )
 
     const connectionCheckVersionText = computed(() => {
       const data = connectionCheckData.value
@@ -217,6 +235,8 @@ export default defineComponent({
       !(!piHoleUrl.match('^(http|https):\\/\\/[^ "]+$') || piHoleUrl.length < 1)
 
     return {
+      mdiEyeOutline,
+      mdiEyeOffOutline,
       currentTab,
       tabs,
       passwordInputType,
@@ -229,6 +249,7 @@ export default defineComponent({
       toggleApiKeyVisibility,
       connectionCheckVersionText,
       connectionCheckStatus,
+      connectionCheckData,
       ...useTranslation()
     }
   }

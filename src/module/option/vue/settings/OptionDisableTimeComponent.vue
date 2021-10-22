@@ -5,6 +5,7 @@
     type="number"
     min="10"
     outlined
+    :rules="[v => typeof v === 'number' || v >= 10]"
     :suffix="translate(I18NOptionKeys.options_default_time_unit)"
   ></v-text-field>
 </template>
@@ -39,7 +40,7 @@ export default defineComponent({
 
     onMounted(() => updateDisableTime())
 
-    return { translate, I18NOptionKeys, disableTime }
+    return { translate, I18NOptionKeys, disableTime, console }
   }
 })
 </script>

@@ -85,10 +85,10 @@
 		"message": "The url is invalid. (Missing http(s), invalid scheme or empty)"
 	},
 	"options_disable_list_feature": {
-		"message": "Disable the list feature in the popup"
+		"message": "Disable black/white list feature in the popup"
 	},
 	"option_disable_update_notification": {
-		"message": "Disable the update notification in the popup"
+		"message": "Disable update notification in the popup"
 	},
 	"popup_status_card_title": {
 		"message": "PiHole Switch"
@@ -142,5 +142,8 @@
 	},
 	"option_connection_check_error": {
 		"message": "Connection not successfully"
+	},
+	"option_connection_check_update_available": {
+		"message": "Update available for PiHole"
 	}
 }

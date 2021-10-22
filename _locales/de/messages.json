@@ -100,7 +100,7 @@
 		"message": "Blacklist"
 	},
 	"options_disable_list_feature": {
-		"message": "Deaktiviere das List Feature im Popup"
+		"message": "Deaktiviere das Black-/White-List Feature im Popup"
 	},
 	"option_disable_update_notification": {
 		"message": "Deaktiviere die Update Benachrichtigung im Popup"
@@ -142,5 +142,8 @@
 	},
 	"option_connection_check_error": {
 		"message": "Verbindung fehlerhaft"
+	},
+	"option_connection_check_update_available": {
+		"message": "Update verfügbar für das PiHole"
 	}
 }
