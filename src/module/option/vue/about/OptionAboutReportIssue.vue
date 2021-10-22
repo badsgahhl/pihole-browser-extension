@@ -10,11 +10,11 @@
       <p>{{ translate(I18NOptionKeys.option_about_copy_debug) }}</p>
       <p ref="versionInfoElement">
         Switch for PiHole: {{ extensionVersion }} <br />Operating System:
-        {{ plattform }} <br />Browser: {{ browser }}
+        {{ platform }} <br />Browser: {{ browser }}
       </p>
       <v-btn @click="copyToClipboard">
         <v-icon>
-          mdi-content-copy
+          {{ mdiContentCopy }}
         </v-icon>
       </v-btn>
     </v-card-text>
@@ -23,6 +23,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, ref } from '@vue/composition-api'
+import { mdiContentCopy } from '@mdi/js'
 import useTranslation from '../../../../hooks/translation'
 
 export default defineComponent({
@@ -35,7 +36,7 @@ export default defineComponent({
       window.open(LinkConfig.github_issue, '_blank')
     }
 
-    const plattform = computed(() => window.navigator.platform)
+    const platform = computed(() => window.navigator.platform)
     const extensionVersion = computed(
       // eslint-disable-next-line no-undef
       () => chrome.runtime.getManifest().version
@@ -76,8 +77,9 @@ export default defineComponent({
       extensionVersion,
       openGithubReport,
       copyToClipboard,
-      plattform,
-      versionInfoElement
+      platform,
+      versionInfoElement,
+      mdiContentCopy
     }
   }
 })

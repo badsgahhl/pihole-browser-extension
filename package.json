@@ -14,7 +14,7 @@
 		"vuetify": "^2.5.10"
 	},
 	"devDependencies": {
-		"@mdi/font": "^6.3.95",
+		"@mdi/js": "^6.3.95",
 		"@types/bootstrap": "^5.0.15",
 		"@types/chrome": "0.0.128",
 		"@types/copy-webpack-plugin": "8.0.0",

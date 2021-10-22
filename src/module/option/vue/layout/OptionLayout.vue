@@ -17,7 +17,7 @@
       <v-list dense nav>
         <v-list-item link to="/">
           <v-list-item-icon>
-            <v-icon>mdi-cog</v-icon>
+            <v-icon>{{ mdiCog }}</v-icon>
             ️
           </v-list-item-icon>
 
@@ -29,7 +29,7 @@
         </v-list-item>
         <v-list-item link to="/about">
           <v-list-item-icon>
-            <v-icon>mdi-information-outline</v-icon>
+            <v-icon>{{ mdiInformationOutline }}</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
@@ -45,7 +45,7 @@
           target="_blank"
         >
           <v-list-item-icon>
-            <v-icon>mdi-gift</v-icon>
+            <v-icon>{{ mdiGift }}</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
@@ -56,7 +56,7 @@
         </v-list-item>
         <v-list-item link :href="LinkConfig.github_issue" target="_blank">
           <v-list-item-icon>
-            <v-icon>mdi-fire</v-icon>
+            <v-icon>{{ mdiFire }}</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
@@ -82,6 +82,7 @@
 
 <script lang="ts">
 import { computed, defineComponent } from '@vue/composition-api'
+import { mdiCog, mdiFire, mdiGift, mdiInformationOutline } from '@mdi/js'
 import useTranslation from '../../../../hooks/translation'
 
 export default defineComponent({
@@ -94,7 +95,16 @@ export default defineComponent({
       return `(C) ${year} - Pascal Glaser`
     })
 
-    return { copyrightText, translate, LinkConfig, I18NOptionKeys }
+    return {
+      copyrightText,
+      translate,
+      LinkConfig,
+      I18NOptionKeys,
+      mdiCog,
+      mdiInformationOutline,
+      mdiGift,
+      mdiFire
+    }
   }
 })
 </script>

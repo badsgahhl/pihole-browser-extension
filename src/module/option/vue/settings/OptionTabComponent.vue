@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-tabs v-model="current_tab_index">
+    <v-tabs v-model="currentTab">
       <v-tab
         v-for="(pi_hole_setting, index) in tabs"
         :key="'dyn-tab-' + index"
@@ -9,7 +9,7 @@
         PiHole {{ index + 1 }}
       </v-tab>
     </v-tabs>
-    <v-tabs-items v-model="current_tab_index">
+    <v-tabs-items v-model="currentTab">
       <v-tab-item
         v-for="(pi_hole_setting, index) in tabs"
         :key="index"
@@ -23,40 +23,40 @@
           :placeholder="PiHoleSettingsDefaults.pi_uri_base"
           :rules="[
             v =>
-              is_invalid_url_schema(v) ||
-              translate(i18nOptionsKeys.options_url_invalid_warning)
+              isInvalidUrlSchema(v) ||
+              translate(I18NOptionKeys.options_url_invalid_warning)
           ]"
-          :label="translate(i18nOptionsKeys.options_pi_hole_address)"
+          :label="translate(I18NOptionKeys.options_pi_hole_address)"
           required
         ></v-text-field>
         <v-text-field
           v-model="pi_hole_setting.api_key"
           outlined
-          :type="password_input_type"
+          :type="passwordInputType"
           :append-icon="
-            password_input_type === 'password'
+            passwordInputType === 'password'
               ? 'mdi-eye-outline'
               : 'mdi-eye-off-outline'
           "
           :rules="[
             v =>
-              is_invalid_api_key(v) ||
-              translate(i18nOptionsKeys.options_api_key_invalid_warning)
+              isInvalidApiKey(v) ||
+              translate(I18NOptionKeys.options_api_key_invalid_warning)
           ]"
-          :label="translate(i18nOptionsKeys.options_api_key)"
-          @click:append="switch_api_key_input_type"
+          :label="translate(I18NOptionKeys.options_api_key)"
+          @click:append="toggleApiKeyVisibility"
         ></v-text-field>
 
         <div class="mb-5">
-          <v-btn v-if="tabs.length < 4" @click.prevent="add_new_settings_tab"
+          <v-btn v-if="tabs.length < 4" @click.prevent="addNewPiHole"
             >{{ translate(i18nOptionsKeys.options_add_button) }}
           </v-btn>
           <v-btn
             v-if="tabs.length > 1"
-            @click.prevent="removeSettingsTab(current_tab_index)"
+            @click.prevent="removePiHole(currentTab)"
             >{{
               translate(i18nOptionsKeys.options_remove_button, [
-                String(current_tab_index + 1)
+                String(currentTab + 1)
               ])
             }}
           </v-btn>
@@ -78,15 +78,21 @@
 </template>
 
 <script lang="ts">
-import { Component, Watch } from 'vue-property-decorator'
 import { debounce } from 'vue-debounce'
+import {
+  computed,
+  defineComponent,
+  onMounted,
+  ref,
+  watch
+} from '@vue/composition-api'
 import {
   PiHoleSettingsStorage,
   StorageService
 } from '../../../../service/StorageService'
-import BaseComponent from '../../../general/BaseComponent.vue'
 import { PiHoleVersions } from '../../../../api/models/PiHoleVersions'
 import PiHoleApiService from '../../../../service/PiHoleApiService'
+import useTranslation from '../../../../hooks/translation'
 
 enum ConnectionCheckStatus {
   OK = 'OK',
@@ -94,154 +100,137 @@ enum ConnectionCheckStatus {
   IDLE = 'IDLE'
 }
 
-@Component
-export default class OptionTabComponent extends BaseComponent {
-  private tabs: Array<PiHoleSettingsStorage> = [this.default_empty_option_tab()]
+enum PasswordInputType {
+  password = 'password',
+  text = 'text'
+}
 
-  private current_tab_index = 0
-
-  private password_input_type: 'password' | 'text' = 'password'
-
-  private connectionCheckStatus: ConnectionCheckStatus =
-    ConnectionCheckStatus.IDLE
-
-  private connectionCheckData: PiHoleVersions | null = null
-
-  mounted() {
-    this.update_tabs_settings().then(() => this.resetConnectionCheckAndCheck())
-  }
-
-  @Watch('current_tab_index', { deep: true })
-  private tab_switched(): void {
-    this.password_input_type = 'password'
-  }
-
-  @Watch('tabs', { deep: true })
-  private on_tabs_changed(): void {
-    for (const piHoleSetting of this.tabs) {
-      if (typeof piHoleSetting.pi_uri_base !== 'undefined') {
-        piHoleSetting.pi_uri_base = piHoleSetting.pi_uri_base.replace(
-          /\s+/g,
-          ''
-        )
-      } else {
-        piHoleSetting.pi_uri_base = ''
+export default defineComponent({
+  name: 'OptionTabComponent',
+  setup: () => {
+    const tabs = ref<PiHoleSettingsStorage[]>([
+      {
+        pi_uri_base: '',
+        api_key: ''
       }
-      if (typeof piHoleSetting.api_key !== 'undefined') {
-        piHoleSetting.api_key = piHoleSetting.api_key.replace(/\s+/g, '')
-      } else {
-        piHoleSetting.api_key = ''
-      }
-    }
-    StorageService.savePiHoleSettingsArray(this.tabs)
-  }
+    ])
 
-  private get connectionCheckVersionText() {
-    const data = this.connectionCheckData
-    return `Core: ${data?.core_current} FTL: ${data?.FTL_current} Web: ${data?.web_current}`
-  }
+    const currentTab = ref(0)
 
-  private resetConnectionCheckAndCheck() {
-    this.connectionCheckStatus = ConnectionCheckStatus.IDLE
-    this.connectionCheckData = null
-    debounce(() => {
-      this.connectionCheck()
-    }, '300ms')()
-  }
+    const passwordInputType = ref<PasswordInputType>(PasswordInputType.password)
 
-  private connectionCheck() {
-    this.connectionCheckStatus = ConnectionCheckStatus.IDLE
-    PiHoleApiService.getPiHoleVersion(this.currentSelectedSettings)
-      .then(result => {
-        if (typeof result.data === 'object') {
-          this.connectionCheckStatus = ConnectionCheckStatus.OK
-          this.connectionCheckData = result.data
-        } else {
-          this.connectionCheckStatus = ConnectionCheckStatus.ERROR
-        }
-      })
-      .catch(() => {
-        this.connectionCheckStatus = ConnectionCheckStatus.ERROR
-      })
-  }
-
-  private get currentSelectedSettings(): PiHoleSettingsStorage {
-    return this.tabs[this.current_tab_index]
-  }
-
-  /**
-   * Validation Function for the api key
-   * @param api_key
-   */
-  private is_invalid_api_key(api_key: string): boolean | null {
-    return !(!api_key.match('^[a-f0-9]{64}$') && api_key.length !== 0)
-  }
-
-  /**
-   * Validation Function for the pi hole url
-   */
-  private is_invalid_url_schema(pi_hole_uri: string): boolean | null {
-    console.log(pi_hole_uri)
-    return !(
-      !pi_hole_uri.match('^(http|https):\\/\\/[^ "]+$') ||
-      pi_hole_uri.length < 1
+    const connectionCheckStatus = ref<ConnectionCheckStatus>(
+      ConnectionCheckStatus.IDLE
     )
-  }
 
-  /**
-   * Getter for an empty pihole settings storage
-   */
-  private default_empty_option_tab(): PiHoleSettingsStorage {
+    const connectionCheckData = ref<PiHoleVersions | null>(null)
+
+    const currentSelectedSettings = computed(() => tabs.value[currentTab.value])
+
+    const connectionCheck = () => {
+      connectionCheckStatus.value = ConnectionCheckStatus.IDLE
+      PiHoleApiService.getPiHoleVersion(currentSelectedSettings.value)
+        .then(result => {
+          if (typeof result.data === 'object') {
+            connectionCheckStatus.value = ConnectionCheckStatus.OK
+            connectionCheckData.value = result.data
+          } else {
+            connectionCheckStatus.value = ConnectionCheckStatus.ERROR
+          }
+        })
+        .catch(() => {
+          connectionCheckStatus.value = ConnectionCheckStatus.ERROR
+        })
+    }
+    const resetConnectionCheckAndCheck = () => {
+      connectionCheckStatus.value = ConnectionCheckStatus.IDLE
+      connectionCheckData.value = null
+      debounce(() => {
+        connectionCheck()
+      }, '300ms')()
+    }
+
+    const updateTabsSettings = async () => {
+      const results = await StorageService.getPiHoleSettingsArray()
+      if (typeof results !== 'undefined' && results.length > 0) {
+        tabs.value = results
+      }
+    }
+
+    onMounted(() => {
+      updateTabsSettings().then(() => resetConnectionCheckAndCheck())
+    })
+
+    watch(currentTab, () => {
+      passwordInputType.value = PasswordInputType.password
+    })
+
+    watch(tabs, () => {
+      for (const piHoleSetting of tabs.value) {
+        if (typeof piHoleSetting.pi_uri_base !== 'undefined') {
+          piHoleSetting.pi_uri_base = piHoleSetting.pi_uri_base.replace(
+            /\s+/g,
+            ''
+          )
+        } else {
+          piHoleSetting.pi_uri_base = ''
+        }
+        if (typeof piHoleSetting.api_key !== 'undefined') {
+          piHoleSetting.api_key = piHoleSetting.api_key.replace(/\s+/g, '')
+        } else {
+          piHoleSetting.api_key = ''
+        }
+      }
+      StorageService.savePiHoleSettingsArray(tabs.value)
+    })
+
+    const connectionCheckVersionText = computed(() => {
+      const data = connectionCheckData.value
+      return `Core: ${data?.core_current} FTL: ${data?.FTL_current} Web: ${data?.web_current}`
+    })
+
+    const toggleApiKeyVisibility = () => {
+      if (passwordInputType.value === PasswordInputType.password) {
+        passwordInputType.value = PasswordInputType.text
+      } else {
+        passwordInputType.value = PasswordInputType.password
+      }
+    }
+
+    const addNewPiHole = () => {
+      resetConnectionCheckAndCheck()
+      tabs.value.push({ pi_uri_base: '', api_key: '' })
+      setTimeout(() => {
+        currentTab.value = tabs.value.length - 1
+      }, 0)
+    }
+
+    const removePiHole = (index: number) => {
+      resetConnectionCheckAndCheck()
+      tabs.value.splice(index, 1)
+    }
+
+    const isInvalidApiKey = (apiKey: string) =>
+      !(!apiKey.match('^[a-f0-9]{64}$') && apiKey.length !== 0)
+
+    const isInvalidUrlSchema = (piHoleUrl: string) =>
+      !(!piHoleUrl.match('^(http|https):\\/\\/[^ "]+$') || piHoleUrl.length < 1)
+
     return {
-      pi_uri_base: '',
-      api_key: ''
+      currentTab,
+      tabs,
+      passwordInputType,
+      connectionCheck,
+      resetConnectionCheckAndCheck,
+      isInvalidApiKey,
+      isInvalidUrlSchema,
+      removePiHole,
+      addNewPiHole,
+      toggleApiKeyVisibility,
+      connectionCheckVersionText,
+      connectionCheckStatus,
+      ...useTranslation()
     }
   }
-
-  private switch_api_key_input_type() {
-    const currentState = this.password_input_type
-
-    if (currentState === 'password') {
-      this.password_input_type = 'text'
-    } else {
-      this.password_input_type = 'password'
-    }
-  }
-
-  /**
-   * Adds a new tab
-   */
-  private add_new_settings_tab(): void {
-    this.resetConnectionCheckAndCheck()
-    this.tabs.push(this.default_empty_option_tab())
-    setTimeout(() => {
-      this.current_tab_index = this.tabs.length - 1
-    }, 0)
-  }
-
-  private removeSettingsTab(index: number): void {
-    this.resetConnectionCheckAndCheck()
-    this.tabs.splice(index, 1)
-  }
-
-  private async update_tabs_settings(): Promise<void> {
-    const results = await StorageService.getPiHoleSettingsArray()
-    if (typeof results !== 'undefined' && results.length > 0) {
-      this.tabs = results
-    }
-  }
-}
+})
 </script>
-<style lang="scss" scoped>
-.no-white-hover-border:hover {
-  border-color: rgba(255, 255, 255, 0);
-}
-
-.no-white-hover-border:focus {
-  border-color: rgba(255, 255, 255, 0);
-}
-
-.clickable {
-  cursor: pointer;
-}
-</style>
