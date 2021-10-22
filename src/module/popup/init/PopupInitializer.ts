@@ -1,15 +1,18 @@
 import Vue from 'vue'
 import { BIconCheckCircle, BIconXCircle, BootstrapVue } from 'bootstrap-vue'
+import VueCompositionAPI from '@vue/composition-api'
 import { Initializer } from '../../general/Initializer'
-import PopupComponent from '../vue/PopupComponent.vue'
+import PopupComponent from '../vue/view/PopupComponent.vue'
+import vuetify from '../../../plugins/vuetify'
 
 export default class PopupInitializer implements Initializer {
   init(): void {
     const vueComponent = {
+      vuetify,
       el: '#main',
       render: (h: any) => h(PopupComponent)
     }
-
+    Vue.use(VueCompositionAPI)
     Vue.use(BootstrapVue)
     Vue.component('BIconCheckCircle', BIconCheckCircle)
     Vue.component('BIconXCircle', BIconXCircle)

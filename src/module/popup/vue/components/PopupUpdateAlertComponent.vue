@@ -16,9 +16,9 @@
 
 <script lang="ts">
 import { Component } from 'vue-property-decorator'
-import BaseComponent from '../../general/BaseComponent.vue'
-import { StorageService } from '../../../service/StorageService'
-import PiHoleApiService from '../../../service/PiHoleApiService'
+import BaseComponent from '../../../general/BaseComponent.vue'
+import { StorageService } from '../../../../service/StorageService'
+import PiHoleApiService from '../../../../service/PiHoleApiService'
 
 @Component
 export default class PopupUpdateAlertComponent extends BaseComponent {

@@ -45,11 +45,11 @@
 
 <script lang="ts">
 import { Component, Prop } from 'vue-property-decorator'
-import BaseComponent from '../../general/BaseComponent.vue'
-import { StorageService } from '../../../service/StorageService'
-import TabService from '../../../service/TabService'
-import PiHoleApiService from '../../../service/PiHoleApiService'
-import ApiList from '../../../api/enum/ApiList'
+import BaseComponent from '../../../general/BaseComponent.vue'
+import { StorageService } from '../../../../service/StorageService'
+import TabService from '../../../../service/TabService'
+import PiHoleApiService from '../../../../service/PiHoleApiService'
+import ApiList from '../../../../api/enum/ApiList'
 
 @Component
 export default class PopupListCardComponent extends BaseComponent {

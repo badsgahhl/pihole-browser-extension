@@ -1,30 +1,32 @@
 <template>
-  <div id="popup">
-    <PopupStatusCardComponent
-      v-if="is_active_by_badge_loaded"
-      :is_active_by_badge="is_active_by_badge"
-      :is_active_by_status.sync="is_active_by_real_status"
-    />
-    <PopupListCardComponent
-      v-if="is_list_feature_active()"
-      :current_url="current_url"
-    />
-    <PopupUpdateAlertComponent v-if="is_active_by_real_status" />
-  </div>
+  <v-app id="popup">
+    <v-container fluid>
+      <PopupStatusCardComponent
+        v-if="is_active_by_badge_loaded"
+        v-model="is_active_by_real_status"
+        :is-active-by-badge="is_active_by_badge"
+      />
+      <PopupListCardComponent
+        v-if="is_list_feature_active()"
+        :current_url="current_url"
+      />
+      <PopupUpdateAlertComponent v-if="is_active_by_real_status" />
+    </v-container>
+  </v-app>
 </template>
 
 <script lang="ts">
 import { Component } from 'vue-property-decorator'
-import PopupStatusCardComponent from './PopupStatusCardComponent.vue'
-import PopupListCardComponent from './PopupListCardComponent.vue'
+import PopupStatusCardComponent from '../components/PopupStatusCardComponent.vue'
+import PopupListCardComponent from '../components/PopupListCardComponent.vue'
 import {
   BadgeService,
   ExtensionBadgeTextEnum
-} from '../../../service/BadgeService'
-import PopupUpdateAlertComponent from './PopupUpdateAlertComponent.vue'
-import BaseComponent from '../../general/BaseComponent.vue'
-import { StorageService } from '../../../service/StorageService'
-import TabService from '../../../service/TabService'
+} from '../../../../service/BadgeService'
+import PopupUpdateAlertComponent from '../components/PopupUpdateAlertComponent.vue'
+import BaseComponent from '../../../general/BaseComponent.vue'
+import { StorageService } from '../../../../service/StorageService'
+import TabService from '../../../../service/TabService'
 
 @Component({
   components: {
@@ -106,39 +108,7 @@ export default class PopupComponent extends BaseComponent {
 </script>
 
 <style lang="scss">
-$card-padding: 5px;
-
 #popup {
-  margin: 1px 1px 1px 1px;
-  text-align: center;
-}
-
-body {
-  width: 150px;
-  overflow: hidden;
-}
-
-.card-body {
-  padding: $card-padding !important;
-  font-size: 14px;
-}
-
-.card:nth-child(n + 2) {
-  margin-top: 5px;
-}
-
-.card-header {
-  padding: $card-padding !important;
-  font-size: 16px;
-}
-
-.card-footer {
-  padding: $card-padding !important;
-}
-
-.status {
-  font-size: 16px;
-  text-align: center;
-  font-weight: bold;
+  width: 250px;
 }
 </style>
