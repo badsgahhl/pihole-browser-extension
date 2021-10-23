@@ -60,8 +60,13 @@
           </v-btn>
         </div>
         <v-alert v-if="connectionCheckStatus === 'IDLE'" outlined type="info">
-          <v-progress-circular color="primary" :width="3" indeterminate />
           {{ translate(I18NOptionKeys.option_connection_check_idle) }}
+          <v-progress-circular
+            color="primary"
+            indeterminate
+            :size="25"
+            :width="2"
+          />
         </v-alert>
         <v-alert v-if="connectionCheckStatus === 'OK'" type="success" outlined>
           {{ translate(I18NOptionKeys.option_connection_check_ok) }}<br />

@@ -112,15 +112,7 @@
 		"message": "Deaktiviere die Context Menu Shortcuts"
 	},
 	"popup_update_card_info": {
-		"message": "PiHole Update verfügbar! ($updates$/$piholes$)",
-		"placeholders": {
-			"updates": {
-				"content": "$1"
-			},
-			"piholes": {
-				"content": "$2"
-			}
-		}
+		"message": "Updates für PiHole verfügbar"
 	},
 	"context_menu_toggle_pi_holes": {
 		"message": "PiHole(s) umschalten"
