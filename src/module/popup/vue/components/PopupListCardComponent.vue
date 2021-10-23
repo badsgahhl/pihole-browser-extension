@@ -4,7 +4,9 @@
       {{ translate(I18NPopupKeys.popup_second_card_current_url) }}
     </v-card-title>
     <v-card-text class="text-center">
-      {{ currentUrl }}
+      <v-alert color="primary" outlined>
+        {{ currentUrl }}
+      </v-alert>
     </v-card-text>
     <v-card-actions class="justify-center">
       <v-btn
