@@ -1,40 +1,32 @@
 <template>
-  <b-card class="shadow" no-body>
-    <b-card-header class="h6">
-      🖥️ {{ translate(i18nOptionsKeys.option_extension) }}
-    </b-card-header>
-    <b-card-body>
+  <v-card>
+    <v-card-title>
+      {{ translate(I18NOptionKeys.option_extension) }}
+    </v-card-title>
+    <v-card-text>
       <p>{{ translate('manifest_description') }}</p>
-      <hr class="mt-0" />
+      <v-divider />
       <p>
-        {{ translate(i18nOptionsKeys.option_contributors) }}
+        {{ translate(I18NOptionKeys.option_contributors) }}
         <br />
-        <b-link
-          :href="LinkConfig.github_user_badsgahhl"
-          class="dark-mode-light-link"
-          target="_blank"
-        >
+        <a :href="LinkConfig.github_user_badsgahhl" target="_blank">
           Pascal Glaser
-        </b-link>
-        ,
-        <b-link
-          :href="LinkConfig.github_user_erikr729"
-          class="dark-mode-light-link"
-          target="_blank"
-        >
+        </a>
+        <br />
+        <a :href="LinkConfig.github_user_erikr729" target="_blank">
           Erik Rill
-        </b-link>
+        </a>
       </p>
-    </b-card-body>
-  </b-card>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script lang="ts">
-import { Component } from 'vue-property-decorator'
-import BaseComponent from '../../../general/BaseComponent.vue'
+import { defineComponent } from '@vue/composition-api'
+import useTranslation from '../../../../hooks/translation'
 
-@Component
-export default class OptionAboutExtension extends BaseComponent {
-  // Empty Class
-}
+export default defineComponent({
+  name: 'OptionAboutExtension',
+  setup: () => ({ ...useTranslation() })
+})
 </script>

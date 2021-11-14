@@ -43,8 +43,14 @@ export class WebpackConfigFactory {
             }
           },
           {
-            test: /\.s[ac]ss$/i,
+            test: /\.(scss|css)$/,
             use: ['style-loader', 'css-loader', 'sass-loader']
+          },
+          {
+            test: /\.(woff|woff2|ttf|eot)$/,
+            use: {
+              loader: 'url-loader'
+            }
           }
         ]
       },

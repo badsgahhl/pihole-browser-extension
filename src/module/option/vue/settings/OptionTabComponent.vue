@@ -1,103 +1,117 @@
 <template>
-  <b-tabs v-model="current_tab_index">
-    <b-tab
-      v-for="(pi_hole_setting, index) in tabs"
-      :key="'dyn-tab-' + index"
-      :title="'PiHole ' + (index + 1)"
-      @click="resetConnectionCheckAndCheck"
-    >
-      <b-form-group
-        :label="translate(i18nOptionsKeys.options_pi_hole_address)"
-        style="margin-top: 1rem"
+  <div>
+    <v-tabs v-model="currentTab">
+      <v-tab
+        v-for="(pi_hole_setting, index) in tabs"
+        :key="'dyn-tab-' + index"
+        @click="resetConnectionCheckAndCheck"
       >
-        <b-form-input
+        PiHole {{ index + 1 }}
+      </v-tab>
+    </v-tabs>
+    <v-tabs-items v-model="currentTab">
+      <v-tab-item
+        v-for="(pi_hole_setting, index) in tabs"
+        :key="index"
+        class="mt-5"
+      >
+        <v-text-field
           v-model="pi_hole_setting.pi_uri_base"
           v-debounce:500ms="connectionCheck"
+          outlined
           debounce-events="input"
           :placeholder="PiHoleSettingsDefaults.pi_uri_base"
-          :state="is_invalid_url_schema(pi_hole_setting.pi_uri_base)"
+          :rules="[
+            v =>
+              isInvalidUrlSchema(v) ||
+              translate(I18NOptionKeys.options_url_invalid_warning)
+          ]"
+          :label="translate(I18NOptionKeys.options_pi_hole_address)"
           required
-        />
-        <b-form-valid-feedback :force-show="connectionCheckStatus === 'IDLE'">
-          <b-spinner small />
-          {{ translate(i18nOptionsKeys.option_connection_check_idle) }}
-        </b-form-valid-feedback>
-        <b-form-valid-feedback :force-show="connectionCheckStatus === 'OK'">
-          {{ translate(i18nOptionsKeys.option_connection_check_ok) }}<br />
-          {{ connectionCheckVersionText }}
-        </b-form-valid-feedback>
-        <b-form-invalid-feedback
-          :force-show="connectionCheckStatus === 'ERROR'"
-        >
-          {{ translate(i18nOptionsKeys.option_connection_check_error) }}
-        </b-form-invalid-feedback>
-        <b-form-invalid-feedback
-          :state="is_invalid_url_schema(pi_hole_setting.pi_uri_base)"
-        >
-          {{ translate(i18nOptionsKeys.options_url_invalid_warning) }}
-        </b-form-invalid-feedback>
-      </b-form-group>
-      <b-form-group :label="translate(i18nOptionsKeys.options_api_key)">
-        <b-input-group>
-          <b-form-input
-            v-model="pi_hole_setting.api_key"
-            :state="is_invalid_api_key(pi_hole_setting.api_key)"
-            :type="password_input_type"
-          />
-          <b-input-group-append class="clickable">
-            <b-input-group-text @click="switch_api_key_input_type">
-              <b-icon-eye v-if="password_input_type === 'password'" />
-              <b-icon-eye-slash v-else />
-            </b-input-group-text>
-          </b-input-group-append>
-        </b-input-group>
-        <b-form-invalid-feedback
-          :state="is_invalid_api_key(pi_hole_setting.api_key)"
-        >
-          {{ translate(i18nOptionsKeys.options_api_key_invalid_warning) }}
-        </b-form-invalid-feedback>
-      </b-form-group>
-    </b-tab>
+        ></v-text-field>
+        <v-text-field
+          v-model="pi_hole_setting.api_key"
+          outlined
+          :type="passwordInputType"
+          :append-icon="
+            passwordInputType === 'password' ? mdiEyeOutline : mdiEyeOffOutline
+          "
+          :rules="[
+            v =>
+              isInvalidApiKey(v) ||
+              translate(I18NOptionKeys.options_api_key_invalid_warning)
+          ]"
+          :label="translate(I18NOptionKeys.options_api_key)"
+          @click:append="toggleApiKeyVisibility"
+        ></v-text-field>
 
-    <!-- New Tab Button (Using tabs-end slot) -->
-    <template #tabs-end style="font-size: 20px;">
-      <b-nav-item
-        v-if="tabs.length < 4"
-        :title="translate(i18nOptionsKeys.options_add_button)"
-        href="#"
-        link-classes="no-white-hover-border"
-        role="presentation"
-        @click.prevent="add_new_settings_tab"
-      >
-        <b-icon-plus-circle
-          style="width: 20px;height: 20px"
-          variant="success"
-        />
-      </b-nav-item>
-      <b-nav-item
-        v-if="tabs.length > 1"
-        :title="translate(i18nOptionsKeys.options_remove_button)"
-        href="#"
-        link-classes="no-white-hover-border"
-        role="presentation"
-        @click.prevent="remove_last_settings_tab"
-      >
-        <b-icon-x-circle style="width: 20px;height: 20px" variant="danger" />
-      </b-nav-item>
-    </template>
-  </b-tabs>
+        <div class="mb-5">
+          <v-btn v-if="tabs.length < 4" @click.prevent="addNewPiHole"
+            >{{ translate(I18NOptionKeys.options_add_button) }}
+          </v-btn>
+          <v-btn
+            v-if="tabs.length > 1"
+            @click.prevent="removePiHole(currentTab)"
+            >{{
+              translate(I18NOptionKeys.options_remove_button, [
+                String(currentTab + 1)
+              ])
+            }}
+          </v-btn>
+        </div>
+        <v-alert v-if="connectionCheckStatus === 'IDLE'" outlined type="info">
+          {{ translate(I18NOptionKeys.option_connection_check_idle) }}
+          <v-progress-circular
+            color="primary"
+            indeterminate
+            :size="25"
+            :width="2"
+          />
+        </v-alert>
+        <v-alert v-if="connectionCheckStatus === 'OK'" type="success" outlined>
+          {{ translate(I18NOptionKeys.option_connection_check_ok) }}<br />
+          {{ connectionCheckVersionText }}
+        </v-alert>
+        <v-alert v-if="connectionCheckStatus === 'ERROR'" outlined type="error">
+          {{ translate(I18NOptionKeys.option_connection_check_error) }}
+        </v-alert>
+        <v-alert
+          v-if="
+            connectionCheckStatus === 'OK' &&
+              connectionCheckData !== null &&
+              (connectionCheckData.core_update ||
+                connectionCheckData.web_update ||
+                connectionCheckData.FTL_update)
+          "
+          outlined
+          type="info"
+        >
+          {{
+            translate(I18NOptionKeys.option_connection_check_update_available)
+          }}
+        </v-alert>
+      </v-tab-item>
+    </v-tabs-items>
+  </div>
 </template>
 
 <script lang="ts">
-import { Component, Watch } from 'vue-property-decorator'
 import { debounce } from 'vue-debounce'
+import {
+  computed,
+  defineComponent,
+  onMounted,
+  ref,
+  watch
+} from '@vue/composition-api'
+import { mdiEyeOffOutline, mdiEyeOutline } from '@mdi/js'
 import {
   PiHoleSettingsStorage,
   StorageService
 } from '../../../../service/StorageService'
-import BaseComponent from '../../../general/BaseComponent.vue'
 import { PiHoleVersions } from '../../../../api/models/PiHoleVersions'
 import PiHoleApiService from '../../../../service/PiHoleApiService'
+import useTranslation from '../../../../hooks/translation'
 
 enum ConnectionCheckStatus {
   OK = 'OK',
@@ -105,156 +119,144 @@ enum ConnectionCheckStatus {
   IDLE = 'IDLE'
 }
 
-@Component
-export default class OptionTabComponent extends BaseComponent {
-  private tabs: Array<PiHoleSettingsStorage> = [this.default_empty_option_tab()]
+enum PasswordInputType {
+  password = 'password',
+  text = 'text'
+}
 
-  private current_tab_index = 0
-
-  private password_input_type: 'password' | 'text' = 'password'
-
-  private connectionCheckStatus: ConnectionCheckStatus =
-    ConnectionCheckStatus.IDLE
-
-  private connectionCheckData: PiHoleVersions | null = null
-
-  mounted() {
-    this.update_tabs_settings().then(() => this.resetConnectionCheckAndCheck())
-  }
-
-  @Watch('current_tab_index', { deep: true })
-  private tab_switched(): void {
-    this.password_input_type = 'password'
-  }
-
-  @Watch('tabs', { deep: true })
-  private on_tabs_changed(): void {
-    for (const piHoleSetting of this.tabs) {
-      if (typeof piHoleSetting.pi_uri_base !== 'undefined') {
-        piHoleSetting.pi_uri_base = piHoleSetting.pi_uri_base.replace(
-          /\s+/g,
-          ''
-        )
-      } else {
-        piHoleSetting.pi_uri_base = ''
+export default defineComponent({
+  name: 'OptionTabComponent',
+  setup: () => {
+    const tabs = ref<PiHoleSettingsStorage[]>([
+      {
+        pi_uri_base: '',
+        api_key: ''
       }
-      if (typeof piHoleSetting.api_key !== 'undefined') {
-        piHoleSetting.api_key = piHoleSetting.api_key.replace(/\s+/g, '')
-      } else {
-        piHoleSetting.api_key = ''
+    ])
+
+    const currentTab = ref(0)
+
+    const passwordInputType = ref<PasswordInputType>(PasswordInputType.password)
+
+    const connectionCheckStatus = ref<ConnectionCheckStatus>(
+      ConnectionCheckStatus.IDLE
+    )
+
+    const connectionCheckData = ref<PiHoleVersions | null>(null)
+
+    const currentSelectedSettings = computed(() => tabs.value[currentTab.value])
+
+    const connectionCheck = () => {
+      connectionCheckStatus.value = ConnectionCheckStatus.IDLE
+      PiHoleApiService.getPiHoleVersion(currentSelectedSettings.value)
+        .then(result => {
+          if (typeof result.data === 'object') {
+            connectionCheckStatus.value = ConnectionCheckStatus.OK
+            connectionCheckData.value = result.data
+          } else {
+            connectionCheckStatus.value = ConnectionCheckStatus.ERROR
+          }
+        })
+        .catch(() => {
+          connectionCheckStatus.value = ConnectionCheckStatus.ERROR
+        })
+    }
+    const resetConnectionCheckAndCheck = () => {
+      connectionCheckStatus.value = ConnectionCheckStatus.IDLE
+      connectionCheckData.value = null
+      debounce(() => {
+        connectionCheck()
+      }, '300ms')()
+    }
+
+    const updateTabsSettings = async () => {
+      const results = await StorageService.getPiHoleSettingsArray()
+      if (typeof results !== 'undefined' && results.length > 0) {
+        tabs.value = results
       }
     }
-    StorageService.savePiHoleSettingsArray(this.tabs)
-  }
 
-  private get connectionCheckVersionText() {
-    const data = this.connectionCheckData
-    return `Core: ${data?.core_current} FTL: ${data?.FTL_current} Web: ${data?.web_current}`
-  }
+    onMounted(() => {
+      updateTabsSettings().then(() => resetConnectionCheckAndCheck())
+    })
 
-  private resetConnectionCheckAndCheck() {
-    this.connectionCheckStatus = ConnectionCheckStatus.IDLE
-    this.connectionCheckData = null
-    debounce(() => {
-      this.connectionCheck()
-    }, '300ms')()
-  }
+    watch(currentTab, () => {
+      passwordInputType.value = PasswordInputType.password
+    })
 
-  private connectionCheck() {
-    this.connectionCheckStatus = ConnectionCheckStatus.IDLE
-    PiHoleApiService.getPiHoleVersion(this.currentSelectedSettings)
-      .then(result => {
-        if (typeof result.data === 'object') {
-          this.connectionCheckStatus = ConnectionCheckStatus.OK
-          this.connectionCheckData = result.data
-        } else {
-          this.connectionCheckStatus = ConnectionCheckStatus.ERROR
+    watch(
+      tabs,
+      () => {
+        for (const piHoleSetting of tabs.value) {
+          if (typeof piHoleSetting.pi_uri_base !== 'undefined') {
+            piHoleSetting.pi_uri_base = piHoleSetting.pi_uri_base.replace(
+              /\s+/g,
+              ''
+            )
+          } else {
+            piHoleSetting.pi_uri_base = ''
+          }
+          if (typeof piHoleSetting.api_key !== 'undefined') {
+            piHoleSetting.api_key = piHoleSetting.api_key.replace(/\s+/g, '')
+          } else {
+            piHoleSetting.api_key = ''
+          }
         }
-      })
-      .catch(() => {
-        this.connectionCheckStatus = ConnectionCheckStatus.ERROR
-      })
-  }
+        StorageService.savePiHoleSettingsArray(tabs.value)
+      },
+      { deep: true }
+    )
 
-  private get currentSelectedSettings(): PiHoleSettingsStorage {
-    return this.tabs[this.current_tab_index]
-  }
+    const connectionCheckVersionText = computed(() => {
+      const data = connectionCheckData.value
+      return `Core: ${data?.core_current} FTL: ${data?.FTL_current} Web: ${data?.web_current}`
+    })
 
-  /**
-   * Validation Function for the api key
-   * @param api_key
-   */
-  private is_invalid_api_key(api_key: string): boolean | null {
-    return !api_key.match('^[a-f0-9]{64}$') && api_key.length !== 0
-      ? false
-      : null
-  }
+    const toggleApiKeyVisibility = () => {
+      if (passwordInputType.value === PasswordInputType.password) {
+        passwordInputType.value = PasswordInputType.text
+      } else {
+        passwordInputType.value = PasswordInputType.password
+      }
+    }
 
-  /**
-   * Validation Function for the pi hole url
-   */
-  private is_invalid_url_schema(pi_hole_uri: string): boolean | null {
-    return !pi_hole_uri.match('^(http|https):\\/\\/[^ "]+$') ||
-      pi_hole_uri.length < 1
-      ? false
-      : null
-  }
+    const addNewPiHole = () => {
+      resetConnectionCheckAndCheck()
+      tabs.value.push({ pi_uri_base: '', api_key: '' })
+      setTimeout(() => {
+        currentTab.value = tabs.value.length - 1
+      }, 0)
+    }
 
-  /**
-   * Getter for an empty pihole settings storage
-   */
-  private default_empty_option_tab(): PiHoleSettingsStorage {
+    const removePiHole = (index: number) => {
+      resetConnectionCheckAndCheck()
+      tabs.value.splice(index, 1)
+    }
+
+    const isInvalidApiKey = (apiKey: string) =>
+      !(!apiKey.match('^[a-f0-9]{64}$') && apiKey.length !== 0)
+
+    const isInvalidUrlSchema = (piHoleUrl: string) =>
+      !(!piHoleUrl.match('^(http|https):\\/\\/[^ "]+$') || piHoleUrl.length < 1)
+
     return {
-      pi_uri_base: '',
-      api_key: ''
+      mdiEyeOutline,
+      mdiEyeOffOutline,
+      currentTab,
+      tabs,
+      passwordInputType,
+      connectionCheck,
+      resetConnectionCheckAndCheck,
+      isInvalidApiKey,
+      isInvalidUrlSchema,
+      removePiHole,
+      addNewPiHole,
+      toggleApiKeyVisibility,
+      connectionCheckVersionText,
+      connectionCheckStatus,
+      connectionCheckData,
+      ...useTranslation()
     }
   }
-
-  private switch_api_key_input_type() {
-    const currentState = this.password_input_type
-
-    if (currentState === 'password') {
-      this.password_input_type = 'text'
-    } else {
-      this.password_input_type = 'password'
-    }
-  }
-
-  /**
-   * Adds a new tab
-   */
-  private add_new_settings_tab(): void {
-    this.tabs.push(this.default_empty_option_tab())
-    setTimeout(() => {
-      this.current_tab_index = this.tabs.length - 1
-    }, 0)
-  }
-
-  /**
-   * Removes the last tab
-   */
-  private remove_last_settings_tab(): void {
-    this.tabs.pop()
-  }
-
-  private async update_tabs_settings(): Promise<void> {
-    const results = await StorageService.getPiHoleSettingsArray()
-    if (typeof results !== 'undefined' && results.length > 0) {
-      this.tabs = results
-    }
-  }
-}
+})
 </script>
-<style lang="scss" scoped>
-.no-white-hover-border:hover {
-  border-color: rgba(255, 255, 255, 0);
-}
-
-.no-white-hover-border:focus {
-  border-color: rgba(255, 255, 255, 0);
-}
-
-.clickable {
-  cursor: pointer;
-}
-</style>

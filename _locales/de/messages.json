@@ -13,6 +13,9 @@
 	"options_settings": {
 		"message": "Einstellungen"
 	},
+	"option_settings_general_settings": {
+		"message": "Allgemeine Einstellungen"
+	},
 	"options_about": {
 		"message": "Über"
 	},
@@ -41,6 +44,9 @@
 		"message": "Spenden"
 	},
 	"options_headline_info": {
+		"message": "PiHole Konfiguration"
+	},
+	"options_headline_additional_info": {
 		"message": "Gebe die Adresse und den API Key ein, welchen du unter API/Web interface in deinen PiHole Einstellungen findest."
 	},
 	"options_default_time_label": {
@@ -62,10 +68,15 @@
 		"message": "PiHole Adresse"
 	},
 	"options_add_button": {
-		"message": "Hinzufügen"
+		"message": "PiHole hinzufügen"
 	},
 	"options_remove_button": {
-		"message": "Entfernen"
+		"message": "PiHole $num$ löschen",
+		"placeholders": {
+			"num": {
+				"content": "$1"
+			}
+		}
 	},
 	"options_api_key_invalid_warning": {
 		"message": "Api Key stimmt nicht mit dem Schema überein (64 Zeichen lang). Er könnte ungültig sein!"
@@ -89,7 +100,7 @@
 		"message": "Blacklist"
 	},
 	"options_disable_list_feature": {
-		"message": "Deaktiviere das List Feature im Popup"
+		"message": "Deaktiviere das Black-/White-List Feature im Popup"
 	},
 	"option_disable_update_notification": {
 		"message": "Deaktiviere die Update Benachrichtigung im Popup"
@@ -101,15 +112,7 @@
 		"message": "Deaktiviere die Context Menu Shortcuts"
 	},
 	"popup_update_card_info": {
-		"message": "PiHole Update verfügbar! ($updates$/$piholes$)",
-		"placeholders": {
-			"updates": {
-				"content": "$1"
-			},
-			"piholes": {
-				"content": "$2"
-			}
-		}
+		"message": "Updates für PiHole verfügbar"
 	},
 	"context_menu_toggle_pi_holes": {
 		"message": "PiHole(s) umschalten"
@@ -131,5 +134,8 @@
 	},
 	"option_connection_check_error": {
 		"message": "Verbindung fehlerhaft"
+	},
+	"option_connection_check_update_available": {
+		"message": "Update verfügbar für das PiHole"
 	}
 }

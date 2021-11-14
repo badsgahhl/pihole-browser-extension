@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"target": "ES2018",
-		"sourceMap": true,
+		"sourceMap": false,
 		"lib": [
 			"dom",
 			"ESNext"
@@ -10,8 +10,7 @@
 		"outDir": "dist",
 		"types": [
 			"chrome",
-			"firefox-webext-browser",
-			"bootstrap"
+			"firefox-webext-browser"
 		],
 		"baseUrl": ".",
 		"module": "ESNext",

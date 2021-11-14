@@ -13,6 +13,9 @@
 	"options_settings": {
 		"message": "Settings"
 	},
+	"option_settings_general_settings": {
+		"message": "General Settings"
+	},
 	"options_about": {
 		"message": "About"
 	},
@@ -41,6 +44,9 @@
 		"message": "Donate"
 	},
 	"options_headline_info": {
+		"message": "PiHole Configuration"
+	},
+	"options_headline_additional_info": {
 		"message": "Enter the address and the API Key, which you can find under API/Web interface in your PiHole settings."
 	},
 	"options_default_time_label": {
@@ -62,10 +68,15 @@
 		"message": "PiHole Address"
 	},
 	"options_add_button": {
-		"message": "Add"
+		"message": "Add PiHole"
 	},
 	"options_remove_button": {
-		"message": "Remove"
+		"message": "Remove PiHole $num$",
+		"placeholders": {
+			"num": {
+				"content": "$1"
+			}
+		}
 	},
 	"options_api_key_invalid_warning": {
 		"message": "Api Key doesn't match scheme (64 chars long). It may be invalid!"
@@ -74,10 +85,10 @@
 		"message": "The url is invalid. (Missing http(s), invalid scheme or empty)"
 	},
 	"options_disable_list_feature": {
-		"message": "Disable the list feature in the popup"
+		"message": "Disable black/white list feature in the popup"
 	},
 	"option_disable_update_notification": {
-		"message": "Disable the update notification in the popup"
+		"message": "Disable update notification in the popup"
 	},
 	"popup_status_card_title": {
 		"message": "PiHole Switch"
@@ -101,15 +112,7 @@
 		"message": "Disable the context menu shortcuts"
 	},
 	"popup_update_card_info": {
-		"message": "PiHole Update available! ($updates$/$piholes$)",
-		"placeholders": {
-			"updates": {
-				"content": "$1"
-			},
-			"piholes": {
-				"content": "$2"
-			}
-		}
+		"message": "Update available for PiHole"
 	},
 	"context_menu_toggle_pi_holes": {
 		"message": "Toggle PiHole(s)"
@@ -131,5 +134,8 @@
 	},
 	"option_connection_check_error": {
 		"message": "Connection not successfully"
+	},
+	"option_connection_check_update_available": {
+		"message": "Update available for PiHole"
 	}
 }
