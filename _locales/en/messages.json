@@ -3,7 +3,7 @@
 		"message": "Browser extension to control your PiHole. Built with Vue, Typescript and ❤"
 	},
 	"options_title": {
-		"message": "$page$ - Switch for PiHole",
+		"message": "$page$ - PiHole Browser Extension",
 		"placeholders": {
 			"page": {
 				"content": "$1"

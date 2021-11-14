@@ -7,7 +7,8 @@
         </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title class="text-h6">
-            Switch for PiHole
+            PiHole
+            <br />Browser <br />Extension
           </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
