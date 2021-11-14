@@ -1,9 +1,9 @@
 # PiHole Browser Extension ![t](https://github.com/badsgahhl/pihole-browser-extension/blob/master/icon/icon-48.png?raw=true)
 
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/ngoafjpapneaopfkpboebcahajopcifi)](https://chrome.google.com/webstore/detail/switch-for-pihole/ngoafjpapneaopfkpboebcahajopcifi)
-[![Mozilla Add-on](https://img.shields.io/amo/v/switch-for-pihole)](https://addons.mozilla.org/firefox/addon/switch-for-pihole/)
+[![Mozilla Add-on](https://img.shields.io/amo/v/pihole-browser-extension)](https://addons.mozilla.org/firefox/addon/pihole-browser-extension/)
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/users/ngoafjpapneaopfkpboebcahajopcifi?label=chrome%20users)](https://chrome.google.com/webstore/detail/switch-for-pihole/ngoafjpapneaopfkpboebcahajopcifi)
-[![Mozilla Add-on](https://img.shields.io/amo/users/switch-for-pihole?color=green&label=mozilla%20users)](https://addons.mozilla.org/firefox/addon/switch-for-pihole/)
+[![Mozilla Add-on](https://img.shields.io/amo/users/pihole-browser-extension?color=green&label=mozilla%20users)](https://addons.mozilla.org/firefox/addon/pihole-browser-extension/)
 ![GitHub](https://img.shields.io/github/license/badsgahhl/pihole-browser-extension)
 <br><br>
 The PiHole Browser Extension is a small browser extension for Chrome and Firefox. It's written with Vue and Typescript.
@@ -13,7 +13,7 @@ With this extension you can control your PiHole remotely (e.g. Turning it on/off
 <br>
 
 [![chrome](https://cdn.glaser.casa/s/ChromeWebStore_BadgeWBorder.png)](https://chrome.google.com/webstore/detail/switch-for-pihole/ngoafjpapneaopfkpboebcahajopcifi)
-[![firefox](https://cdn.glaser.casa/tp/firefox4.png)](https://addons.mozilla.org/firefox/addon/switch-for-pihole/)
+[![firefox](https://cdn.glaser.casa/tp/firefox4.png)](https://addons.mozilla.org/firefox/addon/pihole-browser-extension/)
 
 ### Features:
 
