@@ -50,7 +50,8 @@ export default class PiHoleApiService {
       }
 
       const url = this.getPiHoleBaseUrl(piHole.pi_uri_base, piHole.api_key)
-      url.searchParams.append('status', '')
+
+      // url.searchParams.append('status', '')
       promiseArray.push(
         axios.get<PiHoleApiStatus>(url.href, this.getAxiosConfig())
       )
