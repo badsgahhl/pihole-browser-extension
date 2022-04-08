@@ -17,10 +17,6 @@ With this extension you can control your PiHole remotely (e.g. Turning it on/off
   <img src="https://design.firefox.com/product-identity/firefox/firefox-horizontal-lockup/firefox-logo-horizontal-lockup.png" alt="Firefox Logo" width="155"/>
 </a>  
 
-### PiHole v5.10 Bug
-
-There is currently a bug where the status in the extension is no longer displayed correctly. This is related to a bug in the current PiHole version. For more information see [#54](https://github.com/badsgahhl/pihole-browser-extension/issues/54).
-
 ### Features:
 
 - Disable your PiHole(s) easily with one click
