@@ -12,8 +12,10 @@ With this extension you can control your PiHole remotely (e.g. Turning it on/off
 
 <br>
 
-[![chrome](https://cdn.glaser.casa/s/ChromeWebStore_BadgeWBorder.png)](https://chrome.google.com/webstore/detail/switch-for-pihole/ngoafjpapneaopfkpboebcahajopcifi)
-[![firefox](https://cdn.glaser.casa/tp/firefox4.png)](https://addons.mozilla.org/firefox/addon/pihole-browser-extension/)
+[![chrome](https://wd.imgix.net/image/BrQidfK9jaQyIHwdw91aVpkPiib2/RQMv2HZ0v6NKfFn7XCeU.png?auto=format&w=228)](https://chrome.google.com/webstore/detail/switch-for-pihole/ngoafjpapneaopfkpboebcahajopcifi)
+<a href="https://addons.mozilla.org/firefox/addon/pihole-browser-extension/" target="_blank">
+  <img src="https://design.firefox.com/product-identity/firefox/firefox-horizontal-lockup/firefox-logo-horizontal-lockup.png" alt="Firefox Logo" width="155"/>
+</a>  
 
 ### PiHole v5.10 Bug
 
