@@ -1,74 +1,57 @@
 {
-	"name": "pihole-browser-extension",
-	"version": "3.0.2",
-	"dependencies": {
-		"@vue/composition-api": "^1.4.0",
-		"axios": "^0.24.0",
-		"vue": "^2.6.14",
-		"vue-debounce": "^3.0.1",
-		"vue-router": "^3.5.3",
-		"vuetify": "^2.5.14"
-	},
-	"devDependencies": {
-		"@mdi/js": "^6.5.95",
-		"@types/chrome": "0.0.128",
-		"eslint-config-prettier": "^8.3.0",
-		"prettier": "^1.19.1",
-		"@types/copy-webpack-plugin": "8.0.0",
-		"@types/firefox-webext-browser": "^82.0.0",
-		"@types/zip-webpack-plugin": "^3.0.1",
-		"@typescript-eslint/eslint-plugin": "^4.22.0",
-		"@typescript-eslint/parser": "^4.22.0",
-		"copy-webpack-plugin": "^9.0.0",
-		"cross-env": "^7.0.3",
-		"css-loader": "^6.5.1",
-		"deepmerge": "^4.2.2",
-		"eslint": "^7.27.0",
-		"eslint-config-airbnb-typescript": "^12.3.1",
-		"eslint-plugin-import": "^2.23.3",
-		"eslint-plugin-vue": "^7.9.0",
-		"eslint-webpack-plugin": "^2.5.4",
-		"html-webpack-plugin": "^5.3.1",
-		"sass": "~1.43.4",
-		"sass-loader": "^12.3.0",
-		"style-loader": "^3.3.1",
-		"ts-loader": "^8.3.0",
-		"ts-node": "^10.4.0",
-		"tsconfig-paths": "^3.11.0",
-		"typescript": "^4.4.4",
-		"url-loader": "^4.1.1",
-		"vue-loader": "^15.9.6",
-		"vue-template-compiler": "^2.6.12",
-		"webpack": "^5.64.0",
-		"webpack-cli": "^4.9.1",
-		"zip-webpack-plugin": "^4.0.1"
-	},
-	"description": "Browser extension to control your PiHole. Built with Vue, Typescript and ❤",
-	"scripts": {
-		"start-chrome": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack --mode=development -w --progress --config src/webpack/webpack.chrome.ts",
-		"start-firefox": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack --mode=development -w --progress --config src/webpack/webpack.firefox.ts",
-		"build": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack --mode=production --progress --config src/webpack/webpack.firefox.ts && cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack --mode=production --progress --config src/webpack/webpack.chrome.ts",
-		"rebuild-package-lock": "npm install --package-lock",
-		"eslint": "npx eslint . --ext .ts,.vue",
-		"prettier-check": "prettier --check ./**/*.{ts,vue,css,sccs}",
-		"prettier-format": "prettier --write ./**/*.{ts,vue,css,sccs}"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/badsgahhl/pihole-browser-extension.git"
-	},
-	"keywords": [
-		"pihole",
-		"extension",
-		"chrome",
-		"firefox",
-		"vue",
-		"typescript"
-	],
-	"author": "Pascal Glaser",
-	"license": "MIT",
-	"bugs": {
-		"url": "https://github.com/badsgahhl/pihole-browser-extension/issues"
-	},
-	"homepage": "https://github.com/badsgahhl/pihole-browser-extension/#readme"
+  "name": "pihole-browser-extension",
+  "version": "4.0.0",
+  "description": "Browser extension to control your PiHole. Built with Vue, Typescript and ❤",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/badsgahhl/pihole-browser-extension.git"
+  },
+  "keywords": [
+    "pihole",
+    "extension",
+    "chrome",
+    "firefox",
+    "vue",
+    "typescript"
+  ],
+  "author": "Pascal Glaser",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/badsgahhl/pihole-browser-extension/issues"
+  },
+  "homepage": "https://github.com/badsgahhl/pihole-browser-extension/#readme",
+  "scripts": {
+    "build": "vite build",
+    "dev": "nodemon"
+  },
+  "type": "module",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@crxjs/vite-plugin": "^2.0.0-beta.22",
+    "@types/chrome": "^0.0.253",
+    "@types/node": "^18.17.1",
+    "@types/react": "^18.2.39",
+    "@types/react-dom": "^18.2.17",
+    "@typescript-eslint/eslint-plugin": "^5.49.0",
+    "@typescript-eslint/parser": "^5.49.0",
+    "@vitejs/plugin-react-swc": "^3.0.1",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.32.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-react": "^7.32.1",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "fs-extra": "^11.1.0",
+    "nodemon": "^2.0.20",
+    "postcss": "^8.4.31",
+    "prettier-plugin-tailwindcss": "^0.5.11",
+    "tailwindcss": "^3.3.5",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.4",
+    "vite": "^4.5.0"
+  }
 }

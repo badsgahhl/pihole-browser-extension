@@ -1,0 +1,54 @@
+{
+  "manifest_version": 3,
+  "name": "PiHole Browser Extension",
+  "author": "Pascal Glaser",
+  "description": "__MSG_manifest_description__",
+  "default_locale": "en",
+  "options_page": "src/pages/options/index.html",
+  "background": {
+    "service_worker": "src/pages/background/index.ts",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "src/pages/popup/index.html",
+    "default_icon": {
+      "16": "icon/icon-16.png",
+      "32": "icon/icon-32.png"
+    }
+  },
+  "icons": {
+    "48": "icon-48.png",
+    "96": "icon-i96.png",
+    "128": "icon-128.png"
+  },
+  "host_permissions": ["http://*/*", "https://*/*"],
+  "permissions": [
+    "storage",
+    "activeTab",
+    "contextMenus"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "contentStyle.css",
+        "icon-128.png",
+        "icon-32.png"
+      ],
+      "matches": []
+    }
+  ],
+  "commands": {
+    "hotkey-toggle-pihole": {
+      "description": "__MSG_context_menu_toggle_pi_holes__"
+    },
+    "hotkey-blacklist-current-domain": {
+      "description": "__MSG_context_menu_blacklist_current_domain__"
+    },
+    "hotkey-whitelist-current-domain": {
+      "description": "__MSG_context_menu_whitelist_current_domain__"
+    },
+    "hotkey-open-settings": {
+      "description": "__MSG_context_menu_open_settings__"
+    }
+  }
+}
