@@ -5,7 +5,7 @@
   "watch": [
     "src", "utils", "vite.config.ts", "manifest.json", "manifest.dev.json"
   ],
-  "ext": "tsx,css,html,ts,json",
+  "ext": "css,html,ts,json,vue",
   "ignore": [
     "src/**/*.spec.ts"
   ],

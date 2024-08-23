@@ -1,4 +1,4 @@
-import react from '@vitejs/plugin-react-swc';
+
 import { resolve } from 'path';
 import fs from 'fs';
 import { defineConfig } from 'vite';
@@ -7,6 +7,7 @@ import { crx, ManifestV3Export } from '@crxjs/vite-plugin';
 import manifest from './manifest.json';
 import devManifest from './manifest.dev.json';
 import pkg from './package.json';
+import vuePlugin from "@vitejs/plugin-vue";
 
 const root = resolve(__dirname, 'src');
 const pagesDir = resolve(root, 'pages');
@@ -49,7 +50,7 @@ export default defineConfig({
     },
   },
   plugins: [
-    react(),
+    vuePlugin(),
     crx({
       manifest: extensionManifest as ManifestV3Export,
       contentScripts: {
