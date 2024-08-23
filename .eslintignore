@@ -6,3 +6,5 @@ icon
 icon_raw
 src/webpack
 .eslintrc.js
+src/lib
+src/components
