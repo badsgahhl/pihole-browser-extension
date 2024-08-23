@@ -1,9 +1,10 @@
 <script setup lang="ts">
 
+import { Button } from '@/components/ui/button';
 </script>
 
 <template>
-HI2
+  <Button>Test</Button>
 </template>
 
 <style scoped lang="scss">

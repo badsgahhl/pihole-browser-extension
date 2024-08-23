@@ -1,5 +1,5 @@
 import '@pages/popup/index.css';
-import '@assets/styles/tailwind.css';
+import '@assets/index.css';
 import Popup from './Popup.vue';
 import { createApp } from "vue";
 

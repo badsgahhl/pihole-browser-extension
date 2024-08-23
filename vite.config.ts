@@ -1,4 +1,3 @@
-
 import { resolve } from 'path';
 import fs from 'fs';
 import { defineConfig } from 'vite';
@@ -47,6 +46,7 @@ export default defineConfig({
       '@src': root,
       '@assets': assetsDir,
       '@pages': pagesDir,
+      '@': resolve(__dirname, './src'),
     },
   },
   plugins: [
