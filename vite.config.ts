@@ -1,6 +1,7 @@
 import { resolve } from 'path';
 import fs from 'fs';
 import { defineConfig } from 'vite';
+import { Plugin } from 'rollup';
 import { crx, ManifestV3Export } from '@crxjs/vite-plugin';
 
 import manifest from './manifest.json';
@@ -24,7 +25,7 @@ const extensionManifest = {
 };
 
 // plugin to remove dev icons from prod build
-function stripDevIcons (apply: boolean) {
+function stripDevIcons (apply: boolean):Plugin|null {
   if (apply) return null
 
   return {
@@ -32,8 +33,8 @@ function stripDevIcons (apply: boolean) {
     resolveId (source: string) {
       return source === 'virtual-module' ? source : null
     },
-    renderStart (outputOptions: any, inputOptions: any) {
-      const outDir = outputOptions.dir
+    renderStart (outputOptions) {
+      const outDir = outputOptions.dir!
       fs.rm(resolve(outDir, 'dev-icon-32.png'), () => console.log(`Deleted dev-icon-32.png frm prod build`))
       fs.rm(resolve(outDir, 'dev-icon-128.png'), () => console.log(`Deleted dev-icon-128.png frm prod build`))
     }

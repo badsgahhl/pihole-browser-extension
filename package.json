@@ -21,8 +21,8 @@
   },
   "homepage": "https://github.com/badsgahhl/pihole-browser-extension/#readme",
   "scripts": {
-    "build": "vite build",
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "build": "vue-tsc -b && vite build"
   },
   "type": "module",
   "dependencies": {
@@ -34,7 +34,8 @@
     "radix-vue": "^1.9.4",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
-    "vue": "^3.4.38"
+    "vue": "^3.4.38",
+    "vue-tsc": "^2.0.29"
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "2.0.0-beta.25",
