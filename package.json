@@ -4,7 +4,7 @@
 	"dependencies": {
 		"@vue/composition-api": "^1.4.0",
 		"axios": "^0.24.0",
-		"vue": "^2.6.14",
+		"vue": "^3.0.0",
 		"vue-debounce": "^3.0.1",
 		"vue-router": "^3.5.3",
 		"vuetify": "^2.5.14"
