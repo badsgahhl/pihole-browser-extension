@@ -78,8 +78,15 @@ export default class ContextMenuInitializer implements Initializer {
   }
 
   private createContextMenu(): void {
-    for (const contextMenusConfiguration of this.contextMenusConfigurations) {
-      chrome.contextMenus.create(contextMenusConfiguration)
+    for (const [idx, contextMenusConfiguration] of Object.entries(this.contextMenusConfigurations)) {
+      chrome.contextMenus.create({...contextMenusConfiguration, id: `pihole-${idx}`, onclick: undefined})
+      if (contextMenusConfiguration.onclick) {
+        chrome.contextMenus.onClicked.addListener((info, tab) => {
+          if (info.menuItemId === `pihole-${idx}`) {
+            contextMenusConfiguration.onclick!(info, tab!)
+          }
+        })
+      }
     }
   }
 }

@@ -130,10 +130,10 @@
 		"message": "Connection check in progress"
 	},
 	"option_connection_check_ok": {
-		"message": " Connection successful"
+		"message": "Connection successful"
 	},
 	"option_connection_check_error": {
-		"message": "Connection not successfully"
+		"message": "Connection failed"
 	},
 	"option_connection_check_update_available": {
 		"message": "Update available for PiHole"

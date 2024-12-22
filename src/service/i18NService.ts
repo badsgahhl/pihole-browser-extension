@@ -4,7 +4,7 @@ export class I18NService {
    */
   public static translate(
     key: string,
-    substitutions?: Array<string | number>
+    substitutions?: string | string[]
   ): string {
     return chrome.i18n.getMessage(key, substitutions)
   }

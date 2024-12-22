@@ -62,7 +62,9 @@ export class WebpackConfigFactory {
       },
       optimization: {
         splitChunks: {
-          chunks: 'all'
+          chunks(chunk) {
+            return chunk.name !== 'background'
+          }
         }
       },
       plugins: [
@@ -97,16 +99,16 @@ export class WebpackConfigFactory {
           filename: 'options.html',
           chunks: ['options']
         }),
-        new HtmlWebpackPlugin({
-          template: path.join(
-            __dirname,
-            '../',
-            'module/background',
-            'background.html'
-          ),
-          filename: 'background.html',
-          chunks: ['background']
-        }),
+        // new HtmlWebpackPlugin({
+        //   template: path.join(
+        //     __dirname,
+        //     '../',
+        //     'module/background',
+        //     'background.html'
+        //   ),
+        //   filename: 'background.html',
+        //   chunks: ['background']
+        // }),
         new VueLoaderPlugin(),
         new ESLintWebpackPlugin({
           extensions: ['ts', 'vue']

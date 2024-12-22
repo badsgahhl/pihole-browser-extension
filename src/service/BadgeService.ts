@@ -20,11 +20,11 @@ export class BadgeService {
       browser.browserAction.setBadgeTextColor({ color: 'white' }).then()
     }
 
-    chrome.browserAction.setBadgeBackgroundColor({
+    chrome.action.setBadgeBackgroundColor({
       color: this.getColorForBadgeTextEnum(text)
     })
 
-    chrome.browserAction.setBadgeText({ text })
+    chrome.action.setBadgeText({ text })
   }
 
   /**
@@ -32,7 +32,7 @@ export class BadgeService {
    */
   public static getBadgeText(): Promise<ExtensionBadgeTextEnum> {
     return new Promise(resolve => {
-      chrome.browserAction.getBadgeText({}, (result: string) => {
+      chrome.action.getBadgeText({}, (result: string) => {
         resolve(this.convertStringToBadgeTextEnum(result))
       })
     })
