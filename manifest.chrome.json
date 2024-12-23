@@ -1,7 +1,7 @@
 {
 	"manifest_version": 3,
 	"name": "PiHole Browser Extension",
-	"version": "3.0.2",
+	"version": "3.1.0",
 	"author": "Pascal Glaser",
 	"description": "__MSG_manifest_description__",
 	"default_locale": "en",
@@ -19,7 +19,7 @@
 	},
 	"options_page": "options.html",
 	"background": {
-		"service_worker": "background.js",
+		"service_worker": "service-worker.js",
 		"type": "module"
 	},
 	"host_permissions": [
