@@ -23,7 +23,7 @@ export class WebpackConfigFactory {
           __dirname,
           '../',
           'module/background',
-          `${mainEntryName}.ts`
+          'background.ts'
         )
       },
       devtool: isProduction ? false : 'inline-source-map',

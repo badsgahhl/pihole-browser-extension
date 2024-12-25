@@ -70,10 +70,9 @@ export default class ContextMenuInitializer implements Initializer {
   }
 
   private removeOrCreateContextMenuByBoolean(state: boolean): void {
+    chrome.contextMenus.removeAll()
     if (!state) {
       this.createContextMenu()
-    } else {
-      chrome.contextMenus.removeAll()
     }
   }
 
