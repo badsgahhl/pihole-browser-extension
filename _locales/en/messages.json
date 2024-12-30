@@ -1,6 +1,6 @@
 {
 	"manifest_description": {
-		"message": "Browser extension to control your PiHole. Built with Vue, Typescript and ❤"
+		"message": "Browser extension to control your PiHole."
 	},
 	"options_title": {
 		"message": "$page$ - PiHole Browser Extension",
