@@ -22,17 +22,43 @@ export default class BackgroundInitializer implements Initializer {
     new HotKeyInitializer().init()
 
     this.checkStatus().then()
-    chrome.alarms
-      .create(this.ALARM_NAME, {
+
+    this.createAlarm().then(
+      () => {
+        this.addAlarmListener()
+      },
+      () => {
+        console.error('Failed to create alarm')
+      }
+    )
+  }
+
+  private async createAlarm() {
+    if (typeof browser !== 'undefined') {
+      browser.alarms.create(this.ALARM_NAME, {
         periodInMinutes: this.INTERVAL_TIMEOUT / 60000
       })
-      .then(() => {
-        chrome.alarms.onAlarm.addListener(alarm => {
-          if (alarm.name === this.ALARM_NAME) {
-            this.checkStatus()
-          }
-        })
+    } else {
+      await chrome.alarms.create(this.ALARM_NAME, {
+        periodInMinutes: this.INTERVAL_TIMEOUT / 60000
       })
+    }
+  }
+
+  private addAlarmListener() {
+    if (typeof browser !== 'undefined') {
+      browser.alarms.onAlarm.addListener(alarm => {
+        if (alarm.name === this.ALARM_NAME) {
+          this.checkStatus()
+        }
+      })
+    } else {
+      chrome.alarms.onAlarm.addListener(alarm => {
+        if (alarm.name === this.ALARM_NAME) {
+          this.checkStatus()
+        }
+      })
+    }
   }
 
   /**
