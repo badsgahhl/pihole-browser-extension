@@ -70,16 +70,27 @@ export default class ContextMenuInitializer implements Initializer {
   }
 
   private removeOrCreateContextMenuByBoolean(state: boolean): void {
+    chrome.contextMenus.removeAll()
     if (!state) {
       this.createContextMenu()
-    } else {
-      chrome.contextMenus.removeAll()
     }
   }
 
   private createContextMenu(): void {
-    for (const contextMenusConfiguration of this.contextMenusConfigurations) {
-      chrome.contextMenus.create(contextMenusConfiguration)
+    for (const [idx, contextMenusConfiguration] of Object.entries(
+      this.contextMenusConfigurations
+    )) {
+      chrome.contextMenus.create({
+        ...contextMenusConfiguration,
+        id: idx,
+        onclick: undefined
+      })
     }
+    chrome.contextMenus.onClicked.addListener((info, tab) => {
+      this.contextMenusConfigurations[info.menuItemId as number].onclick?.(
+        info,
+        tab!
+      )
+    })
   }
 }

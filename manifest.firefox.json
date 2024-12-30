@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "PiHole Browser Extension",
-	"version": "3.0.2",
+	"version": "3.1.0",
 	"author": "Pascal Glaser",
 	"description": "__MSG_manifest_description__",
 	"default_locale": "en",
@@ -31,7 +31,8 @@
 		"storage",
 		"<all_urls>",
 		"activeTab",
-		"contextMenus"
+		"contextMenus",
+		"alarms"
 	],
 	"commands": {
 		"hotkey-toggle-pihole": {

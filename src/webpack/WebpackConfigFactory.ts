@@ -11,12 +11,15 @@ export class WebpackConfigFactory {
     browser: Browsers,
     isProduction: boolean
   ): Configuration {
+    const mainEntryName =
+      browser === Browsers.Chrome ? 'service-worker' : 'background'
+
     let config: Configuration = {
       mode: isProduction ? 'production' : 'development',
       entry: {
         popup: path.join(__dirname, '../', 'module/popup', 'popup.ts'),
         options: path.join(__dirname, '../', 'module/option', 'options.ts'),
-        background: path.join(
+        [mainEntryName]: path.join(
           __dirname,
           '../',
           'module/background',
@@ -62,7 +65,9 @@ export class WebpackConfigFactory {
       },
       optimization: {
         splitChunks: {
-          chunks: 'all'
+          chunks(chunk) {
+            return chunk.name !== 'service-worker'
+          }
         }
       },
       plugins: [
@@ -97,21 +102,22 @@ export class WebpackConfigFactory {
           filename: 'options.html',
           chunks: ['options']
         }),
-        new HtmlWebpackPlugin({
-          template: path.join(
-            __dirname,
-            '../',
-            'module/background',
-            'background.html'
-          ),
-          filename: 'background.html',
-          chunks: ['background']
-        }),
+        mainEntryName === 'background' &&
+          new HtmlWebpackPlugin({
+            template: path.join(
+              __dirname,
+              '../',
+              'module/background',
+              'background.html'
+            ),
+            filename: 'background.html',
+            chunks: ['background']
+          }),
         new VueLoaderPlugin(),
         new ESLintWebpackPlugin({
           extensions: ['ts', 'vue']
         })
-      ]
+      ].filter(Boolean)
     }
 
     if (isProduction) {

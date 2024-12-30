@@ -10,7 +10,9 @@ import PiHoleApiStatusEnum from '../../../api/enum/PiHoleApiStatusEnum'
 import HotKeyInitializer from './HotKeyInitializer'
 
 export default class BackgroundInitializer implements Initializer {
-  private readonly INTERVAL_TIMEOUT = 15000
+  private readonly ALARM_NAME = 'pihole.checkStatus'
+
+  private readonly INTERVAL_TIMEOUT = 30000
 
   public init(): void {
     BadgeService.setBadgeText('')
@@ -20,7 +22,17 @@ export default class BackgroundInitializer implements Initializer {
     new HotKeyInitializer().init()
 
     this.checkStatus().then()
-    window.setInterval(() => this.checkStatus(), this.INTERVAL_TIMEOUT)
+    chrome.alarms
+      .create(this.ALARM_NAME, {
+        periodInMinutes: this.INTERVAL_TIMEOUT / 60000
+      })
+      .then(() => {
+        chrome.alarms.onAlarm.addListener(alarm => {
+          if (alarm.name === this.ALARM_NAME) {
+            this.checkStatus()
+          }
+        })
+      })
   }
 
   /**
