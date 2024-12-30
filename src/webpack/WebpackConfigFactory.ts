@@ -126,6 +126,7 @@ export class WebpackConfigFactory {
           filename: 'package.' + browser + '.zip',
           path: path.join(__dirname, '../../')
         }
+        // @ts-ignore
         config.plugins.push(new ZipPlugin(zip_options))
       }
     }
