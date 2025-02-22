@@ -219,4 +219,9 @@ console.log('sid',value);
       });
     });
   }
+
+
+  public static async clearStorage() {
+    return chrome.storage.local.clear();
+  }
 }

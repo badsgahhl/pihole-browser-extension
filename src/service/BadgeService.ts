@@ -4,6 +4,7 @@ export enum ExtensionBadgeTextEnum {
   enabled = 'On',
   disabled = 'Off',
   error = 'Err',
+  info = 'Info',
   ok = 'Ok'
 }
 
@@ -83,6 +84,7 @@ export class BadgeService {
       case ExtensionBadgeTextEnum.enabled:
         return '#1ea23d'
       case ExtensionBadgeTextEnum.ok:
+      case ExtensionBadgeTextEnum.info:
         return '#4577d7'
       default:
         return 'red'
