@@ -9,3 +9,47 @@ export interface PiHoleVersions {
   core_current: string
   core_latest: string
 }
+
+export type PiHoleVersionsV6 = {
+  version: {
+    core: {
+      local: {
+        branch: string
+        version: string
+        hash: string
+      }
+      remote: {
+        version: string
+        hash: string
+      }
+    }
+    web: {
+      local: {
+        branch: string
+        version: string
+        hash: string
+      }
+      remote: {
+        version: string
+        hash: string
+      }
+    }
+    ftl: {
+      local: {
+        branch: string
+        version: string
+        hash: string
+        date: string
+      }
+      remote: {
+        version: string
+        hash: string
+      }
+    }
+    docker: {
+      local: string
+      remote: string
+    }
+  }
+  took: number
+}

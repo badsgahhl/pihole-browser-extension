@@ -27,8 +27,8 @@ export default class BackgroundService {
           .then(data => {
             for (const piHoleStatus of data) {
               if (
-                piHoleStatus.data.status === PiHoleApiStatusEnum.error ||
-                piHoleStatus.data.status !== newStatus
+                piHoleStatus.data.blocking === PiHoleApiStatusEnum.error ||
+                piHoleStatus.data.blocking !== newStatus
               ) {
                 console.warn(
                   'One PiHole returned Error from its request. Please check the API Key.'

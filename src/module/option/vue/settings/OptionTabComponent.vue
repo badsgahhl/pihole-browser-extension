@@ -109,7 +109,7 @@ import {
   PiHoleSettingsStorage,
   StorageService
 } from '../../../../service/StorageService'
-import { PiHoleVersions } from '../../../../api/models/PiHoleVersions'
+import { PiHoleVersionsV6 } from '../../../../api/models/PiHoleVersions'
 import PiHoleApiService from '../../../../service/PiHoleApiService'
 import useTranslation from '../../../../hooks/translation'
 
@@ -142,7 +142,7 @@ export default defineComponent({
       ConnectionCheckStatus.IDLE
     )
 
-    const connectionCheckData = ref<PiHoleVersions | null>(null)
+    const connectionCheckData = ref<PiHoleVersionsV6 | null>(null)
 
     const currentSelectedSettings = computed(() => tabs.value[currentTab.value])
 
@@ -150,6 +150,7 @@ export default defineComponent({
       connectionCheckStatus.value = ConnectionCheckStatus.IDLE
       PiHoleApiService.getPiHoleVersion(currentSelectedSettings.value)
         .then(result => {
+          console.log('version', result)
           if (typeof result.data === 'object') {
             connectionCheckStatus.value = ConnectionCheckStatus.OK
             connectionCheckData.value = result.data
@@ -209,7 +210,7 @@ export default defineComponent({
 
     const connectionCheckVersionText = computed(() => {
       const data = connectionCheckData.value
-      return `Core: ${data?.core_current} FTL: ${data?.FTL_current} Web: ${data?.web_current}`
+      return `Core: ${data?.version.core.local.version} FTL: ${data?.version.ftl.local.version} Web: ${data?.version.web.local.version}`
     })
 
     const toggleApiKeyVisibility = () => {

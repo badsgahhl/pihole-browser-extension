@@ -1,5 +1,6 @@
 import PiHoleApiStatusEnum from '../enum/PiHoleApiStatusEnum'
 
 export interface PiHoleApiStatus {
-  status: PiHoleApiStatusEnum
+  blocking: PiHoleApiStatusEnum
+  timer?: null | number
 }

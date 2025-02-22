@@ -12,7 +12,6 @@
         :current-url="currentUrl"
         class="mb-5"
       />
-      <PopupUpdateAlertComponent v-if="!isActiveByRealStatus" />
     </v-container>
   </v-app>
 </template>
@@ -25,14 +24,12 @@ import {
   BadgeService,
   ExtensionBadgeTextEnum
 } from '../../../../service/BadgeService'
-import PopupUpdateAlertComponent from '../components/PopupUpdateAlertComponent.vue'
 import { StorageService } from '../../../../service/StorageService'
 import TabService from '../../../../service/TabService'
 
 export default defineComponent({
   name: 'PopupComponent',
   components: {
-    PopupUpdateAlertComponent,
     PopupListCardComponent,
     PopupStatusCardComponent
   },
