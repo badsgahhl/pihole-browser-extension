@@ -88,17 +88,13 @@ export default class BackgroundService {
       PiHoleApiService.subDomainFromList(ApiList.blacklist, url)
         .then(() => {
           PiHoleApiService.addDomainToList(ApiList.whitelist, url)
-            .then(value => {
+            .then(() => {
               StorageService.getReloadAfterWhitelist().then(state => {
                 if (typeof state === 'undefined') {
                   return
                 }
                 if (state) {
-                  for (const response of value) {
-                    if (response.data.message.includes('Added')) {
-                      TabService.reloadCurrentTab(1500)
-                    }
-                  }
+                  TabService.reloadCurrentTab(1500)
                 }
               })
               BadgeService.setBadgeText(ExtensionBadgeTextEnum.ok)

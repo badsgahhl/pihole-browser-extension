@@ -1,7 +1,13 @@
-import { Initializer } from '../../general/Initializer';
-import { LinkConfig } from '../../../service/i18NService';
-import { PiHoleSettingsDefaults, StorageService } from '../../../service/StorageService';
-import { BadgeService, ExtensionBadgeTextEnum } from '../../../service/BadgeService';
+import { Initializer } from '../../general/Initializer'
+import { LinkConfig } from '../../../service/i18NService'
+import {
+  PiHoleSettingsDefaults,
+  StorageService
+} from '../../../service/StorageService'
+import {
+  BadgeService,
+  ExtensionBadgeTextEnum
+} from '../../../service/BadgeService'
 
 export default class ChromeRuntimeInitializer implements Initializer {
   public init(): void {
@@ -33,7 +39,7 @@ export default class ChromeRuntimeInitializer implements Initializer {
             StorageService.saveReloadAfterDisable(true)
             StorageService.saveReloadAfterWhitelist(true)
             // Set badge to INFO
-           BadgeService.setBadgeText(ExtensionBadgeTextEnum.info)
+            BadgeService.setBadgeText(ExtensionBadgeTextEnum.info)
           })
         }
       }

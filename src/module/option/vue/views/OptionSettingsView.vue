@@ -77,12 +77,6 @@ export default defineComponent({
           StorageService.saveDisableListFeature(value)
       },
       {
-        labelTextKey: I18NOptionKeys.option_disable_update_notification,
-        getterFunction: () => StorageService.getDisableUpdateNotification(),
-        setterFunction: (value: boolean) =>
-          StorageService.saveDisableUpdateNotification(value)
-      },
-      {
         labelTextKey: I18NOptionKeys.option_disable_context_menu,
         getterFunction: () => StorageService.getDisableContextMenu(),
         setterFunction: (value: boolean) => {

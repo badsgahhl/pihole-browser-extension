@@ -31,16 +31,12 @@
         ></v-text-field>
         <v-text-field
           v-model="pi_hole_setting.api_key"
+          v-debounce:500ms="connectionCheck"
           outlined
           :type="passwordInputType"
           :append-icon="
             passwordInputType === 'password' ? mdiEyeOutline : mdiEyeOffOutline
           "
-          :rules="[
-            v =>
-              isInvalidApiKey(v) ||
-              translate(I18NOptionKeys.options_api_key_invalid_warning)
-          ]"
           :label="translate(I18NOptionKeys.options_api_key)"
           @click:append="toggleApiKeyVisibility"
         ></v-text-field>
@@ -59,6 +55,9 @@
             }}
           </v-btn>
         </div>
+        <v-alert v-if="tabs.length > 1" type="info" outlined>
+          {{ translate(I18NOptionKeys.option_multiple_connections) }}
+        </v-alert>
         <v-alert v-if="connectionCheckStatus === 'IDLE'" outlined type="info">
           {{ translate(I18NOptionKeys.option_connection_check_idle) }}
           <v-progress-circular
@@ -234,9 +233,6 @@ export default defineComponent({
       tabs.value.splice(index, 1)
     }
 
-    const isInvalidApiKey = (apiKey: string) =>
-      !(!apiKey.match('^[a-f0-9]{64}$') && apiKey.length !== 0)
-
     const isInvalidUrlSchema = (piHoleUrl: string) =>
       !(!piHoleUrl.match('^(http|https):\\/\\/[^ "]+$') || piHoleUrl.length < 1)
 
@@ -248,7 +244,6 @@ export default defineComponent({
       passwordInputType,
       connectionCheck,
       resetConnectionCheckAndCheck,
-      isInvalidApiKey,
       isInvalidUrlSchema,
       removePiHole,
       addNewPiHole,

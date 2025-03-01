@@ -39,9 +39,9 @@ type StorageWithTtl<T> = {
 }
 
 export class StorageService {
-  public static savePiHoleSettingsArray(
+  public static async savePiHoleSettingsArray(
     settings: PiHoleSettingsStorage[],
-  ): void {
+  ) {
     if (settings.length > 0) {
       const filteredSettings: PiHoleSettingsStorage[] = settings.filter(
         value => value.pi_uri_base,
@@ -62,13 +62,16 @@ export class StorageService {
         secureSetting.api_key = String(setting.api_key);
 
         secureSettings.push(secureSetting);
+        // Reset the session
+        // eslint-disable-next-line no-await-in-loop
+        await this.removeSid(setting.pi_uri_base!);
       }
 
       const storage: ExtensionStorage = {
         pi_hole_settings: secureSettings,
       };
 
-      chrome.storage.local.set(storage);
+      await chrome.storage.local.set(storage);
     }
   }
 
@@ -135,19 +138,6 @@ export class StorageService {
     chrome.storage.local.set(storage);
   }
 
-  public static getDisableUpdateNotification(): Promise<boolean | undefined> {
-    return this.getStorageValue<boolean>(
-      ExtensionStorageEnum.disable_update_notification,
-    );
-  }
-
-  public static saveDisableUpdateNotification(state: boolean): void {
-    const storage: ExtensionStorage = {
-      disable_update_notification: state,
-    };
-    chrome.storage.local.set(storage);
-  }
-
   public static getDisableContextMenu(): Promise<boolean> {
     return this.getStorageValue<boolean>(
       ExtensionStorageEnum.disable_context_menu,
@@ -166,15 +156,15 @@ export class StorageService {
     const baseUrl = new URL(url).origin;
     const key: MaybeExtensionStorageEnum = `${ExtensionStorageEnum.session_storage}_${baseUrl}`;
     const value = await this.getStorageValue<StorageWithTtl<string>>(key);
-console.log('sid',value);
+    console.log('sid', value);
     if (value) {
-      console.log('sid',value);
-      console.log('sidttl',value.ttl);
-      console.log('sidnow',Date.now());
-      console.log('sidttlnow',value.ttl > Date.now());
+      console.log('sid', value);
+      console.log('sidttl', value.ttl);
+      console.log('sidnow', Date.now());
+      console.log('sidttlnow', value.ttl > Date.now());
 
       if (value.ttl < Date.now()) {
-        console.log('returning sid',value.value);
+        console.log('returning sid', value.value);
         return value.value;
       }
       await chrome.storage.local.remove(key);
@@ -193,13 +183,25 @@ console.log('sid',value);
     await chrome.storage.local.set({ [key]: value });
   }
 
+  public static async removeSid(url: string): Promise<void> {
+    const baseUrl = new URL(url).origin;
+    const key: MaybeExtensionStorageEnum = `${ExtensionStorageEnum.session_storage}_${baseUrl}`;
+    await chrome.storage.local.remove(key);
+  }
+
+  public static async clearStorage() {
+    return chrome.storage.local.clear();
+  }
+
   private static getStorageValue<T>(
     key: MaybeExtensionStorageEnum,
   ): Promise<T | undefined>
+
   private static getStorageValue<T>(
     key: MaybeExtensionStorageEnum,
     defaultUnsetValue: T,
   ): Promise<T>
+
   private static getStorageValue<T>(
     key: MaybeExtensionStorageEnum,
     defaultUnsetValue?: T,
@@ -218,10 +220,5 @@ console.log('sid',value);
         resolve(storageValue);
       });
     });
-  }
-
-
-  public static async clearStorage() {
-    return chrome.storage.local.clear();
   }
 }

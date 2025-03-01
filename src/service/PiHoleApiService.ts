@@ -1,12 +1,12 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { PiHoleApiStatus } from '../api/models/PiHoleApiStatus'
 import { PiHoleSettingsStorage, StorageService } from './StorageService'
-import { PiHoleListStatus } from '../api/models/PiHoleListStatus'
 import { PiHoleVersionsV6 } from '../api/models/PiHoleVersions'
 import ApiListMode from '../api/enum/ApiListMode'
 import ApiList from '../api/enum/ApiList'
 import PiHoleApiStatusEnum from '../api/enum/PiHoleApiStatusEnum'
 import { PiHoleAuth } from '../api/models/PiHoleAuth'
+import { PiHoleDomains } from '../api/models/PiHoleDomains'
 
 export default class PiHoleApiService {
   public static async getPiHoleStatusCombined(): Promise<PiHoleApiStatusEnum> {
@@ -50,9 +50,6 @@ export default class PiHoleApiService {
         return Promise.reject('Some PiHoleSettings are undefined.')
       }
 
-      const url = this.getPiHoleBaseUrl(piHole.pi_uri_base, piHole.api_key)
-
-      url.searchParams.append('status', '')
       promiseArray.push(
         this.getAxiosInstance(piHole.pi_uri_base, piHole.api_key).get<
           PiHoleApiStatus
@@ -115,7 +112,7 @@ export default class PiHoleApiService {
           PiHoleApiStatus
         >('/dns/blocking', {
           blocking,
-          timer: time === 0 ? null : time
+          timer: time === 0 || blocking ? null : time
         })
       )
     }
@@ -126,14 +123,14 @@ export default class PiHoleApiService {
   public static async addDomainToList(
     list: ApiList,
     domain: string
-  ): Promise<AxiosResponse<PiHoleListStatus>[]> {
+  ): Promise<AxiosResponse<PiHoleDomains>[]> {
     return this.changeDomainOnList(list, ApiListMode.add, domain)
   }
 
   public static async subDomainFromList(
     list: ApiList,
     domain: string
-  ): Promise<AxiosResponse<PiHoleListStatus>[]> {
+  ): Promise<AxiosResponse<PiHoleDomains>[]> {
     return this.changeDomainOnList(list, ApiListMode.sub, domain)
   }
 
@@ -141,7 +138,7 @@ export default class PiHoleApiService {
     list: ApiList,
     mode: ApiListMode,
     domain: string
-  ): Promise<AxiosResponse<PiHoleListStatus>[]> {
+  ): Promise<AxiosResponse<PiHoleDomains>[]> {
     const piHoleSettingsArray = await StorageService.getPiHoleSettingsArray()
 
     if (typeof piHoleSettingsArray === 'undefined') {
@@ -152,7 +149,7 @@ export default class PiHoleApiService {
       return Promise.reject("Domain can't be empty")
     }
 
-    const promiseArray = new Array<Promise<AxiosResponse<PiHoleListStatus>>>()
+    const promiseArray = new Array<Promise<AxiosResponse<PiHoleDomains>>>()
 
     for (const piHole of piHoleSettingsArray) {
       if (
@@ -163,18 +160,24 @@ export default class PiHoleApiService {
       }
 
       const addPromise = () =>
-        this.getAxiosInstance(piHole.pi_uri_base!, piHole.api_key).post(
-          `/domains/${list}/exact`,
-          {
+        this.getAxiosInstance(piHole.pi_uri_base!, piHole.api_key)
+          .post<PiHoleDomains>(`/domains/${list}/exact`, {
             domain,
             comment: 'From PiHole Extension',
             groups: [0],
             enabled: true
-          }
-        )
+          })
+          .catch(
+            // Sub can fail if the domain is not in the list
+            // We can ignore this error
+            reason => {
+              console.warn(reason)
+              return reason
+            }
+          )
       const subPromise = () =>
         this.getAxiosInstance(piHole.pi_uri_base!, piHole.api_key)
-          .delete(`/domains/${list}/exact/${domain}`)
+          .delete<PiHoleDomains>(`/domains/${list}/exact/${domain}`)
           .catch(
             // Sub can fail if the domain is not in the list
             // We can ignore this error
