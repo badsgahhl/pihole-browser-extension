@@ -31,16 +31,12 @@
         ></v-text-field>
         <v-text-field
           v-model="pi_hole_setting.api_key"
+          v-debounce:500ms="connectionCheck"
           outlined
           :type="passwordInputType"
           :append-icon="
             passwordInputType === 'password' ? mdiEyeOutline : mdiEyeOffOutline
           "
-          :rules="[
-            v =>
-              isInvalidApiKey(v) ||
-              translate(I18NOptionKeys.options_api_key_invalid_warning)
-          ]"
           :label="translate(I18NOptionKeys.options_api_key)"
           @click:append="toggleApiKeyVisibility"
         ></v-text-field>
@@ -59,6 +55,9 @@
             }}
           </v-btn>
         </div>
+        <v-alert v-if="tabs.length > 1" type="info" outlined>
+          {{ translate(I18NOptionKeys.option_multiple_connections) }}
+        </v-alert>
         <v-alert v-if="connectionCheckStatus === 'IDLE'" outlined type="info">
           {{ translate(I18NOptionKeys.option_connection_check_idle) }}
           <v-progress-circular
@@ -109,7 +108,7 @@ import {
   PiHoleSettingsStorage,
   StorageService
 } from '../../../../service/StorageService'
-import { PiHoleVersions } from '../../../../api/models/PiHoleVersions'
+import { PiHoleVersionsV6 } from '../../../../api/models/PiHoleVersions'
 import PiHoleApiService from '../../../../service/PiHoleApiService'
 import useTranslation from '../../../../hooks/translation'
 
@@ -142,7 +141,7 @@ export default defineComponent({
       ConnectionCheckStatus.IDLE
     )
 
-    const connectionCheckData = ref<PiHoleVersions | null>(null)
+    const connectionCheckData = ref<PiHoleVersionsV6 | null>(null)
 
     const currentSelectedSettings = computed(() => tabs.value[currentTab.value])
 
@@ -150,6 +149,7 @@ export default defineComponent({
       connectionCheckStatus.value = ConnectionCheckStatus.IDLE
       PiHoleApiService.getPiHoleVersion(currentSelectedSettings.value)
         .then(result => {
+          console.log('version', result)
           if (typeof result.data === 'object') {
             connectionCheckStatus.value = ConnectionCheckStatus.OK
             connectionCheckData.value = result.data
@@ -209,7 +209,7 @@ export default defineComponent({
 
     const connectionCheckVersionText = computed(() => {
       const data = connectionCheckData.value
-      return `Core: ${data?.core_current} FTL: ${data?.FTL_current} Web: ${data?.web_current}`
+      return `Core: ${data?.version.core.local.version} FTL: ${data?.version.ftl.local.version} Web: ${data?.version.web.local.version}`
     })
 
     const toggleApiKeyVisibility = () => {
@@ -233,9 +233,6 @@ export default defineComponent({
       tabs.value.splice(index, 1)
     }
 
-    const isInvalidApiKey = (apiKey: string) =>
-      !(!apiKey.match('^[a-f0-9]{64}$') && apiKey.length !== 0)
-
     const isInvalidUrlSchema = (piHoleUrl: string) =>
       !(!piHoleUrl.match('^(http|https):\\/\\/[^ "]+$') || piHoleUrl.length < 1)
 
@@ -247,7 +244,6 @@ export default defineComponent({
       passwordInputType,
       connectionCheck,
       resetConnectionCheckAndCheck,
-      isInvalidApiKey,
       isInvalidUrlSchema,
       removePiHole,
       addNewPiHole,

@@ -1,6 +1,6 @@
 export interface PiHoleSettingsStorage {
-  pi_uri_base?: string
-  api_key?: string
+  pi_uri_base?: string;
+  api_key?: string;
 }
 
 export enum PiHoleSettingsDefaults {
@@ -9,14 +9,14 @@ export enum PiHoleSettingsDefaults {
 }
 
 export interface ExtensionStorage {
-  pi_hole_settings?: PiHoleSettingsStorage[]
-  default_disable_time?: number
-  reload_after_disable?: boolean
-  reload_after_white_list?: boolean
-  disable_list_feature?: boolean
-  disable_update_notification?: boolean
-  beta_feature_flag?: boolean
-  disable_context_menu?: boolean
+  pi_hole_settings?: PiHoleSettingsStorage[];
+  default_disable_time?: number;
+  reload_after_disable?: boolean;
+  reload_after_white_list?: boolean;
+  disable_list_feature?: boolean;
+  disable_update_notification?: boolean;
+  beta_feature_flag?: boolean;
+  disable_context_menu?: boolean;
 }
 
 export enum ExtensionStorageEnum {
@@ -26,157 +26,199 @@ export enum ExtensionStorageEnum {
   reload_after_white_list = 'reload_after_white_list',
   disable_list_feature = 'disable_list_feature',
   disable_update_notification = 'disable_update_notification',
-  disable_context_menu = 'disable_context_menu'
+  disable_context_menu = 'disable_context_menu',
+  session_storage = 'session_storage'
+}
+
+type Postfix = string
+type ExtensionStorageEnumWithPostfix = `${ExtensionStorageEnum}_${Postfix}`
+type MaybeExtensionStorageEnum = ExtensionStorageEnum | ExtensionStorageEnumWithPostfix
+type StorageWithTtl<T> = {
+  value: T,
+  ttl: number
 }
 
 export class StorageService {
-  public static savePiHoleSettingsArray(
-    settings: PiHoleSettingsStorage[]
-  ): void {
+  public static async savePiHoleSettingsArray(
+    settings: PiHoleSettingsStorage[],
+  ) {
     if (settings.length > 0) {
       const filteredSettings: PiHoleSettingsStorage[] = settings.filter(
-        value => value.pi_uri_base
-      )
+        value => value.pi_uri_base,
+      );
 
       if (filteredSettings.length < 1) {
-        chrome.storage.local.remove(ExtensionStorageEnum.pi_hole_settings)
-        return
+        chrome.storage.local.remove(ExtensionStorageEnum.pi_hole_settings);
+        return;
       }
 
-      const secureSettings: PiHoleSettingsStorage[] = []
+      const secureSettings: PiHoleSettingsStorage[] = [];
 
       // Type Assertion
       for (const setting of filteredSettings) {
-        const secureSetting: PiHoleSettingsStorage = {}
+        const secureSetting: PiHoleSettingsStorage = {};
 
-        secureSetting.pi_uri_base = String(setting.pi_uri_base)
-        secureSetting.api_key = String(setting.api_key)
+        secureSetting.pi_uri_base = String(setting.pi_uri_base);
+        secureSetting.api_key = String(setting.api_key);
 
-        secureSettings.push(secureSetting)
+        secureSettings.push(secureSetting);
+        // Reset the session
+        // eslint-disable-next-line no-await-in-loop
+        await this.removeSid(setting.pi_uri_base!);
       }
 
       const storage: ExtensionStorage = {
-        pi_hole_settings: secureSettings
-      }
+        pi_hole_settings: secureSettings,
+      };
 
-      chrome.storage.local.set(storage)
+      await chrome.storage.local.set(storage);
     }
   }
 
   public static saveDefaultDisableTime(time: number): void {
     if (time < 1) {
-      return
+      return;
     }
     const storage: ExtensionStorage = {
-      default_disable_time: time
-    }
-    chrome.storage.local.set(storage)
+      default_disable_time: time,
+    };
+    chrome.storage.local.set(storage);
   }
 
   public static getDefaultDisableTime(): Promise<number | undefined> {
     return this.getStorageValue<number>(
-      ExtensionStorageEnum.default_disable_time
-    )
+      ExtensionStorageEnum.default_disable_time,
+    );
   }
 
   public static saveReloadAfterDisable(state: boolean): void {
     const storage: ExtensionStorage = {
-      reload_after_disable: state
-    }
-    chrome.storage.local.set(storage)
+      reload_after_disable: state,
+    };
+    chrome.storage.local.set(storage);
   }
 
   public static getReloadAfterDisable(): Promise<boolean | undefined> {
     return this.getStorageValue<boolean>(
-      ExtensionStorageEnum.reload_after_disable
-    )
+      ExtensionStorageEnum.reload_after_disable,
+    );
   }
 
   public static saveReloadAfterWhitelist(state: boolean): void {
     const storage: ExtensionStorage = {
-      reload_after_white_list: state
-    }
-    chrome.storage.local.set(storage)
+      reload_after_white_list: state,
+    };
+    chrome.storage.local.set(storage);
   }
 
   public static getReloadAfterWhitelist(): Promise<boolean | undefined> {
     return this.getStorageValue<boolean>(
-      ExtensionStorageEnum.reload_after_white_list
-    )
+      ExtensionStorageEnum.reload_after_white_list,
+    );
   }
 
   public static getPiHoleSettingsArray(): Promise<
     PiHoleSettingsStorage[] | undefined
   > {
     return this.getStorageValue<PiHoleSettingsStorage[]>(
-      ExtensionStorageEnum.pi_hole_settings
-    )
+      ExtensionStorageEnum.pi_hole_settings,
+    );
   }
 
   public static getDisableListFeature(): Promise<boolean | undefined> {
     return this.getStorageValue<boolean>(
-      ExtensionStorageEnum.disable_list_feature
-    )
+      ExtensionStorageEnum.disable_list_feature,
+    );
   }
 
   public static saveDisableListFeature(state: boolean): void {
     const storage: ExtensionStorage = {
-      disable_list_feature: state
-    }
-    chrome.storage.local.set(storage)
-  }
-
-  public static getDisableUpdateNotification(): Promise<boolean | undefined> {
-    return this.getStorageValue<boolean>(
-      ExtensionStorageEnum.disable_update_notification
-    )
-  }
-
-  public static saveDisableUpdateNotification(state: boolean): void {
-    const storage: ExtensionStorage = {
-      disable_update_notification: state
-    }
-    chrome.storage.local.set(storage)
+      disable_list_feature: state,
+    };
+    chrome.storage.local.set(storage);
   }
 
   public static getDisableContextMenu(): Promise<boolean> {
     return this.getStorageValue<boolean>(
       ExtensionStorageEnum.disable_context_menu,
-      false
-    )
+      false,
+    );
   }
 
   public static saveDisableContextMenu(state: boolean): void {
     const storage: ExtensionStorage = {
-      disable_context_menu: state
+      disable_context_menu: state,
+    };
+    chrome.storage.local.set(storage);
+  }
+
+  public static async getSid(url: string): Promise<string | undefined> {
+    const baseUrl = new URL(url).origin;
+    const key: MaybeExtensionStorageEnum = `${ExtensionStorageEnum.session_storage}_${baseUrl}`;
+    const value = await this.getStorageValue<StorageWithTtl<string>>(key);
+    console.log('sid', value);
+    if (value) {
+      console.log('sid', value);
+      console.log('sidttl', value.ttl);
+      console.log('sidnow', Date.now());
+      console.log('sidttlnow', value.ttl > Date.now());
+
+      if (value.ttl < Date.now()) {
+        console.log('returning sid', value.value);
+        return value.value;
+      }
+      await chrome.storage.local.remove(key);
     }
-    chrome.storage.local.set(storage)
+
+    return undefined;
+  }
+
+  public static async saveSid(url: string, sid: string, ttl: number): Promise<void> {
+    const baseUrl = new URL(url).origin;
+    const key: MaybeExtensionStorageEnum = `${ExtensionStorageEnum.session_storage}_${baseUrl}`;
+    const value: StorageWithTtl<string> = {
+      value: sid,
+      ttl: Date.now() + ttl,
+    };
+    await chrome.storage.local.set({ [key]: value });
+  }
+
+  public static async removeSid(url: string): Promise<void> {
+    const baseUrl = new URL(url).origin;
+    const key: MaybeExtensionStorageEnum = `${ExtensionStorageEnum.session_storage}_${baseUrl}`;
+    await chrome.storage.local.remove(key);
+  }
+
+  public static async clearStorage() {
+    return chrome.storage.local.clear();
   }
 
   private static getStorageValue<T>(
-    key: ExtensionStorageEnum
+    key: MaybeExtensionStorageEnum,
   ): Promise<T | undefined>
+
   private static getStorageValue<T>(
-    key: ExtensionStorageEnum,
-    defaultUnsetValue: T
+    key: MaybeExtensionStorageEnum,
+    defaultUnsetValue: T,
   ): Promise<T>
+
   private static getStorageValue<T>(
-    key: ExtensionStorageEnum,
-    defaultUnsetValue?: T
+    key: MaybeExtensionStorageEnum,
+    defaultUnsetValue?: T,
   ): Promise<T | undefined> | Promise<T> {
     return new Promise(resolve => {
       chrome.storage.local.get(key, obj => {
-        const storageValue: T | undefined = obj[key]
+        const storageValue: T | undefined = obj[key];
 
         if (
           typeof defaultUnsetValue !== 'undefined' &&
           typeof storageValue === 'undefined'
         ) {
-          resolve(defaultUnsetValue)
+          resolve(defaultUnsetValue);
         }
 
-        resolve(storageValue)
-      })
-    })
+        resolve(storageValue);
+      });
+    });
   }
 }

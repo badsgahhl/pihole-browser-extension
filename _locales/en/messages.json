@@ -62,7 +62,7 @@
 		"message": "Reload current tab after Whitelisting"
 	},
 	"options_api_key": {
-		"message": "API Key"
+		"message": "Password"
 	},
 	"options_pi_hole_address": {
 		"message": "PiHole Address"
@@ -78,17 +78,11 @@
 			}
 		}
 	},
-	"options_api_key_invalid_warning": {
-		"message": "Api Key doesn't match scheme (64 chars long). It may be invalid!"
-	},
 	"options_url_invalid_warning": {
 		"message": "The url is invalid. (Missing http(s), invalid scheme or empty)"
 	},
 	"options_disable_list_feature": {
 		"message": "Disable black/white list feature in the popup"
-	},
-	"option_disable_update_notification": {
-		"message": "Disable update notification in the popup"
 	},
 	"popup_status_card_title": {
 		"message": "PiHole Switch"
@@ -137,5 +131,8 @@
 	},
 	"option_connection_check_update_available": {
 		"message": "Update available for PiHole"
+	},
+	"option_multiple_connections": {
+		"message": "The usage of multiple pihole can be unstable. Please use with caution."
 	}
 }

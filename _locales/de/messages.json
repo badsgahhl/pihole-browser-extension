@@ -62,7 +62,7 @@
 		"message": "Aktuellen Tab nach Whitelisting neu laden"
 	},
 	"options_api_key": {
-		"message": "API Key"
+		"message": "Passwort"
 	},
 	"options_pi_hole_address": {
 		"message": "PiHole Adresse"
@@ -77,9 +77,6 @@
 				"content": "$1"
 			}
 		}
-	},
-	"options_api_key_invalid_warning": {
-		"message": "Api Key stimmt nicht mit dem Schema überein (64 Zeichen lang). Er könnte ungültig sein!"
 	},
 	"options_url_invalid_warning": {
 		"message": "Die URL ist invalide. (Fehlendes http(s), ungültiges Format oder leer)"
@@ -101,9 +98,6 @@
 	},
 	"options_disable_list_feature": {
 		"message": "Deaktiviere das Black-/White-List Feature im Popup"
-	},
-	"option_disable_update_notification": {
-		"message": "Deaktiviere die Update Benachrichtigung im Popup"
 	},
 	"option_hotkey_settings": {
 		"message": "Hotkey Einstellungen"
@@ -137,5 +131,8 @@
 	},
 	"option_connection_check_update_available": {
 		"message": "Update verfügbar für das PiHole"
+	},
+	"option_multiple_connections": {
+		"message": "Die Nutzung von mehreren PiHole kann je nach Setup instabil sein. Bitte nutze nach Möglichkeit nur ein PiHole."
 	}
 }

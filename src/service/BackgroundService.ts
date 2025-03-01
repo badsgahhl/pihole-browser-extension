@@ -27,8 +27,8 @@ export default class BackgroundService {
           .then(data => {
             for (const piHoleStatus of data) {
               if (
-                piHoleStatus.data.status === PiHoleApiStatusEnum.error ||
-                piHoleStatus.data.status !== newStatus
+                piHoleStatus.data.blocking === PiHoleApiStatusEnum.error ||
+                piHoleStatus.data.blocking !== newStatus
               ) {
                 console.warn(
                   'One PiHole returned Error from its request. Please check the API Key.'
@@ -88,17 +88,13 @@ export default class BackgroundService {
       PiHoleApiService.subDomainFromList(ApiList.blacklist, url)
         .then(() => {
           PiHoleApiService.addDomainToList(ApiList.whitelist, url)
-            .then(value => {
+            .then(() => {
               StorageService.getReloadAfterWhitelist().then(state => {
                 if (typeof state === 'undefined') {
                   return
                 }
                 if (state) {
-                  for (const response of value) {
-                    if (response.data.message.includes('Added')) {
-                      TabService.reloadCurrentTab(1500)
-                    }
-                  }
+                  TabService.reloadCurrentTab(1500)
                 }
               })
               BadgeService.setBadgeText(ExtensionBadgeTextEnum.ok)

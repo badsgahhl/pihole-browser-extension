@@ -89,13 +89,13 @@ export default defineComponent({
     }
 
     const updateComponentsByData = (data: PiHoleApiStatus) => {
-      if (data.status === PiHoleApiStatusEnum.disabled) {
+      if (data.blocking === PiHoleApiStatusEnum.disabled) {
         defaultDisableTimeDisabled.value = true
         sliderChecked.value = false
         sliderDisabled.value = false
         BadgeService.setBadgeText(ExtensionBadgeTextEnum.disabled)
         emit('updateStatus', false)
-      } else if (data.status === PiHoleApiStatusEnum.enabled) {
+      } else if (data.blocking === PiHoleApiStatusEnum.enabled) {
         defaultDisableTimeDisabled.value = false
         sliderDisabled.value = false
         sliderChecked.value = true
@@ -122,16 +122,16 @@ export default defineComponent({
 
       PiHoleApiService.getPiHoleStatusCombined()
         .then(value => {
-          updateComponentsByData({ status: value })
+          updateComponentsByData({ blocking: value })
         })
         .catch(() =>
-          updateComponentsByData({ status: PiHoleApiStatusEnum.error })
+          updateComponentsByData({ blocking: PiHoleApiStatusEnum.error })
         )
     }
 
     const onSliderClickSuccessHandler = (data: PiHoleApiStatus) => {
       updateComponentsByData(data)
-      if (data.status === PiHoleApiStatusEnum.disabled) {
+      if (data.blocking === PiHoleApiStatusEnum.disabled) {
         const reloadAfterDisableCallback = (
           is_enabled: boolean | undefined
         ) => {
@@ -149,14 +149,14 @@ export default defineComponent({
     ) => {
       console.warn(error_message)
 
-      updateComponentsByData({ status: PiHoleApiStatusEnum.error })
+      updateComponentsByData({ blocking: PiHoleApiStatusEnum.error })
       if (refresh_status) {
         setTimeout(() => {
           PiHoleApiService.getPiHoleStatusCombined()
-            .then(data => updateComponentsByData({ status: data }))
+            .then(data => updateComponentsByData({ blocking: data }))
             .catch(() =>
               updateComponentsByData({
-                status: PiHoleApiStatusEnum.error
+                blocking: PiHoleApiStatusEnum.error
               })
             )
         }, 1500)
@@ -180,8 +180,8 @@ export default defineComponent({
           .then(value => {
             for (const piHoleStatus of value) {
               if (
-                piHoleStatus.data.status === PiHoleApiStatusEnum.error ||
-                piHoleStatus.data.status !== currentMode
+                piHoleStatus.data.blocking === PiHoleApiStatusEnum.error ||
+                piHoleStatus.data.blocking !== currentMode
               ) {
                 throwConsoleBadgeError(
                   'One PiHole returned Error from its request. Please check the API Key.',

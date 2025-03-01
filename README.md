@@ -5,6 +5,9 @@
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/users/ngoafjpapneaopfkpboebcahajopcifi?label=chrome%20users)](https://chrome.google.com/webstore/detail/switch-for-pihole/ngoafjpapneaopfkpboebcahajopcifi)
 [![Mozilla Add-on](https://img.shields.io/amo/users/pihole-browser-extension?color=green&label=mozilla%20users)](https://addons.mozilla.org/firefox/addon/pihole-browser-extension/)
 ![GitHub](https://img.shields.io/github/license/badsgahhl/pihole-browser-extension)
+
+**Disclaimer: This project is in maintenance mode. New features won't be added, but bugs will be fixed.**
+<br>**Compatibility with PiHole v6+ is ensured.**
 <br><br>
 The PiHole Browser Extension is a small browser extension for Chrome and Firefox. It's written with Vue and Typescript.
 With this extension you can control your PiHole remotely (e.g. Turning it on/off, black/white listing current tab, etc.)
@@ -12,9 +15,9 @@ With this extension you can control your PiHole remotely (e.g. Turning it on/off
 
 <br>
 
-[![chrome](https://wd.imgix.net/image/BrQidfK9jaQyIHwdw91aVpkPiib2/RQMv2HZ0v6NKfFn7XCeU.png?auto=format&w=228)](https://chrome.google.com/webstore/detail/switch-for-pihole/ngoafjpapneaopfkpboebcahajopcifi)
+[![chrome](https://developer.chrome.com/static/docs/webstore/branding/image/206x58-chrome-web-043497a3d766e.png)](https://chrome.google.com/webstore/detail/switch-for-pihole/ngoafjpapneaopfkpboebcahajopcifi)
 <a href="https://addons.mozilla.org/firefox/addon/pihole-browser-extension/" target="_blank">
-  <img src="https://design.firefox.com/product-identity/firefox/firefox-horizontal-lockup/firefox-logo-horizontal-lockup.png" alt="Firefox Logo" width="155"/>
+  <img src="https://blog.mozilla.org/addons/files/2019/12/Firefox-parent-brand-logo.png" alt="Firefox Logo" width="50"/>
 </a>  
 
 ### Features:
@@ -30,17 +33,9 @@ With this extension you can control your PiHole remotely (e.g. Turning it on/off
 1. Open the popup by clicking the "Raspberry" Icon in the top navigation of your browser
 2. Click on the setting wheel in the top right corner
 3. Enter your host address (including http:// or https:// and the directory.
-4. Go to your PiHole settings. Click "Api/Web interface" and then on "Show Api token" at the bottom of your screen.
-5. Copy the api key into the settings
+4. Enter your pihole password
 
 ### Troubleshooting
-
-#### Status / Slider are not working
-
-Please check that you used the correct host address. Use the address where you can see your dashboard page (statistics
-board). For example if your pihole is located at http://192.168.178.2, but you can see your dashboard/admin page
-at http://192.168.178.2/admin then don't forget to add /admin to the address. The connection checker will show you if
-your given address is valid.
 
 #### Error after clicking the Slider (was "on" before)
 

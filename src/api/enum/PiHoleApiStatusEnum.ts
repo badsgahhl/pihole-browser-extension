@@ -1,7 +1,8 @@
 enum PiHoleApiStatusEnum {
   enabled = 'enabled',
   disabled = 'disabled',
-  error = 'error'
+  error = 'failed',
+  unknown = 'unknown'
 }
 
 export default PiHoleApiStatusEnum
