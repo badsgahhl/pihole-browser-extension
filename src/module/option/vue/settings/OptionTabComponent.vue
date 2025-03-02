@@ -149,7 +149,6 @@ export default defineComponent({
       connectionCheckStatus.value = ConnectionCheckStatus.IDLE
       PiHoleApiService.getPiHoleVersion(currentSelectedSettings.value)
         .then(result => {
-          console.log('version', result)
           if (typeof result.data === 'object') {
             connectionCheckStatus.value = ConnectionCheckStatus.OK
             connectionCheckData.value = result.data

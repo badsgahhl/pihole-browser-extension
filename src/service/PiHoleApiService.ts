@@ -221,7 +221,9 @@ export default class PiHoleApiService {
 
     const instance = axios.create({
       baseURL: apiUrl.toString(),
-      transformResponse: data => JSON.parse(data)
+      transformResponse: data => JSON.parse(data),
+      adapter: 'fetch',
+      withCredentials: false
     })
 
     const acquireSid = async () => {
@@ -243,16 +245,13 @@ export default class PiHoleApiService {
       }
 
       const sid = await StorageService.getSid(domain)
-      console.log('got sid', sid)
       if (sid) {
-        console.log('Using existing session', sid)
         // eslint-disable-next-line no-param-reassign
         config.headers['X-FTL-SID'] = sid
         return config
       }
 
       const session = await acquireSid()
-      console.log('Acquired new session', session)
       await StorageService.saveSid(domain, session.sid, session.validity)
       // eslint-disable-next-line no-param-reassign
       config.headers['X-FTL-SID'] = session.sid
@@ -262,8 +261,8 @@ export default class PiHoleApiService {
 
     // Response interceptor to handle session expiration
     instance.interceptors.response.use(undefined, async error => {
-      if (error.response.status === 403) {
-        console.log('Session expired, acquiring new session')
+      if (error.response.status === 401) {
+        console.warn('Session expired, acquiring new session')
         const session = await acquireSid()
         await StorageService.saveSid(domain, session.sid, session.validity)
         // eslint-disable-next-line no-param-reassign

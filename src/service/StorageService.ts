@@ -156,15 +156,9 @@ export class StorageService {
     const baseUrl = new URL(url).origin;
     const key: MaybeExtensionStorageEnum = `${ExtensionStorageEnum.session_storage}_${baseUrl}`;
     const value = await this.getStorageValue<StorageWithTtl<string>>(key);
-    console.log('sid', value);
     if (value) {
-      console.log('sid', value);
-      console.log('sidttl', value.ttl);
-      console.log('sidnow', Date.now());
-      console.log('sidttlnow', value.ttl > Date.now());
 
       if (value.ttl < Date.now()) {
-        console.log('returning sid', value.value);
         return value.value;
       }
       await chrome.storage.local.remove(key);
