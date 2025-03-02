@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+import axios, { AxiosInstance, AxiosResponse } from 'axios'
 import { PiHoleApiStatus } from '../api/models/PiHoleApiStatus'
 import { PiHoleSettingsStorage, StorageService } from './StorageService'
 import { PiHoleVersionsV6 } from '../api/models/PiHoleVersions'
@@ -193,43 +193,22 @@ export default class PiHoleApiService {
     return Promise.all(promiseArray)
   }
 
-  private static getAxiosConfig(): AxiosRequestConfig {
-    return {
-      transformResponse: data => JSON.parse(data)
-    }
-  }
-
-  private static getPiHoleBaseUrl(domain: string, apiKey?: string): URL {
-    // We only need the domain. We add the api.php later
-    const baseUrl = new URL(domain)
-
-    let correctApiKey
-    if (typeof apiKey === 'undefined' || apiKey.length < 1) {
-      correctApiKey = ''
-    } else {
-      correctApiKey = apiKey
-    }
-    baseUrl.searchParams.append('auth', correctApiKey)
-    return baseUrl
+  private static createAxiosBaseInstance(domain: string): AxiosInstance {
+    return axios.create({
+      baseURL: new URL('/api', new URL(domain)).toString(),
+      adapter: 'fetch',
+      withCredentials: false
+    })
   }
 
   private static getAxiosInstance(
     domain: string,
     apiKey?: string
   ): AxiosInstance {
-    const apiUrl = new URL('/api', new URL(domain))
-
-    const instance = axios.create({
-      baseURL: apiUrl.toString(),
-      transformResponse: data => JSON.parse(data),
-      adapter: 'fetch',
-      withCredentials: false
-    })
+    const instance = this.createAxiosBaseInstance(domain)
 
     const acquireSid = async () => {
-      const axiosInstance = axios.create({
-        baseURL: apiUrl.toString()
-      })
+      const axiosInstance = this.createAxiosBaseInstance(domain)
 
       const auth = await axiosInstance.post<PiHoleAuth>('/auth', {
         password: apiKey
@@ -252,7 +231,7 @@ export default class PiHoleApiService {
       }
 
       const session = await acquireSid()
-      await StorageService.saveSid(domain, session.sid, session.validity)
+      await StorageService.saveSid(domain, session.sid)
       // eslint-disable-next-line no-param-reassign
       config.headers['X-FTL-SID'] = session.sid
 
@@ -261,10 +240,11 @@ export default class PiHoleApiService {
 
     // Response interceptor to handle session expiration
     instance.interceptors.response.use(undefined, async error => {
-      if (error.response.status === 401) {
+      const isAuthRoute = error.config.url === '/auth'
+      if (error.response.status === 401 && !isAuthRoute) {
         console.warn('Session expired, acquiring new session')
         const session = await acquireSid()
-        await StorageService.saveSid(domain, session.sid, session.validity)
+        await StorageService.saveSid(domain, session.sid)
         // eslint-disable-next-line no-param-reassign
         error.config.headers['X-FTL-SID'] = session.sid
         return axios.request(error.config)

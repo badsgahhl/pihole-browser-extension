@@ -33,9 +33,8 @@ export enum ExtensionStorageEnum {
 type Postfix = string
 type ExtensionStorageEnumWithPostfix = `${ExtensionStorageEnum}_${Postfix}`
 type MaybeExtensionStorageEnum = ExtensionStorageEnum | ExtensionStorageEnumWithPostfix
-type StorageWithTtl<T> = {
+type StorageValue<T> = {
   value: T,
-  ttl: number
 }
 
 export class StorageService {
@@ -155,24 +154,16 @@ export class StorageService {
   public static async getSid(url: string): Promise<string | undefined> {
     const baseUrl = new URL(url).origin;
     const key: MaybeExtensionStorageEnum = `${ExtensionStorageEnum.session_storage}_${baseUrl}`;
-    const value = await this.getStorageValue<StorageWithTtl<string>>(key);
-    if (value) {
+    const value = await this.getStorageValue<StorageValue<string>>(key);
 
-      if (value.ttl < Date.now()) {
-        return value.value;
-      }
-      await chrome.storage.local.remove(key);
-    }
-
-    return undefined;
+    return value?.value;
   }
 
-  public static async saveSid(url: string, sid: string, ttl: number): Promise<void> {
+  public static async saveSid(url: string, sid: string): Promise<void> {
     const baseUrl = new URL(url).origin;
     const key: MaybeExtensionStorageEnum = `${ExtensionStorageEnum.session_storage}_${baseUrl}`;
-    const value: StorageWithTtl<string> = {
+    const value: StorageValue<string> = {
       value: sid,
-      ttl: Date.now() + ttl,
     };
     await chrome.storage.local.set({ [key]: value });
   }
