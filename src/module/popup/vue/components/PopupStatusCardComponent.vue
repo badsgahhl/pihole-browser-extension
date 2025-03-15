@@ -11,7 +11,7 @@
     </v-card-title>
     <v-card-text>
       <v-text-field
-        v-model="defaultDisableTime"
+        v-model.number="defaultDisableTime"
         :disabled="defaultDisableTimeDisabled"
         type="number"
         min="0"

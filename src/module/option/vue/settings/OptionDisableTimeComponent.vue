@@ -1,6 +1,6 @@
 <template>
   <v-text-field
-    v-model="disableTime"
+    v-model.number="disableTime"
     :label="translate(I18NOptionKeys.options_default_time_label)"
     type="number"
     min="10"
