@@ -1,6 +1,6 @@
 {
 	"name": "pihole-browser-extension",
-	"version": "4.0.2",
+	"version": "4.0.3",
 	"dependencies": {
 		"@vue/composition-api": "^1.4.0",
 		"axios": "^1.7.8",
