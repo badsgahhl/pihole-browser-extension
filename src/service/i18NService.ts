@@ -54,7 +54,7 @@ export enum I18NPopupKeys {
 }
 
 export enum LinkConfig {
-  paypal_donation_link = 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3H9XJUKXMSG22&source=url',
+  paypal_donation_link = 'https://www.paypal.com/donate/?hosted_button_id=CXLHH44DFQCY4',
   github_troubleshooting = 'https://github.com/badsgahhl/pihole-browser-extension#troubleshooting',
   uninstall_survey = 'https://forms.gle/RsGUyrmB1jtsGhYQ9',
   github_issue = 'https://github.com/badsgahhl/pihole-browser-extension/issues',
