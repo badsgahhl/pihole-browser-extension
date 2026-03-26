@@ -18,8 +18,11 @@ export class BadgeService {
    * Sets the badge text.
    */
   public static setBadgeText(text: ExtensionBadgeTextEnum | string): void {
+     if (typeof chrome !== 'undefined' && chrome.action?.setBadgeTextColor) {
+      // Chrome MV3 path
+      chrome.action.setBadgeTextColor(colorOptions);
+    } else if (typeof browser !== 'undefined') {
     // Firefox needs white text color.
-    if (typeof browser !== 'undefined') {
       browser.browserAction.setBadgeTextColor({ color: 'white' }).then()
     }
 
