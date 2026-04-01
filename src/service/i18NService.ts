@@ -66,5 +66,7 @@ export enum I18NContextMenuKeys {
   toggle_pi_holes = 'context_menu_toggle_pi_holes',
   blacklist_current_domain = 'context_menu_blacklist_current_domain',
   whitelist_current_domain = 'context_menu_whitelist_current_domain',
+  blacklist_link_domain = 'context_menu_blacklist_link_domain',
+  whitelist_link_domain = 'context_menu_whitelist_link_domain',
   open_settings = 'context_menu_open_settings'
 }

@@ -1,45 +1,26 @@
 <template>
-  <v-card>
-    <v-card-title class="justify-space-between">
-      {{ translate(I18NPopupKeys.popup_status_card_title) }}
-      <v-icon
-        right
-        :title="translate(I18NOptionKeys.options_settings)"
-        @click="openOptions"
-        >{{ mdiCog }}
-      </v-icon>
-    </v-card-title>
-    <v-card-text>
-      <v-text-field
-        v-model.number="defaultDisableTime"
-        :disabled="defaultDisableTimeDisabled"
-        type="number"
-        min="0"
-        outlined
-        :rules="[v => typeof v === 'number' || v >= 0]"
-        :suffix="defaultDisableTime > 0 ? 's' : ''"
-        :append-icon="timeUnitIcon"
-      >
-        <template #label>
-          {{ translate(I18NPopupKeys.popup_status_card_info_text) }}
-        </template>
-      </v-text-field>
-      <div class="d-flex flex justify-center">
+  <v-card class="status-card" flat>
+    <v-card-text class="pa-4">
+      <div class="toggle-area">
         <v-switch
           v-model="sliderChecked"
-          style="transform: scale(1.5)"
           inset
-          color="green"
+          color="secondary"
+          hide-details
           :disabled="sliderDisabled"
+          class="mt-0 pt-0"
           @change="sliderClicked()"
         ></v-switch>
+        <div class="status-indicator">
+          <span class="status-dot" :class="statusDotClass"></span>
+          <span class="status-label">{{ statusText }}</span>
+        </div>
       </div>
     </v-card-text>
   </v-card>
 </template>
 
 <script lang="ts">
-import { mdiAllInclusive, mdiCog, mdiTimerOutline } from '@mdi/js'
 import { computed, defineComponent, onMounted, ref } from '@vue/composition-api'
 import {
   PiHoleSettingsDefaults,
@@ -53,7 +34,6 @@ import {
 import TabService from '../../../../service/TabService'
 import PiHoleApiService from '../../../../service/PiHoleApiService'
 import PiHoleApiStatusEnum from '../../../../api/enum/PiHoleApiStatusEnum'
-import useTranslation from '../../../../hooks/translation'
 
 export default defineComponent({
   name: 'PopupStatusCardComponent',
@@ -71,14 +51,22 @@ export default defineComponent({
   setup: (props, { emit }) => {
     const sliderChecked = ref(props.isActiveByBadge)
     const sliderDisabled = ref(!props.isActiveByBadge)
-    const defaultDisableTimeDisabled = ref(!props.isActiveByBadge)
+    /** Seconds for temporary disable; loaded from options storage (not shown in popup). */
     const defaultDisableTime = ref<number>(
       PiHoleSettingsDefaults.default_disable_time
     )
 
-    const timeUnitIcon = computed(() =>
-      defaultDisableTime.value < 1 ? mdiAllInclusive : mdiTimerOutline
-    )
+    const statusDotClass = computed(() => {
+      if (sliderDisabled.value) return 'status-dot--error'
+      return sliderChecked.value
+        ? 'status-dot--active'
+        : 'status-dot--inactive'
+    })
+
+    const statusText = computed(() => {
+      if (sliderDisabled.value) return 'Error'
+      return sliderChecked.value ? 'Enabled' : 'Disabled'
+    })
 
     const updateDefaultDisableTime = () => {
       StorageService.getDefaultDisableTime().then(time => {
@@ -90,19 +78,16 @@ export default defineComponent({
 
     const updateComponentsByData = (data: PiHoleApiStatus) => {
       if (data.blocking === PiHoleApiStatusEnum.disabled) {
-        defaultDisableTimeDisabled.value = true
         sliderChecked.value = false
         sliderDisabled.value = false
         BadgeService.setBadgeText(ExtensionBadgeTextEnum.disabled)
         emit('updateStatus', false)
       } else if (data.blocking === PiHoleApiStatusEnum.enabled) {
-        defaultDisableTimeDisabled.value = false
         sliderDisabled.value = false
         sliderChecked.value = true
         BadgeService.setBadgeText(ExtensionBadgeTextEnum.enabled)
         emit('updateStatus', true)
       } else {
-        defaultDisableTimeDisabled.value = true
         sliderDisabled.value = true
         sliderChecked.value = false
         BadgeService.setBadgeText(ExtensionBadgeTextEnum.error)
@@ -117,7 +102,6 @@ export default defineComponent({
       if (isEnabledByBadge) {
         sliderChecked.value = true
         sliderDisabled.value = false
-        defaultDisableTimeDisabled.value = false
       }
 
       PiHoleApiService.getPiHoleStatusCombined()
@@ -163,11 +147,6 @@ export default defineComponent({
       }
     }
 
-    const openOptions = () => {
-      // eslint-disable-next-line no-undef
-      chrome.runtime.openOptionsPage()
-    }
-
     const sliderClicked = () => {
       const currentMode = sliderChecked.value
         ? PiHoleApiStatusEnum.enabled
@@ -209,15 +188,11 @@ export default defineComponent({
     })
 
     return {
-      defaultDisableTime,
-      defaultDisableTimeDisabled,
       sliderChecked,
       sliderDisabled,
-      timeUnitIcon,
-      mdiCog,
-      sliderClicked,
-      openOptions,
-      ...useTranslation()
+      statusDotClass,
+      statusText,
+      sliderClicked
     }
   }
 })

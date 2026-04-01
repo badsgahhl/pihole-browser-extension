@@ -1,19 +1,26 @@
 <template>
-  <div>
-    <v-tabs v-model="currentTab">
+  <div class="option-pihole-tabs">
+    <v-tabs
+      v-model="currentTab"
+      background-color="transparent"
+      class="option-pihole-tabs__tabs"
+      color="secondary"
+      slider-color="secondary"
+    >
       <v-tab
         v-for="(pi_hole_setting, index) in tabs"
         :key="'dyn-tab-' + index"
+        class="option-pihole-tabs__tab"
         @click="resetConnectionCheckAndCheck"
       >
-        PiHole {{ index + 1 }}
+        Pi-hole {{ index + 1 }}
       </v-tab>
     </v-tabs>
-    <v-tabs-items v-model="currentTab">
+    <v-tabs-items v-model="currentTab" class="option-pihole-tabs__items">
       <v-tab-item
         v-for="(pi_hole_setting, index) in tabs"
         :key="index"
-        class="mt-5"
+        class="mt-6"
       >
         <v-text-field
           v-model="pi_hole_setting.pi_uri_base"
@@ -41,12 +48,19 @@
           @click:append="toggleApiKeyVisibility"
         ></v-text-field>
 
-        <div class="mb-5">
-          <v-btn v-if="tabs.length < 4" @click.prevent="addNewPiHole"
+        <div class="option-pihole-tabs__actions mb-5">
+          <v-btn
+            v-if="tabs.length < 4"
+            rounded
+            depressed
+            color="secondary"
+            @click.prevent="addNewPiHole"
             >{{ translate(I18NOptionKeys.options_add_button) }}
           </v-btn>
           <v-btn
             v-if="tabs.length > 1"
+            rounded
+            outlined
             @click.prevent="removePiHole(currentTab)"
             >{{
               translate(I18NOptionKeys.options_remove_button, [
@@ -55,23 +69,48 @@
             }}
           </v-btn>
         </div>
-        <v-alert v-if="tabs.length > 1" type="info" outlined>
+        <v-alert
+          v-if="tabs.length > 1"
+          type="info"
+          outlined
+          dense
+          class="option-pihole-tabs__alert mb-3"
+        >
           {{ translate(I18NOptionKeys.option_multiple_connections) }}
         </v-alert>
-        <v-alert v-if="connectionCheckStatus === 'IDLE'" outlined type="info">
+        <v-alert
+          v-if="connectionCheckStatus === 'IDLE'"
+          outlined
+          type="info"
+          dense
+          class="option-pihole-tabs__alert mb-3"
+        >
           {{ translate(I18NOptionKeys.option_connection_check_idle) }}
           <v-progress-circular
-            color="primary"
+            color="secondary"
             indeterminate
-            :size="25"
+            :size="22"
             :width="2"
+            class="ml-2"
           />
         </v-alert>
-        <v-alert v-if="connectionCheckStatus === 'OK'" type="success" outlined>
+        <v-alert
+          v-if="connectionCheckStatus === 'OK'"
+          type="success"
+          outlined
+          dense
+          class="option-pihole-tabs__alert mb-3"
+        >
           {{ translate(I18NOptionKeys.option_connection_check_ok) }}<br />
           {{ connectionCheckVersionText }}
         </v-alert>
-        <v-alert v-if="connectionCheckStatus === 'ERROR'" outlined type="error">
+        <v-alert
+          v-if="connectionCheckStatus === 'ERROR'"
+          outlined
+          type="error"
+          dense
+          class="option-pihole-tabs__alert mb-3"
+        >
           {{ translate(I18NOptionKeys.option_connection_check_error) }}
         </v-alert>
         <v-alert
@@ -84,6 +123,8 @@
           "
           outlined
           type="info"
+          dense
+          class="option-pihole-tabs__alert mb-3"
         >
           {{
             translate(I18NOptionKeys.option_connection_check_update_available)
@@ -255,3 +296,34 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="scss">
+.option-pihole-tabs {
+  &__tabs {
+    border-radius: 10px;
+  }
+
+  &__tab {
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.65px !important;
+    text-transform: uppercase !important;
+    min-width: 0 !important;
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  &__alert {
+    border-radius: 8px !important;
+    font-size: 13px !important;
+  }
+
+  &__items .v-text-field {
+    margin-bottom: 8px;
+  }
+}
+</style>

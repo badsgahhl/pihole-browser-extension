@@ -1,37 +1,43 @@
 <template>
-  <v-card>
-    <v-card-title>
-      {{ translate(I18NPopupKeys.popup_second_card_current_url) }}
-    </v-card-title>
-    <v-card-text class="text-center">
-      <v-alert color="primary" outlined>
+  <v-card class="list-card" flat>
+    <v-card-text class="pa-4">
+      <div class="list-card__label">
+        {{ translate(I18NPopupKeys.popup_second_card_current_url) }}
+      </div>
+      <div class="url-pill">
         {{ currentUrl }}
-      </v-alert>
+      </div>
+      <div class="list-card__actions">
+        <v-btn
+          id="list_action_white"
+          :disabled="buttonsDisabled"
+          :title="translate(I18NPopupKeys.popup_second_card_whitelist)"
+          color="success"
+          rounded
+          depressed
+          :loading="whitelistingActive"
+          class="list-card__btn"
+          @click="whitelistUrl"
+        >
+          <v-icon left small>{{ mdiCheckCircleOutline }}</v-icon>
+          {{ translate(I18NPopupKeys.popup_second_card_whitelist) }}
+        </v-btn>
+        <v-btn
+          id="list_action_black"
+          :disabled="buttonsDisabled"
+          :title="translate(I18NPopupKeys.popup_second_card_blacklist)"
+          color="error"
+          rounded
+          depressed
+          :loading="blacklistingActive"
+          class="list-card__btn"
+          @click="blackListUrl"
+        >
+          <v-icon left small>{{ mdiAlphaXCircleOutline }}</v-icon>
+          {{ translate(I18NPopupKeys.popup_second_card_blacklist) }}
+        </v-btn>
+      </div>
     </v-card-text>
-    <v-card-actions class="justify-center">
-      <v-btn
-        id="list_action_white"
-        :disabled="buttonsDisabled"
-        :title="translate(I18NPopupKeys.popup_second_card_whitelist)"
-        size="sm"
-        color="green"
-        :loading="whitelistingActive"
-        @click="whitelistUrl"
-      >
-        <v-icon color="white">{{ mdiCheckCircleOutline }}</v-icon>
-      </v-btn>
-      <v-btn
-        id="list_action_black"
-        :disabled="buttonsDisabled"
-        :title="translate(I18NPopupKeys.popup_second_card_blacklist)"
-        size="sm"
-        color="red"
-        :loading="blacklistingActive"
-        @click="blackListUrl"
-      >
-        <v-icon color="white">{{ mdiAlphaXCircleOutline }}</v-icon>
-      </v-btn>
-    </v-card-actions>
   </v-card>
 </template>
 

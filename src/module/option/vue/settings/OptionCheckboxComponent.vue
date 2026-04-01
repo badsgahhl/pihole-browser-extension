@@ -1,5 +1,12 @@
 <template>
-  <v-switch v-model="isChecked" inset :label="translate(labelTextKey)">
+  <v-switch
+    v-model="isChecked"
+    inset
+    hide-details
+    color="secondary"
+    class="option-settings-switch"
+    :label="translate(labelTextKey)"
+  >
   </v-switch>
 </template>
 
@@ -56,3 +63,17 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="scss">
+.option-settings-switch {
+  margin-top: 4px !important;
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
+
+  .v-label {
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    line-height: 1.4 !important;
+  }
+}
+</style>

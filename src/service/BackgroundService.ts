@@ -57,57 +57,77 @@ export default class BackgroundService {
     })
   }
 
+  public static blacklistHostname(hostname: string): void {
+    if (hostname.length < 1) {
+      return
+    }
+    PiHoleApiService.subDomainFromList(ApiList.whitelist, hostname)
+      .then(() => {
+        PiHoleApiService.addDomainToList(ApiList.blacklist, hostname)
+          .then(() => {
+            BadgeService.setBadgeText(ExtensionBadgeTextEnum.ok)
+          })
+          .catch(reason => {
+            console.warn(reason)
+            BadgeService.setBadgeText(ExtensionBadgeTextEnum.error)
+          })
+      })
+      .catch(reason => {
+        console.warn(reason)
+        BadgeService.setBadgeText(ExtensionBadgeTextEnum.error)
+      })
+  }
+
+  public static whitelistHostname(hostname: string): void {
+    if (hostname.length < 1) {
+      return
+    }
+    PiHoleApiService.subDomainFromList(ApiList.blacklist, hostname)
+      .then(() => {
+        PiHoleApiService.addDomainToList(ApiList.whitelist, hostname)
+          .then(() => {
+            StorageService.getReloadAfterWhitelist().then(state => {
+              if (typeof state === 'undefined') {
+                return
+              }
+              if (state) {
+                TabService.reloadCurrentTab(1500)
+              }
+            })
+            BadgeService.setBadgeText(ExtensionBadgeTextEnum.ok)
+          })
+          .catch(reason => {
+            console.warn(reason)
+            BadgeService.setBadgeText(ExtensionBadgeTextEnum.error)
+          })
+      })
+      .catch(reason => {
+        console.warn(reason)
+        BadgeService.setBadgeText(ExtensionBadgeTextEnum.error)
+      })
+  }
+
   public static blacklistCurrentDomain(): void {
     TabService.getCurrentTabUrlCleaned().then(url => {
-      if (url.length < 1) {
-        return
-      }
-      PiHoleApiService.subDomainFromList(ApiList.whitelist, url)
-        .then(() => {
-          PiHoleApiService.addDomainToList(ApiList.blacklist, url)
-            .then(() => {
-              BadgeService.setBadgeText(ExtensionBadgeTextEnum.ok)
-            })
-            .catch(reason => {
-              console.warn(reason)
-              BadgeService.setBadgeText(ExtensionBadgeTextEnum.error)
-            })
-        })
-        .catch(reason => {
-          console.warn(reason)
-          BadgeService.setBadgeText(ExtensionBadgeTextEnum.error)
-        })
+      BackgroundService.blacklistHostname(url)
     })
   }
 
   public static whitelistCurrentDomain(): void {
     TabService.getCurrentTabUrlCleaned().then(url => {
-      if (url.length < 1) {
-        return
-      }
-      PiHoleApiService.subDomainFromList(ApiList.blacklist, url)
-        .then(() => {
-          PiHoleApiService.addDomainToList(ApiList.whitelist, url)
-            .then(() => {
-              StorageService.getReloadAfterWhitelist().then(state => {
-                if (typeof state === 'undefined') {
-                  return
-                }
-                if (state) {
-                  TabService.reloadCurrentTab(1500)
-                }
-              })
-              BadgeService.setBadgeText(ExtensionBadgeTextEnum.ok)
-            })
-            .catch(reason => {
-              console.warn(reason)
-              BadgeService.setBadgeText(ExtensionBadgeTextEnum.error)
-            })
-        })
-        .catch(reason => {
-          console.warn(reason)
-          BadgeService.setBadgeText(ExtensionBadgeTextEnum.error)
-        })
+      BackgroundService.whitelistHostname(url)
+    })
+  }
+
+  public static blacklistDomainFromLink(linkUrl: string): void {
+    TabService.getHostnameFromUrlForListing(linkUrl).then(hostname => {
+      BackgroundService.blacklistHostname(hostname)
+    })
+  }
+
+  public static whitelistDomainFromLink(linkUrl: string): void {
+    TabService.getHostnameFromUrlForListing(linkUrl).then(hostname => {
+      BackgroundService.whitelistHostname(hostname)
     })
   }
 

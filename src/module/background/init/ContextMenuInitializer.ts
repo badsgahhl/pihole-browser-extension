@@ -48,6 +48,28 @@ export default class ContextMenuInitializer implements Initializer {
         title: I18NService.translate(I18NContextMenuKeys.open_settings),
         contexts: ['page'],
         onclick: () => BackgroundService.openOptions()
+      },
+      {
+        title: I18NService.translate(
+          I18NContextMenuKeys.blacklist_link_domain
+        ),
+        contexts: ['link'],
+        onclick: (info?: chrome.contextMenus.OnClickData) => {
+          if (info?.linkUrl) {
+            BackgroundService.blacklistDomainFromLink(info.linkUrl)
+          }
+        }
+      },
+      {
+        title: I18NService.translate(
+          I18NContextMenuKeys.whitelist_link_domain
+        ),
+        contexts: ['link'],
+        onclick: (info?: chrome.contextMenus.OnClickData) => {
+          if (info?.linkUrl) {
+            BackgroundService.whitelistDomainFromLink(info.linkUrl)
+          }
+        }
       }
     ]
   }

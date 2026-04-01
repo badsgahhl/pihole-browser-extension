@@ -117,6 +117,12 @@
 	"context_menu_whitelist_current_domain": {
 		"message": "Whitelist current domain"
 	},
+	"context_menu_blacklist_link_domain": {
+		"message": "Blacklist this link's domain"
+	},
+	"context_menu_whitelist_link_domain": {
+		"message": "Whitelist this link's domain"
+	},
 	"context_menu_open_settings": {
 		"message": "Open Settings"
 	},
