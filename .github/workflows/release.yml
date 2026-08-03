@@ -3,30 +3,95 @@ name: Release
 on:
   push:
     tags:
-      - 'v*.*.*'
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing v-prefixed tag to publish'
+        required: true
+        type: string
 
 permissions:
   contents: read
 
 concurrency:
-  group: release-${{ github.ref }}
+  group: release-${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref }}
   cancel-in-progress: false
+
+env:
+  CI: true
 
 jobs:
   build:
     name: Validate and package
     runs-on: ubuntu-24.04
     timeout-minutes: 25
+    outputs:
+      is_prerelease: ${{ steps.release.outputs.is_prerelease }}
+      release_label: ${{ steps.release.outputs.release_label }}
+      tag: ${{ steps.release.outputs.tag }}
 
     steps:
       - name: Check out tagged revision
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref }}
           show-progress: false
 
-      - name: Verify tag target
-        run: test "$(git rev-parse "${GITHUB_REF_NAME}^{commit}")" = "$GITHUB_SHA"
+      - name: Resolve release target and version from tag
+        id: release
+        env:
+          REQUESTED_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          TAG="$REQUESTED_TAG"
+
+          if [[ ! "$TAG" =~ ^v([0-9]+)\.([0-9]+)\.([0-9]+)(-([0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*))?$ ]]; then
+            echo "Expected a tag such as v4.5.0 or v4.5.0-rc.1." >&2
+            exit 1
+          fi
+
+          MAJOR=${BASH_REMATCH[1]}
+          MINOR=${BASH_REMATCH[2]}
+          PATCH=${BASH_REMATCH[3]}
+
+          for VERSION_PART in "$MAJOR" "$MINOR" "$PATCH"; do
+            if [[ "$VERSION_PART" =~ ^0[0-9]+$ ]] || (( 10#$VERSION_PART > 65535 )); then
+              echo "Invalid numeric version component: ${VERSION_PART}." >&2
+              exit 1
+            fi
+          done
+
+          VERSION="${MAJOR}.${MINOR}.${PATCH}"
+          RELEASE_LABEL=${TAG#v}
+
+          git fetch --force origin "refs/tags/${TAG}:refs/tags/${TAG}"
+          TAG_SHA=$(git rev-list -n 1 "$TAG")
+          RELEASE_SHA=$(git rev-parse HEAD)
+
+          if [[ "$TAG_SHA" != "$RELEASE_SHA" ]]; then
+            echo "Tag ${TAG} points to ${TAG_SHA}, but ${RELEASE_SHA} was checked out." >&2
+            exit 1
+          fi
+
+          if [[ "$TAG" == "v${VERSION}" ]]; then
+            IS_PRERELEASE=false
+          else
+            IS_PRERELEASE=true
+          fi
+
+          echo "TAG=${TAG}" >> "$GITHUB_ENV"
+          echo "VERSION=${VERSION}" >> "$GITHUB_ENV"
+          echo "RELEASE_LABEL=${RELEASE_LABEL}" >> "$GITHUB_ENV"
+          echo "RELEASE_SHA=${RELEASE_SHA}" >> "$GITHUB_ENV"
+          echo "IS_PRERELEASE=${IS_PRERELEASE}" >> "$GITHUB_ENV"
+
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "release_label=${RELEASE_LABEL}" >> "$GITHUB_OUTPUT"
+          echo "is_prerelease=${IS_PRERELEASE}" >> "$GITHUB_OUTPUT"
 
       - name: Set up Node.js
         uses: actions/setup-node@v7
@@ -35,11 +100,28 @@ jobs:
           cache: npm
           cache-dependency-path: package-lock.json
 
+      - name: Apply release version to build files
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          npm version "$VERSION" --no-git-tag-version --allow-same-version
+
+          RELEASE_VERSION="$VERSION" node <<'NODE'
+          const fs = require('node:fs')
+
+          for (const path of ['manifest.firefox.json', 'manifest.chrome.json']) {
+            const manifest = JSON.parse(fs.readFileSync(path, 'utf8'))
+            manifest.version = process.env.RELEASE_VERSION
+            fs.writeFileSync(path, `${JSON.stringify(manifest, null, 2)}\n`)
+          }
+          NODE
+
       - name: Install locked dependencies
         run: npm ci --prefer-offline --no-audit --no-fund --loglevel=error
 
       - name: Verify release versions
-        run: npm run verify:release -- "$GITHUB_REF_NAME"
+        run: npm run verify:release -- "$TAG"
 
       - name: Run complete project checks
         run: npm run check
@@ -51,47 +133,54 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          package_version="$(node -p "require('./package.json').version")"
-          release_version="${GITHUB_REF_NAME#v}"
-          if [[ "$release_version" != "$package_version" ]]; then
+
+          if [[ "$RELEASE_LABEL" != "$VERSION" ]]; then
             mv \
-              "artifacts/pihole-browser-extension-${package_version}-firefox-unsigned.xpi" \
-              "artifacts/pihole-browser-extension-${release_version}-firefox-unsigned.xpi"
+              "artifacts/pihole-browser-extension-${VERSION}-firefox-unsigned.xpi" \
+              "artifacts/pihole-browser-extension-${RELEASE_LABEL}-firefox-unsigned.xpi"
             mv \
-              "artifacts/pihole-browser-extension-${package_version}-chrome.zip" \
-              "artifacts/pihole-browser-extension-${release_version}-chrome.zip"
+              "artifacts/pihole-browser-extension-${VERSION}-chrome.zip" \
+              "artifacts/pihole-browser-extension-${RELEASE_LABEL}-chrome.zip"
           fi
 
       - name: Create source archive
         shell: bash
         run: |
           set -euo pipefail
-          release_version="${GITHUB_REF_NAME#v}"
-          source_dir="source-package"
-          source_archive="artifacts/pihole-browser-extension-${release_version}-source.zip"
-          source_date_epoch="$(git show -s --format=%ct HEAD)"
 
-          mkdir "$source_dir"
-          git archive --format=tar HEAD | tar -xf - -C "$source_dir"
-          printf '%s\n' "$GITHUB_SHA" > "$source_dir/SOURCE_COMMIT.txt"
-          find "$source_dir" -exec touch -h -d "@${source_date_epoch}" {} +
+          SOURCE_DIR=$(mktemp -d)
+          SOURCE_ARCHIVE="artifacts/pihole-browser-extension-${RELEASE_LABEL}-source.zip"
+          SOURCE_DATE_EPOCH=$(git show -s --format=%ct "$RELEASE_SHA")
+          trap 'rm -rf "$SOURCE_DIR"' EXIT
+
+          git archive "$RELEASE_SHA" | tar -xf - -C "$SOURCE_DIR"
+          cp package.json package-lock.json "$SOURCE_DIR/"
+          cp manifest.firefox.json manifest.chrome.json "$SOURCE_DIR/"
+          printf '%s\n' "$RELEASE_SHA" > "$SOURCE_DIR/SOURCE_COMMIT.txt"
+          find "$SOURCE_DIR" -exec touch -h -d "@${SOURCE_DATE_EPOCH}" {} +
+
           (
-            cd "$source_dir"
-            find . -type f -print | LC_ALL=C sort | zip -X -q "../${source_archive}" -@
+            cd "$SOURCE_DIR"
+            find . -type f -print | LC_ALL=C sort | zip -X -q "$GITHUB_WORKSPACE/${SOURCE_ARCHIVE}" -@
           )
 
       - name: Regenerate SHA-256 checksums
         shell: bash
         run: |
+          set -euo pipefail
           find artifacts -maxdepth 1 -type f ! -name SHA256SUMS.txt -printf '%f\n' \
             | LC_ALL=C sort \
             | while IFS= read -r artifact; do sha256sum "artifacts/$artifact"; done \
             | sed 's#  artifacts/#  #' > artifacts/SHA256SUMS.txt
+          (
+            cd artifacts
+            sha256sum -c SHA256SUMS.txt
+          )
 
       - name: Upload validated release bundle
         uses: actions/upload-artifact@v7
         with:
-          name: release-${{ github.ref_name }}
+          name: release-${{ steps.release.outputs.tag }}
           path: artifacts/
           if-no-files-found: error
           compression-level: 0
@@ -106,33 +195,60 @@ jobs:
       contents: write
 
     steps:
-      - name: Refuse to overwrite an existing release
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          if gh release view "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-            echo "Release $GITHUB_REF_NAME already exists; refusing to overwrite it." >&2
-            exit 1
-          fi
-
       - name: Download validated release bundle
         uses: actions/download-artifact@v8
         with:
-          name: release-${{ github.ref_name }}
+          name: release-${{ needs.build.outputs.tag }}
           path: release-assets
 
       - name: Publish release and assets
         env:
           GH_TOKEN: ${{ github.token }}
+          IS_PRERELEASE: ${{ needs.build.outputs.is_prerelease }}
+          RELEASE_LABEL: ${{ needs.build.outputs.release_label }}
+          TAG: ${{ needs.build.outputs.tag }}
         shell: bash
         run: |
           set -euo pipefail
-          release_flags=(--generate-notes)
-          if [[ "$GITHUB_REF_NAME" == *-* ]]; then
-            release_flags+=(--prerelease)
+
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload "$TAG" release-assets/* \
+              --repo "$GITHUB_REPOSITORY" \
+              --clobber
+
+            RELEASE_ID=$(gh release view "$TAG" \
+              --repo "$GITHUB_REPOSITORY" \
+              --json databaseId \
+              --jq '.databaseId')
+
+            if [[ "$IS_PRERELEASE" == "true" ]]; then
+              MAKE_LATEST=false
+            else
+              MAKE_LATEST=true
+            fi
+
+            gh api \
+              --method PATCH \
+              "repos/${GITHUB_REPOSITORY}/releases/${RELEASE_ID}" \
+              -f name="Pi-hole Browser Extension ${RELEASE_LABEL}" \
+              -F prerelease="$IS_PRERELEASE" \
+              -f make_latest="$MAKE_LATEST" \
+              >/dev/null
+          else
+            RELEASE_ARGS=(
+              "$TAG"
+              release-assets/*
+              --repo "$GITHUB_REPOSITORY"
+              --verify-tag
+              --title "Pi-hole Browser Extension ${RELEASE_LABEL}"
+              --generate-notes
+            )
+
+            if [[ "$IS_PRERELEASE" == "true" ]]; then
+              RELEASE_ARGS+=(--prerelease)
+            else
+              RELEASE_ARGS+=(--latest)
+            fi
+
+            gh release create "${RELEASE_ARGS[@]}"
           fi
-          gh release create "$GITHUB_REF_NAME" release-assets/* \
-            --repo "$GITHUB_REPOSITORY" \
-            --verify-tag \
-            --title "$GITHUB_REF_NAME" \
-            "${release_flags[@]}"
