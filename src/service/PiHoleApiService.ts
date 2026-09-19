@@ -241,7 +241,8 @@ export default class PiHoleApiService {
     // Response interceptor to handle session expiration
     instance.interceptors.response.use(undefined, async error => {
       const isAuthRoute = error.config.url === '/auth'
-      if (error.response.status === 401 && !isAuthRoute) {
+      const status = error.response && error.response.status
+      if (status === 401 && !isAuthRoute) {
         console.warn('Session expired, acquiring new session')
         const session = await acquireSid()
         await StorageService.saveSid(domain, session.sid)
