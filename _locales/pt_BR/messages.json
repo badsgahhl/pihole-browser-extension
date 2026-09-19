@@ -1,0 +1,138 @@
+{
+	"manifest_description": {
+		"message": "Extensão de navegador para controlar seu PiHole."
+	},
+	"options_title": {
+		"message": "$page$ - Extensão do Navegador PiHole",
+		"placeholders": {
+			"page": {
+				"content": "$1"
+			}
+		}
+	},
+	"options_settings": {
+		"message": "Configurações"
+	},
+	"option_settings_general_settings": {
+		"message": "Configurações gerais"
+	},
+	"options_about": {
+		"message": "Sobre"
+	},
+	"options_report_error": {
+		"message": "Relatar um problema"
+	},
+	"options_about_licences": {
+		"message": "Licenças"
+	},
+	"option_report_error_github": {
+		"message": "Criar um issue no Github"
+	},
+	"option_troubleshooting": {
+		"message": "Solução de problemas"
+	},
+	"option_extension": {
+		"message": "Extensão"
+	},
+	"option_about_copy_debug": {
+		"message": "Cole as seguintes informações de depuração no issue:"
+	},
+	"option_contributors": {
+		"message": "Contribuidores:"
+	},
+	"option_donation": {
+		"message": "Doar"
+	},
+	"options_headline_info": {
+		"message": "Configuração do PiHole"
+	},
+	"options_headline_additional_info": {
+		"message": "Digite o endereço e a chave de API, que você pode encontrar em API/Interface web nas configurações do seu PiHole."
+	},
+	"options_default_time_label": {
+		"message": "Tempo padrão de desativação:"
+	},
+	"options_default_time_unit": {
+		"message": "segundos"
+	},
+	"options_reload_after_disable": {
+		"message": "Recarregar a guia atual após desativar"
+	},
+	"options_reload_after_white_list": {
+		"message": "Recarregar a guia atual após incluir na lista de permissões"
+	},
+	"options_api_key": {
+		"message": "Senha"
+	},
+	"options_pi_hole_address": {
+		"message": "Endereço do PiHole"
+	},
+	"options_add_button": {
+		"message": "Adicionar PiHole"
+	},
+	"options_remove_button": {
+		"message": "Remover PiHole $num$",
+		"placeholders": {
+			"num": {
+				"content": "$1"
+			}
+		}
+	},
+	"options_url_invalid_warning": {
+		"message": "O URL é inválido. (Sem http(s), esquema inválido ou vazio)"
+	},
+	"options_disable_list_feature": {
+		"message": "Desativar o recurso de lista de bloqueio/permissões no popup"
+	},
+	"popup_status_card_title": {
+		"message": "Interruptor do PiHole"
+	},
+	"popup_status_card_info_text": {
+		"message": "0 para permanente"
+	},
+	"popup_second_card_current_url": {
+		"message": "URL atual"
+	},
+	"popup_second_card_whitelist": {
+		"message": "Lista de permissões"
+	},
+	"popup_second_card_blacklist": {
+		"message": "Lista de bloqueio"
+	},
+	"option_hotkey_settings": {
+		"message": "Configurações de atalhos"
+	},
+	"option_disable_context_menu": {
+		"message": "Desativar os atalhos do menu de contexto"
+	},
+	"popup_update_card_info": {
+		"message": "Atualização disponível para o PiHole"
+	},
+	"context_menu_toggle_pi_holes": {
+		"message": "Alternar PiHole(s)"
+	},
+	"context_menu_blacklist_current_domain": {
+		"message": "Adicionar o domínio atual à lista de bloqueio"
+	},
+	"context_menu_whitelist_current_domain": {
+		"message": "Incluir o domínio atual na lista de permissões"
+	},
+	"context_menu_open_settings": {
+		"message": "Abrir configurações"
+	},
+	"option_connection_check_idle": {
+		"message": "Verificação de conexão em andamento"
+	},
+	"option_connection_check_ok": {
+		"message": "Conexão bem-sucedida"
+	},
+	"option_connection_check_error": {
+		"message": "Falha na conexão"
+	},
+	"option_connection_check_update_available": {
+		"message": "Atualização disponível para o PiHole"
+	},
+	"option_multiple_connections": {
+		"message": "O uso de vários PiHoles pode ser instável. Use com cautela."
+	}
+}
