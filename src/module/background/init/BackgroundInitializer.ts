@@ -72,6 +72,8 @@ export default class BackgroundInitializer implements Initializer {
             BadgeService.setBadgeText(ExtensionBadgeTextEnum.disabled)
           } else if (value === PiHoleApiStatusEnum.enabled) {
             BadgeService.setBadgeText(ExtensionBadgeTextEnum.enabled)
+          } else {
+            BadgeService.setBadgeText(ExtensionBadgeTextEnum.error)
           }
         }
       })
