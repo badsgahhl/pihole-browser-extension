@@ -1,0 +1,12 @@
+{
+  "name": "pihole-switch-design",
+  "private": true,
+  "description": "Renders the v5 design assets: mockup pages, icon PNGs and store screenshots.",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0",
+    "sharp": "^0.34.0"
+  }
+}

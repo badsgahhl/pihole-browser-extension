@@ -1,0 +1,135 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>store</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500;600&display=swap"><style>
+*{box-sizing:border-box}
+body{margin:0;background:#0a0c0f;color:#f2f4f7;font-family:Inter,system-ui,sans-serif;letter-spacing:-0.01em;overflow:hidden}
+.shot{position:relative;width:1280px;height:800px;background:#0a0c0f;overflow:hidden;display:flex;align-items:center;padding:0 0 0 72px;gap:48px}
+.shot::before{content:"";position:absolute;inset:0;background-image:linear-gradient(#171a1f 1px,transparent 1px),linear-gradient(90deg,#171a1f 1px,transparent 1px);background-size:40px 40px;opacity:.55;mask-image:linear-gradient(180deg,rgba(0,0,0,.9),rgba(0,0,0,.2))}
+.copy{position:relative;width:420px;flex-shrink:0;display:flex;flex-direction:column;gap:18px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#38d0ea;letter-spacing:.04em;text-transform:uppercase}
+.eyebrow::before{content:"";width:8px;height:8px;background:#38d0ea}
+h1{margin:0;font-size:44px;line-height:1.08;font-weight:700;letter-spacing:-0.03em}
+.sub{font-size:17px;line-height:1.45;color:#a6aeba;margin:0}
+.bullets{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.bullets div{display:flex;align-items:center;gap:10px;font-size:14px;color:#f2f4f7}
+.bullets div::before{content:"";width:6px;height:6px;background:#45d483;flex-shrink:0}
+.bullets code{font-family:'JetBrains Mono',monospace;font-size:12px;color:#a6aeba;border:1px solid #3a404a;border-radius:2px;padding:1px 5px}
+.stage{position:relative;flex:1;height:100%;display:flex;align-items:center}
+.frame{position:relative;border:1px solid #262a31;border-radius:3px;background:#101318;box-shadow:0 30px 80px rgba(0,0,0,.6);overflow:hidden;display:flex;flex-direction:column}
+.toolbar{height:44px;display:flex;align-items:center;gap:12px;padding:0 12px;background:#171a1f;border-bottom:1px solid #262a31;flex-shrink:0}
+.dots{display:flex;gap:6px}.dots span{width:10px;height:10px;border-radius:50%;background:#3a404a}
+.nav{display:flex;gap:10px;color:#808997;font-size:16px}
+.address{flex:1;height:28px;border:1px solid #262a31;border-radius:3px;background:#0a0c0f;color:#a6aeba;font-family:'JetBrains Mono',monospace;font-size:12px;display:flex;align-items:center;gap:8px;padding:0 10px}
+.ext{display:flex;align-items:center;gap:10px;color:#808997}
+.ext-icon{position:relative;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:3px;background:#22262d;border:1px solid #3a404a}
+.badge{position:absolute;right:-6px;bottom:-5px;height:13px;padding:0 3px;border-radius:2px;color:#fff;font-family:'JetBrains Mono',monospace;font-size:8.5px;font-weight:700;display:flex;align-items:center;border:1px solid #171a1f}
+.viewport{position:relative;flex:1;background:#0c0e11}
+.site{padding:28px 36px;display:flex;flex-direction:column;gap:14px;opacity:.9}
+.site-bar{height:14px;width:160px;background:#22262d}
+.site-h{height:30px;width:420px;background:#2a2f37;margin-top:8px}
+.site-p{height:10px;width:520px;background:#1d2128}.site-p.short{width:380px}
+.site-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:10px}.site-grid div{height:120px;background:#171a1f;border:1px solid #22262d}
+.popup{position:absolute;right:14px;box-shadow:0 24px 60px rgba(0,0,0,.7)}
+.popup > div{border-color:#3a404a !important}
+.options-wrap{position:relative;width:1280px;height:800px;transform-origin:top left}
+.tile{width:440px;height:280px;background:#0a0c0f;display:flex;align-items:center;gap:28px;padding:0 40px;position:relative;overflow:hidden}
+.tile::before{content:"";position:absolute;inset:0;background-image:linear-gradient(#171a1f 1px,transparent 1px),linear-gradient(90deg,#171a1f 1px,transparent 1px);background-size:32px 32px;opacity:.5}
+.tile .logo{position:relative;width:128px;height:128px;flex-shrink:0}
+.tile .t{position:relative;display:flex;flex-direction:column;gap:6px}
+.tile .t b{font-size:30px;font-weight:700;letter-spacing:-0.03em;line-height:1.05}
+.tile .t span{font-size:15px;color:#a6aeba}
+.tile .t .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.tile .t .tags i{white-space:nowrap;font-style:normal;font-family:'JetBrains Mono',monospace;font-size:11px;color:#38d0ea;border:1px solid #1f4a55;background:#08262c;border-radius:3px;padding:3px 7px}
+.marquee{width:1400px;height:560px;background:#0a0c0f;display:flex;align-items:center;padding:0 88px;gap:60px;position:relative;overflow:hidden}
+.marquee::before{content:"";position:absolute;inset:0;background-image:linear-gradient(#171a1f 1px,transparent 1px),linear-gradient(90deg,#171a1f 1px,transparent 1px);background-size:40px 40px;opacity:.5}
+.marquee .copy{width:560px}
+.marquee h1{font-size:56px}
+.marquee .stage{justify-content:flex-end}
+</style></head><body><div class="shot"><div class="copy"><div class="eyebrow">Timer</div><h1>Paused, with a way back.</h1><p class="sub">A live countdown, one button to resume early, and quick extensions when five minutes were not enough.</p><div class="bullets"><div>Badge shows the remaining time</div><div>Nothing is filtered while paused, and the popup says so</div><div>Resumes even if the browser is closed</div></div></div><div class="stage">
+<div class="frame" style="width:760px;height:600px">
+  <div class="toolbar">
+    <div class="dots"><span></span><span></span><span></span></div>
+    <div class="nav"><span>‹</span><span>›</span><span>↻</span></div>
+    <div class="address"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#45d483" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="1"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>app.example-bank.com</div>
+    <div class="ext"><span class="ext-icon"><svg width="20" height="20" viewBox="0 0 512 512" aria-hidden="true">
+  <g fill="#45d483">
+    <path d="M256 128c-12-48-64-74-130-60 30 52 84 72 130 60z"/>
+    <path d="M256 128c12-48 64-74 130-60-30 52-84 72-130 60z"/>
+  </g>
+  <g fill="#ff4d42" transform="translate(256 300) rotate(45)">
+    <rect x="-136" y="-136" width="70" height="70" rx="11"/>
+    <rect x="-52" y="-136" width="70" height="70" rx="11"/>
+    <rect x="32" y="-136" width="70" height="70" rx="11"/>
+    <rect x="-136" y="-52" width="70" height="70" rx="11"/>
+    <rect x="-52" y="-52" width="70" height="70" rx="11"/>
+    <rect x="32" y="-52" width="70" height="70" rx="11"/>
+    <rect x="-136" y="32" width="70" height="70" rx="11"/>
+    <rect x="-52" y="32" width="70" height="70" rx="11"/>
+    <rect x="32" y="32" width="70" height="70" rx="11"/>
+  </g>
+</svg><span class="badge" style="background:#875900">4:32</span></span><span class="ext-more">⋮</span></div>
+  </div>
+  <div class="viewport">
+    <div class="site">
+      <div class="site-bar"></div>
+      <div class="site-h"></div>
+      <div class="site-p"></div><div class="site-p short"></div><div class="site-p"></div>
+      <div class="site-grid"><div></div><div></div><div></div></div>
+    </div>
+    <div class="popup" style="top:44px"><div style="width: 320px; height: 356px; box-sizing: border-box; background: #0a0c0f; color: #f2f4f7; font-family: 'Inter', system-ui, sans-serif; font-size: 13px; line-height: 1.35; letter-spacing: -0.01em; display: flex; flex-direction: column; border: 1px solid #262a31">
+
+  <div style="display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 8px 0 12px; border-bottom: 1px solid #262a31; flex-shrink: 0">
+    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5.5c-1.5-2.5-4-2.5-5.5-1.5 1.5 2 3.5 2.5 5.5 1.5z" fill="#45d483"></path><path d="M12 5.5c1.5-2.5 4-2.5 5.5-1.5-1.5 2-3.5 2.5-5.5 1.5z" fill="#45d483"></path><circle cx="12" cy="9" r="3.1" fill="#ff4d42"></circle><circle cx="8.4" cy="12.6" r="3.1" fill="#ff4d42"></circle><circle cx="15.6" cy="12.6" r="3.1" fill="#ff4d42"></circle><circle cx="9.9" cy="16.6" r="3.1" fill="#ff4d42"></circle><circle cx="14.1" cy="16.6" r="3.1" fill="#ff4d42"></circle><circle cx="12" cy="20.2" r="2.5" fill="#ff4d42"></circle></svg>
+    <div style="font-weight: 600; font-size: 13px">Pi-hole Switch</div>
+    <div aria-label="Connected Pi-holes" style="margin-left: auto; display: flex; gap: 4px">
+      <button type="button" title="Home · paused · 04:32 left" style="display: inline-flex; align-items: center; gap: 5px; height: 22px; padding: 0 7px; border: 1px solid #262a31; border-radius: 3px; background: #171a1f; color: #a6aeba; font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 500; cursor: pointer"><span style="width: 5px; height: 5px; border-radius: 50%; background: #ffb000"></span>Home</button>
+      <button type="button" title="Office · paused · 04:32 left" style="display: inline-flex; align-items: center; gap: 5px; height: 22px; padding: 0 7px; border: 1px solid #262a31; border-radius: 3px; background: #171a1f; color: #a6aeba; font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 500; cursor: pointer"><span style="width: 5px; height: 5px; border-radius: 50%; background: #ffb000"></span>Office</button>
+    </div>
+    <button type="button" aria-label="Settings" style="display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border: 1px solid transparent; border-radius: 3px; background: transparent; color: #808997; cursor: pointer; padding: 0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></svg></button>
+  </div>
+
+  <section aria-label="Blocking" style="margin: 10px 10px 0; border: 1px solid #5c3d00; border-radius: 3px; background: #0f1216">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 10px 12px">
+      <span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 50%; background: #ffb000; box-shadow: 0 0 0 3px rgba(255, 176, 0, 0.22); flex-shrink: 0"></span>
+      <div style="flex: 1; min-width: 0">
+        <div style="font-weight: 600">Blocking paused</div>
+        <div style="font-size: 11px; color: #808997">Both Pi-holes · back in <span style="font-family: 'JetBrains Mono', monospace; font-weight: 600; color: #ffb000">04:32</span></div>
+      </div>
+      <button type="button" role="switch" aria-checked="false" aria-label="Blocking off" style="position: relative; width: 40px; height: 22px; border: 1px solid #3a404a; border-radius: 3px; background: #22262d; padding: 0; cursor: pointer; flex-shrink: 0"><span style="position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 2px; background: #808997"></span></button>
+    </div>
+    <div style="border-top: 1px solid #262a31; padding: 8px 12px 10px; display: flex; flex-direction: column; gap: 6px">
+      <div style="display: flex; align-items: center; justify-content: space-between">
+        <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #808997">Timer</span>
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #5a6371">T toggles</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 4px">
+        <button type="button" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 24px; border: 1px solid #f2f4f7; border-radius: 3px; background: #f2f4f7; color: #0a0c0f; font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 600; cursor: pointer; padding: 0"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v10"></path><path d="M18.4 6.6a9 9 0 1 1-12.8 0"></path></svg>Enable now</button>
+        <button type="button" style="height: 24px; border: 1px solid #262a31; border-radius: 3px; background: #171a1f; color: #f2f4f7; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; cursor: pointer; padding: 0">+5m</button>
+        <button type="button" style="height: 24px; border: 1px solid #262a31; border-radius: 3px; background: #171a1f; color: #f2f4f7; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; cursor: pointer; padding: 0">+1h</button>
+      </div>
+    </div>
+  </section>
+
+  <section aria-label="Current site" style="margin: 10px 10px 0; border: 1px solid #262a31; border-radius: 3px; background: #0f1216">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 10px 12px">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#808997" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+      <div style="flex: 1; min-width: 0">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">app.example-bank.com</div>
+        <div style="font-size: 11px; color: #808997">Paused · nothing is filtered right now</div>
+      </div>
+    </div>
+    <div style="border-top: 1px solid #262a31; padding: 8px 12px 8px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px">
+      <button type="button" style="display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 8px; border: 1px solid #262a31; border-radius: 3px; background: #171a1f; color: #f2f4f7; font-family: 'Inter', system-ui, sans-serif; font-size: 12px; font-weight: 500; cursor: pointer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#45d483" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>Allow<kbd style="display: inline-flex; align-items: center; justify-content: center; min-width: 16px; height: 16px; padding: 0 4px; margin-left: auto; border: 1px solid #3a404a; border-radius: 2px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #808997">A</kbd></button>
+      <button type="button" style="display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 8px; border: 1px solid #262a31; border-radius: 3px; background: #171a1f; color: #f2f4f7; font-family: 'Inter', system-ui, sans-serif; font-size: 12px; font-weight: 500; cursor: pointer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff4d42" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m8.5 8.5 7 7"></path></svg>Deny<kbd style="display: inline-flex; align-items: center; justify-content: center; min-width: 16px; height: 16px; padding: 0 4px; margin-left: auto; border: 1px solid #3a404a; border-radius: 2px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #808997">D</kbd></button>
+    </div>
+    <div style="display: flex; align-items: center; justify-content: space-between; padding: 0 12px 10px; font-size: 11px">
+      <a href="#allow-temp" style="display: inline-flex; align-items: center; gap: 4px; color: #38d0ea; text-decoration: none; font-weight: 500"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>Allow for 10 min</a>
+      <a href="#open-admin" style="display: inline-flex; align-items: center; gap: 4px; color: #808997; text-decoration: none; font-weight: 500">Open in Pi-hole<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg></a>
+    </div>
+  </section>
+
+  <div style="margin-top: auto; display: flex; align-items: center; gap: 8px; height: 30px; padding: 0 12px; border-top: 1px solid #262a31; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #808997; flex-shrink: 0">
+    <span style="white-space: nowrap">Core 6.4.2 · FTL 6.6.1</span>
+    <span style="margin-left: auto; white-space: nowrap; font-family: 'Inter', system-ui, sans-serif; font-size: 10px; color: #5a6371">Reloads tab on resume</span>
+  </div>
+</div></div>
+  </div>
+</div></div></div></body></html>
