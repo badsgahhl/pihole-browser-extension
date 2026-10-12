@@ -103,7 +103,7 @@ popup:
     blockedByYou: Bloqueado por você
     allowedByYou: Permitido por você
     allowedByList: Permitido pela lista $1
-    allowedTemp: Permitido por $1
+    allowedTemp: Permitido por mais $1 min
     notBlocked: Não bloqueado
     paused: Pausado · nada está sendo filtrado agora
     checking: Verificando…

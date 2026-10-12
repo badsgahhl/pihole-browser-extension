@@ -102,7 +102,7 @@ popup:
     blockedByYou: Blocked by you
     allowedByYou: Allowed by you
     allowedByList: Allowed by list $1
-    allowedTemp: Allowed for $1
+    allowedTemp: Allowed for $1 min
     notBlocked: Not blocked
     paused: Paused · nothing is filtered right now
     checking: Checking…

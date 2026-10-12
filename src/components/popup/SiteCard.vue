@@ -74,7 +74,6 @@ import BasePanel from '@/components/base/BasePanel.vue'
 import PanelSection from '@/components/base/PanelSection.vue'
 import { Button } from '@/components/ui/button'
 import { useCountdown } from '@/composables/useCountdown'
-import { formatDuration } from '@/lib/duration'
 import { errorMessage } from '@/lib/error-messages'
 import type { PiholeErrorData } from '@/lib/pihole/errors'
 import type { ListType, SiteStatus } from '@/lib/pihole/site-status'
@@ -145,7 +144,7 @@ const statusText = computed(() => {
     case 'allowed-temp': {
       // Minute granularity: the line is a live region and must not re-announce every second.
       const minutes = Math.max(1, Math.ceil((tempCountdown.remainingMs.value ?? 0) / 60_000))
-      return t('popup.site.allowedTemp', [formatDuration(minutes * 60)])
+      return t('popup.site.allowedTemp', [String(minutes)])
     }
     case 'allowed-list':
       return t('popup.site.allowedByList', [site?.listName ?? ''])
