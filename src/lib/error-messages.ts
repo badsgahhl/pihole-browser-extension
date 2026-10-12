@@ -42,6 +42,8 @@ export function errorMessage(error: PiholeErrorData): string {
       return i18n.t('errors.bad_request', [detail(error)])
     case 'not_found':
       return i18n.t('errors.not_found')
+    case 'not_pihole':
+      return i18n.t('errors.not_pihole', [error.hint ?? ''])
     case 'http':
       return i18n.t('errors.http', [String(error.status ?? '')])
     case 'unknown':

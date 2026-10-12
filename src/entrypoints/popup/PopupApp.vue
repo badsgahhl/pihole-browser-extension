@@ -19,7 +19,7 @@
       <PermissionBanner v-if="needsPermission" @grant="openOptions('/pi-holes')" />
       <BlockingCard
         :state="state"
-        :disabled="actions.pending.value !== null"
+        :busy="actions.pending.value !== null"
         :error="actions.error.value"
         :error-source="errorSourceName(actions.error.value, state.instances)"
         @toggle="actions.toggle()"

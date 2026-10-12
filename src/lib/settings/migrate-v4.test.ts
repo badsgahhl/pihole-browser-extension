@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import { fakeBrowser } from 'wxt/testing/fake-browser'
 
-import { DEFAULT_SETTINGS } from './defaults'
+import { DEFAULT_SETTINGS, MAX_INSTANCES } from './defaults'
 import { LEGACY_KEYS, mapLegacy, migrateFromV4, readLegacy } from './migrate-v4'
 import { migratedItem, settingsItem } from './storage'
 
@@ -87,6 +87,19 @@ describe('mapLegacy', () => {
   })
 })
 
+describe('mapLegacy limits', () => {
+  it('keeps at most MAX_INSTANCES Pi-holes and lists the rest as skipped', () => {
+    const many = Array.from({ length: MAX_INSTANCES + 2 }, (_, i) => ({
+      pi_uri_base: `http://pi${i}.example`,
+      api_key: ''
+    }))
+    const { settings, skipped } = mapLegacy({ pi_hole_settings: many, sessions: [], sessionKeys: [] })
+    expect(settings.instances).toHaveLength(MAX_INSTANCES)
+    expect(skipped).toHaveLength(2)
+    expect(skipped[0]).toContain('not carried over')
+  })
+})
+
 describe('migrateFromV4', () => {
   it('does nothing on a fresh install', async () => {
     expect(await migrateFromV4()).toBeNull()
@@ -117,6 +130,15 @@ describe('migrateFromV4', () => {
     // A second run is a no-op even if legacy keys reappear.
     await fakeBrowser.storage.local.set({ pi_hole_settings: [{ pi_uri_base: 'http://other', api_key: '' }] })
     expect(await migrateFromV4()).toBeNull()
+    expect((await settingsItem.getValue()).instances).toHaveLength(2)
+  })
+
+  it('serves concurrent callers with one run', async () => {
+    await fakeBrowser.storage.local.set(v4Storage)
+    const logout = vi.fn().mockResolvedValue(undefined)
+    const [first, second] = await Promise.all([migrateFromV4({ logout }), migrateFromV4({ logout })])
+    expect(first).toBe(second)
+    expect(logout).toHaveBeenCalledTimes(2)
     expect((await settingsItem.getValue()).instances).toHaveLength(2)
   })
 

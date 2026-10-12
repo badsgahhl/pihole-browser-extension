@@ -33,6 +33,20 @@ export const tempAllowItem = storage.defineItem<TempAllowEntry[]>('local:tempAll
 const MAX_EXPIRY_ATTEMPTS = 10
 const RETRY_DELAY_MS = 60_000
 
+/**
+ * Writes to the entry list run one after another and re-read it first: an expiry and a new
+ * temporary allow can overlap, and a plain read-modify-write would drop one of them.
+ */
+let writeQueue: Promise<unknown> = Promise.resolve()
+
+function updateEntries(update: (entries: TempAllowEntry[]) => TempAllowEntry[]): Promise<void> {
+  const next = writeQueue.then(async () => {
+    await tempAllowItem.setValue(update(await tempAllowItem.getValue()))
+  })
+  writeQueue = next.catch(() => undefined)
+  return next
+}
+
 export function tempAllowComment(expiresAt: number): string {
   return `${TEMP_COMMENT_PREFIX}${new Date(expiresAt).toISOString()}`
 }
@@ -45,7 +59,9 @@ export function tempAllowComment(expiresAt: number): string {
 export async function tempAllow(hostname: string, minutes?: number): Promise<SiteMutationResult> {
   const settings = await readSettings()
   const contexts = await resolveContexts(settings)
-  const expiresAt = Date.now() + (minutes ?? settings.tempAllowMinutes) * 60_000
+  const duration =
+    typeof minutes === 'number' && Number.isFinite(minutes) && minutes > 0 ? minutes : settings.tempAllowMinutes
+  const expiresAt = Date.now() + duration * 60_000
   const comment = tempAllowComment(expiresAt)
 
   const results = await Promise.allSettled(
@@ -82,8 +98,7 @@ export async function tempAllow(hostname: string, minutes?: number): Promise<Sit
       instanceIds,
       attempts: 0
     }
-    const existing = (await tempAllowItem.getValue()).filter((e) => e.hostname !== hostname)
-    await tempAllowItem.setValue([...existing, entry])
+    await updateEntries((entries) => [...entries.filter((e) => e.hostname !== hostname), entry])
     await scheduleTempAllowExpiry(entry.id, expiresAt)
   }
 
@@ -126,10 +141,10 @@ export async function expireTempAllow(id: string): Promise<void> {
   const failed = results.some((result) => result.status === 'rejected')
 
   if (failed && entry.attempts + 1 < MAX_EXPIRY_ATTEMPTS) {
-    await tempAllowItem.setValue(entries.map((e) => (e.id === id ? { ...e, attempts: e.attempts + 1 } : e)))
+    await updateEntries((current) => current.map((e) => (e.id === id ? { ...e, attempts: e.attempts + 1 } : e)))
     await scheduleTempAllowExpiry(id, Date.now() + RETRY_DELAY_MS)
   } else {
-    await tempAllowItem.setValue(entries.filter((e) => e.id !== id))
+    await updateEntries((current) => current.filter((e) => e.id !== id))
     await clearTempAllowAlarm(id)
   }
   await invalidateSiteCache(entry.hostname)
@@ -150,6 +165,6 @@ export async function forgetTempAllow(hostname: string): Promise<void> {
   const entries = await tempAllowItem.getValue()
   const gone = entries.filter((e) => e.hostname === hostname)
   if (gone.length === 0) return
-  await tempAllowItem.setValue(entries.filter((e) => e.hostname !== hostname))
+  await updateEntries((current) => current.filter((e) => e.hostname !== hostname))
   for (const entry of gone) await clearTempAllowAlarm(entry.id)
 }

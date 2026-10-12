@@ -23,12 +23,14 @@
       <BaseSwitch
         :model-value="switchOn"
         :label="t('popup.blocking.switch')"
-        :disabled="disabled || state.overall === 'error'"
+        :disabled="state.overall === 'error'"
         @update:model-value="emit('toggle')"
       />
     </div>
 
-    <PanelSection class="flex flex-col gap-1.5 pt-2 pb-2.5">
+    <!-- Controls stay enabled while an action runs: dimming them would flash on every click, and
+         useActions ignores a second action anyway. aria-busy tells assistive tech what is going on. -->
+    <PanelSection class="flex flex-col gap-1.5 pt-2 pb-2.5" :aria-busy="busy">
       <PanelHeading v-if="state.overall !== 'error'">
         {{ paused ? t('popup.blocking.timer') : t('popup.blocking.disableAllFor') }}
         <template #right>
@@ -36,7 +38,7 @@
         </template>
       </PanelHeading>
       <div v-if="state.overall === 'error'" class="flex gap-1.5">
-        <Button variant="secondary" size="sm" class="flex-1" :disabled="disabled" @click="emit('retry')">
+        <Button variant="secondary" size="sm" class="flex-1" @click="emit('retry')">
           {{ t('common.retry') }}
         </Button>
         <Button v-if="actionNeeded" variant="secondary" size="sm" class="flex-1" @click="emit('openSettings')">
@@ -45,12 +47,11 @@
       </div>
       <ResumeRow
         v-else-if="paused"
-        :disabled="disabled"
         :can-extend="state.timerEndsAt !== null"
         @resume="emit('resume')"
         @extend="emit('extend', $event)"
       />
-      <PausePresets v-else :disabled="disabled" @pick="emit('pause', $event)" />
+      <PausePresets v-else @pick="emit('pause', $event)" />
       <p v-if="error" role="alert" class="text-destructive flex items-center gap-2 text-[11px]">
         <span class="min-w-0 flex-1">
           <span v-if="errorSource" class="font-semibold">{{ errorSource }} · </span>{{ errorMessage(error) }}
@@ -83,7 +84,8 @@ import ResumeRow from './ResumeRow.vue'
 const props = withDefaults(
   defineProps<{
     state: ExtensionState
-    disabled?: boolean
+    /** An action is in flight. Shown to assistive tech only, see the template. */
+    busy?: boolean
     error?: PiholeErrorData | null
     /** Name of the Pi-hole the error came from, shown when several are configured. */
     errorSource?: string | null

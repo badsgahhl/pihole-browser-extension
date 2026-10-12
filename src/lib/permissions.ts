@@ -29,19 +29,19 @@ export async function missingOrigins(settings: Settings): Promise<string[]> {
   return missing
 }
 
-/** Gives back origin permissions that no configured instance uses anymore. */
-export async function pruneHostPermissions(settings: Settings): Promise<void> {
-  const needed = new Set(settings.instances.map((instance) => originPattern(instance.url)))
-  let granted: string[]
+/**
+ * Gives back the origins of instances that were removed or moved, unless another instance still
+ * uses them. Only patterns the extension requested itself are touched; whatever the user granted
+ * through the browser's own site-access UI is left alone.
+ */
+export async function releaseHostPermissions(previous: Settings, next: Settings): Promise<void> {
+  const stillNeeded = new Set(next.instances.map((instance) => originPattern(instance.url)))
+  const release = [...new Set(previous.instances.map((instance) => originPattern(instance.url)))].filter(
+    (pattern) => !stillNeeded.has(pattern)
+  )
+  if (release.length === 0) return
   try {
-    granted = (await browser.permissions.getAll()).origins ?? []
-  } catch {
-    return
-  }
-  const stale = granted.filter((origin) => !needed.has(origin) && !origin.includes('*://*'))
-  if (stale.length === 0) return
-  try {
-    await browser.permissions.remove({ origins: stale })
+    await browser.permissions.remove({ origins: release })
   } catch {
     // Not fatal: the permission just stays granted.
   }

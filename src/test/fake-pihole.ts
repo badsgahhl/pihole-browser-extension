@@ -42,6 +42,20 @@ interface Failure {
   once: boolean
 }
 
+type RequestTest = (method: string, path: string, sid: string | null) => boolean
+
+interface Delay {
+  test: RequestTest
+  ms: number
+  once: boolean
+}
+
+interface Override {
+  test: RequestTest
+  respond: () => Response
+  once: boolean
+}
+
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json' } })
 }
@@ -72,6 +86,8 @@ export class FakePihole {
   requests: RecordedRequest[] = []
 
   private failures: Failure[] = []
+  private delays: Delay[] = []
+  private overrides: Override[] = []
   private nextId = 1
   private sidCounter = 0
 
@@ -90,6 +106,19 @@ export class FakePihole {
 
   clearFailures(): void {
     this.failures = []
+  }
+
+  /**
+   * Holds the answer to a matching request back for `ms`. The answer is computed first, so a request
+   * that was in flight when something else changed the Pi-hole still reports the old state.
+   */
+  delayWhen(test: RequestTest, ms: number, options: { once?: boolean } = {}): void {
+    this.delays.push({ test, ms, once: options.once ?? true })
+  }
+
+  /** Answers a matching request with whatever `respond` builds, e.g. a proxy's HTML login page. */
+  respondWhen(test: RequestTest, respond: () => Response, options: { once?: boolean } = {}): void {
+    this.overrides.push({ test, respond, once: options.once ?? true })
   }
 
   addDomain(
@@ -187,6 +216,19 @@ export class FakePihole {
     const body: unknown = text ? JSON.parse(text) : undefined
     this.requests.push({ method, path, sid, query: url.search, body })
 
+    const override = this.overrides.find((o) => o.test(method, path, sid))
+    if (override) {
+      if (override.once) this.overrides = this.overrides.filter((o) => o !== override)
+      return override.respond()
+    }
+    const delay = this.delays.find((d) => d.test(method, path, sid))
+    if (delay?.once) this.delays = this.delays.filter((d) => d !== delay)
+    const response = this.route(method, path, sid, body)
+    if (delay) await new Promise((resolve) => setTimeout(resolve, delay.ms))
+    return response
+  }
+
+  private route(method: string, path: string, sid: string | null, body: unknown): Response {
     const failure = this.failures.find((f) => f.test(method, path))
     if (failure) {
       if (failure.once) this.failures = this.failures.filter((f) => f !== failure)

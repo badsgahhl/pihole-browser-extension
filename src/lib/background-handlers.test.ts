@@ -70,6 +70,22 @@ describe('background handlers', () => {
     expect((await stateItem.getValue()).overall).toBe('enabled')
   })
 
+  it('migrates once when the worker start, onInstalled and onStartup overlap', async () => {
+    await settingsItem.removeValue()
+    await fakeBrowser.storage.local.set({
+      pi_hole_settings: [{ pi_uri_base: `${HOME}/admin`, api_key: 'secret' }]
+    })
+
+    await Promise.all([bootstrap(), handleInstalled({ reason: 'update', previousVersion: '4.0.4' }), bootstrap()])
+
+    expect((await settingsItem.getValue()).instances).toHaveLength(1)
+    expect(await migratedItem.getValue()).toMatchObject({ from: '4.0.4', instances: 1 })
+    const removeAll = (fakeBrowser as unknown as { contextMenus: { removeAll: { mock: { calls: unknown[] } } } })
+      .contextMenus.removeAll
+    expect(removeAll.mock.calls).toHaveLength(1)
+    expect((await stateItem.getValue()).overall).toBe('enabled')
+  })
+
   it('runs hotkeys through the same actions', async () => {
     await fakeBrowser.tabs.create({ url: 'https://ads.example.com/x', active: true })
     await handleCommand(HOTKEYS.deny)

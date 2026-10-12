@@ -6,7 +6,7 @@ import { contextFor, HOME, instance, permissionsMock, simulateWorkerRestart } fr
 
 import { PiholeError } from './errors'
 import type { InstanceContext } from './instances'
-import { listSessions, logout, withSession } from './session'
+import { listSessions, logout, recentLoginFailure, withSession } from './session'
 
 describe('withSession', () => {
   let pihole: FakePihole
@@ -50,6 +50,40 @@ describe('withSession', () => {
     pihole.expireSessions()
     expect(await status()).toMatchObject({ blocking: 'enabled' })
     expect(pihole.requestsTo('/auth', 'POST')).toHaveLength(2)
+  })
+
+  it('reuses the session a parallel call opened after a late 401', async () => {
+    await status()
+    pihole.expireSessions()
+    // The second stale call answers late, after the first one has already logged in again.
+    let stale = 0
+    pihole.delayWhen((_method, path, sid) => path === '/dns/blocking' && sid === 'sid-1' && ++stale === 2, 40)
+    await Promise.all([status(), status()])
+    expect(pihole.requestsTo('/auth', 'POST')).toHaveLength(2)
+    expect(pihole.sessionCount).toBe(1)
+  })
+
+  it('remembers a refused password for background refreshes while user actions still try', async () => {
+    pihole.password = 'other'
+    await expect(status()).rejects.toMatchObject({ kind: 'unauthorized' })
+    expect(await recentLoginFailure(ctx, 60_000)).toMatchObject({ kind: 'unauthorized' })
+    expect(await recentLoginFailure(ctx, 0)).toBeNull()
+
+    await expect(status()).rejects.toMatchObject({ kind: 'unauthorized' })
+    expect(pihole.requestsTo('/auth', 'POST')).toHaveLength(2)
+
+    pihole.password = 'secret'
+    expect(await status()).toMatchObject({ blocking: 'enabled' })
+    expect(await recentLoginFailure(ctx, 60_000)).toBeNull()
+  })
+
+  it('rejects an address that answers with a web page instead of the API', async () => {
+    pihole.respondWhen(
+      () => true,
+      () => new Response('<html>login</html>', { status: 200, headers: { 'Content-Type': 'text/html' } }),
+      { once: false }
+    )
+    await expect(status()).rejects.toMatchObject({ kind: 'not_pihole', hint: expect.stringContaining('text/html') })
   })
 
   it('reports a wrong password without retrying', async () => {

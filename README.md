@@ -31,7 +31,7 @@ Pause blocking for a while, allow or deny the site you are on, and see at a glan
 ## Requirements
 
 - Pi-hole **v6** or newer. The extension uses the v6 REST API. For Pi-hole v5 stay on extension version 4.x.
-- Chrome 102+, Edge, or Firefox 128+.
+- Chrome 103+, Edge, or Firefox 140+.
 
 ## Install
 

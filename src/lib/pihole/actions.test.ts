@@ -5,7 +5,15 @@ import { ALARM_PAUSE_END } from '@/lib/alarms'
 import { lastPauseItem, settingsItem } from '@/lib/settings/storage'
 import { stateItem } from '@/lib/state'
 import type { FakePihole } from '@/test/fake-pihole'
-import { HOME, instance, OFFICE, seedSettings, simulateWorkerRestart, twoPiholes } from '@/test/helpers'
+import {
+  HOME,
+  instance,
+  OFFICE,
+  permissionsMock,
+  seedSettings,
+  simulateWorkerRestart,
+  twoPiholes
+} from '@/test/helpers'
 
 import { extendPause, refreshAll, saveSettings, setBlocking, testInstance, toggle } from './actions'
 
@@ -49,6 +57,33 @@ describe('actions', () => {
     it('shares one run between concurrent callers', async () => {
       await Promise.all([refreshAll('popup'), refreshAll('alarm'), refreshAll('manual')])
       expect(home.requestsTo('/dns/blocking')).toHaveLength(1)
+    })
+
+    it('fetches again when a pause lands while it is in flight', async () => {
+      await refreshAll('startup')
+      home.delayWhen((_method, path) => path === '/dns/blocking', 60)
+      office.delayWhen((_method, path) => path === '/dns/blocking', 60)
+
+      const refreshing = refreshAll('alarm')
+      await new Promise((resolve) => setTimeout(resolve, 10))
+      await setBlocking({ enabled: false, seconds: 300 })
+      const state = await refreshing
+
+      expect(state.overall).toBe('paused')
+      expect((await stateItem.getValue()).overall).toBe('paused')
+    })
+
+    it('does not retry a refused password on the minute alarm', async () => {
+      home.password = 'other'
+      await refreshAll('startup')
+      expect(home.requestsTo('/auth', 'POST')).toHaveLength(1)
+
+      const state = await refreshAll('alarm')
+      expect(state.instances[0]?.error?.kind).toBe('unauthorized')
+      expect(home.requestsTo('/auth', 'POST')).toHaveLength(1)
+
+      await refreshAll('popup')
+      expect(home.requestsTo('/auth', 'POST')).toHaveLength(2)
     })
   })
 
@@ -152,6 +187,24 @@ describe('actions', () => {
       })
       expect(await testInstance({ url: '::::', password: 'x' })).toMatchObject({ ok: false, reachable: false })
     })
+  })
+
+  it('testInstance hands fresh versions to the configured instance right away', async () => {
+    await refreshAll('startup')
+    home.versions.core = 'v6.4.3'
+    await testInstance({ url: HOME, password: 'secret' })
+    expect((await stateItem.getValue()).instances[0]?.versions?.core).toBe('v6.4.3')
+  })
+
+  it('saveSettings releases only the origin of a removed instance', async () => {
+    await refreshAll('startup')
+    const settings = await settingsItem.getValue()
+    await saveSettings({ instances: settings.instances.filter((i) => i.url !== OFFICE) })
+    expect(permissionsMock().remove).toHaveBeenCalledWith({ origins: ['https://office.example/*'] })
+
+    permissionsMock().remove.mockClear()
+    await saveSettings({ badgeMode: 'percent' })
+    expect(permissionsMock().remove).not.toHaveBeenCalled()
   })
 
   it('saveSettings logs out of a changed instance and refreshes', async () => {

@@ -42,6 +42,20 @@ describe('temporary allow', () => {
     expect(await fakeBrowser.alarms.get(tempAllowAlarmName(entry!.id))).toBeTruthy()
   })
 
+  it('keeps an entry added while another one is expiring', async () => {
+    await tempAllow('one.example')
+    const [one] = await tempAllowItem.getValue()
+    home.delayWhen((_method, path) => path.startsWith('/search/one.example'), 60)
+
+    const expiring = expireTempAllow(one!.id)
+    await new Promise((resolve) => setTimeout(resolve, 10))
+    await tempAllow('two.example')
+    await expiring
+
+    expect((await tempAllowItem.getValue()).map((entry) => entry.hostname)).toEqual(['two.example'])
+    expect(home.domains.map((entry) => entry.domain)).toEqual(['two.example'])
+  })
+
   it('leaves a permanent allow entry alone', async () => {
     home.addDomain('allow', 'exact', 'cdn.example.com', 'mine')
     const result = await tempAllow('cdn.example.com', 5)

@@ -1,6 +1,6 @@
 import { browser } from '#imports'
 
-import { DEFAULT_SETTINGS } from './defaults'
+import { DEFAULT_SETTINGS, MAX_INSTANCES } from './defaults'
 import { type Instance, newInstanceId, type Settings } from './schema'
 import { type MigrationMarker, migratedItem, writeSettings } from './storage'
 import { instanceHostname, normalizeInstanceUrl } from './url'
@@ -120,6 +120,10 @@ export function mapLegacy(
       continue
     }
     usedUrls.add(url.toLowerCase())
+    if (instances.length >= MAX_INSTANCES) {
+      skipped.push(`Pi-hole ${index + 1}: ${url} not carried over, v5 keeps up to ${MAX_INSTANCES} Pi-holes`)
+      continue
+    }
 
     const hostname = instanceHostname(url)
     const count = (usedNames.get(hostname) ?? 0) + 1
@@ -157,7 +161,18 @@ export function mapLegacy(
  * Carries v4 storage over to the v5 settings object exactly once. Returns `null` when there is
  * nothing to migrate or it already happened.
  */
-export async function migrateFromV4(options: MigrateOptions = {}): Promise<MigrationReport | null> {
+let migrating: Promise<MigrationReport | null> | null = null
+
+export function migrateFromV4(options: MigrateOptions = {}): Promise<MigrationReport | null> {
+  // onInstalled and the worker's bootstrap both ask at start-up; one run serves both.
+  if (migrating) return migrating
+  migrating = runMigration(options).finally(() => {
+    migrating = null
+  })
+  return migrating
+}
+
+async function runMigration(options: MigrateOptions): Promise<MigrationReport | null> {
   if ((await migratedItem.getValue()) !== null) return null
 
   const snapshot = await readLegacy()
@@ -166,14 +181,16 @@ export async function migrateFromV4(options: MigrateOptions = {}): Promise<Migra
   const { settings, skipped } = mapLegacy(snapshot)
   await writeSettings(settings)
 
+  // Legacy keys (plaintext passwords among them) go before the marker: a worker dying in between
+  // then re-runs a migration of nothing rather than keeping the keys forever.
+  await browser.storage.local.remove([...LEGACY_KEYS, ...snapshot.sessionKeys])
+
   const marker: MigrationMarker = {
     from: options.previousVersion ?? 'unknown',
     at: new Date().toISOString(),
     instances: settings.instances.length
   }
   await migratedItem.setValue(marker)
-
-  await browser.storage.local.remove([...LEGACY_KEYS, ...snapshot.sessionKeys])
 
   if (options.logout) {
     for (const session of snapshot.sessions) {

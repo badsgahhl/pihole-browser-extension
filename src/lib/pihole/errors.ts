@@ -6,6 +6,7 @@ export type PiholeErrorKind =
   | 'seats'
   | 'rate_limited'
   | 'duplicate'
+  | 'not_pihole'
   | 'regex'
   | 'bad_request'
   | 'not_found'
@@ -71,7 +72,14 @@ export interface ApiOutcome<T = unknown> {
 
 interface ErrorBody {
   error?: { key?: string; message?: string; hint?: string | null }
-  session?: { valid?: boolean; message?: string | null }
+  session?: { valid?: boolean; message?: string | null; totp?: boolean }
+}
+
+export const TOTP_HINT = 'Two-factor authentication (TOTP) is on; use an app password from Pi-hole › Settings › API'
+
+/** The address answered, but not like a Pi-hole API: a login page, an SPA shell, a proxy error page. */
+export function notPiholeError(instanceId: string | undefined, status: number, detail: string): PiholeError {
+  return new PiholeError({ kind: 'not_pihole', instanceId, status, message: 'Not a Pi-hole API answer', hint: detail })
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -96,10 +104,13 @@ export function errorFromOutcome(instanceId: string | undefined, outcome: ApiOut
   const body = readBody(outcome.error)
   const apiKey = body.error?.key
   const hint = body.error?.hint ?? undefined
-  const message = body.error?.message ?? body.session?.message ?? outcome.response.statusText ?? `HTTP ${status}`
+  // statusText is an empty string over HTTP/2, so `||` rather than `??`.
+  const message = body.error?.message ?? body.session?.message ?? (outcome.response.statusText || `HTTP ${status}`)
   const base = { instanceId, status, apiKey, message, hint }
 
-  if (status === 401) return new PiholeError({ ...base, kind: 'unauthorized' })
+  if (status === 401) {
+    return new PiholeError({ ...base, kind: 'unauthorized', hint: body.session?.totp ? TOTP_HINT : hint })
+  }
   if (status === 429) {
     return new PiholeError({ ...base, kind: apiKey === 'api_seats_exceeded' ? 'seats' : 'rate_limited' })
   }

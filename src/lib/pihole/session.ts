@@ -3,7 +3,16 @@ import { addAuth, getAuth, logout as logoutRequest } from '@/lib/api/pihole'
 import { hasHostPermission } from '@/lib/permissions'
 
 import { type CallOptions, callApi, getClient } from './client'
-import { type ApiOutcome, errorFromOutcome, isUnauthorized, permissionError, PiholeError } from './errors'
+import {
+  type ApiOutcome,
+  errorFromOutcome,
+  isUnauthorized,
+  notPiholeError,
+  permissionError,
+  PiholeError,
+  type PiholeErrorData,
+  TOTP_HINT
+} from './errors'
 import type { InstanceContext } from './instances'
 
 export interface SessionRecord {
@@ -17,7 +26,13 @@ export interface SessionRecord {
   /** Seconds the Pi-hole reported at login, `-1` when not applicable. */
   validity: number
   lastUsedAt: number
+  /** Set instead of a session when the last login was refused, so background refreshes back off. */
+  loginFailedAt?: number
+  failure?: PiholeErrorData
 }
+
+/** Background refreshes do not retry a refused password for this long; user actions always do. */
+export const LOGIN_BACKOFF_MS = 10 * 60_000
 
 /**
  * One storage key per instance, so two Pi-holes logging in at the same time never overwrite each
@@ -38,6 +53,7 @@ async function readRecord(ctx: InstanceContext): Promise<SessionRecord | null> {
   const record = await storage.getItem<SessionRecord>(sessionKey(ctx.id))
   if (!record) return null
   if (record.url !== ctx.url || record.passwordHash !== ctx.passwordHash) return null
+  if (record.loginFailedAt !== undefined) return null
   if (!record.noAuth && record.validity > 0) {
     if (Date.now() >= record.lastUsedAt + record.validity * 1000 - EXPIRY_MARGIN_MS) return null
   }
@@ -49,15 +65,61 @@ async function saveRecord(ctx: InstanceContext, record: SessionRecord): Promise<
   return record
 }
 
-async function touch(id: string): Promise<void> {
+/** Slides the validity window, but only for the session that was actually used: a re-login may have replaced it. */
+async function touch(id: string, usedSid: string | null): Promise<void> {
   const record = await storage.getItem<SessionRecord>(sessionKey(id))
-  if (!record) return
+  if (!record || record.sid !== usedSid) return
   if (Date.now() - record.lastUsedAt < 10_000) return
   await storage.setItem(sessionKey(id), { ...record, lastUsedAt: Date.now() })
 }
 
-export async function invalidateSession(id: string): Promise<void> {
+/**
+ * Forgets the cached session. With `onlySid`, nothing happens when a parallel call has already
+ * replaced the session with a fresh one, so a late 401 cannot throw away a good login.
+ */
+export async function invalidateSession(id: string, onlySid?: string | null): Promise<void> {
+  if (onlySid !== undefined) {
+    const record = await storage.getItem<SessionRecord>(sessionKey(id))
+    if (record && record.sid !== onlySid) return
+  }
   await storage.removeItem(sessionKey(id))
+}
+
+/** The refused login of the current password, when it happened within `maxAgeMs`. */
+export async function recentLoginFailure(ctx: InstanceContext, maxAgeMs: number): Promise<PiholeErrorData | null> {
+  const record = await storage.getItem<SessionRecord>(sessionKey(ctx.id))
+  if (!record?.loginFailedAt || !record.failure) return null
+  if (record.url !== ctx.url || record.passwordHash !== ctx.passwordHash) return null
+  return Date.now() - record.loginFailedAt < maxAgeMs ? record.failure : null
+}
+
+async function rememberFailure(ctx: InstanceContext, error: PiholeError): Promise<void> {
+  await storage.setItem(sessionKey(ctx.id), {
+    ...recordFor(ctx, null, -1),
+    noAuth: false,
+    loginFailedAt: Date.now(),
+    failure: error.toJSON()
+  })
+}
+
+function isApiBody(data: unknown): boolean {
+  return data === undefined || data === null || typeof data === 'object'
+}
+
+/** A 2xx that is not JSON from the Pi-hole's own origin is a reverse proxy, a login page or a redirect. */
+function checkApiAnswer(ctx: InstanceContext, outcome: ApiOutcome): void {
+  const response = outcome.response
+  if (!response?.ok) return
+  if (!isApiBody(outcome.data)) {
+    const type = response.headers.get('content-type') ?? 'unknown content type'
+    throw notPiholeError(ctx.id, response.status, `${ctx.apiBase} answered with ${type}`)
+  }
+  if (response.url) {
+    const origin = new URL(response.url).origin
+    if (origin !== new URL(ctx.apiBase).origin) {
+      throw notPiholeError(ctx.id, response.status, `${ctx.apiBase} redirected to ${origin}`)
+    }
+  }
 }
 
 /** All cached sessions by instance id. */
@@ -108,6 +170,7 @@ export async function login(ctx: InstanceContext): Promise<SessionRecord> {
   }
 
   const result = await callApi(ctx, null, (o) => addAuth({ ...o, body: { password: ctx.password } }))
+  checkApiAnswer(ctx, result)
   const session = result.response?.ok ? result.data?.session : undefined
   if (session) {
     if (session.valid && session.sid) {
@@ -121,7 +184,7 @@ export async function login(ctx: InstanceContext): Promise<SessionRecord> {
       instanceId: ctx.id,
       status: result.response?.status,
       message: session.message ?? 'Login failed',
-      hint: session.totp ? 'Two-factor authentication (TOTP) is not supported by the extension' : undefined
+      hint: session.totp ? TOTP_HINT : undefined
     })
   }
   throw errorFromOutcome(ctx.id, result)
@@ -130,7 +193,12 @@ export async function login(ctx: InstanceContext): Promise<SessionRecord> {
 function loginOnce(ctx: InstanceContext): Promise<SessionRecord> {
   let pending = inflightLogins.get(ctx.id)
   if (!pending) {
-    pending = login(ctx).finally(() => inflightLogins.delete(ctx.id))
+    pending = login(ctx)
+      .catch(async (error: unknown) => {
+        if (error instanceof PiholeError && error.kind === 'unauthorized') await rememberFailure(ctx, error)
+        throw error
+      })
+      .finally(() => inflightLogins.delete(ctx.id))
     inflightLogins.set(ctx.id, pending)
   }
   return pending
@@ -156,14 +224,16 @@ export async function withSession<T>(
 
   let outcome = await callApi(ctx, record.sid, fn)
   if (isUnauthorized(outcome)) {
-    await invalidateSession(ctx.id)
+    await invalidateSession(ctx.id, record.sid)
     if (fresh) throw errorFromOutcome(ctx.id, outcome)
-    record = await loginOnce(ctx)
+    // A parallel call may have logged in again meanwhile; reuse that session instead of opening another seat.
+    record = (await readRecord(ctx)) ?? (await loginOnce(ctx))
     outcome = await callApi(ctx, record.sid, fn)
   }
 
   if (outcome.error !== undefined || !outcome.response?.ok) throw errorFromOutcome(ctx.id, outcome)
-  void touch(ctx.id)
+  checkApiAnswer(ctx, outcome)
+  void touch(ctx.id, record.sid)
   return outcome.data as T
 }
 

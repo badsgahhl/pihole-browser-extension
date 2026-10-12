@@ -21,7 +21,7 @@ import { logoutSid } from './pihole/session'
 import { allowDomain, denyDomain, getSiteStatus, removeDomain } from './pihole/site-status'
 import { cleanupTempAllows, expireTempAllow, tempAllow } from './pihole/temp-allow'
 import { migrateFromV4 } from './settings/migrate-v4'
-import { readSettings } from './settings/storage'
+import { migratedItem, readSettings } from './settings/storage'
 import { apiBaseUrl } from './settings/url'
 import { isStale, stateItem } from './state'
 import { getCurrentTabHostname } from './tabs'
@@ -146,20 +146,48 @@ export async function handleInstalled(details: { reason: string; previousVersion
     return
   }
   if (details.reason === 'update' && majorOf(details.previousVersion) < 5) {
+    // Shares its run with the migration fallback inside bootstrap(), so this never migrates twice.
     await migrateFromV4({
       previousVersion: details.previousVersion,
       logout: (origin, sid) => logoutSid(apiBaseUrl(origin), sid)
     })
+    // The fallback may have won the race without knowing the version; the marker is informational.
+    const marker = await migratedItem.getValue()
+    if (marker?.from === 'unknown' && details.previousVersion) {
+      await migratedItem.setValue({ ...marker, from: details.previousVersion })
+    }
   }
   await bootstrap()
 }
 
-/** Idempotent start-up work: migration fallback, menus, alarms, pending temporary entries, a refresh. */
-export async function bootstrap(): Promise<void> {
-  await migrateFromV4({ logout: (origin, sid) => logoutSid(apiBaseUrl(origin), sid) })
-  const settings = await readSettings()
-  await syncContextMenu(settings.contextMenu)
-  await ensureStatusAlarm()
-  await cleanupTempAllows()
-  await refreshAll('startup')
+let bootstrapping: Promise<void> | null = null
+
+/**
+ * Idempotent start-up work: migration fallback, menus, alarms, pending temporary entries, a refresh.
+ * The worker's top-level call, onStartup and onInstalled all land here at once; they share one run,
+ * and a failing step (a broken migration, a rejected menu) does not keep the alarm from being set.
+ */
+export function bootstrap(): Promise<void> {
+  if (bootstrapping) return bootstrapping
+  bootstrapping = (async () => {
+    const steps: Array<() => Promise<unknown>> = [
+      () => migrateFromV4({ logout: (origin, sid) => logoutSid(apiBaseUrl(origin), sid) }),
+      async () => syncContextMenu((await readSettings()).contextMenu),
+      () => ensureStatusAlarm(),
+      () => cleanupTempAllows(),
+      () => refreshAll('startup')
+    ]
+    let failure: unknown
+    for (const step of steps) {
+      try {
+        await step()
+      } catch (error) {
+        failure ??= error
+      }
+    }
+    if (failure !== undefined) throw failure
+  })().finally(() => {
+    bootstrapping = null
+  })
+  return bootstrapping
 }

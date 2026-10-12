@@ -53,7 +53,8 @@ export default defineConfig({
       'hotkey-whitelist-current-domain': { description: '__MSG_commands_allow__' },
       'hotkey-open-settings': { description: '__MSG_commands_openSettings__' }
     },
-    ...(browser === 'chrome' && { minimum_chrome_version: '102' }),
+    // AbortSignal.timeout() exists from 103.
+    ...(browser === 'chrome' && { minimum_chrome_version: '103' }),
     ...(browser === 'firefox' && {
       browser_specific_settings: {
         gecko: {

@@ -28,11 +28,10 @@ describe('useCountdown', () => {
   it('ticks once a second and reports expiry', async () => {
     const { wrapper } = mountWith(Date.now() + 272_000)
     expect(wrapper.text()).toBe('04:32|false')
-    vi.advanceTimersByTime(1000)
-    await wrapper.vm.$nextTick()
+    // useTimeoutPoll arms the next tick after an await, so the timers advance asynchronously.
+    await vi.advanceTimersByTimeAsync(1000)
     expect(wrapper.text()).toBe('04:31|false')
-    vi.advanceTimersByTime(272_000)
-    await wrapper.vm.$nextTick()
+    await vi.advanceTimersByTimeAsync(272_000)
     expect(wrapper.text()).toBe('00:00|true')
   })
 

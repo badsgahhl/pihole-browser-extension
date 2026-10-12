@@ -276,5 +276,6 @@ errors:
   regex: Pi-hole hat das Domain-Muster abgelehnt.
   bad_request: Pi-hole hat die Anfrage abgelehnt ($1).
   not_found: Pi-hole konnte diesen Eintrag nicht finden.
+  not_pihole: Diese Adresse hat nicht wie ein Pi-hole geantwortet. Prüfe, ob es die Admin-Oberfläche ist und keine Login-Seite oder ein Proxy. ($1)
   http: Pi-hole hat mit HTTP $1 geantwortet.
   unknown: Etwas ist schiefgelaufen. $1

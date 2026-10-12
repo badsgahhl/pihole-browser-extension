@@ -75,6 +75,18 @@ describe('errorFromOutcome', () => {
     })
   })
 
+  it('points at app passwords when TOTP is on, and names the status when statusText is empty', () => {
+    const totp = errorFromOutcome('home', {
+      error: { session: { valid: false, totp: true, message: 'password incorrect' } },
+      response: response(401)
+    })
+    expect(totp.kind).toBe('unauthorized')
+    expect(totp.hint).toContain('app password')
+
+    const bare = errorFromOutcome('home', { error: 'boom', response: response(502) })
+    expect(bare.message).toBe('HTTP 502')
+  })
+
   it('uses the session message for a failed login', () => {
     const error = errorFromOutcome('home', {
       error: { session: { valid: false, message: 'password incorrect' } },
