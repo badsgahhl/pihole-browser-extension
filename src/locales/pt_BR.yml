@@ -1,0 +1,281 @@
+# Based on the pt_BR locale contributed by arraswi in pull request #116 for v4, extended for v5.
+extName: Pi-hole Switch
+extDescription: Controle seu Pi-hole pela barra de ferramentas. Pause o bloqueio, permita ou bloqueie o site atual, em todos os seus Pi-holes.
+
+commands:
+  toggle: Alternar o bloqueio do Pi-hole
+  allow: Permitir o domínio atual
+  deny: Bloquear o domínio atual
+  openSettings: Abrir configurações
+
+contextMenu:
+  toggle: Alternar o bloqueio do Pi-hole
+  deny: Bloquear o domínio atual
+  allow: Permitir o domínio atual
+  openSettings: Abrir as configurações do Pi-hole Switch
+
+badge:
+  on: ON
+  off: OFF
+  error: ERR
+  info: INFO
+  mixed: MIX
+  title:
+    needsSetup: Pi-hole Switch · adicione seu Pi-hole nas configurações
+    needsPermission: Pi-hole Switch · conceda acesso ao seu Pi-hole nas configurações
+    unauthorized: Pi-hole Switch · verifique a senha nas configurações
+    unreachable: Pi-hole Switch · Pi-hole inacessível
+    mixed: Pi-hole Switch · alguns Pi-holes estão pausados
+    paused: Pi-hole Switch · pausado, volta em $1
+    pausedIndefinitely: Pi-hole Switch · pausado até você ativar novamente
+    enabled: Pi-hole Switch · bloqueio ativo
+    enabledStats: Pi-hole Switch · bloqueio ativo, $1 % bloqueado hoje
+
+common:
+  settings: Configurações
+  save: Salvar
+  cancel: Cancelar
+  remove: Remover
+  retry: Tentar novamente
+  close: Fechar
+  copy: Copiar
+  copied: Copiado
+  notSet: Não definido
+  unknown: Desconhecido
+  loading: Carregando…
+  upToDate: Atualizado
+  updateAvailable: Atualização disponível
+  noSession: Sem sessão
+  grantAccess: Conceder acesso
+  versions: Core $1 · FTL $2 · Web $3
+
+status:
+  ok: conectado
+  unreachable: inacessível
+  timeout: sem resposta
+  unauthorized: senha incorreta
+  permission: acesso não concedido
+  seats: nenhuma sessão livre
+  unknown: desconhecido
+  enabled: bloqueando
+  paused: pausado
+
+popup:
+  title: Pi-hole Switch
+  instances: Pi-holes conectados
+  moreInstances:
+    1: $1 Pi-hole
+    n: $1 Pi-holes
+  blocking:
+    active: Bloqueio ativo
+    paused: Bloqueio pausado
+    mixed: Parcialmente pausado
+    unreachable: Inacessível
+    actionNeeded: Ação necessária
+    switch: Bloqueio
+    piHoles:
+      1: 1 Pi-hole
+      n: $1 Pi-holes
+    piHolesWord:
+      1: Pi-hole
+      n: Pi-holes
+    statsClients: clientes
+    statsBlocked: bloqueado
+    backIn: Volta em $1
+    backInBoth: Ambos os Pi-holes · volta em $1
+    backInAll: Todos os Pi-holes · volta em $1
+    pausedIndefinitely: Pausado até você ativar novamente
+    partial: $1 pausado · $2 ativo
+    onlyOne: $1 inacessível · somente $2
+    disableAllFor: Desativar todos por
+    timer: Temporizador
+    toggleHint: T alterna
+    permanent: Desativar até ativar novamente
+    custom: Duração personalizada
+    customPause: Pausar
+    enableNow: Ativar agora
+    extend5: +5m
+    extend1h: +1h
+    reloadsOnPause: A guia recarrega após pausar
+  site:
+    label: Site atual
+    blockedByList: Bloqueado pela lista $1
+    blockedByYou: Bloqueado por você
+    allowedByYou: Permitido por você
+    allowedByList: Permitido pela lista $1
+    allowedTemp: Permitido por $1
+    notBlocked: Não bloqueado
+    paused: Pausado · nada está sendo filtrado agora
+    checking: Verificando…
+    unknown: Não foi possível verificar este site
+    allow: Permitir
+    allowed: Permitido
+    deny: Bloquear
+    denied: Bloqueado
+    allowTemp: Permitir por $1 min
+    removeAllow: Remover da lista de permissões
+    removeDeny: Remover da lista de bloqueio
+    openAdmin: Abrir no Pi-hole
+  footer:
+    messages:
+      1: $1 mensagem
+      n: $1 mensagens
+  empty:
+    title: Nenhum Pi-hole ainda
+    text: Adicione o endereço e a senha do seu Pi-hole para começar.
+    action: Adicionar seu Pi-hole
+  permission:
+    title: Acesso necessário
+    text: O navegador precisa de permissão para se comunicar com seu Pi-hole.
+    action: Conceder acesso
+  error:
+    title: Não foi possível acessar seus Pi-holes
+    openSettings: Abrir configurações
+
+options:
+  title: $1 · Pi-hole Switch
+  nav:
+    label: Seções das configurações
+    instances: Pi-holes
+    general: Geral
+    shortcuts: Atalhos
+    about: Sobre
+    donate: Doar
+    issue: Relatar um problema
+    copyright: © $1 Pascal Glaser · MIT
+  instances:
+    title: Pi-holes
+    intro: Cada alternância, permissão e bloqueio é enviado a todos os Pi-holes conectados de uma vez. O popup mostra o estado de cada um no cabeçalho.
+    add: Adicionar Pi-hole
+    limit: Até $1 instâncias
+    edit: Editar $1
+    remove: Remover $1
+    removeConfirm:
+      title: Remover $1?
+      text: A senha salva é excluída e a sessão da API é encerrada.
+    editing: Editando · $1
+    new: Novo Pi-hole
+    name: Nome
+    address: Endereço
+    addressHint: Esquema, host e porta da interface de administração. O caminho é adicionado automaticamente.
+    password: Senha
+    passwordHint: Senha de administrador ou uma senha de aplicativo de Pi-hole › Configurações › API. Armazenada somente neste navegador.
+    showPassword: Mostrar senha
+    hidePassword: Ocultar senha
+    connection: Conexão
+    test: Testar conexão
+    testAgain: Testar novamente
+    testing: Testando…
+    connected: Conectado
+    noAuthNeeded: Conectado, nenhuma senha necessária
+    accessGranted: O acesso a $1 foi concedido. O navegador pergunta uma vez por endereço e nada mais é contatado.
+    accessPending: O navegador pedirá acesso a $1 ao salvar.
+    accessDenied: Sem acesso a $1, a extensão não consegue alcançar este Pi-hole.
+    empty: Nenhum Pi-hole configurado ainda.
+    untested: Ainda não testado. Salve para verificar a conexão.
+    noAccess: Acesso ainda não concedido
+  general:
+    title: Geral
+    intro: Como o popup, o emblema da barra de ferramentas e o menu de contexto se comportam. As alterações valem imediatamente.
+    popup: Popup
+    pauseDefault:
+      title: Duração padrão da pausa
+      text: Usada pelo atalho e pelo menu de contexto. O popup também oferece predefinições.
+    units:
+      label: Unidade
+      seconds: segundos
+      minutes: minutos
+      hours: horas
+    rememberLast:
+      title: Lembrar a última duração
+      text: Uma duração escolhida no popup se torna o novo padrão.
+    showSite:
+      title: Mostrar o site atual
+      text: Consulta o domínio da guia em cada Pi-hole e oferece permitir e bloquear.
+    reloadAfterPause:
+      title: Recarregar a guia após pausar
+      text: Aguarda um momento para a alteração de DNS entrar em vigor.
+    reloadAfterAllow:
+      title: Recarregar a guia após permitir um domínio
+      text: Aguarda um momento para a alteração de DNS entrar em vigor.
+    badge:
+      title: Emblema da barra de ferramentas
+      mode: Modo do emblema
+      off: Desligado
+      state: Ligado / Desligado
+      percent: Bloqueado %
+      active: ativo
+      paused: pausado
+      unreachable: inacessível
+    integration: Integração com o navegador
+    contextMenu:
+      title: Menu de contexto da página
+      text: Alternar, permitir e bloquear pelo menu do botão direito.
+    theme:
+      title: Tema
+      text: Segue o navegador por padrão.
+      system: Sistema
+      light: Claro
+      dark: Escuro
+    data: Dados
+    settingsFile:
+      title: Arquivo de configurações
+      text: A exportação inclui as senhas dos Pi-holes. A importação substitui tudo, após uma confirmação.
+    export: Exportar
+    import: Importar
+    importConfirm:
+      title: Substituir todas as configurações?
+      text: Tudo neste navegador será sobrescrito com o conteúdo do arquivo.
+    importInvalid: Este arquivo não é uma exportação de configurações do Pi-hole Switch.
+    reset: Redefinir tudo
+    resetConfirm:
+      title: Redefinir tudo?
+      text: Todos os Pi-holes, senhas e preferências serão removidos.
+  shortcuts:
+    title: Atalhos
+    intro: Os atalhos globais funcionam em qualquer página. Dentro do popup, teclas únicas fazem o mesmo.
+    global: Atalhos do navegador
+    action: Ação
+    shortcut: Atalho
+    change: Alterar atalhos
+    firefoxHint: 'Firefox: abra about:addons, clique na engrenagem e escolha Gerenciar atalhos de extensões.'
+    popupKeys: Dentro do popup
+    toggle: Alternar bloqueio
+    allow: Permitir o site atual
+    deny: Bloquear o site atual
+    preset: Predefinição de pausa $1
+    close: Fechar o popup
+  about:
+    title: Sobre
+    intro: Um pequeno interruptor para o Pi-hole v6.
+    description: O Pi-hole Switch controla uma ou mais instâncias do Pi-hole v6 pela barra de ferramentas do navegador. É um projeto independente, sem afiliação com a equipe do Pi-hole.
+    source: Código-fonte no GitHub
+    contributors: Contribuidores
+    debug: Informações de depuração
+    debugHint: 'Cole isto no issue:'
+    extensionVersion: Extensão
+    os: Sistema operacional
+    browser: Navegador
+    piHole: Pi-hole $1
+    troubleshooting: Solução de problemas
+    issues: Criar um issue no GitHub
+
+errors:
+  url_empty: Digite o endereço do seu Pi-hole.
+  url_scheme: O endereço deve começar com http:// ou https://.
+  url_invalid: O endereço é inválido. (Sem http(s), esquema inválido ou vazio)
+  name_required: Dê um nome a este Pi-hole.
+  duplicate_instance: Este endereço já está configurado.
+  duration_min: Digite pelo menos 1.
+  unreachable: Não foi possível acessar este Pi-hole. Verifique o endereço e se ele está online.
+  timeout: O Pi-hole não respondeu a tempo.
+  permission: O navegador ainda não tem acesso a este endereço. Conceda o acesso e tente novamente.
+  unauthorized: Não autorizado · verifique a senha
+  seats: Nenhuma sessão de API livre. Desconecte outro cliente no Pi-hole ou aumente o limite de sessões.
+  rate_limited: Muitas tentativas. Aguarde um minuto e tente novamente.
+  duplicate: Este domínio já está na lista.
+  regex: O Pi-hole rejeitou o padrão de domínio.
+  bad_request: O Pi-hole rejeitou a solicitação ($1).
+  not_found: O Pi-hole não encontrou essa entrada.
+  http: O Pi-hole respondeu com HTTP $1.
+  unknown: Algo deu errado. $1

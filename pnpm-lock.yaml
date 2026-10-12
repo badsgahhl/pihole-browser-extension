@@ -287,6 +287,9 @@ importers:
       wxt:
         specifier: ^0.21.4
         version: 0.21.4(eslint@10.12.0(jiti@2.7.0)(supports-color@7.2.0))(rolldown@1.2.13)(typescript@5.9.3)(vite@8.3.4(@types/node@24.19.2)(jiti@2.7.0)(yaml@2.9.1))(web-ext@10.7.0(jiti@2.7.0)(supports-color@7.2.0))
+      yaml:
+        specifier: ^2.9.1
+        version: 2.9.1
 
 packages:
 
@@ -6275,8 +6278,7 @@ snapshots:
 
   y18n@5.0.8: {}
 
-  yaml@2.9.1:
-    optional: true
+  yaml@2.9.1: {}
 
   yargs-parser@21.1.1: {}
 

@@ -1,0 +1,280 @@
+extName: Pi-hole Switch
+extDescription: Steuere dein Pi-hole aus der Symbolleiste. Blockierung pausieren, die aktuelle Seite erlauben oder sperren, auf allen deinen Pi-holes.
+
+commands:
+  toggle: Pi-hole-Blockierung umschalten
+  allow: Aktuelle Domain erlauben
+  deny: Aktuelle Domain sperren
+  openSettings: Einstellungen öffnen
+
+contextMenu:
+  toggle: Pi-hole-Blockierung umschalten
+  deny: Aktuelle Domain sperren
+  allow: Aktuelle Domain erlauben
+  openSettings: Pi-hole Switch Einstellungen öffnen
+
+badge:
+  on: AN
+  off: AUS
+  error: ERR
+  info: INFO
+  mixed: MIX
+  title:
+    needsSetup: Pi-hole Switch · füge dein Pi-hole in den Einstellungen hinzu
+    needsPermission: Pi-hole Switch · erlaube in den Einstellungen den Zugriff auf dein Pi-hole
+    unauthorized: Pi-hole Switch · prüfe das Passwort in den Einstellungen
+    unreachable: Pi-hole Switch · Pi-hole nicht erreichbar
+    mixed: Pi-hole Switch · einige Pi-holes sind pausiert
+    paused: Pi-hole Switch · pausiert, wieder aktiv in $1
+    pausedIndefinitely: Pi-hole Switch · pausiert, bis du es wieder aktivierst
+    enabled: Pi-hole Switch · Blockierung aktiv
+    enabledStats: Pi-hole Switch · Blockierung aktiv, heute $1 % blockiert
+
+common:
+  settings: Einstellungen
+  save: Speichern
+  cancel: Abbrechen
+  remove: Entfernen
+  retry: Erneut versuchen
+  close: Schließen
+  copy: Kopieren
+  copied: Kopiert
+  notSet: Nicht belegt
+  unknown: Unbekannt
+  loading: Lädt…
+  upToDate: Aktuell
+  updateAvailable: Update verfügbar
+  noSession: Keine Sitzung
+  grantAccess: Zugriff erlauben
+  versions: Core $1 · FTL $2 · Web $3
+
+status:
+  ok: verbunden
+  unreachable: nicht erreichbar
+  timeout: antwortet nicht
+  unauthorized: falsches Passwort
+  permission: Zugriff nicht erlaubt
+  seats: keine freie Sitzung
+  unknown: unbekannt
+  enabled: blockiert
+  paused: pausiert
+
+popup:
+  title: Pi-hole Switch
+  instances: Verbundene Pi-holes
+  moreInstances:
+    1: $1 Pi-hole
+    n: $1 Pi-holes
+  blocking:
+    active: Blockierung aktiv
+    paused: Blockierung pausiert
+    mixed: Teilweise pausiert
+    unreachable: Nicht erreichbar
+    actionNeeded: Aktion erforderlich
+    switch: Blockierung
+    piHoles:
+      1: 1 Pi-hole
+      n: $1 Pi-holes
+    piHolesWord:
+      1: Pi-hole
+      n: Pi-holes
+    statsClients: Clients
+    statsBlocked: blockiert
+    backIn: Wieder aktiv in $1
+    backInBoth: Beide Pi-holes · wieder aktiv in $1
+    backInAll: Alle Pi-holes · wieder aktiv in $1
+    pausedIndefinitely: Pausiert, bis du es wieder aktivierst
+    partial: $1 pausiert · $2 aktiv
+    onlyOne: $1 nicht erreichbar · nur $2
+    disableAllFor: Alle deaktivieren für
+    timer: Timer
+    toggleHint: T schaltet um
+    permanent: Deaktivieren, bis du es wieder aktivierst
+    custom: Eigene Dauer
+    customPause: Pausieren
+    enableNow: Jetzt aktivieren
+    extend5: +5m
+    extend1h: +1h
+    reloadsOnPause: Tab lädt nach dem Pausieren neu
+  site:
+    label: Aktuelle Seite
+    blockedByList: Blockiert durch Liste $1
+    blockedByYou: Von dir blockiert
+    allowedByYou: Von dir erlaubt
+    allowedByList: Erlaubt durch Liste $1
+    allowedTemp: Erlaubt für $1
+    notBlocked: Nicht blockiert
+    paused: Pausiert · gerade wird nichts gefiltert
+    checking: Prüfe…
+    unknown: Diese Seite konnte nicht geprüft werden
+    allow: Erlauben
+    allowed: Erlaubt
+    deny: Sperren
+    denied: Gesperrt
+    allowTemp: Für $1 Min. erlauben
+    removeAllow: Von der Allowlist entfernen
+    removeDeny: Von der Denylist entfernen
+    openAdmin: Im Pi-hole öffnen
+  footer:
+    messages:
+      1: $1 Meldung
+      n: $1 Meldungen
+  empty:
+    title: Noch kein Pi-hole
+    text: Trage Adresse und Passwort deines Pi-holes ein, um loszulegen.
+    action: Pi-hole hinzufügen
+  permission:
+    title: Zugriff nötig
+    text: Der Browser braucht die Erlaubnis, mit deinem Pi-hole zu sprechen.
+    action: Zugriff erlauben
+  error:
+    title: Deine Pi-holes sind nicht erreichbar
+    openSettings: Einstellungen öffnen
+
+options:
+  title: $1 · Pi-hole Switch
+  nav:
+    label: Bereiche der Einstellungen
+    instances: Pi-holes
+    general: Allgemein
+    shortcuts: Tastenkürzel
+    about: Über
+    donate: Spenden
+    issue: Problem melden
+    copyright: © $1 Pascal Glaser · MIT
+  instances:
+    title: Pi-holes
+    intro: Jedes Umschalten, Erlauben und Sperren geht gleichzeitig an alle verbundenen Pi-holes. Das Popup zeigt den Zustand jedes einzelnen im Kopfbereich.
+    add: Pi-hole hinzufügen
+    limit: Bis zu $1 Instanzen
+    edit: $1 bearbeiten
+    remove: $1 entfernen
+    removeConfirm:
+      title: $1 entfernen?
+      text: Das gespeicherte Passwort wird gelöscht und die API-Sitzung beendet.
+    editing: Bearbeiten · $1
+    new: Neues Pi-hole
+    name: Name
+    address: Adresse
+    addressHint: Schema, Host und Port der Admin-Oberfläche. Der Pfad wird automatisch ergänzt.
+    password: Passwort
+    passwordHint: Admin-Passwort oder ein App-Passwort aus Pi-hole › Einstellungen › API. Wird nur in diesem Browser gespeichert.
+    showPassword: Passwort anzeigen
+    hidePassword: Passwort verbergen
+    connection: Verbindung
+    test: Verbindung testen
+    testAgain: Erneut testen
+    testing: Teste…
+    connected: Verbunden
+    noAuthNeeded: Verbunden, kein Passwort nötig
+    accessGranted: Der Zugriff auf $1 ist erlaubt. Der Browser fragt einmal pro Adresse, und nichts anderes wird kontaktiert.
+    accessPending: Der Browser fragt beim Speichern nach dem Zugriff auf $1.
+    accessDenied: Ohne Zugriff auf $1 kann die Erweiterung dieses Pi-hole nicht erreichen.
+    empty: Noch kein Pi-hole eingerichtet.
+    untested: Noch nicht getestet. Speichern prüft die Verbindung.
+    noAccess: Zugriff noch nicht erlaubt
+  general:
+    title: Allgemein
+    intro: Wie sich Popup, Symbolleisten-Badge und Kontextmenü verhalten. Änderungen gelten sofort.
+    popup: Popup
+    pauseDefault:
+      title: Standard-Pausendauer
+      text: Gilt für Tastenkürzel und Kontextmenü. Das Popup bietet zusätzlich Voreinstellungen.
+    units:
+      label: Einheit
+      seconds: Sekunden
+      minutes: Minuten
+      hours: Stunden
+    rememberLast:
+      title: Letzte Dauer merken
+      text: Eine im Popup gewählte Dauer wird zum neuen Standard.
+    showSite:
+      title: Aktuelle Seite anzeigen
+      text: Schlägt die Domain des Tabs auf jedem Pi-hole nach und bietet Erlauben und Sperren an.
+    reloadAfterPause:
+      title: Tab nach dem Pausieren neu laden
+      text: Wartet kurz, bis die DNS-Änderung wirkt.
+    reloadAfterAllow:
+      title: Tab nach dem Erlauben einer Domain neu laden
+      text: Wartet kurz, bis die DNS-Änderung wirkt.
+    badge:
+      title: Symbolleisten-Badge
+      mode: Badge-Modus
+      off: Aus
+      state: An / Aus
+      percent: Blockiert %
+      active: aktiv
+      paused: pausiert
+      unreachable: nicht erreichbar
+    integration: Browser-Integration
+    contextMenu:
+      title: Kontextmenü der Seite
+      text: Umschalten, Erlauben und Sperren aus dem Rechtsklick-Menü.
+    theme:
+      title: Design
+      text: Folgt standardmäßig dem Browser.
+      system: System
+      light: Hell
+      dark: Dunkel
+    data: Daten
+    settingsFile:
+      title: Einstellungsdatei
+      text: Der Export enthält die Pi-hole-Passwörter. Der Import ersetzt alles, nach einer Bestätigung.
+    export: Exportieren
+    import: Importieren
+    importConfirm:
+      title: Alle Einstellungen ersetzen?
+      text: Alles in diesem Browser wird mit dem Inhalt der Datei überschrieben.
+    importInvalid: Diese Datei ist kein Einstellungs-Export von Pi-hole Switch.
+    reset: Alles zurücksetzen
+    resetConfirm:
+      title: Alles zurücksetzen?
+      text: Alle Pi-holes, Passwörter und Einstellungen werden entfernt.
+  shortcuts:
+    title: Tastenkürzel
+    intro: Globale Tastenkürzel funktionieren auf jeder Seite. Im Popup erledigen einzelne Tasten dasselbe.
+    global: Browser-Tastenkürzel
+    action: Aktion
+    shortcut: Tastenkürzel
+    change: Tastenkürzel ändern
+    firefoxHint: 'Firefox: öffne about:addons, klicke auf das Zahnrad und wähle „Erweiterungs-Tastenkürzel verwalten“.'
+    popupKeys: Im Popup
+    toggle: Blockierung umschalten
+    allow: Aktuelle Seite erlauben
+    deny: Aktuelle Seite sperren
+    preset: Pausen-Voreinstellung $1
+    close: Popup schließen
+  about:
+    title: Über
+    intro: Ein kleiner Schalter für Pi-hole v6.
+    description: Pi-hole Switch steuert eine oder mehrere Pi-hole-v6-Instanzen aus der Symbolleiste des Browsers. Es ist ein unabhängiges Projekt und steht in keiner Verbindung zum Pi-hole-Team.
+    source: Quellcode auf GitHub
+    contributors: Mitwirkende
+    debug: Debug-Informationen
+    debugHint: 'Füge das in dein Issue ein:'
+    extensionVersion: Erweiterung
+    os: Betriebssystem
+    browser: Browser
+    piHole: Pi-hole $1
+    troubleshooting: Fehlerbehebung
+    issues: Issue auf GitHub erstellen
+
+errors:
+  url_empty: Gib die Adresse deines Pi-holes ein.
+  url_scheme: Die Adresse muss mit http:// oder https:// beginnen.
+  url_invalid: Die Adresse ist ungültig. (Fehlendes http(s), ungültiges Schema oder leer)
+  name_required: Gib diesem Pi-hole einen Namen.
+  duplicate_instance: Diese Adresse ist bereits eingerichtet.
+  duration_min: Gib mindestens 1 ein.
+  unreachable: Dieses Pi-hole ist nicht erreichbar. Prüfe die Adresse und ob es online ist.
+  timeout: Das Pi-hole hat nicht rechtzeitig geantwortet.
+  permission: Der Browser hat noch keinen Zugriff auf diese Adresse. Erlaube den Zugriff und versuche es erneut.
+  unauthorized: Nicht autorisiert · prüfe das Passwort
+  seats: Keine freie API-Sitzung. Melde einen anderen Client im Pi-hole ab oder erhöhe das Sitzungslimit.
+  rate_limited: Zu viele Versuche. Warte eine Minute und versuche es erneut.
+  duplicate: Diese Domain steht bereits auf der Liste.
+  regex: Pi-hole hat das Domain-Muster abgelehnt.
+  bad_request: Pi-hole hat die Anfrage abgelehnt ($1).
+  not_found: Pi-hole konnte diesen Eintrag nicht finden.
+  http: Pi-hole hat mit HTTP $1 geantwortet.
+  unknown: Etwas ist schiefgelaufen. $1
