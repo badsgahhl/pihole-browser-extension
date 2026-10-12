@@ -1,0 +1,281 @@
+extName: Pi-hole Switch
+extDescription: Control your Pi-hole from the toolbar. Pause blocking, allow or deny the current site, across all your Pi-holes.
+
+commands:
+  toggle: Toggle Pi-hole blocking
+  allow: Allow current domain
+  deny: Deny current domain
+  openSettings: Open settings
+
+contextMenu:
+  toggle: Toggle Pi-hole blocking
+  deny: Deny current domain
+  allow: Allow current domain
+  openSettings: Open Pi-hole Switch settings
+
+badge:
+  on: ON
+  off: OFF
+  error: ERR
+  info: INFO
+  mixed: MIX
+  title:
+    needsSetup: Pi-hole Switch · add your Pi-hole in the settings
+    needsPermission: Pi-hole Switch · grant access to your Pi-hole in the settings
+    unauthorized: Pi-hole Switch · check the password in the settings
+    unreachable: Pi-hole Switch · Pi-hole unreachable
+    mixed: Pi-hole Switch · some Pi-holes are paused
+    paused: Pi-hole Switch · paused, back in $1
+    pausedIndefinitely: Pi-hole Switch · paused until you enable it again
+    enabled: Pi-hole Switch · blocking active
+    enabledStats: Pi-hole Switch · blocking active, $1 % blocked today
+
+common:
+  settings: Settings
+  save: Save
+  cancel: Cancel
+  remove: Remove
+  retry: Retry
+  close: Close
+  copy: Copy
+  copied: Copied
+  notSet: Not set
+  unknown: Unknown
+  loading: Loading…
+  upToDate: Up to date
+  updateAvailable: Update available
+  noSession: No session
+  grantAccess: Grant access
+  versions: Core $1 · FTL $2 · Web $3
+
+status:
+  ok: connected
+  unreachable: unreachable
+  timeout: not answering
+  unauthorized: wrong password
+  permission: access not granted
+  seats: no free session
+  unknown: unknown
+  enabled: blocking
+  paused: paused
+
+popup:
+  title: Pi-hole Switch
+  instances: Connected Pi-holes
+  moreInstances:
+    1: $1 Pi-hole
+    n: $1 Pi-holes
+  blocking:
+    active: Blocking active
+    paused: Blocking paused
+    mixed: Partially paused
+    unreachable: Unreachable
+    actionNeeded: Action needed
+    switch: Blocking
+    piHoles:
+      1: 1 Pi-hole
+      n: $1 Pi-holes
+    piHolesWord:
+      1: Pi-hole
+      n: Pi-holes
+    statsClients: clients
+    statsBlocked: blocked
+    backIn: Back in $1
+    backInBoth: Both Pi-holes · back in $1
+    backInAll: All Pi-holes · back in $1
+    pausedIndefinitely: Paused until you enable it again
+    partial: $1 paused · $2 active
+    onlyOne: $1 unreachable · $2 only
+    disableAllFor: Disable all for
+    timer: Timer
+    toggleHint: T toggles
+    permanent: Disable until enabled again
+    custom: Custom duration
+    customPause: Pause
+    enableNow: Enable now
+    extend5: +5m
+    extend1h: +1h
+    reloadsOnPause: Tab reloads after pausing
+  site:
+    label: Current site
+    blockedByList: Blocked by list $1
+    blockedByYou: Blocked by you
+    allowedByYou: Allowed by you
+    allowedByList: Allowed by list $1
+    allowedTemp: Allowed for $1
+    notBlocked: Not blocked
+    paused: Paused · nothing is filtered right now
+    checking: Checking…
+    unknown: Could not check this site
+    allow: Allow
+    allowed: Allowed
+    deny: Deny
+    denied: Denied
+    allowTemp: Allow for $1 min
+    removeAllow: Remove from allowlist
+    removeDeny: Remove from denylist
+    openAdmin: Open in Pi-hole
+  footer:
+    messages:
+      1: $1 message
+      n: $1 messages
+  empty:
+    title: No Pi-hole yet
+    text: Add the address and password of your Pi-hole to start switching.
+    action: Add your Pi-hole
+  permission:
+    title: Access needed
+    text: The browser needs permission to talk to your Pi-hole.
+    action: Grant access
+  error:
+    title: Can't reach your Pi-holes
+    openSettings: Open settings
+
+options:
+  title: $1 · Pi-hole Switch
+  nav:
+    label: Settings sections
+    instances: Pi-holes
+    general: General
+    shortcuts: Shortcuts
+    about: About
+    donate: Donate
+    issue: Report an issue
+    copyright: © $1 Pascal Glaser · MIT
+  instances:
+    title: Pi-holes
+    intro: Every switch, allow and deny action is sent to all connected Pi-holes at once. The popup shows each one's state in its header.
+    add: Add Pi-hole
+    limit: Up to $1 instances
+    edit: Edit $1
+    remove: Remove $1
+    removeConfirm:
+      title: Remove $1?
+      text: The saved password is deleted and the API session is closed.
+    editing: Editing · $1
+    new: New Pi-hole
+    name: Name
+    address: Address
+    addressHint: Scheme, host and port of the admin interface. The path is added for you.
+    password: Password
+    passwordHint: Admin password, or an app password from Pi-hole › Settings › API. Stored only in this browser.
+    showPassword: Show password
+    hidePassword: Hide password
+    connection: Connection
+    test: Test connection
+    testAgain: Test again
+    testing: Testing…
+    connected: Connected
+    noAuthNeeded: Connected, no password needed
+    accessGranted: Access to $1 is granted. The browser asks once per address and nothing else is contacted.
+    accessPending: The browser will ask for access to $1 when you save.
+    accessDenied: Without access to $1 the extension cannot reach this Pi-hole.
+    empty: No Pi-hole configured yet.
+    untested: Not tested yet. Save to check the connection.
+    noAccess: Access not granted yet
+  general:
+    title: General
+    intro: How the popup, the toolbar badge and the page context menu behave. Changes apply immediately.
+    popup: Popup
+    pauseDefault:
+      title: Default pause duration
+      text: Used by the hotkey and the context menu. The popup offers presets as well.
+    units:
+      label: Unit
+      seconds: seconds
+      minutes: minutes
+      hours: hours
+    rememberLast:
+      title: Remember the last duration
+      text: A duration picked in the popup becomes the next default.
+    showSite:
+      title: Show the current site
+      text: Looks the tab's domain up on every Pi-hole and offers allow and deny.
+    reloadAfterPause:
+      title: Reload the tab after pausing
+      text: Waits a moment so the DNS change is in effect.
+    reloadAfterAllow:
+      title: Reload the tab after allowing a domain
+      text: Waits a moment so the DNS change is in effect.
+    badge:
+      title: Toolbar badge
+      mode: Badge mode
+      off: Off
+      state: On / Off
+      percent: Blocked %
+      active: active
+      paused: paused
+      unreachable: unreachable
+    integration: Browser integration
+    contextMenu:
+      title: Page context menu
+      text: Toggle, allow and deny from the right-click menu.
+    theme:
+      title: Theme
+      text: Follows the browser by default.
+      system: System
+      light: Light
+      dark: Dark
+    data: Data
+    settingsFile:
+      title: Settings file
+      text: Export includes the Pi-hole passwords. Import replaces everything, after a confirmation.
+    export: Export
+    import: Import
+    importConfirm:
+      title: Replace all settings?
+      text: Everything in this browser is overwritten with the file's contents.
+    importInvalid: This file is not a Pi-hole Switch settings export.
+    reset: Reset everything
+    resetConfirm:
+      title: Reset everything?
+      text: All Pi-holes, passwords and preferences are removed.
+  shortcuts:
+    title: Shortcuts
+    intro: Global shortcuts work on any page. Inside the popup single keys do the same.
+    global: Browser shortcuts
+    action: Action
+    shortcut: Shortcut
+    change: Change shortcuts
+    firefoxHint: 'Firefox: open about:addons, click the gear and choose Manage Extension Shortcuts.'
+    popupKeys: Inside the popup
+    toggle: Toggle blocking
+    allow: Allow current site
+    deny: Deny current site
+    preset: Pause preset $1
+    close: Close the popup
+  about:
+    title: About
+    intro: A small switch for Pi-hole v6.
+    description: Pi-hole Switch controls one or more Pi-hole v6 instances from the browser toolbar. It is an independent project and not affiliated with the Pi-hole team.
+    source: Source on GitHub
+    contributors: Contributors
+    debug: Debug information
+    debugHint: 'Paste this into the issue:'
+    extensionVersion: Extension
+    os: Operating system
+    browser: Browser
+    piHole: Pi-hole $1
+    troubleshooting: Troubleshooting
+    issues: Create an issue on GitHub
+
+errors:
+  url_empty: Enter the address of your Pi-hole.
+  url_scheme: The address must start with http:// or https://.
+  url_invalid: The address is invalid. (Missing http(s), invalid scheme or empty)
+  name_required: Give this Pi-hole a name.
+  duplicate_instance: This address is already configured.
+  duration_min: Enter at least 1.
+  unreachable: Can't reach this Pi-hole. Check the address and that it is online.
+  timeout: The Pi-hole did not answer in time.
+  permission: The browser has no access to this address yet. Grant access and try again.
+  unauthorized: Unauthorized · check the password
+  seats: No free API session. Log out another client in Pi-hole or raise the session limit.
+  rate_limited: Too many attempts. Wait a minute and try again.
+  duplicate: This domain is already on the list.
+  regex: Pi-hole rejected the domain pattern.
+  bad_request: Pi-hole rejected the request ($1).
+  not_found: Pi-hole could not find that entry.
+  not_pihole: This address did not answer like a Pi-hole. Check that it is the admin interface, not a login page or a proxy. ($1)
+  http: Pi-hole answered with HTTP $1.
+  unknown: Something went wrong. $1

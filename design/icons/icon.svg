@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <title>Pi-hole Switch</title>
+  <rect x="2" y="2" width="508" height="508" rx="44" fill="#0c0e11" stroke="#262a31" stroke-width="4"/>
+  <g fill="#45d483">
+    <path d="M256 152c-10-40-54-62-110-50 26 44 72 60 110 50z"/>
+    <path d="M256 152c10-40 54-62 110-50-26 44-72 60-110 50z"/>
+  </g>
+  <g fill="#ff4d42" transform="translate(256 300) rotate(45)">
+    <rect x="-115" y="-115" width="56" height="56" rx="9"/>
+    <rect x="-45" y="-115" width="56" height="56" rx="9"/>
+    <rect x="25" y="-115" width="56" height="56" rx="9"/>
+    <rect x="-115" y="-45" width="56" height="56" rx="9"/>
+    <rect x="-45" y="-45" width="56" height="56" rx="9"/>
+    <rect x="25" y="-45" width="56" height="56" rx="9"/>
+    <rect x="-115" y="25" width="56" height="56" rx="9"/>
+    <rect x="-45" y="25" width="56" height="56" rx="9"/>
+    <rect x="25" y="25" width="56" height="56" rx="9"/>
+  </g>
+</svg>

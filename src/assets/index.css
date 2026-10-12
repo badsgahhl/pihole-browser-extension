@@ -1,0 +1,215 @@
+/*
+ * Explicit sources: automatic detection would scan the whole repository (design mockups, e2e scripts,
+ * tests, markdown) and make the CSS depend on files the AMO sources zip does not contain.
+ */
+@import 'tailwindcss' source(none);
+@import 'tw-animate-css';
+@source '../entrypoints';
+@source '../components';
+@source '../composables';
+@source not '../**/*.test.ts';
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Fonts are bundled from the fontsource packages, but only the Latin subsets as woff2.
+ * Importing the packages' own CSS would ship every script in woff and woff2 (about 500 kB).
+ */
+@font-face {
+  font-family: 'Inter Variable';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2')
+    format('woff2-variations');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC,
+    U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../../node_modules/@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC,
+    U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../../node_modules/@fontsource/jetbrains-mono/files/jetbrains-mono-latin-500-normal.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC,
+    U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../../node_modules/@fontsource/jetbrains-mono/files/jetbrains-mono-latin-600-normal.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC,
+    U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@theme inline {
+  --font-sans: 'Inter Variable', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Mono', monospace;
+
+  /* Square everywhere: every radius token is the same 3 px. */
+  --radius-sm: var(--radius);
+  --radius-md: var(--radius);
+  --radius-lg: var(--radius);
+  --radius-xl: var(--radius);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Extension-specific tokens beyond the shadcn set. */
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-border-strong: var(--border-strong);
+  --color-ink-2: var(--ink-2);
+  --color-ink-4: var(--ink-4);
+  --color-sidebar: var(--sidebar);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-success-border: var(--success-border);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-warning-border: var(--warning-border);
+  --color-danger-soft: var(--danger-soft);
+  --color-danger-border: var(--danger-border);
+  --color-info: var(--info);
+  --color-switch-on: var(--switch-on);
+  --color-switch-on-border: var(--switch-on-border);
+}
+
+:root {
+  --radius: 3px;
+
+  --background: #f3f5f7;
+  --foreground: #0a0c0f;
+  --card: #ffffff;
+  --card-foreground: #0a0c0f;
+  --popover: #ffffff;
+  --popover-foreground: #0a0c0f;
+  --primary: #0a0c0f;
+  --primary-foreground: #ffffff;
+  --secondary: #f3f5f7;
+  --secondary-foreground: #0a0c0f;
+  --muted: #eceff3;
+  --muted-foreground: #5a6371;
+  --accent: #007a96;
+  --accent-foreground: #ffffff;
+  --destructive: #c4102b;
+  --destructive-foreground: #ffffff;
+  --border: #d5d9df;
+  --input: #b9c0c9;
+  --ring: #007a96;
+
+  --surface-2: #eceff3;
+  --surface-3: #dfe3e8;
+  --border-strong: #b9c0c9;
+  --ink-2: #454e5c;
+  --ink-4: #6b7482;
+  --sidebar: #ffffff;
+  --success: #1b7a3e;
+  --success-soft: #e6f6ec;
+  --success-border: #1b7a3e;
+  --warning: #875900;
+  --warning-soft: #fff4d6;
+  --warning-border: #e2c27a;
+  --danger-soft: #fde8ea;
+  --danger-border: #f0b4bb;
+  --info: #007a96;
+  --switch-on: #1b7a3e;
+  --switch-on-border: #156231;
+}
+
+.dark {
+  --background: #0a0c0f;
+  --foreground: #f2f4f7;
+  --card: #0f1216;
+  --card-foreground: #f2f4f7;
+  --popover: #0f1216;
+  --popover-foreground: #f2f4f7;
+  --primary: #f2f4f7;
+  --primary-foreground: #0a0c0f;
+  --secondary: #171a1f;
+  --secondary-foreground: #f2f4f7;
+  --muted: #171a1f;
+  --muted-foreground: #808997;
+  --accent: #38d0ea;
+  --accent-foreground: #0a0c0f;
+  --destructive: #ff4d42;
+  --destructive-foreground: #0a0c0f;
+  --border: #262a31;
+  --input: #3a404a;
+  --ring: #38d0ea;
+
+  --surface-2: #171a1f;
+  --surface-3: #22262d;
+  --border-strong: #3a404a;
+  --ink-2: #a6aeba;
+  --ink-4: #78838f;
+  --sidebar: #0c0e11;
+  --success: #45d483;
+  --success-soft: #0d2a19;
+  --success-border: #1f5a36;
+  --warning: #ffb000;
+  --warning-soft: #2e2100;
+  --warning-border: #5c3d00;
+  --danger-soft: #2a1210;
+  --danger-border: #5a1d1a;
+  --info: #38d0ea;
+  --switch-on: #45d483;
+  --switch-on-border: #2f9a5f;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    background: var(--background);
+    color-scheme: light dark;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans text-[13px] leading-[1.35] tracking-[-0.01em] antialiased;
+    margin: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}

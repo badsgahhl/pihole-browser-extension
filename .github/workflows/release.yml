@@ -1,0 +1,71 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  # Builds the store zips for a version tag and drafts a GitHub release with them. Publishing to
+  # the stores stays manual, see README.md and SOURCE_CODE_REVIEW.md.
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      # No version here: the action reads packageManager from package.json and refuses both at once.
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+
+      # Before the install, so a mistagged push fails in seconds.
+      - name: Check the tag matches package.json
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          version="$(node -p "require('./package.json').version")"
+          if [ "$tag" != "$version" ]; then
+            echo "Tag v$tag does not match package.json version $version" >&2
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # The same checks as CI: a tag may sit on a commit CI never saw.
+      - name: Format, lint, type-check and test
+        run: |
+          pnpm format:check
+          pnpm lint:check
+          pnpm type-check
+          pnpm test
+
+      - name: Check the generated API client is in sync
+        env:
+          REDOCLY_TELEMETRY: off
+        run: |
+          pnpm generate:api
+          git add -N -- api-spec src/lib/api/pihole
+          git diff --exit-code -- api-spec src/lib/api/pihole
+
+      - name: Package for Chrome, Edge and Firefox
+        run: |
+          pnpm zip
+          pnpm zip:firefox
+
+      - name: Lint the Firefox build
+        run: pnpm exec web-ext lint --source-dir .output/firefox-mv3
+
+      - name: Draft the GitHub release
+        uses: softprops/action-gh-release@v3
+        with:
+          draft: true
+          fail_on_unmatched_files: true
+          name: ${{ github.ref_name }}
+          body: |
+            See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/CHANGELOG.md).
+
+            The Chrome zip is also the Edge Add-ons upload. The sources zip is for the AMO source review.
+          files: .output/*.zip

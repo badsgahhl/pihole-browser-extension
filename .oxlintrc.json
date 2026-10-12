@@ -1,0 +1,150 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["vue", "typescript", "unicorn"],
+  "categories": {
+    "correctness": "off"
+  },
+  "env": {
+    "builtin": true
+  },
+  "ignorePatterns": [
+    "**/.output/**",
+    "**/.wxt/**",
+    "**/coverage/**",
+    "**/design/**",
+    "**/api-spec/**",
+    "**/src/lib/api/pihole/**",
+    "**/src/components/ui/**",
+    "**/src/public/**"
+  ],
+  "rules": {
+    "vue/no-arrow-functions-in-watch": "error",
+    "vue/no-async-in-computed-properties": "error",
+    "vue/no-computed-properties-in-data": "error",
+    "vue/no-deprecated-data-object-declaration": "error",
+    "vue/no-deprecated-delete-set": "error",
+    "vue/no-deprecated-destroyed-lifecycle": "error",
+    "vue/no-deprecated-events-api": "error",
+    "vue/no-deprecated-model-definition": "error",
+    "vue/no-deprecated-props-default-this": "error",
+    "vue/no-deprecated-vue-config-keycodes": "error",
+    "vue/no-dupe-keys": "error",
+    "vue/no-export-in-script-setup": "error",
+    "vue/no-expose-after-await": "error",
+    "vue/no-lifecycle-after-await": "error",
+    "vue/no-reserved-component-names": "error",
+    "vue/no-reserved-keys": "error",
+    "vue/no-reserved-props": "error",
+    "vue/no-shared-component-data": "error",
+    "vue/no-side-effects-in-computed-properties": "error",
+    "vue/no-watch-after-await": "error",
+    "vue/prefer-import-from-vue": "error",
+    "vue/require-prop-type-constructor": "error",
+    "vue/require-render-return": "error",
+    "vue/require-slots-as-functions": "error",
+    "vue/return-in-computed-property": "error",
+    "vue/return-in-emits-validator": "error",
+    "vue/valid-define-emits": "error",
+    "vue/valid-define-options": "error",
+    "vue/valid-define-props": "error",
+    "vue/valid-next-tick": "error",
+    "vue/component-definition-name-casing": "warn",
+    "vue/prop-name-casing": "warn",
+    "vue/require-default-prop": "warn",
+    "vue/require-prop-types": "warn",
+    "vue/no-multiple-slot-args": "warn",
+    "vue/no-required-prop-with-default": "warn",
+    "no-array-constructor": "error",
+    "no-unused-expressions": "error",
+    "no-unused-vars": "error",
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          {
+            "group": [
+              "@/lib/api/pihole/client.gen",
+              "@/lib/api/pihole/client.gen.ts",
+              "**/api/pihole/client.gen",
+              "**/api/pihole/client.gen.ts"
+            ],
+            "message": "Pi-hole clients are created per instance in src/lib/pihole. Pages never talk to Pi-hole directly; send a message to the background instead."
+          }
+        ]
+      }
+    ],
+    "typescript/ban-ts-comment": "error",
+    "typescript/no-duplicate-enum-values": "error",
+    "typescript/no-empty-object-type": "error",
+    "typescript/no-explicit-any": "error",
+    "typescript/no-extra-non-null-assertion": "error",
+    "typescript/no-misused-new": "error",
+    "typescript/no-namespace": "error",
+    "typescript/no-non-null-asserted-optional-chain": "error",
+    "typescript/no-require-imports": "error",
+    "typescript/no-this-alias": "error",
+    "typescript/no-unnecessary-type-constraint": "error",
+    "typescript/no-unsafe-declaration-merging": "error",
+    "typescript/no-unsafe-function-type": "error",
+    "typescript/no-wrapper-object-types": "error",
+    "typescript/prefer-as-const": "error",
+    "typescript/prefer-namespace-keyword": "error",
+    "typescript/triple-slash-reference": "error"
+  },
+  "overrides": [
+    {
+      "files": ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts", "**/*.vue"],
+      "rules": {
+        "constructor-super": "off",
+        "getter-return": "off",
+        "no-class-assign": "off",
+        "no-const-assign": "off",
+        "no-dupe-class-members": "off",
+        "no-dupe-keys": "off",
+        "no-func-assign": "off",
+        "no-import-assign": "off",
+        "no-new-native-nonconstructor": "off",
+        "no-obj-calls": "off",
+        "no-redeclare": "off",
+        "no-setter-return": "off",
+        "no-this-before-super": "off",
+        "no-unreachable": "off",
+        "no-unsafe-negation": "off",
+        "no-var": "error",
+        "no-with": "off",
+        "prefer-const": "error",
+        "prefer-rest-params": "error",
+        "prefer-spread": "error"
+      }
+    },
+    {
+      "files": ["src/lib/pihole/**/*.ts"],
+      "rules": {
+        "no-restricted-imports": "off"
+      }
+    },
+    {
+      "files": ["src/**/*.test.ts", "src/test/**/*.ts"],
+      "rules": {
+        "vitest/expect-expect": ["error", { "assertFunctionNames": ["expect", "expect*"] }],
+        "vitest/no-commented-out-tests": "error",
+        "vitest/no-conditional-expect": "error",
+        "vitest/no-disabled-tests": "warn",
+        "vitest/no-focused-tests": "error",
+        "vitest/no-identical-title": "error",
+        "vitest/no-import-node-test": "error",
+        "vitest/no-interpolation-in-snapshots": "error",
+        "vitest/no-mocks-import": "error",
+        "vitest/no-standalone-expect": "error",
+        "vitest/no-unneeded-async-expect-function": "error",
+        "vitest/prefer-called-exactly-once-with": "error",
+        "vitest/require-local-test-context-for-concurrent-snapshots": "error",
+        "vitest/valid-describe-callback": "error",
+        "vitest/valid-expect": ["error", { "maxArgs": 2 }],
+        "vitest/valid-expect-in-promise": "error",
+        "vitest/valid-title": "error"
+      },
+      "plugins": ["vitest"]
+    }
+  ]
+}

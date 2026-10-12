@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Popup A dark, blocking active</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#38d0ea}a:hover{color:#7fe0f2}
+</style>
+</helmet>
+<div style="width: 320px; height: 356px; box-sizing: border-box; background: #0a0c0f; color: #f2f4f7; font-family: 'Inter', system-ui, sans-serif; font-size: 13px; line-height: 1.35; letter-spacing: -0.01em; display: flex; flex-direction: column; border: 1px solid #262a31">
+
+  <div style="display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 8px 0 12px; border-bottom: 1px solid #262a31; flex-shrink: 0">
+    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5.5c-1.5-2.5-4-2.5-5.5-1.5 1.5 2 3.5 2.5 5.5 1.5z" fill="#45d483"></path><path d="M12 5.5c1.5-2.5 4-2.5 5.5-1.5-1.5 2-3.5 2.5-5.5 1.5z" fill="#45d483"></path><circle cx="12" cy="9" r="3.1" fill="#ff4d42"></circle><circle cx="8.4" cy="12.6" r="3.1" fill="#ff4d42"></circle><circle cx="15.6" cy="12.6" r="3.1" fill="#ff4d42"></circle><circle cx="9.9" cy="16.6" r="3.1" fill="#ff4d42"></circle><circle cx="14.1" cy="16.6" r="3.1" fill="#ff4d42"></circle><circle cx="12" cy="20.2" r="2.5" fill="#ff4d42"></circle></svg>
+    <div style="font-weight: 600; font-size: 13px">Pi-hole Switch</div>
+    <div aria-label="Connected Pi-holes" style="margin-left: auto; display: flex; gap: 4px">
+      <button type="button" title="Home · connected · Core 6.4.2" style="display: inline-flex; align-items: center; gap: 5px; height: 22px; padding: 0 7px; border: 1px solid #262a31; border-radius: 3px; background: #171a1f; color: #a6aeba; font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 500; cursor: pointer"><span style="width: 5px; height: 5px; border-radius: 50%; background: #45d483"></span>Home</button>
+      <button type="button" title="Office · connected · Core 6.4.2" style="display: inline-flex; align-items: center; gap: 5px; height: 22px; padding: 0 7px; border: 1px solid #262a31; border-radius: 3px; background: #171a1f; color: #a6aeba; font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 500; cursor: pointer"><span style="width: 5px; height: 5px; border-radius: 50%; background: #45d483"></span>Office</button>
+    </div>
+    <button type="button" aria-label="Settings" style="display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border: 1px solid transparent; border-radius: 3px; background: transparent; color: #808997; cursor: pointer; padding: 0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></svg></button>
+  </div>
+
+  <section aria-label="Blocking" style="margin: 10px 10px 0; border: 1px solid #262a31; border-radius: 3px; background: #0f1216">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 10px 12px">
+      <span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 50%; background: #45d483; box-shadow: 0 0 0 3px rgba(69, 212, 131, 0.22); flex-shrink: 0"></span>
+      <div style="flex: 1; min-width: 0">
+        <div style="font-weight: 600">Blocking active</div>
+        <div style="font-size: 11px; color: #808997"><span style="font-family: 'JetBrains Mono', monospace; color: #a6aeba">2</span> Pi-holes · <span style="font-family: 'JetBrains Mono', monospace; color: #a6aeba">24</span> clients · <span style="font-family: 'JetBrains Mono', monospace; color: #a6aeba">38 %</span> blocked</div>
+      </div>
+      <button type="button" role="switch" aria-checked="true" aria-label="Blocking on" style="position: relative; width: 40px; height: 22px; border: 1px solid #2f9a5f; border-radius: 3px; background: #45d483; padding: 0; cursor: pointer; flex-shrink: 0"><span style="position: absolute; top: 2px; right: 2px; width: 16px; height: 16px; border-radius: 2px; background: #0a0c0f"></span></button>
+    </div>
+    <div style="border-top: 1px solid #262a31; padding: 8px 12px 10px; display: flex; flex-direction: column; gap: 6px">
+      <div style="display: flex; align-items: center; justify-content: space-between">
+        <span style="font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #808997">Disable all for</span>
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #5a6371">T toggles</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px">
+        <button type="button" style="height: 24px; border: 1px solid #262a31; border-radius: 3px; background: #171a1f; color: #f2f4f7; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; cursor: pointer; padding: 0">10s</button>
+        <button type="button" style="height: 24px; border: 1px solid #262a31; border-radius: 3px; background: #171a1f; color: #f2f4f7; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; cursor: pointer; padding: 0">30s</button>
+        <button type="button" style="height: 24px; border: 1px solid #262a31; border-radius: 3px; background: #171a1f; color: #f2f4f7; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; cursor: pointer; padding: 0">5m</button>
+        <button type="button" style="height: 24px; border: 1px solid #262a31; border-radius: 3px; background: #171a1f; color: #f2f4f7; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; cursor: pointer; padding: 0">30m</button>
+        <button type="button" style="height: 24px; border: 1px solid #262a31; border-radius: 3px; background: #171a1f; color: #f2f4f7; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; cursor: pointer; padding: 0">1h</button>
+        <button type="button" aria-label="Disable permanently" style="height: 24px; border: 1px solid #262a31; border-radius: 3px; background: #171a1f; color: #f2f4f7; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; cursor: pointer; padding: 0">∞</button>
+      </div>
+    </div>
+  </section>
+
+  <section aria-label="Current site" style="margin: 10px 10px 0; border: 1px solid #262a31; border-radius: 3px; background: #0f1216">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 10px 12px">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ff4d42" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m8.5 8.5 7 7"></path></svg>
+      <div style="flex: 1; min-width: 0">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">ads.google.com</div>
+        <div style="font-size: 11px; color: #ff4d42">Blocked by list StevenBlack hosts</div>
+      </div>
+    </div>
+    <div style="border-top: 1px solid #262a31; padding: 8px 12px 8px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px">
+      <button type="button" style="display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 8px; border: 1px solid #262a31; border-radius: 3px; background: #171a1f; color: #f2f4f7; font-family: 'Inter', system-ui, sans-serif; font-size: 12px; font-weight: 500; cursor: pointer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#45d483" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>Allow<kbd style="display: inline-flex; align-items: center; justify-content: center; min-width: 16px; height: 16px; padding: 0 4px; margin-left: auto; border: 1px solid #3a404a; border-radius: 2px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #808997">A</kbd></button>
+      <button type="button" style="display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 8px; border: 1px solid #262a31; border-radius: 3px; background: #171a1f; color: #f2f4f7; font-family: 'Inter', system-ui, sans-serif; font-size: 12px; font-weight: 500; cursor: pointer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff4d42" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m8.5 8.5 7 7"></path></svg>Deny<kbd style="display: inline-flex; align-items: center; justify-content: center; min-width: 16px; height: 16px; padding: 0 4px; margin-left: auto; border: 1px solid #3a404a; border-radius: 2px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #808997">D</kbd></button>
+    </div>
+    <div style="display: flex; align-items: center; justify-content: space-between; padding: 0 12px 10px; font-size: 11px">
+      <a href="#allow-temp" style="display: inline-flex; align-items: center; gap: 4px; color: #38d0ea; text-decoration: none; font-weight: 500"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>Allow for 10 min</a>
+      <a href="#open-admin" style="display: inline-flex; align-items: center; gap: 4px; color: #808997; text-decoration: none; font-weight: 500">Open in Pi-hole<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg></a>
+    </div>
+  </section>
+
+  <div style="margin-top: auto; display: flex; align-items: center; gap: 8px; height: 30px; padding: 0 12px; border-top: 1px solid #262a31; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #808997; flex-shrink: 0">
+    <span>Core 6.4.2 · FTL 6.6.1</span>
+    <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 4px; height: 18px; padding: 0 6px; border: 1px solid #5c3d00; border-radius: 3px; background: #2e2100; color: #ffb000; font-family: 'Inter', system-ui, sans-serif; font-size: 10px; font-weight: 600"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"></path><path d="m5 12 7-7 7 7"></path></svg>Update available</span>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":320,"height":356}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

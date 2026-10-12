@@ -1,0 +1,5 @@
+allowBuilds:
+  simple-git-hooks: true
+  esbuild: false
+minimumReleaseAgeExclude:
+  - happy-dom@21.0.1

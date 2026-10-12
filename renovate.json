@@ -1,0 +1,64 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": [
+    "Weekly (Monday 00-09, Berlin): minor, patch, pin and digest updates merge themselves once CI is green.",
+    "Majors wait for a person as draft PRs. TypeScript stays below 6 and @types/node below 25 on purpose.",
+    "Renovate merges by itself (platformAutomerge off); master must require the build-and-test check and nothing else that Renovate cannot satisfy."
+  ],
+  "extends": ["config:recommended"],
+  "timezone": "Europe/Berlin",
+  "schedule": ["* 0-8 * * 1"],
+  "updateNotScheduled": false,
+  "minimumReleaseAge": "3 days",
+  "platformAutomerge": false,
+  "automergeStrategy": "squash",
+  "rebaseWhen": "conflicted",
+  "osvVulnerabilityAlerts": true,
+  "prConcurrentLimit": 0,
+  "prHourlyLimit": 0,
+  "draftPR": true,
+  "lockFileMaintenance": {
+    "enabled": true,
+    "automerge": true,
+    "draftPR": false
+  },
+  "packageRules": [
+    {
+      "description": "Merge without a person once the checks are green.",
+      "matchUpdateTypes": ["minor", "patch", "pin", "pinDigest", "digest"],
+      "automerge": true,
+      "draftPR": false
+    },
+    {
+      "description": "Workflow changes rerun everything; once a week in one PR.",
+      "matchManagers": ["github-actions"],
+      "groupName": "github-actions"
+    },
+    {
+      "description": "WXT and its modules move together.",
+      "matchPackageNames": ["wxt", "@wxt-dev/**"],
+      "groupName": "wxt"
+    },
+    {
+      "description": "@hey-api/openapi-ts loads the TypeScript compiler API and breaks on TypeScript 6. Lift this once a release of openapi-ts supports it.",
+      "matchPackageNames": ["typescript"],
+      "allowedVersions": "<6"
+    },
+    {
+      "description": "The engines field pins Node 24; the types follow the runtime, not the other way round.",
+      "matchPackageNames": ["@types/node"],
+      "allowedVersions": "<25"
+    },
+    {
+      "description": "Design tooling renders the mockups and store images locally; e2e drives the built extension in a headless browser. CI still lints and formats e2e, so their updates wait for a green check like everything else.",
+      "matchFileNames": ["design/**", "e2e/**"],
+      "groupName": "local tooling"
+    },
+    {
+      "description": "Majors wait for a person, one draft PR each.",
+      "matchUpdateTypes": ["major"],
+      "automerge": false,
+      "draftPR": true
+    }
+  ]
+}

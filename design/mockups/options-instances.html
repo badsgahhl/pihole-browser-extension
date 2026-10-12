@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Options, Pi-holes</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+body{margin:0}
+a{color:#38d0ea}a:hover{color:#7fe0f2}
+</style>
+<style>
+body { margin: 0; background: #15181d; min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 40px 16px; box-sizing: border-box; }
+body { padding: 0; display: block; } body > div { min-height: 100vh; }
+</style>
+</head>
+<body>
+<div style="min-height: 800px; box-sizing: border-box; background: #0a0c0f; color: #f2f4f7; font-family: 'Inter', system-ui, sans-serif; font-size: 13px; line-height: 1.4; letter-spacing: -0.01em; display: flex; flex-wrap: wrap">
+
+  <nav aria-label="Settings sections" style="flex: 0 1 232px; min-width: 200px; box-sizing: border-box; border-right: 1px solid #262a31; background: #0c0e11; display: flex; flex-direction: column; gap: 4px; padding: 16px 12px">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 4px 8px 14px">
+      <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5.5c-1.5-2.5-4-2.5-5.5-1.5 1.5 2 3.5 2.5 5.5 1.5z" fill="#45d483"></path><path d="M12 5.5c1.5-2.5 4-2.5 5.5-1.5-1.5 2-3.5 2.5-5.5 1.5z" fill="#45d483"></path><circle cx="12" cy="9" r="3.1" fill="#ff4d42"></circle><circle cx="8.4" cy="12.6" r="3.1" fill="#ff4d42"></circle><circle cx="15.6" cy="12.6" r="3.1" fill="#ff4d42"></circle><circle cx="9.9" cy="16.6" r="3.1" fill="#ff4d42"></circle><circle cx="14.1" cy="16.6" r="3.1" fill="#ff4d42"></circle><circle cx="12" cy="20.2" r="2.5" fill="#ff4d42"></circle></svg>
+      <div>
+        <div style="font-weight: 600; font-size: 14px; line-height: 1.2">Pi-hole Switch</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: #808997">v5.0.0</div>
+      </div>
+    </div>
+    <a href="#pi-holes" aria-current="page" style="display: flex; align-items: center; gap: 10px; height: 32px; padding: 0 10px; border: 1px solid #3a404a; border-radius: 3px; background: #171a1f; color: #f2f4f7; text-decoration: none; font-weight: 600"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="7" rx="1"></rect><rect x="2" y="14" width="20" height="7" rx="1"></rect><path d="M6 6.5h.01"></path><path d="M6 17.5h.01"></path></svg>Pi-holes</a>
+    <a href="#general" style="display: flex; align-items: center; gap: 10px; height: 32px; padding: 0 10px; border: 1px solid transparent; border-radius: 3px; color: #a6aeba; text-decoration: none; font-weight: 500"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21v-7"></path><path d="M4 10V3"></path><path d="M12 21v-9"></path><path d="M12 8V3"></path><path d="M20 21v-5"></path><path d="M20 12V3"></path><path d="M1 14h6"></path><path d="M9 8h6"></path><path d="M17 16h6"></path></svg>General</a>
+    <a href="#shortcuts" style="display: flex; align-items: center; gap: 10px; height: 32px; padding: 0 10px; border: 1px solid transparent; border-radius: 3px; color: #a6aeba; text-decoration: none; font-weight: 500"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="1"></rect><path d="M6 8h.01"></path><path d="M10 8h.01"></path><path d="M14 8h.01"></path><path d="M18 8h.01"></path><path d="M8 12h.01"></path><path d="M12 12h.01"></path><path d="M16 12h.01"></path><path d="M7 16h10"></path></svg>Shortcuts</a>
+    <a href="#about" style="display: flex; align-items: center; gap: 10px; height: 32px; padding: 0 10px; border: 1px solid transparent; border-radius: 3px; color: #a6aeba; text-decoration: none; font-weight: 500"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>About</a>
+    <div style="flex: 1"></div>
+    <a href="#donate" style="display: flex; align-items: center; gap: 10px; height: 30px; padding: 0 10px; border-radius: 3px; color: #808997; text-decoration: none; font-size: 12px; font-weight: 500"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12v10H4V12"></path><path d="M2 7h20v5H2z"></path><path d="M12 22V7"></path><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>Donate</a>
+    <a href="#issue" style="display: flex; align-items: center; gap: 10px; height: 30px; padding: 0 10px; border-radius: 3px; color: #808997; text-decoration: none; font-size: 12px; font-weight: 500"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 2 1.88 1.88"></path><path d="M14.12 3.88 16 2"></path><path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1"></path><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6z"></path><path d="M12 20v-9"></path><path d="M6.53 9C4.6 8.8 3 7.1 3 5"></path><path d="M6 13H2"></path><path d="M3 21c0-2.1 1.7-3.9 3.8-4"></path><path d="M20.97 5c0 2.1-1.6 3.8-3.5 4"></path><path d="M22 13h-4"></path><path d="M17.2 17c2.1.1 3.8 1.9 3.8 4"></path></svg>Report an issue</a>
+    <div style="padding: 10px 10px 0; font-size: 10.5px; color: #5a6371">© 2026 Pascal Glaser · MIT</div>
+  </nav>
+
+  <main style="flex: 999 1 560px; min-width: 0; box-sizing: border-box; padding: 28px 32px 40px">
+    <div style="max-width: 880px; display: flex; flex-direction: column; gap: 16px">
+      <div>
+        <h1 style="margin: 0; font-size: 20px; font-weight: 600; letter-spacing: -0.02em">Pi-holes</h1>
+        <p style="margin: 4px 0 0; font-size: 12.5px; color: #808997">Every switch, allow and deny action is sent to all connected Pi-holes at once. The popup shows each one's state in its header.</p>
+      </div>
+
+      <section aria-label="Instances" style="border: 1px solid #262a31; border-radius: 3px; background: #0f1216">
+        <div style="display: grid; grid-template-columns: 16px minmax(0, 1.2fr) minmax(0, 1fr) auto auto; align-items: center; gap: 14px; padding: 12px 14px; border-bottom: 1px solid #262a31">
+          <span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 50%; background: #45d483; box-shadow: 0 0 0 3px rgba(69, 212, 131, 0.22); justify-self: center"></span>
+          <div style="min-width: 0">
+            <div style="font-weight: 600">Home</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #808997; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">http://192.168.178.20:9802</div>
+          </div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #a6aeba; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Core 6.4.2 · FTL 6.6.1 · Web 6.5</div>
+          <span style="display: inline-flex; align-items: center; gap: 4px; height: 20px; padding: 0 7px; border: 1px solid #5c3d00; border-radius: 3px; background: #2e2100; color: #ffb000; font-size: 10.5px; font-weight: 600; white-space: nowrap"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"></path><path d="m5 12 7-7 7 7"></path></svg>Update available</span>
+          <div style="display: flex; gap: 4px">
+            <button type="button" aria-label="Edit Home" aria-pressed="true" style="display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border: 1px solid #3a404a; border-radius: 3px; background: #22262d; color: #f2f4f7; cursor: pointer; padding: 0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2.8 2.8 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"></path></svg></button>
+            <button type="button" aria-label="Remove Home" style="display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border: 1px solid #262a31; border-radius: 3px; background: #171a1f; color: #a6aeba; cursor: pointer; padding: 0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"></path><path d="M8 6V4h8v2"></path><path d="M19 6l-1 14H6L5 6"></path></svg></button>
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 16px minmax(0, 1.2fr) minmax(0, 1fr) auto auto; align-items: center; gap: 14px; padding: 12px 14px; border-bottom: 1px solid #262a31">
+          <span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 50%; background: #45d483; box-shadow: 0 0 0 3px rgba(69, 212, 131, 0.22); justify-self: center"></span>
+          <div style="min-width: 0">
+            <div style="font-weight: 600">Office</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #808997; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">https://pihole.office.example</div>
+          </div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #a6aeba; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Core 6.4.2 · FTL 6.6.1 · Web 6.5</div>
+          <span style="display: inline-flex; align-items: center; gap: 4px; height: 20px; padding: 0 7px; border: 1px solid #1f5a36; border-radius: 3px; background: #0d2a19; color: #45d483; font-size: 10.5px; font-weight: 600; white-space: nowrap"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>Up to date</span>
+          <div style="display: flex; gap: 4px">
+            <button type="button" aria-label="Edit Office" style="display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border: 1px solid #262a31; border-radius: 3px; background: #171a1f; color: #a6aeba; cursor: pointer; padding: 0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2.8 2.8 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"></path></svg></button>
+            <button type="button" aria-label="Remove Office" style="display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border: 1px solid #262a31; border-radius: 3px; background: #171a1f; color: #a6aeba; cursor: pointer; padding: 0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"></path><path d="M8 6V4h8v2"></path><path d="M19 6l-1 14H6L5 6"></path></svg></button>
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 16px minmax(0, 1.2fr) minmax(0, 1fr) auto auto; align-items: center; gap: 14px; padding: 12px 14px; border-bottom: 1px solid #262a31">
+          <span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 50%; background: #ff4d42; box-shadow: 0 0 0 3px rgba(255, 77, 66, 0.22); justify-self: center"></span>
+          <div style="min-width: 0">
+            <div style="font-weight: 600">Garage</div>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #808997; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">http://10.0.0.5</div>
+          </div>
+          <div style="font-size: 11px; color: #ff4d42; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Unauthorized · check the password</div>
+          <span style="display: inline-flex; align-items: center; gap: 4px; height: 20px; padding: 0 7px; border: 1px solid #262a31; border-radius: 3px; background: #171a1f; color: #808997; font-size: 10.5px; font-weight: 600; white-space: nowrap">No session</span>
+          <div style="display: flex; gap: 4px">
+            <button type="button" aria-label="Edit Garage" style="display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border: 1px solid #262a31; border-radius: 3px; background: #171a1f; color: #a6aeba; cursor: pointer; padding: 0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2.8 2.8 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"></path></svg></button>
+            <button type="button" aria-label="Remove Garage" style="display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border: 1px solid #262a31; border-radius: 3px; background: #171a1f; color: #a6aeba; cursor: pointer; padding: 0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"></path><path d="M8 6V4h8v2"></path><path d="M19 6l-1 14H6L5 6"></path></svg></button>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px">
+          <button type="button" style="display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border: 1px solid #3a404a; border-radius: 3px; background: #171a1f; color: #f2f4f7; font-family: 'Inter', system-ui, sans-serif; font-size: 12px; font-weight: 600; cursor: pointer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>Add Pi-hole</button>
+          <span style="font-size: 11px; color: #5a6371">Up to 8 instances</span>
+        </div>
+      </section>
+
+      <section aria-label="Edit Home" style="border: 1px solid #3a404a; border-radius: 3px; background: #0f1216; display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr)">
+        <form style="padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; border-right: 1px solid #262a31">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #808997">Editing · Home</div>
+          <div style="display: flex; flex-direction: column; gap: 5px">
+            <label for="inst-name" style="font-size: 12px; font-weight: 500; color: #a6aeba">Name</label>
+            <input id="inst-name" type="text" value="Home" style="box-sizing: border-box; height: 32px; padding: 0 10px; border: 1px solid #3a404a; border-radius: 3px; background: #0a0c0f; color: #f2f4f7; font-family: 'Inter', system-ui, sans-serif; font-size: 13px">
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px">
+            <label for="inst-url" style="font-size: 12px; font-weight: 500; color: #a6aeba">Address</label>
+            <input id="inst-url" type="url" value="http://192.168.178.20:9802" style="box-sizing: border-box; height: 32px; padding: 0 10px; border: 1px solid #3a404a; border-radius: 3px; background: #0a0c0f; color: #f2f4f7; font-family: 'JetBrains Mono', monospace; font-size: 12.5px">
+            <div style="font-size: 11px; color: #5a6371">Scheme, host and port of the admin interface. The path is added for you.</div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 5px">
+            <label for="inst-pw" style="font-size: 12px; font-weight: 500; color: #a6aeba">Password</label>
+            <div style="position: relative">
+              <input id="inst-pw" type="password" value="correct-horse" style="box-sizing: border-box; width: 100%; height: 32px; padding: 0 36px 0 10px; border: 1px solid #3a404a; border-radius: 3px; background: #0a0c0f; color: #f2f4f7; font-family: 'JetBrains Mono', monospace; font-size: 12.5px">
+              <button type="button" aria-label="Show password" style="position: absolute; top: 2px; right: 2px; width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; border: 0; border-radius: 3px; background: transparent; color: #808997; cursor: pointer; padding: 0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"></path><circle cx="12" cy="12" r="3"></circle></svg></button>
+            </div>
+            <div style="font-size: 11px; color: #5a6371">Admin password, or an app password from Pi-hole › Settings › API. Stored only in this browser.</div>
+          </div>
+          <div style="display: flex; gap: 6px; margin-top: 4px">
+            <button type="button" style="display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border: 1px solid #f2f4f7; border-radius: 3px; background: #f2f4f7; color: #0a0c0f; font-family: 'Inter', system-ui, sans-serif; font-size: 12px; font-weight: 600; cursor: pointer">Save</button>
+            <button type="button" style="display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border: 1px solid #262a31; border-radius: 3px; background: #171a1f; color: #f2f4f7; font-family: 'Inter', system-ui, sans-serif; font-size: 12px; font-weight: 500; cursor: pointer">Cancel</button>
+          </div>
+        </form>
+        <div style="padding: 16px 18px; display: flex; flex-direction: column; gap: 10px">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #808997">Connection</div>
+          <div style="display: flex; align-items: center; gap: 8px; font-weight: 600; color: #45d483"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>Connected</div>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #a6aeba; line-height: 1.7">Core 6.4.2<br>FTL 6.6.1<br>Web 6.5<br>Docker 2026.10.1</div>
+          <div style="display: flex; align-items: flex-start; gap: 8px; font-size: 11.5px; color: #808997; border-top: 1px solid #262a31; padding-top: 10px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38d0ea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 1px"><rect x="3" y="11" width="18" height="11" rx="1"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg><span>Access to <span style="font-family: 'JetBrains Mono', monospace; color: #a6aeba">192.168.178.20:9802</span> is granted. The browser asks once per address and nothing else is contacted.</span></div>
+          <button type="button" style="align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border: 1px solid #262a31; border-radius: 3px; background: #171a1f; color: #f2f4f7; font-family: 'Inter', system-ui, sans-serif; font-size: 12px; font-weight: 500; cursor: pointer"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7"></path><path d="M21 3v6h-6"></path></svg>Test again</button>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+</body>
+</html>

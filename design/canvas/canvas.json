@@ -1,0 +1,31 @@
+{
+  "v": 3,
+  "createdOnFiles": { "v": 1, "at": "2026-10-11T19:50:00Z" },
+  "title": "Pi-hole Switch v5 Mockups",
+  "launch": { "view": "canvas" },
+  "pages": [],
+  "boards": {
+    "Main.dc.html": { "x": 0, "y": 0, "w": 320, "h": 356, "title": "A · Dark · Blocking active (chosen)" },
+    "PopupA-Paused.dc.html": { "x": 400, "y": 0, "w": 320, "h": 356, "title": "A · Dark · Paused with timer" },
+    "PopupA-Light.dc.html": { "x": 800, "y": 0, "w": 320, "h": 356, "title": "A · Light · Mixed state, site allowed" },
+    "PopupB.dc.html": { "x": 0, "y": 860, "w": 320, "h": 456, "title": "B · Dark · Blocking active" },
+    "PopupB-Light.dc.html": { "x": 400, "y": 860, "w": 320, "h": 456, "title": "B · Light · Site blocked by list" },
+    "Options-Instances.dc.html": { "x": 0, "y": 1820, "w": 1280, "h": 800, "title": "Options · Pi-holes", "expand": "fill" },
+    "Options-General.dc.html": { "x": 1360, "y": 1820, "w": 1280, "h": 800, "title": "Options · General", "expand": "fill" }
+  },
+  "order": [
+    "Main.dc.html",
+    "PopupA-Paused.dc.html",
+    "PopupA-Light.dc.html",
+    "PopupB.dc.html",
+    "PopupB-Light.dc.html",
+    "Options-Instances.dc.html",
+    "Options-General.dc.html"
+  ],
+  "notes": {
+    "t1": { "x": 0, "y": -300, "text": "Popup · Variante A „Console“ · dicht, 320 px, Tastenkürzel sichtbar", "kind": "title1", "maxW": 1120 },
+    "t2": { "x": 0, "y": 560, "text": "Popup · Variante B „Cards“ · luftiger, Status im Vordergrund", "kind": "title1", "maxW": 1120 },
+    "t3": { "x": 0, "y": 1520, "text": "Options · Seitenleiste wie heute, Instanzen als Liste mit Verbindungstest", "kind": "title1", "maxW": 2640 }
+  },
+  "designSystems": []
+}

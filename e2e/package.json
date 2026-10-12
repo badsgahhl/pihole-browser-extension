@@ -1,0 +1,18 @@
+{
+  "name": "pihole-browser-extension-e2e",
+  "private": true,
+  "type": "module",
+  "description": "Drives the built extension in a headless Chromium against a local Pi-hole. See README.md.",
+  "scripts": {
+    "popup": "node popup-shots.mjs ../.output/chrome-mv3-dev out/popup",
+    "options": "node options-shots.mjs ../.output/chrome-mv3-dev out/options",
+    "pages": "node options-pages.mjs ../.output/chrome-mv3-dev out/pages",
+    "migration": "node migration.mjs ../.output/chrome-mv3-dev out/migration",
+    "a11y": "node a11y.mjs ../.output/chrome-mv3-dev out/a11y",
+    "sessions": "node sessions.mjs ../.output/chrome-mv3-dev out/sessions"
+  },
+  "devDependencies": {
+    "axe-core": "^4.14.0",
+    "playwright": "^1.64.0"
+  }
+}
