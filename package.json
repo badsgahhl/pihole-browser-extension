@@ -1,7 +1,7 @@
 {
   "name": "pihole-browser-extension",
   "displayName": "PiHole Browser Extension",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "private": true,
   "type": "module",
   "description": "Control your Pi-hole v6 from the toolbar: pause blocking, allow or deny the current site, several Pi-holes at once.",

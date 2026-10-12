@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.0.1 · 2026-10-12
+
+### Fixed
+
+- The temporary allow line in the popup spells out its unit ("Allowed for 10 min"); "10m" read like metres in German
+  and did not match the button.
+- The mark in the popup header, the empty state and the settings sidebar now has the same shape as the toolbar icon.
+
 ## 5.0.0 · 2026-10-12
 
 A rewrite for Pi-hole v6. Vue 3, Manifest V3 on every browser, one design for Chrome, Edge and Firefox.
