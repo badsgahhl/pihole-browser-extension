@@ -7,6 +7,29 @@ commands:
   deny: Deny current domain
   openSettings: Open settings
 
+contextMenu:
+  toggle: Toggle Pi-hole blocking
+  deny: Deny current domain
+  allow: Allow current domain
+  openSettings: Open Pi-hole Switch settings
+
+badge:
+  on: ON
+  off: OFF
+  error: ERR
+  info: INFO
+  mixed: MIX
+  title:
+    needsSetup: Pi-hole Switch · add your Pi-hole in the settings
+    needsPermission: Pi-hole Switch · grant access to your Pi-hole in the settings
+    unauthorized: Pi-hole Switch · check the password in the settings
+    unreachable: Pi-hole Switch · Pi-hole unreachable
+    mixed: Pi-hole Switch · some Pi-holes are paused
+    paused: Pi-hole Switch · paused, back in $1
+    pausedIndefinitely: Pi-hole Switch · paused until you enable it again
+    enabled: Pi-hole Switch · blocking active
+    enabledStats: Pi-hole Switch · blocking active, $1 % blocked today
+
 popup:
   title: Pi-hole Switch
 

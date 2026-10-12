@@ -45,10 +45,12 @@ describe('formatBadgeCountdown', () => {
 
   it('uses minutes below 100 minutes and hours above', () => {
     expect(formatBadgeCountdown(30_000)).toBe('<1m')
-    expect(formatBadgeCountdown(272_000)).toBe('4m')
+    expect(formatBadgeCountdown(272_000)).toBe('5m')
     expect(formatBadgeCountdown(99 * 60_000)).toBe('99m')
-    expect(formatBadgeCountdown(100 * 60_000)).toBe('1h')
+    expect(formatBadgeCountdown(100 * 60_000)).toBe('1.7h')
+    expect(formatBadgeCountdown(2 * 3_600_000)).toBe('2h')
     expect(formatBadgeCountdown(5 * 3_600_000)).toBe('5h')
+    expect(formatBadgeCountdown(24 * 3_600_000)).toBe('24h')
   })
 })
 

@@ -35,10 +35,11 @@ export function formatCountdown(ms: number): string {
  * so it shows minutes, not seconds: `<1m`, `4m`, `59m`, `2h`.
  */
 export function formatBadgeCountdown(ms: number): string {
-  const total = Math.max(0, Math.ceil(ms / 1000))
+  const total = Math.max(0, ms / 1000)
   if (total < MINUTE) return '<1m'
-  if (total < 100 * MINUTE) return `${Math.floor(total / MINUTE)}m`
-  return `${Math.floor(total / HOUR)}h`
+  if (total < 100 * MINUTE) return `${Math.round(total / MINUTE)}m`
+  const hours = total / HOUR
+  return hours < 10 ? `${hours.toFixed(1).replace(/\.0$/, '')}h` : `${Math.round(hours)}h`
 }
 
 /**
