@@ -74,3 +74,32 @@ After the update the extension asks once for access to each Pi-hole address. It 
 - `contextMenus`: the right-click entries for toggling, allowing and denying.
 - Optional host permissions: the extension requests access to each Pi-hole address the user saves, and to nothing else.
 - Remote code: none. Data use: no user data is collected or transmitted to the developer.
+
+## Privacy form (Edge Add-ons and Chrome Web Store)
+
+### Single purpose
+
+Control the user's own Pi-hole (v6) DNS filter from the browser toolbar: pause or resume blocking, see whether the current site is blocked, and add or remove it on the Pi-hole's allow or deny list. The extension talks only to the Pi-hole addresses the user enters in its settings.
+
+### Permission justifications
+
+- `storage`: Stores the Pi-hole addresses, names and passwords the user enters, the user's preferences (pause duration, badge mode, theme), the last known blocking state so the popup opens instantly, the API session per Pi-hole, and temporary allow entries the extension has to remove again. Everything stays in the browser's extension storage on the device; nothing is synced or sent to the developer.
+- `alarms`: Timers the extension needs while its service worker is asleep: refreshing the blocking state once a minute for the toolbar badge, ending a timed pause on time, and removing a temporary allow entry when it expires.
+- `activeTab`: Reads the host name of the active tab only when the user opens the popup, uses a keyboard shortcut or the context menu, so the popup can show whether that site is blocked by the Pi-hole and let the user allow or deny it. The host name is sent only to the user's own Pi-hole, cached for 30 seconds and not stored otherwise. No page content is read.
+- `contextMenus`: Adds entries to the page's context menu to toggle Pi-hole blocking, allow or deny the current domain and open the settings, so the user can do this without opening the popup.
+- Host permissions (optional, `http://*/*` and `https://*/*`): Access to a Pi-hole address is requested only when the user saves that address in the settings, one origin at a time, and released again when the address is removed. It is needed to send API requests to that Pi-hole. The extension never asks for access to all websites at install.
+
+### Remote code
+
+No. All code ships in the package; nothing is loaded from the network and nothing is evaluated from strings.
+
+### Privacy policy URL
+
+https://github.com/badsgahhl/pihole-browser-extension/blob/master/PRIVACY.md
+
+### Data usage
+
+- Authentication information: yes. The Pi-hole password (or app password) the user enters. Stored only in the browser's extension storage on the device and sent only to that Pi-hole to log in. Never transmitted to the developer.
+- Web history: yes, in the narrowest sense. The host name of the current tab, read only when the user acts (popup, shortcut, context menu) and sent only to the user's own Pi-hole to look it up. Not recorded, not kept beyond a 30-second cache.
+- Everything else: no. No personal, health, financial, communication, location, activity or page-content data.
+- Certifications: data is not sold to third parties, not used or transferred for purposes unrelated to the extension's single purpose, and not used to determine creditworthiness or for lending purposes.
