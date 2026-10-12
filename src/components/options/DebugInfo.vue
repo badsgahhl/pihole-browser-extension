@@ -18,6 +18,7 @@
 
 <script setup lang="ts">
 import { CopyIcon } from '@lucide/vue'
+import { useClipboard } from '@vueuse/core'
 import { computed, onMounted, ref } from 'vue'
 
 import { i18n } from '#i18n'
@@ -32,7 +33,6 @@ const props = defineProps<{ state: ExtensionState | null }>()
 
 const t = i18n.t
 const platform = ref('')
-const copied = ref(false)
 
 onMounted(async () => {
   try {
@@ -57,16 +57,10 @@ const text = computed(() => {
   return lines.join('\n')
 })
 
-let timer: ReturnType<typeof setTimeout> | undefined
+const { copy: copyToClipboard, copied } = useClipboard({ copiedDuring: 1500, legacy: true })
 
-async function copy(): Promise<void> {
-  try {
-    await navigator.clipboard.writeText(text.value)
-    copied.value = true
-    clearTimeout(timer)
-    timer = setTimeout(() => (copied.value = false), 1500)
-  } catch {
-    // Clipboard access can be denied; the text stays selectable.
-  }
+function copy(): void {
+  // Clipboard access can be denied; the text stays selectable then.
+  void copyToClipboard(text.value).catch(() => undefined)
 }
 </script>

@@ -1,33 +1,35 @@
-import { computed, type MaybeRefOrGetter, onScopeDispose, ref, toValue, watch } from 'vue'
+import { useIntervalFn } from '@vueuse/core'
+import { computed, type MaybeRefOrGetter, shallowRef, toValue, watch } from 'vue'
 
 import { formatCountdown } from '@/lib/duration'
 
-/** Ticks once a second while a pause is running, so the popup can show `mm:ss`. */
+/**
+ * Ticks once a second while a pause is running, so the popup can show `mm:ss`. Each tick reads the
+ * wall clock rather than counting down: the end is an absolute time from the background, and a
+ * throttled popup must not drift away from it.
+ */
 export function useCountdown(endsAt: MaybeRefOrGetter<number | null>) {
-  const now = ref(Date.now())
-  let timer: ReturnType<typeof setInterval> | undefined
+  const now = shallowRef(Date.now())
 
-  function stop() {
-    if (timer !== undefined) clearInterval(timer)
-    timer = undefined
-  }
+  const ticker = useIntervalFn(
+    () => {
+      now.value = Date.now()
+      const ends = toValue(endsAt)
+      if (ends === null || now.value >= ends) ticker.pause()
+    },
+    1000,
+    { immediate: false }
+  )
 
   watch(
     () => toValue(endsAt),
     (ends) => {
-      stop()
       now.value = Date.now()
-      if (ends !== null && ends > now.value) {
-        timer = setInterval(() => {
-          now.value = Date.now()
-          if (now.value >= ends) stop()
-        }, 1000)
-      }
+      if (ends !== null && ends > now.value) ticker.resume()
+      else ticker.pause()
     },
     { immediate: true }
   )
-
-  onScopeDispose(stop)
 
   const remainingMs = computed(() => {
     const ends = toValue(endsAt)

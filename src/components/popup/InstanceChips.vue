@@ -1,5 +1,5 @@
 <template>
-  <div :aria-label="t('popup.instances')" class="flex gap-1">
+  <div role="group" :aria-label="t('popup.instances')" class="flex gap-1">
     <template v-if="instances.length <= 3">
       <InstanceChip
         v-for="instance in instances"

@@ -60,7 +60,9 @@ describe('SiteCard', () => {
     expect(wrapper.emitted('allow')).toHaveLength(1)
     expect(wrapper.emitted('deny')).toHaveLength(1)
 
-    const links = wrapper.findAll('.text-\\[11px\\] button')
+    const links = wrapper
+      .findAll('button')
+      .filter((button) => /popup_site_allowTemp|popup_site_openAdmin/.test(button.text()))
     expect(links[0]!.text()).toContain('popup_site_allowTemp:15')
     await links[0]!.trigger('click')
     expect(wrapper.emitted('tempAllow')).toHaveLength(1)

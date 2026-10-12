@@ -4,6 +4,9 @@ import { cva } from 'class-variance-authority'
 export { default as Button } from './Button.vue'
 
 // Square, hairline buttons as in the v5 design: 3 px radius, 1 px border, cyan focus ring.
+// Edited rather than only restyled, on purpose: the variants `link` and `link-muted`, the sizes `xs`
+// and `icon-xs` and the `secondary` default do not exist upstream. Keep them when refreshing from
+// the shadcn registry.
 export const buttonVariants = cva(
   "inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-sm border text-xs font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5 aria-invalid:border-destructive cursor-pointer",
   {

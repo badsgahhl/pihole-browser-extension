@@ -1,4 +1,5 @@
-import { beforeEach, vi } from 'vitest'
+import { enableAutoUnmount } from '@vue/test-utils'
+import { afterEach, beforeEach, vi } from 'vitest'
 import { fakeBrowser } from 'wxt/testing/fake-browser'
 
 /**
@@ -33,6 +34,9 @@ export function installBrowserStubs(): void {
   runtime.setUninstallURL ??= vi.fn(async () => undefined)
   runtime.openOptionsPage ??= vi.fn(async () => undefined)
 }
+
+// Mounted components are torn down after each test, so watchers and listeners do not leak.
+enableAutoUnmount(afterEach)
 
 // Every test starts from an empty fake browser: no storage, no listeners, no alarms.
 beforeEach(() => {

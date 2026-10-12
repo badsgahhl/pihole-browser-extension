@@ -1,18 +1,19 @@
 <template>
   <div class="flex gap-1">
-    <input
+    <BaseInput
       :id="id"
-      v-model.number="amount"
+      v-model="amount"
+      mono
       type="number"
       :min="min"
       inputmode="numeric"
       :aria-label="label"
-      class="border-input bg-background text-foreground focus-visible:ring-ring focus-visible:ring-offset-background box-border h-[30px] w-16 rounded-sm border px-2 text-right font-mono text-[12.5px] outline-none focus-visible:ring-2 focus-visible:ring-offset-1"
+      class="h-[30px] w-16 px-2 text-right"
       @change="commit"
     />
     <select
       v-model="unit"
-      :aria-label="unitLabel"
+      :aria-label="unitLabel ?? t('options.general.units.label')"
       class="border-input bg-secondary text-foreground focus-visible:ring-ring focus-visible:ring-offset-background box-border h-[30px] rounded-sm border px-2 text-[12.5px] outline-none focus-visible:ring-2 focus-visible:ring-offset-1"
       @change="commit"
     >
@@ -24,20 +25,23 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { shallowRef, watch } from 'vue'
 
 import { i18n } from '#i18n'
+
+import BaseInput from './BaseInput.vue'
 
 type Unit = 'seconds' | 'minutes' | 'hours'
 
 const FACTORS: Record<Unit, number> = { seconds: 1, minutes: 60, hours: 3600 }
 
-const props = withDefaults(
-  defineProps<{ modelValue: number; label: string; unitLabel?: string; id?: string; min?: number }>(),
-  { unitLabel: 'Unit', id: undefined, min: 1 }
-)
-
-const emit = defineEmits<{ 'update:modelValue': [seconds: number] }>()
+const props = withDefaults(defineProps<{ label: string; unitLabel?: string; id?: string; min?: number }>(), {
+  unitLabel: undefined,
+  id: undefined,
+  min: 1
+})
+/** Seconds. The amount and unit shown are derived from it and written back on change. */
+const model = defineModel<number>({ required: true })
 
 const t = i18n.t
 
@@ -47,21 +51,18 @@ function largestUnit(seconds: number): Unit {
   return 'seconds'
 }
 
-const unit = ref<Unit>(largestUnit(props.modelValue))
-const amount = ref<number>(Math.round(props.modelValue / FACTORS[unit.value]))
+const unit = shallowRef<Unit>(largestUnit(model.value))
+const amount = shallowRef(String(Math.round(model.value / FACTORS[unit.value])))
 
-watch(
-  () => props.modelValue,
-  (seconds) => {
-    if (seconds === amount.value * FACTORS[unit.value]) return
-    unit.value = largestUnit(seconds)
-    amount.value = Math.round(seconds / FACTORS[unit.value])
-  }
-)
+watch(model, (seconds) => {
+  if (seconds === Number(amount.value) * FACTORS[unit.value]) return
+  unit.value = largestUnit(seconds)
+  amount.value = String(Math.round(seconds / FACTORS[unit.value]))
+})
 
 function commit() {
   const value = Number(amount.value)
   if (!Number.isFinite(value) || value < props.min) return
-  emit('update:modelValue', Math.round(value * FACTORS[unit.value]))
+  model.value = Math.round(value * FACTORS[unit.value])
 }
 </script>

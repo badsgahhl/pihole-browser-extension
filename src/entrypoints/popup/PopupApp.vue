@@ -67,19 +67,18 @@ import { useActions } from '@/composables/useActions'
 import { useCurrentHostname } from '@/composables/useCurrentHostname'
 import { useExtensionState } from '@/composables/useExtensionState'
 import { useHotkeys } from '@/composables/useHotkeys'
-import { useOpenOptions } from '@/composables/useOpenOptions'
 import { useSettings } from '@/composables/useSettings'
 import { useSiteStatus } from '@/composables/useSiteStatus'
 import { useTheme } from '@/composables/useTheme'
 import { PAUSE_PRESETS } from '@/lib/duration'
 import { errorSourceName } from '@/lib/error-messages'
+import { openOptions } from '@/lib/open-options'
 
 const { state } = useExtensionState()
 const { settings } = useSettings()
 const { hostname } = useCurrentHostname()
 const actions = useActions()
 const site = useSiteStatus(hostname)
-const openOptions = useOpenOptions()
 
 useTheme(computed(() => settings.value?.theme))
 

@@ -40,7 +40,7 @@
 
 <script setup lang="ts">
 import { DownloadIcon, UploadIcon } from '@lucide/vue'
-import { ref } from 'vue'
+import { ref, useTemplateRef } from 'vue'
 
 import { i18n } from '#i18n'
 import { Button } from '@/components/ui/button'
@@ -50,7 +50,8 @@ import ConfirmDialog from './ConfirmDialog.vue'
 
 const t = i18n.t
 
-const fileInput = ref<HTMLInputElement | null>(null)
+// A real input instead of useFileDialog: its change event can be driven in tests with a File.
+const fileInput = useTemplateRef<HTMLInputElement>('fileInput')
 // The dialog clears its open flag before confirm fires, so the file content lives in its own ref.
 const pendingJson = ref<string | null>(null)
 const importOpen = ref(false)

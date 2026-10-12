@@ -10,20 +10,24 @@
 </template>
 
 <script setup lang="ts">
-import { computed, watch } from 'vue'
+import { useTitle } from '@vueuse/core'
+import { computed } from 'vue'
 import { RouterView, useRoute } from 'vue-router'
 
 import { i18n } from '#i18n'
 import { browser } from '#imports'
 import OptionsNav from '@/components/options/OptionsNav.vue'
-import { useSettings } from '@/composables/useSettings'
+import { provideExtensionState } from '@/composables/useExtensionState'
+import { provideSettings } from '@/composables/useSettings'
 import { useTheme } from '@/composables/useTheme'
 
 import type { SectionName } from './router'
 
 const t = i18n.t
 const route = useRoute()
-const { settings } = useSettings()
+// Provided once here, so every view shares one storage subscription and one state request.
+const { settings } = provideSettings()
+provideExtensionState()
 const version = browser.runtime.getManifest().version
 
 useTheme(computed(() => settings.value?.theme))
@@ -35,11 +39,5 @@ const SECTION_TITLES: Record<SectionName, () => string> = {
   about: () => t('options.nav.about')
 }
 
-watch(
-  () => route.meta.section,
-  (section) => {
-    document.title = t('options.title', [SECTION_TITLES[section ?? 'instances']()])
-  },
-  { immediate: true }
-)
+useTitle(computed(() => t('options.title', [SECTION_TITLES[route.meta.section ?? 'instances']()])))
 </script>

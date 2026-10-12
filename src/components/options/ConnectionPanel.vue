@@ -2,32 +2,35 @@
   <div class="flex flex-col gap-2.5 px-[18px] py-4">
     <PanelHeading>{{ t('options.instances.connection') }}</PanelHeading>
 
-    <div
-      v-if="phase === 'testing'"
-      class="text-muted-foreground flex items-center gap-2 text-[12.5px]"
-      aria-live="polite"
-    >
-      <LoaderCircleIcon class="size-3.5 animate-spin" aria-hidden="true" />
-      {{ t('options.instances.testing') }}
+    <!-- One region that is always mounted: a polite live region only announces content swapped into it. -->
+    <div aria-live="polite" class="flex flex-col gap-2.5">
+      <div v-if="phase === 'testing'" class="text-muted-foreground flex items-center gap-2 text-[12.5px]">
+        <LoaderCircleIcon class="size-3.5 animate-spin" aria-hidden="true" />
+        {{ t('options.instances.testing') }}
+      </div>
+      <template v-else-if="view.kind === 'ok'">
+        <div class="text-success flex items-center gap-2 font-semibold">
+          <CheckIcon class="size-3.5" aria-hidden="true" />
+          {{ view.noAuth ? t('options.instances.noAuthNeeded') : t('options.instances.connected') }}
+        </div>
+        <div v-if="view.lines.length" class="text-ink-2 font-mono text-[11px] leading-[1.7]">
+          <div v-for="line in view.lines" :key="line">{{ line }}</div>
+        </div>
+      </template>
+      <p v-else-if="view.kind === 'error'" role="alert" class="text-destructive text-xs">
+        {{ errorMessage(view.error) }}
+      </p>
+      <p v-else class="text-muted-foreground text-xs">{{ t('options.instances.untested') }}</p>
     </div>
-    <template v-else-if="view.kind === 'ok'">
-      <div class="text-success flex items-center gap-2 font-semibold" aria-live="polite">
-        <CheckIcon class="size-3.5" aria-hidden="true" />
-        {{ view.noAuth ? t('options.instances.noAuthNeeded') : t('options.instances.connected') }}
-      </div>
-      <div v-if="view.lines.length" class="text-ink-2 font-mono text-[11px] leading-[1.7]">
-        <div v-for="line in view.lines" :key="line">{{ line }}</div>
-      </div>
-    </template>
-    <p v-else-if="view.kind === 'error'" role="alert" class="text-destructive text-xs">
-      {{ errorMessage(view.error) }}
-    </p>
-    <p v-else class="text-muted-foreground text-xs">{{ t('options.instances.untested') }}</p>
 
     <div
       v-if="host && access !== 'unknown'"
-      class="border-border text-muted-foreground flex items-start gap-2 border-t pt-2.5 text-[11.5px]"
-      :class="access === 'denied' && 'text-destructive'"
+      :class="
+        cn(
+          'border-border text-muted-foreground flex items-start gap-2 border-t pt-2.5 text-[11.5px]',
+          access === 'denied' && 'text-destructive'
+        )
+      "
     >
       <component
         :is="access === 'granted' ? LockIcon : LockOpenIcon"
@@ -59,6 +62,7 @@ import { errorMessage } from '@/lib/error-messages'
 import type { InstanceTestResult } from '@/lib/pihole/actions'
 import type { PiholeErrorData } from '@/lib/pihole/errors'
 import type { InstanceStatus } from '@/lib/state'
+import { cn } from '@/lib/utils'
 import { versionLines } from '@/lib/version'
 
 export type EditorPhase = 'idle' | 'testing' | 'saving'

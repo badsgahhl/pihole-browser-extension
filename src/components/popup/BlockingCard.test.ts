@@ -26,7 +26,8 @@ describe('BlockingCard', () => {
     expect(wrapper.text()).toContain('24')
     expect(wrapper.text()).toContain('38 %')
     expect(wrapper.get('[role="switch"]').attributes('aria-checked')).toBe('true')
-    expect(wrapper.findAll('.grid-cols-7 button')).toHaveLength(7)
+    expect(wrapper.findAll('[aria-keyshortcuts]')).toHaveLength(6)
+    expect(wrapper.find('[aria-label="popup_blocking_custom"]').exists()).toBe(true)
     expect(wrapper.text()).toContain('popup_blocking_disableAllFor')
   })
 
@@ -35,7 +36,7 @@ describe('BlockingCard', () => {
     await wrapper.get('[role="switch"]').trigger('click')
     expect(wrapper.emitted('toggle')).toHaveLength(1)
 
-    const presets = wrapper.findAll('.grid-cols-7 button')
+    const presets = wrapper.findAll('[aria-keyshortcuts]')
     await presets[2]!.trigger('click')
     expect(wrapper.emitted('pause')).toEqual([[300]])
     await presets[5]!.trigger('click')
@@ -55,10 +56,10 @@ describe('BlockingCard', () => {
     await wrapper.vm.$nextTick()
     expect(wrapper.text()).toContain('04:31')
 
-    const buttons = wrapper.findAll('.grid-cols-\\[2fr_1fr_1fr\\] button')
-    await buttons[0]!.trigger('click')
+    const byText = (text: string) => wrapper.findAll('button').find((button) => button.text() === text)!
+    await byText('popup_blocking_enableNow').trigger('click')
     expect(wrapper.emitted('resume')).toHaveLength(1)
-    await buttons[1]!.trigger('click')
+    await byText('popup_blocking_extend5').trigger('click')
     expect(wrapper.emitted('extend')).toEqual([[300]])
   })
 

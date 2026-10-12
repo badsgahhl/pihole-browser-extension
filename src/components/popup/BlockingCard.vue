@@ -3,13 +3,11 @@
     <div class="flex items-center gap-2.5 px-3 py-2.5">
       <StatusDot :tone="dotTone" halo />
       <div class="min-w-0 flex-1">
-        <div class="font-semibold">{{ label }}</div>
-        <div class="text-muted-foreground text-[11px]" :class="sublineClass" aria-live="polite">
+        <div class="font-semibold" aria-live="polite">{{ label }}</div>
+        <div :class="cn('text-muted-foreground text-[11px]', sublineClass)">
           <template v-if="paused && countdown.text.value">
-            <span v-if="state.instances.length === 1">{{ t('popup.blocking.backIn', ['']) }}</span>
-            <span v-else-if="state.instances.length === 2">{{ t('popup.blocking.backInBoth', ['']) }}</span>
-            <span v-else>{{ t('popup.blocking.backInAll', ['']) }}</span>
-            <span class="text-warning font-mono font-semibold">{{ countdown.text.value }}</span>
+            {{ backInParts.before }}<span class="text-warning font-mono font-semibold">{{ countdown.text.value }}</span
+            >{{ backInParts.after }}
           </template>
           <template v-else-if="state.overall === 'enabled' && !state.degraded && hasStats">
             <span class="text-ink-2 font-mono">{{ state.instances.length }}</span>
@@ -77,6 +75,7 @@ import { useCountdown } from '@/composables/useCountdown'
 import { errorMessage } from '@/lib/error-messages'
 import type { PiholeErrorData } from '@/lib/pihole/errors'
 import type { ExtensionState } from '@/lib/state'
+import { cn } from '@/lib/utils'
 
 import PausePresets from './PausePresets.vue'
 import ResumeRow from './ResumeRow.vue'
@@ -164,4 +163,14 @@ const subline = computed(() => {
 })
 
 const sublineClass = computed(() => (props.state.degraded && props.state.overall !== 'error' ? 'text-warning' : ''))
+
+/** The countdown is styled on its own, so the sentence around `$1` is split at a marker. */
+const backInParts = computed(() => {
+  const count = props.state.instances.length
+  const key =
+    count === 1 ? 'popup.blocking.backIn' : count === 2 ? 'popup.blocking.backInBoth' : 'popup.blocking.backInAll'
+  const marker = '[[time]]'
+  const [before = '', after = ''] = t(key, [marker]).split(marker)
+  return { before, after }
+})
 </script>

@@ -42,6 +42,7 @@
         for-id="instance-password"
         :hint="t('options.instances.passwordHint')"
       >
+        <!-- The reveal button overlays the field on purpose; shadcn's input-group is not vendored here. -->
         <div class="relative">
           <BaseInput
             id="instance-password"
@@ -153,12 +154,15 @@ const host = computed(() => (normalizedUrl.value ? new URL(normalizedUrl.value).
 
 watchDebounced(
   normalizedUrl,
-  async (url) => {
+  async (url, _previous, onCleanup) => {
     if (!url) {
       access.value = 'unknown'
       return
     }
-    access.value = (await hasHostPermission(url)) ? 'granted' : 'pending'
+    let stale = false
+    onCleanup(() => (stale = true))
+    const granted = await hasHostPermission(url)
+    if (!stale) access.value = granted ? 'granted' : 'pending'
   },
   { debounce: 250, immediate: true }
 )

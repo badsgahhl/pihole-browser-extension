@@ -1,6 +1,6 @@
 <template>
   <RadioGroupRoot
-    :model-value="modelValue"
+    :model-value="model"
     :aria-label="label"
     orientation="horizontal"
     loop
@@ -34,13 +34,10 @@ export interface SegmentOption<V extends string> {
   label: string
 }
 
-withDefaults(defineProps<{ modelValue: T; options: SegmentOption<T>[]; label: string; size?: 'sm' | 'md' }>(), {
-  size: 'md'
-})
-
-const emit = defineEmits<{ 'update:modelValue': [value: T] }>()
+withDefaults(defineProps<{ options: SegmentOption<T>[]; label: string; size?: 'sm' | 'md' }>(), { size: 'md' })
+const model = defineModel<T>({ required: true })
 
 function onChange(value: unknown) {
-  if (typeof value === 'string') emit('update:modelValue', value as T)
+  if (typeof value === 'string') model.value = value as T
 }
 </script>

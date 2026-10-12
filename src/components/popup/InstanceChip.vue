@@ -15,11 +15,11 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-import { i18n } from '#i18n'
 import BaseChip, { type ChipTone } from '@/components/base/BaseChip.vue'
 import StatusDot, { type StatusTone } from '@/components/base/StatusDot.vue'
 import { statusLabel } from '@/lib/error-messages'
 import type { InstanceStatus } from '@/lib/state'
+import { formatVersions } from '@/lib/version'
 
 const props = defineProps<{ instance: InstanceStatus }>()
 
@@ -44,9 +44,8 @@ const title = computed(() => {
   const { instance } = props
   const blocking = instance.blocking === 'enabled' || instance.blocking === 'disabled' ? instance.blocking : null
   const parts = [instance.name, statusLabel(instance.error, blocking)]
-  if (instance.versions?.core) parts.push(`Core ${instance.versions.core}`)
+  const versions = formatVersions(instance.versions, { docker: false })
+  if (versions) parts.push(versions)
   return parts.join(' · ')
 })
-
-defineExpose({ t: i18n.t })
 </script>

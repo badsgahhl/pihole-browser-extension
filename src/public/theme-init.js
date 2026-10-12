@@ -4,7 +4,8 @@
   try {
     var stored = localStorage.getItem('pihole-switch:theme')
     var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    var dark = stored === 'dark' || ((stored === null || stored === 'system') && prefersDark)
+    // useColorMode stores 'auto' for the system choice; older mirrors may say 'system'.
+    var dark = stored === 'dark' || ((stored === null || stored === 'auto' || stored === 'system') && prefersDark)
     document.documentElement.classList.toggle('dark', dark)
     document.documentElement.style.colorScheme = dark ? 'dark' : 'light'
   } catch (_) {

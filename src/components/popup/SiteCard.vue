@@ -19,7 +19,7 @@
         aria-keyshortcuts="a"
         @click="allowedByYou ? emit('remove', 'allow') : emit('allow')"
       >
-        <ShieldCheckIcon class="text-success size-3.5" />
+        <ShieldCheckIcon class="text-success" />
         {{ allowedByYou ? t('popup.site.allowed') : t('popup.site.allow') }}
         <BaseKbd>A</BaseKbd>
       </Button>
@@ -33,7 +33,7 @@
         aria-keyshortcuts="d"
         @click="deniedByYou ? emit('remove', 'deny') : emit('deny')"
       >
-        <ShieldBanIcon class="text-destructive size-3.5" />
+        <ShieldBanIcon class="text-destructive" />
         {{ deniedByYou ? t('popup.site.denied') : t('popup.site.deny') }}
         <BaseKbd>D</BaseKbd>
       </Button>
@@ -74,7 +74,7 @@ import BasePanel from '@/components/base/BasePanel.vue'
 import PanelSection from '@/components/base/PanelSection.vue'
 import { Button } from '@/components/ui/button'
 import { useCountdown } from '@/composables/useCountdown'
-import { formatCountdown } from '@/lib/duration'
+import { formatDuration } from '@/lib/duration'
 import { errorMessage } from '@/lib/error-messages'
 import type { PiholeErrorData } from '@/lib/pihole/errors'
 import type { ListType, SiteStatus } from '@/lib/pihole/site-status'
@@ -142,8 +142,11 @@ const statusText = computed(() => {
   switch (verdict.value) {
     case 'allowed-own':
       return t('popup.site.allowedByYou')
-    case 'allowed-temp':
-      return t('popup.site.allowedTemp', [formatCountdown(tempCountdown.remainingMs.value ?? 0)])
+    case 'allowed-temp': {
+      // Minute granularity: the line is a live region and must not re-announce every second.
+      const minutes = Math.max(1, Math.ceil((tempCountdown.remainingMs.value ?? 0) / 60_000))
+      return t('popup.site.allowedTemp', [formatDuration(minutes * 60)])
+    }
     case 'allowed-list':
       return t('popup.site.allowedByList', [site?.listName ?? ''])
     case 'blocked-own':

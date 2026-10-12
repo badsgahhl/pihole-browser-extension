@@ -11,6 +11,7 @@ describe('resolveTheme', () => {
     expect(resolveTheme('system', true)).toBe('dark')
     expect(resolveTheme('system', false)).toBe('light')
     expect(resolveTheme(undefined, true)).toBe('dark')
+    expect(resolveTheme('system', false)).toBe('light')
     expect(resolveTheme('light', true)).toBe('light')
     expect(resolveTheme('dark', false)).toBe('dark')
   })
@@ -40,5 +41,25 @@ describe('useTheme', () => {
     await wrapper.vm.$nextTick()
     expect(document.documentElement.classList.contains('dark')).toBe(false)
     expect(localStorage.getItem(THEME_STORAGE_KEY)).toBe('light')
+  })
+
+  it('leaves the page alone while the settings are still loading', async () => {
+    document.documentElement.classList.add('dark')
+    localStorage.setItem(THEME_STORAGE_KEY, 'dark')
+    const theme = ref<Theme | undefined>(undefined)
+    const Host = defineComponent({
+      setup() {
+        useTheme(theme)
+        return () => h('div')
+      }
+    })
+    const wrapper = mount(Host)
+
+    expect(document.documentElement.classList.contains('dark')).toBe(true)
+    expect(localStorage.getItem(THEME_STORAGE_KEY)).toBe('dark')
+
+    theme.value = 'light'
+    await wrapper.vm.$nextTick()
+    expect(document.documentElement.classList.contains('dark')).toBe(false)
   })
 })

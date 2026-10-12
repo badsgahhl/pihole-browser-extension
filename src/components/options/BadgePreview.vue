@@ -1,6 +1,7 @@
 <template>
   <div class="text-muted-foreground flex flex-wrap items-center gap-3 text-[11.5px]" aria-hidden="true">
     <span v-for="sample in samples" :key="sample.label" class="inline-flex items-center gap-1.5">
+      <!-- text-white on purpose: badge colours are the fixed values the browser paints, not theme tokens. -->
       <span
         class="inline-flex h-4 items-center justify-center rounded-[2px] px-[5px] font-mono text-[9.5px] font-bold text-white"
         :style="{ background: sample.color }"

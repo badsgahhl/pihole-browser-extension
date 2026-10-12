@@ -50,9 +50,9 @@ async function currentHostname(): Promise<string | null> {
 /** Registers every message handler. Must run synchronously inside `defineBackground`. */
 export function registerMessageHandlers(): void {
   onMessage('getState', async () => {
-    const state = await stateItem.getValue()
-    if (isStale(state)) await refreshInBackground('popup')
-    return state
+    if (isStale(await stateItem.getValue())) await refreshInBackground('popup')
+    // Read again after the write above, so the page gets `refreshing: true` and not a stale snapshot.
+    return stateItem.getValue()
   })
   onMessage('refresh', () => refreshAll('manual'))
   onMessage('setBlocking', ({ data }) => setBlocking(data))

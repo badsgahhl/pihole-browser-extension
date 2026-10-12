@@ -1,4 +1,4 @@
-import { type Ref, ref, watch } from 'vue'
+import { type MaybeRefOrGetter, shallowRef, toValue, watch } from 'vue'
 
 import { errorDataFrom } from '@/lib/error-messages'
 import { sendMessage } from '@/lib/messaging'
@@ -6,14 +6,17 @@ import type { PiholeErrorData } from '@/lib/pihole/errors'
 import type { ListType, SiteMutationResult, SiteStatus } from '@/lib/pihole/site-status'
 
 /** What the Pi-holes do with the current tab's domain, plus the allow and deny actions. */
-export function useSiteStatus(hostname: Ref<string | null>) {
-  const site = ref<SiteStatus | null>(null)
-  const loading = ref(false)
-  const acting = ref(false)
-  const error = ref<PiholeErrorData | null>(null)
+export function useSiteStatus(hostname: MaybeRefOrGetter<string | null>) {
+  const site = shallowRef<SiteStatus | null>(null)
+  const loading = shallowRef(false)
+  const acting = shallowRef(false)
+  const error = shallowRef<PiholeErrorData | null>(null)
+
+  /** An answer only counts while the popup is still on the host it was asked for. */
+  const current = (host: string) => toValue(hostname) === host
 
   async function load(fresh = false): Promise<void> {
-    const host = hostname.value
+    const host = toValue(hostname)
     if (!host) {
       site.value = null
       return
@@ -22,31 +25,36 @@ export function useSiteStatus(hostname: Ref<string | null>) {
     error.value = null
     try {
       const status = await sendMessage('getSiteStatus', { hostname: host, fresh })
-      if (hostname.value === host) site.value = status
+      if (current(host)) site.value = status
     } catch (caught) {
-      error.value = errorDataFrom(caught)
+      if (current(host)) error.value = errorDataFrom(caught)
     } finally {
-      loading.value = false
+      if (current(host)) loading.value = false
     }
   }
 
   async function mutate(task: (host: string) => Promise<SiteMutationResult>): Promise<void> {
-    const host = hostname.value
+    const host = toValue(hostname)
     if (!host || acting.value) return
     acting.value = true
     error.value = null
     try {
       const result = await task(host)
+      if (!current(host)) return
       site.value = result.status
       if (!result.ok) error.value = result.perInstance.find((entry) => entry.error)?.error ?? null
     } catch (caught) {
-      error.value = errorDataFrom(caught)
+      if (current(host)) error.value = errorDataFrom(caught)
     } finally {
       acting.value = false
     }
   }
 
-  watch(hostname, () => void load(), { immediate: true })
+  watch(
+    () => toValue(hostname),
+    () => void load(),
+    { immediate: true }
+  )
 
   return {
     site,
