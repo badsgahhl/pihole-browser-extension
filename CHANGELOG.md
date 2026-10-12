@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.0.0 · unreleased
+## 5.0.0 · 2026-10-12
 
 A rewrite for Pi-hole v6. Vue 3, Manifest V3 on every browser, one design for Chrome, Edge and Firefox.
 
