@@ -21,6 +21,7 @@
         :state="state"
         :disabled="actions.pending.value !== null"
         :error="actions.error.value"
+        :error-source="errorSourceName(actions.error.value, state.instances)"
         @toggle="actions.toggle()"
         @pause="actions.pause($event)"
         @resume="actions.resume()"
@@ -37,6 +38,7 @@
         :busy="site.acting.value"
         :temp-allow-minutes="settings?.tempAllowMinutes"
         :error="site.error.value"
+        :error-source="errorSourceName(site.error.value, state.instances)"
         @allow="site.allow()"
         @deny="site.deny()"
         @remove="site.remove($event)"
@@ -70,6 +72,7 @@ import { useSettings } from '@/composables/useSettings'
 import { useSiteStatus } from '@/composables/useSiteStatus'
 import { useTheme } from '@/composables/useTheme'
 import { PAUSE_PRESETS } from '@/lib/duration'
+import { errorSourceName } from '@/lib/error-messages'
 
 const { state } = useExtensionState()
 const { settings } = useSettings()

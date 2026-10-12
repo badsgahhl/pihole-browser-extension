@@ -54,7 +54,9 @@
       />
       <PausePresets v-else :disabled="disabled" @pick="emit('pause', $event)" />
       <p v-if="error" role="alert" class="text-destructive flex items-center gap-2 text-[11px]">
-        <span class="min-w-0 flex-1">{{ errorMessage(error) }}</span>
+        <span class="min-w-0 flex-1">
+          <span v-if="errorSource" class="font-semibold">{{ errorSource }} · </span>{{ errorMessage(error) }}
+        </span>
         <Button variant="link" @click="emit('retry')">{{ t('common.retry') }}</Button>
       </p>
     </PanelSection>
@@ -80,10 +82,14 @@ import PausePresets from './PausePresets.vue'
 import ResumeRow from './ResumeRow.vue'
 
 const props = withDefaults(
-  defineProps<{ state: ExtensionState; disabled?: boolean; error?: PiholeErrorData | null }>(),
-  {
-    error: null
-  }
+  defineProps<{
+    state: ExtensionState
+    disabled?: boolean
+    error?: PiholeErrorData | null
+    /** Name of the Pi-hole the error came from, shown when several are configured. */
+    errorSource?: string | null
+  }>(),
+  { error: null, errorSource: null }
 )
 
 const emit = defineEmits<{

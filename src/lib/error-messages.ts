@@ -2,6 +2,23 @@ import { i18n } from '#i18n'
 
 import type { PiholeErrorData } from './pihole/errors'
 
+/** Pi-hole's message plus its hint, which carries the actual reason (an SQLite error, a config key). */
+function detail(error: PiholeErrorData): string {
+  return error.hint ? `${error.message} · ${error.hint}` : error.message
+}
+
+/**
+ * Name of the Pi-hole an error came from, when there is more than one so the name adds information.
+ * `null` for a single Pi-hole or an error without origin.
+ */
+export function errorSourceName(
+  error: PiholeErrorData | null | undefined,
+  instances: ReadonlyArray<{ id: string; name: string }> | undefined
+): string | null {
+  if (!error?.instanceId || !instances || instances.length < 2) return null
+  return instances.find((instance) => instance.id === error.instanceId)?.name ?? null
+}
+
 /** Human readable, translated text for an error coming from the background. */
 export function errorMessage(error: PiholeErrorData): string {
   switch (error.kind) {
@@ -22,13 +39,13 @@ export function errorMessage(error: PiholeErrorData): string {
     case 'regex':
       return i18n.t('errors.regex')
     case 'bad_request':
-      return i18n.t('errors.bad_request', [error.message])
+      return i18n.t('errors.bad_request', [detail(error)])
     case 'not_found':
       return i18n.t('errors.not_found')
     case 'http':
       return i18n.t('errors.http', [String(error.status ?? '')])
     case 'unknown':
-      return i18n.t('errors.unknown', [error.message])
+      return i18n.t('errors.unknown', [detail(error)])
   }
 }
 

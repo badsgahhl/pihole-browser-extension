@@ -58,7 +58,9 @@
       </Button>
     </div>
 
-    <p v-if="error" role="alert" class="text-destructive px-3 pb-2.5 text-[11px]">{{ errorMessage(error) }}</p>
+    <p v-if="error" role="alert" class="text-destructive px-3 pb-2.5 text-[11px]">
+      <span v-if="errorSource" class="font-semibold">{{ errorSource }} · </span>{{ errorMessage(error) }}
+    </p>
   </BasePanel>
 </template>
 
@@ -86,8 +88,10 @@ const props = withDefaults(
     busy?: boolean
     tempAllowMinutes?: number
     error?: PiholeErrorData | null
+    /** Name of the Pi-hole the error came from, shown when several are configured. */
+    errorSource?: string | null
   }>(),
-  { tempAllowMinutes: 10, error: null }
+  { tempAllowMinutes: 10, error: null, errorSource: null }
 )
 
 const emit = defineEmits<{
