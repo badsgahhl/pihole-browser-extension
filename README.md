@@ -9,9 +9,13 @@
 **Disclaimer: This project is in maintenance mode. New features won't be added, but bugs will be fixed.**
 <br>**Compatibility with PiHole v6+ is ensured.**
 <br>
+
 ### Alternative Tools:
+
 - [pihole-browser-toggle](https://github.com/brlala/pihole-browser-toggle) by [brlala](https://github.com/brlala)
------------------
+
+---
+
 The PiHole Browser Extension is a small browser extension for Chrome and Firefox. It's written with Vue and Typescript.
 With this extension you can control your PiHole remotely (e.g. Turning it on/off, black/white listing current tab, etc.)
 .
@@ -20,8 +24,8 @@ With this extension you can control your PiHole remotely (e.g. Turning it on/off
 
 [![chrome](https://developer.chrome.com/static/docs/webstore/branding/image/206x58-chrome-web-043497a3d766e.png)](https://chrome.google.com/webstore/detail/switch-for-pihole/ngoafjpapneaopfkpboebcahajopcifi)
 <a href="https://addons.mozilla.org/firefox/addon/pihole-browser-extension/" target="_blank">
-  <img src="https://blog.mozilla.org/addons/files/2019/12/Firefox-parent-brand-logo.png" alt="Firefox Logo" width="50"/>
-</a>  
+<img src="https://blog.mozilla.org/addons/files/2019/12/Firefox-parent-brand-logo.png" alt="Firefox Logo" width="50"/>
+</a>
 
 ### Features:
 

@@ -1,31 +1,8 @@
 {
-	"compilerOptions": {
-		"target": "ES2018",
-		"sourceMap": false,
-		"lib": [
-			"dom",
-			"ESNext"
-		],
-		"rootDir": "src/",
-		"outDir": "dist",
-		"types": [
-			"chrome",
-			"firefox-webext-browser"
-		],
-		"baseUrl": ".",
-		"module": "ESNext",
-		"moduleResolution": "Node",
-		"esModuleInterop": true,
-		"experimentalDecorators": true,
-		"strict": true,
-		"allowSyntheticDefaultImports": true
-	},
-	"exclude": [
-		"node_modules",
-		"src/webpack",
-		".eslintrc.js"
-	],
-	"include": [
-		"src/**/*"
-	]
+  "extends": ["@vue/tsconfig/tsconfig.dom.json", "./.wxt/tsconfig.json"],
+  "include": [".wxt/wxt.d.ts", "src/**/*", "src/**/*.vue"],
+  "compilerOptions": {
+    "lib": ["DOM", "DOM.Iterable", "ES2023"],
+    "noUncheckedIndexedAccess": true
+  }
 }

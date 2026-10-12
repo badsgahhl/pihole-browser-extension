@@ -1,0 +1,14 @@
+extName: Pi-hole Switch
+extDescription: Control your Pi-hole from the toolbar. Pause blocking, allow or deny the current site, across all your Pi-holes.
+
+commands:
+  toggle: Toggle Pi-hole blocking
+  allow: Allow current domain
+  deny: Deny current domain
+  openSettings: Open settings
+
+popup:
+  title: Pi-hole Switch
+
+options:
+  title: $1 · Pi-hole Switch
