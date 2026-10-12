@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest'
+import { fakeBrowser } from 'wxt/testing/fake-browser'
 
 import { deleteDomain, getBlocking } from '@/lib/api/pihole'
 import { FakePihole, installFakeNetwork } from '@/test/fake-pihole'
@@ -43,6 +44,15 @@ describe('withSession', () => {
     simulateWorkerRestart()
     await status()
     expect(pihole.requestsTo('/auth', 'POST')).toHaveLength(1)
+  })
+
+  it('keeps the session across a browser restart, which empties the session storage area', async () => {
+    await status()
+    await fakeBrowser.storage.session.clear()
+    simulateWorkerRestart()
+    await status()
+    expect(pihole.requestsTo('/auth', 'POST')).toHaveLength(1)
+    expect(pihole.sessionCount).toBe(1)
   })
 
   it('logs in once more after the Pi-hole forgot the session', async () => {

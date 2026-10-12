@@ -22,8 +22,9 @@ Everything is stored in the browser's extension storage on your device. Nothing 
   them. They are removed when you remove the Pi-hole or reset the extension.
 - Your preferences (pause duration, badge mode, theme and so on).
 - The last known state of your Pi-holes, so the popup opens without waiting.
-- The API session id of each Pi-hole, in session storage that the browser clears when it closes. The extension logs
-  out of a Pi-hole when you remove or change it.
+- The API session id of each Pi-hole, kept with the other data so a browser restart or an extension update reuses
+  the session instead of opening another one on the Pi-hole. The extension logs out of a Pi-hole when you remove or
+  change it, and when you reset the extension.
 - Temporary allow entries it created, so it can remove them again.
 
 The settings export you can trigger yourself contains the passwords. You decide where that file goes.

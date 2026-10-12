@@ -36,12 +36,15 @@ export const LOGIN_BACKOFF_MS = 10 * 60_000
 
 /**
  * One storage key per instance, so two Pi-holes logging in at the same time never overwrite each
- * other's record. The `session:` area is cleared with the browser and survives the worker sleeping.
+ * other's record. Records live in `local:` on purpose: the `session:` area is cleared by every
+ * extension reload and browser restart, and each of those would leave a session behind on the
+ * Pi-hole until its timeout while a new one takes another seat. The password sits in `local:`
+ * anyway, so the session id adds nothing an attacker with that access would not already have.
  */
 const SESSION_KEY_PREFIX = 'pihole-session:'
 
-function sessionKey(id: string): `session:${string}` {
-  return `session:${SESSION_KEY_PREFIX}${id}`
+function sessionKey(id: string): `local:${string}` {
+  return `local:${SESSION_KEY_PREFIX}${id}`
 }
 
 /** Logins in progress, so parallel calls from the alarm and the popup share one login. */
@@ -129,7 +132,7 @@ function checkApiAnswer(ctx: InstanceContext, outcome: ApiOutcome): void {
 
 /** All cached sessions by instance id. */
 export async function listSessions(): Promise<Record<string, SessionRecord>> {
-  const all = (await browser.storage.session.get(null)) as Record<string, unknown>
+  const all = (await browser.storage.local.get(null)) as Record<string, unknown>
   const result: Record<string, SessionRecord> = {}
   for (const [key, value] of Object.entries(all)) {
     if (key.startsWith(SESSION_KEY_PREFIX) && value)

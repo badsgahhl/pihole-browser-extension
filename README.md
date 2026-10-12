@@ -80,8 +80,9 @@ longer asks for access to all websites.
 an app password in Pi-hole › Settings › Web interface / API and use that.
 
 **No free API session.** Pi-hole limits the number of concurrent API sessions. The extension keeps exactly one
-session per Pi-hole and logs out when you remove or change it. Close sessions you do not need under Pi-hole ›
-Settings › Web interface / API, or raise the limit there.
+session per Pi-hole, reuses it across browser restarts and logs out when you remove or change the Pi-hole. Other
+clients (the admin page, scripts, a second browser) take seats of their own. Close sessions you do not need under
+Pi-hole › Settings › Web interface / API, or raise the limit there.
 
 **Unreachable.** Check address and port, and that the admin interface opens in a normal tab. For `https://` with a
 self-signed certificate, open the admin page once in the browser and accept the certificate.
