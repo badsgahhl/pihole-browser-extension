@@ -1,0 +1,81 @@
+name: CI
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches: [master, v5]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  # One job on purpose: installing dependencies is the fixed cost. Steps run cheapest first, so a
+  # formatting slip fails in seconds. Branch protection requires this job by name.
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 12
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check formatting
+        run: pnpm format:check
+
+      # Without --fix: the local lint:fix autofixes, which in CI would let a violation pass silently.
+      - name: Lint
+        run: pnpm lint:check
+
+      - name: Type-check
+        run: pnpm type-check
+
+      - name: Test with coverage
+        run: pnpm test:coverage
+
+      - name: Upload coverage report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage
+          path: coverage/
+          retention-days: 14
+          if-no-files-found: warn
+
+      # The Pi-hole API client is committed. Regenerating it from the vendored spec must be a no-op,
+      # otherwise someone edited generated files or forgot to run generate:api after a spec update.
+      - name: Check the generated API client is in sync
+        run: |
+          pnpm generate:api
+          git diff --exit-code -- api-spec src/lib/api/pihole
+
+      - name: Build for Chrome and Edge
+        run: pnpm build
+
+      - name: Build for Firefox
+        run: pnpm build:firefox
+
+      # Warnings are reported, not fatal: the two expected ones are listed in SOURCE_CODE_REVIEW.md.
+      - name: Lint the Firefox build
+        run: pnpm exec web-ext lint --source-dir .output/firefox-mv3
+
+      - name: Package
+        run: |
+          pnpm zip
+          pnpm zip:firefox
+
+      - name: Upload packages
+        uses: actions/upload-artifact@v7
+        with:
+          name: extension-zips
+          path: .output/*.zip
+          retention-days: 14

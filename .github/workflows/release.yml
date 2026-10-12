@@ -1,0 +1,57 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  # Builds the store zips for a version tag and drafts a GitHub release with them. Publishing to
+  # the stores stays manual, see README.md and SOURCE_CODE_REVIEW.md.
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 12
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check the tag matches package.json
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          version="$(node -p "require('./package.json').version")"
+          if [ "$tag" != "$version" ]; then
+            echo "Tag v$tag does not match package.json version $version" >&2
+            exit 1
+          fi
+
+      - name: Lint, type-check and test
+        run: |
+          pnpm lint:check
+          pnpm type-check
+          pnpm test
+
+      - name: Package for Chrome, Edge and Firefox
+        run: |
+          pnpm zip
+          pnpm zip:firefox
+
+      - name: Draft the GitHub release
+        uses: softprops/action-gh-release@v3
+        with:
+          draft: true
+          name: ${{ github.ref_name }}
+          body: |
+            See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/CHANGELOG.md).
+
+            The Chrome zip is also the Edge Add-ons upload. The sources zip is for the AMO source review.
+          files: .output/*.zip
