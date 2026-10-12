@@ -38,6 +38,8 @@ export interface LegacySnapshot {
   disable_list_feature?: boolean
   disable_context_menu?: boolean
   sessions: LegacySession[]
+  /** Every `session_storage_*` key, including ones whose value is not what v4 wrote; all are removed. */
+  sessionKeys: string[]
 }
 
 export interface MigrationReport extends MigrationMarker {
@@ -60,14 +62,16 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 export async function readLegacy(): Promise<LegacySnapshot | null> {
   const all = (await browser.storage.local.get(null)) as Record<string, unknown>
   const sessions: LegacySession[] = []
+  const sessionKeys: string[] = []
   for (const [key, value] of Object.entries(all)) {
     if (!key.startsWith(LEGACY_SESSION_PREFIX)) continue
+    sessionKeys.push(key)
     const sid = isRecord(value) && typeof value.value === 'string' ? value.value : null
     if (sid) sessions.push({ origin: key.slice(LEGACY_SESSION_PREFIX.length), sid })
   }
 
   const hasLegacyKey = LEGACY_KEYS.some((key) => key in all)
-  if (!hasLegacyKey && sessions.length === 0) return null
+  if (!hasLegacyKey && sessionKeys.length === 0) return null
 
   const instances = Array.isArray(all.pi_hole_settings)
     ? all.pi_hole_settings.filter(isRecord).map((entry) => ({
@@ -83,7 +87,8 @@ export async function readLegacy(): Promise<LegacySnapshot | null> {
     reload_after_white_list: typeof all.reload_after_white_list === 'boolean' ? all.reload_after_white_list : undefined,
     disable_list_feature: typeof all.disable_list_feature === 'boolean' ? all.disable_list_feature : undefined,
     disable_context_menu: typeof all.disable_context_menu === 'boolean' ? all.disable_context_menu : undefined,
-    sessions
+    sessions,
+    sessionKeys
   }
 }
 
@@ -168,10 +173,7 @@ export async function migrateFromV4(options: MigrateOptions = {}): Promise<Migra
   }
   await migratedItem.setValue(marker)
 
-  await browser.storage.local.remove([
-    ...LEGACY_KEYS,
-    ...snapshot.sessions.map((session) => `${LEGACY_SESSION_PREFIX}${session.origin}`)
-  ])
+  await browser.storage.local.remove([...LEGACY_KEYS, ...snapshot.sessionKeys])
 
   if (options.logout) {
     for (const session of snapshot.sessions) {

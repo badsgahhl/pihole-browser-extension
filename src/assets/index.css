@@ -1,5 +1,13 @@
-@import 'tailwindcss';
+/*
+ * Explicit sources: automatic detection would scan the whole repository (design mockups, e2e scripts,
+ * tests, markdown) and make the CSS depend on files the AMO sources zip does not contain.
+ */
+@import 'tailwindcss' source(none);
 @import 'tw-animate-css';
+@source '../entrypoints';
+@source '../components';
+@source '../composables';
+@source not '../**/*.test.ts';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -126,7 +134,7 @@
   --surface-3: #dfe3e8;
   --border-strong: #b9c0c9;
   --ink-2: #454e5c;
-  --ink-4: #808997;
+  --ink-4: #6b7482;
   --sidebar: #ffffff;
   --success: #1b7a3e;
   --success-soft: #e6f6ec;
@@ -166,7 +174,7 @@
   --surface-3: #22262d;
   --border-strong: #3a404a;
   --ink-2: #a6aeba;
-  --ink-4: #5a6371;
+  --ink-4: #78838f;
   --sidebar: #0c0e11;
   --success: #45d483;
   --success-soft: #0d2a19;

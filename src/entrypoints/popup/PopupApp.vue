@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-background text-foreground flex w-[320px] flex-col">
+  <main class="bg-background text-foreground flex w-[320px] flex-col">
     <PopupHeader
       :instances="state?.instances ?? []"
       @open-settings="openOptions()"
@@ -16,7 +16,7 @@
     <EmptyState v-else-if="state.overall === 'needs-setup'" @add="openOptions('/pi-holes/new')" />
 
     <template v-else>
-      <PermissionBanner v-if="state.overall === 'needs-permission'" @grant="openOptions('/pi-holes')" />
+      <PermissionBanner v-if="needsPermission" @grant="openOptions('/pi-holes')" />
       <BlockingCard
         :state="state"
         :disabled="actions.pending.value !== null"
@@ -47,7 +47,7 @@
 
     <div class="h-2.5" />
     <PopupFooter v-if="state" :state="state" :reloads-on-pause="settings?.reloadAfterPause" />
-  </div>
+  </main>
 </template>
 
 <script setup lang="ts">
@@ -79,6 +79,11 @@ const site = useSiteStatus(hostname)
 const openOptions = useOpenOptions()
 
 useTheme(computed(() => settings.value?.theme))
+
+/** Any Pi-hole the browser may not talk to yet, whether or not the others are fine. */
+const needsPermission = computed(
+  () => state.value?.instances.some((instance) => instance.error?.kind === 'permission') ?? false
+)
 
 const showSite = computed(() => {
   const current = state.value

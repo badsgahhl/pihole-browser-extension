@@ -48,15 +48,15 @@ describe('combine', () => {
     expect(state.overall).toBe('error')
   })
 
-  it('prefers needs-permission over error and over a healthy sibling', () => {
+  it('prefers needs-permission over error, but a healthy sibling keeps its state', () => {
     expect(combine([status({ blocking: null, error: { kind: 'permission', message: 'x' } })]).overall).toBe(
       'needs-permission'
     )
     const mixed = combine([
-      status({ id: 'a' }),
+      status({ id: 'a', blocking: 'disabled', timerEndsAt: Date.now() + 60_000 }),
       status({ id: 'b', blocking: null, error: { kind: 'permission', message: 'x' } })
     ])
-    expect(mixed.overall).toBe('needs-permission')
+    expect(mixed.overall).toBe('paused')
     expect(mixed.degraded).toBe(true)
   })
 

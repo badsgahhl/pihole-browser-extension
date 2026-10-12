@@ -37,12 +37,11 @@
   />
 
   <ConfirmDialog
-    :open="pendingRemove !== null"
+    v-model:open="removeOpen"
     :title="t('options.instances.removeConfirm.title', [pendingRemove?.name ?? ''])"
     :text="t('options.instances.removeConfirm.text')"
     :confirm-label="t('common.remove')"
     destructive
-    @update:open="(open) => !open && (pendingRemove = null)"
     @confirm="remove"
   />
 </template>
@@ -99,15 +98,19 @@ async function grant(entry: Instance): Promise<void> {
   if (granted) await sendMessage('refresh', undefined)
 }
 
+// The dialog closes itself (and clears the open flag) before the confirm handler runs, so the
+// instance to remove is kept separately from that flag.
 const pendingRemove = ref<Instance | null>(null)
+const removeOpen = ref(false)
 
 function askRemove(entry: Instance): void {
   pendingRemove.value = entry
+  removeOpen.value = true
 }
 
 async function remove(): Promise<void> {
+  removeOpen.value = false
   const target = pendingRemove.value
-  pendingRemove.value = null
   if (!target || !settings.value) return
   await save({ instances: settings.value.instances.filter((entry) => entry.id !== target.id) })
   if (editingId.value === target.id) await router.push('/pi-holes')

@@ -21,11 +21,10 @@
     </div>
 
     <ConfirmDialog
-      :open="pendingJson !== null"
+      v-model:open="importOpen"
       :title="t('options.general.importConfirm.title')"
       :text="t('options.general.importConfirm.text')"
       :confirm-label="t('options.general.import')"
-      @update:open="(open) => !open && (pendingJson = null)"
       @confirm="importNow"
     />
     <ConfirmDialog
@@ -52,7 +51,9 @@ import ConfirmDialog from './ConfirmDialog.vue'
 const t = i18n.t
 
 const fileInput = ref<HTMLInputElement | null>(null)
+// The dialog clears its open flag before confirm fires, so the file content lives in its own ref.
 const pendingJson = ref<string | null>(null)
+const importOpen = ref(false)
 const resetOpen = ref(false)
 const busy = ref(false)
 const error = ref('')
@@ -88,9 +89,11 @@ async function onFile(event: Event): Promise<void> {
   if (!file) return
   error.value = ''
   pendingJson.value = await file.text()
+  importOpen.value = true
 }
 
 async function importNow(): Promise<void> {
+  importOpen.value = false
   const json = pendingJson.value
   pendingJson.value = null
   if (json === null) return

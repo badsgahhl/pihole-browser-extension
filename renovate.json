@@ -50,9 +50,9 @@
       "allowedVersions": "<25"
     },
     {
-      "description": "Design tooling renders the mockups and store images locally. No CI covers it, so without ignoreTests no check would ever turn green.",
-      "matchFileNames": ["design/**"],
-      "groupName": "design tooling",
+      "description": "Design tooling renders the mockups and store images locally; e2e drives the built extension in a headless browser. No CI covers either, so without ignoreTests no check would ever turn green.",
+      "matchFileNames": ["design/**", "e2e/**"],
+      "groupName": "local tooling",
       "ignoreTests": true
     },
     {

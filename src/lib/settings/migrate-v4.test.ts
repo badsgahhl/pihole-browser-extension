@@ -49,7 +49,8 @@ describe('mapLegacy', () => {
       reload_after_white_list: true,
       disable_list_feature: true,
       disable_context_menu: false,
-      sessions: []
+      sessions: [],
+      sessionKeys: []
     })
     expect(settings.instances.map((i) => [i.name, i.url, i.password])).toEqual([
       ['192.168.178.20', 'http://192.168.178.20:9802', 'home-pass'],
@@ -64,7 +65,7 @@ describe('mapLegacy', () => {
   })
 
   it('falls back to defaults for missing flags and keeps 0 as indefinite', () => {
-    const { settings } = mapLegacy({ pi_hole_settings: [], default_disable_time: 0, sessions: [] })
+    const { settings } = mapLegacy({ pi_hole_settings: [], default_disable_time: 0, sessions: [], sessionKeys: [] })
     expect(settings.pause.defaultSeconds).toBe(0)
     expect(settings.reloadAfterPause).toBe(DEFAULT_SETTINGS.reloadAfterPause)
     expect(settings.showCurrentSite).toBe(true)
@@ -78,7 +79,8 @@ describe('mapLegacy', () => {
         { pi_uri_base: 'http://pi.hole:8080', api_key: 'b' },
         { pi_uri_base: 'http://pi.hole/admin', api_key: 'c' }
       ],
-      sessions: []
+      sessions: [],
+      sessionKeys: []
     })
     expect(settings.instances.map((i) => i.name)).toEqual(['pi.hole', 'pi.hole (2)'])
     expect(skipped).toEqual(['Pi-hole 3: duplicate of http://pi.hole'])

@@ -29,7 +29,7 @@ export default defineConfig({
   zip: {
     artifactTemplate: '{{name}}-{{packageVersion}}-{{browser}}.zip',
     sourcesTemplate: '{{name}}-{{packageVersion}}-sources.zip',
-    excludeSources: ['design/**', 'coverage/**', '**/*.test.ts', 'src/test/**']
+    excludeSources: ['design/**', 'e2e/**', 'coverage/**', '**/*.test.ts', 'src/test/**']
   },
   manifest: ({ browser, mode }) => ({
     name: 'PiHole Browser Extension',

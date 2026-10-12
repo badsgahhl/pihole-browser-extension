@@ -131,10 +131,11 @@ export function combine(instances: InstanceStatus[], extras: CombineExtras = {})
     return { ...base, overall: permissionMissing ? 'needs-permission' : 'error' }
   }
 
+  // A sibling without permission does not hide what the healthy Pi-holes do; the popup shows the
+  // permission banner next to the real state instead.
   const paused = healthy.filter((status) => status.blocking === 'disabled')
   let overall: OverallState
-  if (permissionMissing) overall = 'needs-permission'
-  else if (paused.length === healthy.length) overall = 'paused'
+  if (paused.length === healthy.length) overall = 'paused'
   else if (paused.length === 0) overall = 'enabled'
   else overall = 'mixed'
 

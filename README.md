@@ -120,6 +120,8 @@ Layout:
 - `src/components/` base primitives, popup and options components, shadcn-vue under `ui/`
 - `src/locales/` `en.yml` is the source, other locales must match its keys (a test checks that)
 - `design/` mockups, icons and store images, see [design/README.md](design/README.md)
+- `e2e/` headless-browser checks against a local Pi-hole (screenshots, migration, sessions, accessibility), see
+  [e2e/README.md](e2e/README.md)
 
 For automated checks against a local Pi-hole a development build can carry host permissions:
 `WXT_DEV_HOST_PERMISSIONS="http://localhost:8080/*" pnpm exec wxt build --mode development`. Production builds never do.
