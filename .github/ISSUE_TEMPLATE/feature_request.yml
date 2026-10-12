@@ -1,0 +1,21 @@
+name: Feature request
+description: Suggest something the extension should do
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What would you like to do
+      description: Describe the situation and what is missing, rather than a specific implementation.
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: How could it work
+      description: Where in the popup or settings would it live, what would it look like?
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else
+      description: Links, screenshots, how other tools solve it.

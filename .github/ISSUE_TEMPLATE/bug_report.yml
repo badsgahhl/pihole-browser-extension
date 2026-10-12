@@ -1,0 +1,49 @@
+name: Bug report
+description: Something does not work as it should
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. The extension needs Pi-hole v6 or newer; problems with Pi-hole itself belong to the Pi-hole project.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happens
+      description: What did you do, what did you expect, what happened instead?
+      placeholder: |
+        1. Open the popup on …
+        2. Click …
+        3. …
+    validations:
+      required: true
+  - type: textarea
+    id: debug
+    attributes:
+      label: Debug information
+      description: Settings › About › Debug information, copied with the button there.
+      render: text
+    validations:
+      required: true
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Browser
+      options:
+        - Chrome
+        - Edge
+        - Firefox
+        - Other Chromium browser
+    validations:
+      required: true
+  - type: input
+    id: setup
+    attributes:
+      label: Pi-hole setup
+      description: Docker or bare metal, reverse proxy, https, two-factor authentication, several Pi-holes?
+      placeholder: Docker, behind nginx with https, one Pi-hole
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else
+      description: Screenshots, the browser console of the popup or background page, what you already tried.

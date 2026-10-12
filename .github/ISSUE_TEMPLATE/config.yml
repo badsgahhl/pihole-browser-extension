@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Pi-hole itself
+    url: https://discourse.pi-hole.net
+    about: Questions about Pi-hole, its lists or its web interface belong to the Pi-hole community.

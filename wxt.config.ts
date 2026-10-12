@@ -35,6 +35,7 @@ export default defineConfig({
     name: 'PiHole Browser Extension',
     description: '__MSG_extDescription__',
     default_locale: 'en',
+    homepage_url: 'https://github.com/badsgahhl/pihole-browser-extension',
     permissions: ['storage', 'alarms', 'activeTab', 'contextMenus'],
     // No host access at install. The options page requests each Pi-hole's origin when it is saved.
     optional_host_permissions: ['http://*/*', 'https://*/*'],
@@ -57,7 +58,9 @@ export default defineConfig({
       browser_specific_settings: {
         gecko: {
           id: FIREFOX_ID,
-          strict_min_version: '128.0',
+          // 140 is the oldest supported ESR and the first release that knows data_collection_permissions,
+          // which AMO requires; older Firefox versions would only log a manifest warning.
+          strict_min_version: '140.0',
           data_collection_permissions: { required: ['none'] }
         }
       }

@@ -1,59 +1,140 @@
-# PiHole Browser Extension ![t](https://github.com/badsgahhl/pihole-browser-extension/blob/master/icon/icon-48.png?raw=true)
+# PiHole Browser Extension
 
-[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/ngoafjpapneaopfkpboebcahajopcifi)](https://chrome.google.com/webstore/detail/switch-for-pihole/ngoafjpapneaopfkpboebcahajopcifi)
-[![Mozilla Add-on](https://img.shields.io/amo/v/pihole-browser-extension)](https://addons.mozilla.org/firefox/addon/pihole-browser-extension/)
-[![Chrome Web Store](https://img.shields.io/chrome-web-store/users/ngoafjpapneaopfkpboebcahajopcifi?label=chrome%20users)](https://chrome.google.com/webstore/detail/switch-for-pihole/ngoafjpapneaopfkpboebcahajopcifi)
-[![Mozilla Add-on](https://img.shields.io/amo/users/pihole-browser-extension?color=green&label=mozilla%20users)](https://addons.mozilla.org/firefox/addon/pihole-browser-extension/)
-![GitHub](https://img.shields.io/github/license/badsgahhl/pihole-browser-extension)
+<img src="design/icons/png/icon-128.png" width="72" align="right" alt="">
 
-**Disclaimer: This project is in maintenance mode. New features won't be added, but bugs will be fixed.**
-<br>**Compatibility with PiHole v6+ is ensured.**
-<br>
+[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/ngoafjpapneaopfkpboebcahajopcifi?label=chrome%20web%20store)](https://chromewebstore.google.com/detail/ngoafjpapneaopfkpboebcahajopcifi)
+[![Mozilla Add-on](https://img.shields.io/amo/v/pihole-browser-extension?label=firefox%20add-on)](https://addons.mozilla.org/firefox/addon/pihole-browser-extension/)
+[![Chrome users](https://img.shields.io/chrome-web-store/users/ngoafjpapneaopfkpboebcahajopcifi?label=chrome%20users)](https://chromewebstore.google.com/detail/ngoafjpapneaopfkpboebcahajopcifi)
+[![Firefox users](https://img.shields.io/amo/users/pihole-browser-extension?color=green&label=firefox%20users)](https://addons.mozilla.org/firefox/addon/pihole-browser-extension/)
+[![CI](https://github.com/badsgahhl/pihole-browser-extension/actions/workflows/ci.yml/badge.svg)](https://github.com/badsgahhl/pihole-browser-extension/actions/workflows/ci.yml)
+![License](https://img.shields.io/github/license/badsgahhl/pihole-browser-extension)
 
-### Alternative Tools:
+**Pi-hole Switch** controls one or more [Pi-hole](https://pi-hole.net) v6 instances from the browser toolbar.
+Pause blocking for a while, allow or deny the site you are on, and see at a glance what every Pi-hole is doing.
 
-- [pihole-browser-toggle](https://github.com/brlala/pihole-browser-toggle) by [brlala](https://github.com/brlala)
+![The popup: blocking card with pause presets and the current site](design/store/screenshot-1-pause.png)
 
----
+## Features
 
-The PiHole Browser Extension is a small browser extension for Chrome and Firefox. It's written with Vue and Typescript.
-With this extension you can control your PiHole remotely (e.g. Turning it on/off, black/white listing current tab, etc.)
-.
+- **One switch for all your Pi-holes.** Pause for 10 s, 30 s, 5 min, 30 min, 1 h, until you enable it again, or any
+  duration you type. The popup counts down and the toolbar badge shows the state.
+- **The site you are on.** The popup tells you whether the current domain is blocked and by which list, allowed, or
+  untouched. Allow or deny it with one click, or allow it for 10 minutes and let the extension remove the entry again.
+- **Several Pi-holes.** Up to eight, for example a primary and a secondary DNS. Every switch, allow and deny goes to
+  all of them at once; the chips in the popup header show the state of each one.
+- **Hotkeys and context menu.** Toggle blocking, allow or deny the current domain and open the settings from
+  keyboard shortcuts or the page's right-click menu. Inside the popup single keys do the same.
+- **Toolbar badge.** `ON`, `OFF`, the remaining pause time, the blocked percentage of the day, or nothing at all.
+- **Dark and light**, following the browser. English, Deutsch and Português (Brasil).
+- **Yours only.** The extension talks to the addresses you enter and to nothing else. See [PRIVACY.md](PRIVACY.md).
 
-<br>
+## Requirements
 
-[![chrome](https://developer.chrome.com/static/docs/webstore/branding/image/206x58-chrome-web-043497a3d766e.png)](https://chrome.google.com/webstore/detail/switch-for-pihole/ngoafjpapneaopfkpboebcahajopcifi)
-<a href="https://addons.mozilla.org/firefox/addon/pihole-browser-extension/" target="_blank">
-<img src="https://blog.mozilla.org/addons/files/2019/12/Firefox-parent-brand-logo.png" alt="Firefox Logo" width="50"/>
-</a>
+- Pi-hole **v6** or newer. The extension uses the v6 REST API. For Pi-hole v5 stay on extension version 4.x.
+- Chrome 102+, Edge, or Firefox 128+.
 
-### Features:
+## Install
 
-- Disable your PiHole(s) easily with one click
-- Individual configuration for multiple PiHoles
-- White-/Blacklist your current tabs url with one click
-- Shortcuts - Use features quickly with a hotkey shortcut or pages context menu
-- Connection checker within the settings
+- Chrome and Edge: [Chrome Web Store](https://chromewebstore.google.com/detail/ngoafjpapneaopfkpboebcahajopcifi)
+- Firefox: [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/pihole-browser-extension/)
 
-### How to use:
+## Setup
 
-1. Open the popup by clicking the "Raspberry" Icon in the top navigation of your browser
-2. Click on the setting wheel in the top right corner
-3. Enter your host address (including http:// or https:// and the directory.
-4. Enter your pihole password
+1. Click the raspberry in the toolbar and choose **Add your Pi-hole**, or open the settings.
+2. Enter a name, the address of the admin interface (for example `http://pi.hole` or `http://192.168.1.2:8080`;
+   `/admin` is optional, reverse proxy paths work) and the password.
+   An **app password** from Pi-hole › Settings › Web interface / API is the better choice: it is independent of the
+   admin password and works when two-factor authentication is on. Leave the password empty if your Pi-hole has none.
+3. Save. The browser asks once whether the extension may access that address. The extension tests the login and
+   shows the Pi-hole's versions.
 
-### Troubleshooting
+The extension requests access per address instead of to every website, so the prompt appears once per Pi-hole and
+again after you change its address.
 
-#### Error after clicking the Slider (was "on" before)
+## The popup
 
-This indicates that your API key is probably wrong. In the version >2.0.6 the options will show you if your key is
-wrong. Check that you copied the key correctly and that there are no whitespaces, etc. in it.
+| Key     | Action                                                    |
+| ------- | --------------------------------------------------------- |
+| `T`     | Toggle blocking                                           |
+| `1`–`6` | Pause for 10 s, 30 s, 5 min, 30 min, 1 h, or indefinitely |
+| `A`     | Allow the current site                                    |
+| `D`     | Deny the current site                                     |
+| `Esc`   | Close                                                     |
 
-#### Black- / Whitelisting domains
+The browser-wide shortcuts (toggle, allow, deny, settings) are listed in the settings under **Shortcuts**, where you
+can also change them. Firefox manages them in `about:addons` under _Manage Extension Shortcuts_.
 
-The extension is able to black and whitelist the current tabs url. This feature requires PiHole v5.1+.
+## Several Pi-holes
 
-### This is not an official PiHole application.
+Pi-hole Switch treats all configured Pi-holes as one. A pause pauses all of them, an allow entry lands on all of them.
+That is what you want when two Pi-holes serve the same network as primary and secondary DNS. The popup header shows a
+chip per Pi-hole with its state; if one is unreachable the popup says so and keeps working with the others.
 
-Please use the issue templates in **this** repository for bugs. The main PiHole project **is not responsible** for any
-malfunction that is caused by the use of the extension!
+## Troubleshooting
+
+**Access needed.** The browser has not granted access to that address yet. Open the settings and click
+**Grant access** next to the Pi-hole. After an update from version 4 this is expected once, because the extension no
+longer asks for access to all websites.
+
+**Unauthorized · check the password.** The password is wrong, or the Pi-hole uses two-factor authentication. Create
+an app password in Pi-hole › Settings › Web interface / API and use that.
+
+**No free API session.** Pi-hole limits the number of concurrent API sessions. The extension keeps exactly one
+session per Pi-hole and logs out when you remove or change it. Close sessions you do not need under Pi-hole ›
+Settings › Web interface / API, or raise the limit there.
+
+**Unreachable.** Check address and port, and that the admin interface opens in a normal tab. For `https://` with a
+self-signed certificate, open the admin page once in the browser and accept the certificate.
+
+**The site shows "Not blocked" although it is.** The lookup is exact. A list entry for `example.com` does not match
+`cdn.example.com`; open the domain in Pi-hole from the popup to see the full picture.
+
+**Debug information** for a bug report is in the settings under **About**.
+
+## Development
+
+Node 24 and pnpm 12.
+
+```bash
+pnpm install          # also prepares WXT types and installs the git hooks
+pnpm dev              # Chrome with live reload
+pnpm dev:firefox
+pnpm test             # vitest
+pnpm lint:check       # oxlint + eslint-plugin-vue
+pnpm type-check
+pnpm format
+pnpm build            # .output/chrome-mv3
+pnpm build:firefox    # .output/firefox-mv3
+pnpm zip              # store zips, plus the sources zip for AMO with zip:firefox
+```
+
+Stack: [WXT](https://wxt.dev) (Manifest V3 for Chrome, Edge and Firefox), Vue 3, Tailwind 4, shadcn-vue, reka-ui,
+Vitest. The Pi-hole API client in `src/lib/api/pihole` is generated from the FTL OpenAPI specification vendored in
+`api-spec/`; `pnpm generate:api` regenerates it and `pnpm generate:api --fetch` first updates the specification to
+the tag in `api-spec/FTL_VERSION`. The commit hook runs type-check, lint and format on staged files.
+
+Layout:
+
+- `src/entrypoints/` background, popup and options pages
+- `src/lib/pihole/` sessions, actions, site status; `src/lib/settings/` schema, storage, migration from v4
+- `src/components/` base primitives, popup and options components, shadcn-vue under `ui/`
+- `src/locales/` `en.yml` is the source, other locales must match its keys (a test checks that)
+- `design/` mockups, icons and store images, see [design/README.md](design/README.md)
+
+For automated checks against a local Pi-hole a development build can carry host permissions:
+`WXT_DEV_HOST_PERMISSIONS="http://localhost:8080/*" pnpm exec wxt build --mode development`. Production builds never do.
+
+## Release
+
+1. Bump `version` in `package.json`, add the entry to [CHANGELOG.md](CHANGELOG.md), commit.
+2. Tag `vX.Y.Z` and push the tag. CI builds, tests and drafts a GitHub release with the Chrome, Firefox and sources
+   zips.
+3. Upload the zips to the Chrome Web Store and to AMO; [SOURCE_CODE_REVIEW.md](SOURCE_CODE_REVIEW.md) has the notes
+   for the AMO source review.
+
+## Not an official Pi-hole project
+
+Please report problems with the extension in this repository. The Pi-hole project is not responsible for anything
+the extension does.
+
+[MIT](LICENSE) · Pascal Glaser
