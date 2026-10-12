@@ -28,6 +28,9 @@ Pause blocking for a while, allow or deny the site you are on, and see at a glan
 - **Dark and light**, following the browser. English, Deutsch and Português (Brasil).
 - **Yours only.** The extension talks to the addresses you enter and to nothing else. See [PRIVACY.md](PRIVACY.md).
 
+This extension is a switch and stays one. For statistics, the query log and list management in the browser, see
+[Pi-hole In One](https://github.com/creeperkatze/pihole-in-one).
+
 ## Requirements
 
 - Pi-hole **v6** or newer. The extension uses the v6 REST API. For Pi-hole v5 stay on extension version 4.x.
@@ -144,6 +147,12 @@ For automated checks against a local Pi-hole a development build can carry host 
    zips.
 3. Upload the zips to the Chrome Web Store and to AMO; [SOURCE_CODE_REVIEW.md](SOURCE_CODE_REVIEW.md) has the notes
    for the AMO source review.
+
+## Acknowledgements
+
+[Pi-hole In One](https://github.com/creeperkatze/pihole-in-one) by [creeperkatze](https://github.com/creeperkatze)
+was a reference while version 5 was planned. It is the more complete Pi-hole extension, with statistics, the query
+log and list management in the browser. If you want more than a switch, have a look.
 
 ## Not an official Pi-hole project
 

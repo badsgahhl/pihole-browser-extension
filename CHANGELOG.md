@@ -58,3 +58,8 @@ A rewrite for Pi-hole v6. Vue 3, Manifest V3 on every browser, one design for Ch
 - Vue 2, Vuetify and webpack.
 - The "disable update notification" and beta flags from the settings; the update hint is a small chip in the popup.
 - Access to all websites. The extension requests each Pi-hole address instead.
+
+### Thanks
+
+- @creeperkatze for [Pi-hole In One](https://github.com/creeperkatze/pihole-in-one), a reference while this release
+  was planned.
