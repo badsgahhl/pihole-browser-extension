@@ -1,14 +1,20 @@
 <template>
-  <svg :width="size" :height="size" viewBox="0 0 24 24" aria-hidden="true" class="shrink-0">
-    <path d="M12 5.5c-1.5-2.5-4-2.5-5.5-1.5 1.5 2 3.5 2.5 5.5 1.5z" class="fill-success" />
-    <path d="M12 5.5c1.5-2.5 4-2.5 5.5-1.5-1.5 2-3.5 2.5-5.5 1.5z" class="fill-success" />
-    <g class="fill-destructive">
-      <circle cx="12" cy="9" r="3.1" />
-      <circle cx="8.4" cy="12.6" r="3.1" />
-      <circle cx="15.6" cy="12.6" r="3.1" />
-      <circle cx="9.9" cy="16.6" r="3.1" />
-      <circle cx="14.1" cy="16.6" r="3.1" />
-      <circle cx="12" cy="20.2" r="2.5" />
+  <!-- Same geometry as design/icons/icon-toolbar.svg, coloured with the theme tokens. -->
+  <svg :width="size" :height="size" viewBox="0 0 512 512" aria-hidden="true" class="shrink-0">
+    <g class="fill-success">
+      <path d="M256 128c-12-48-64-74-130-60 30 52 84 72 130 60z" />
+      <path d="M256 128c12-48 64-74 130-60-30 52-84 72-130 60z" />
+    </g>
+    <g class="fill-destructive" transform="translate(256 300) rotate(45)">
+      <rect x="-136" y="-136" width="70" height="70" rx="11" />
+      <rect x="-52" y="-136" width="70" height="70" rx="11" />
+      <rect x="32" y="-136" width="70" height="70" rx="11" />
+      <rect x="-136" y="-52" width="70" height="70" rx="11" />
+      <rect x="-52" y="-52" width="70" height="70" rx="11" />
+      <rect x="32" y="-52" width="70" height="70" rx="11" />
+      <rect x="-136" y="32" width="70" height="70" rx="11" />
+      <rect x="-52" y="32" width="70" height="70" rx="11" />
+      <rect x="32" y="32" width="70" height="70" rx="11" />
     </g>
   </svg>
 </template>
