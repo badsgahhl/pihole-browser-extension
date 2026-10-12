@@ -21,9 +21,7 @@ jobs:
           node-version: 24
           cache: pnpm
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
+      # Before the install, so a mistagged push fails in seconds.
       - name: Check the tag matches package.json
         run: |
           tag="${GITHUB_REF_NAME#v}"
@@ -33,21 +31,38 @@ jobs:
             exit 1
           fi
 
-      - name: Lint, type-check and test
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # The same checks as CI: a tag may sit on a commit CI never saw.
+      - name: Format, lint, type-check and test
         run: |
+          pnpm format:check
           pnpm lint:check
           pnpm type-check
           pnpm test
+
+      - name: Check the generated API client is in sync
+        env:
+          REDOCLY_TELEMETRY: off
+        run: |
+          pnpm generate:api
+          git add -N -- api-spec src/lib/api/pihole
+          git diff --exit-code -- api-spec src/lib/api/pihole
 
       - name: Package for Chrome, Edge and Firefox
         run: |
           pnpm zip
           pnpm zip:firefox
 
+      - name: Lint the Firefox build
+        run: pnpm exec web-ext lint --source-dir .output/firefox-mv3
+
       - name: Draft the GitHub release
         uses: softprops/action-gh-release@v3
         with:
           draft: true
+          fail_on_unmatched_files: true
           name: ${{ github.ref_name }}
           body: |
             See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/CHANGELOG.md).

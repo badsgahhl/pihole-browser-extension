@@ -29,7 +29,8 @@ export default defineConfig({
   zip: {
     artifactTemplate: '{{name}}-{{packageVersion}}-{{browser}}.zip',
     sourcesTemplate: '{{name}}-{{packageVersion}}-sources.zip',
-    excludeSources: ['design/**', 'e2e/**', 'coverage/**', '**/*.test.ts', 'src/test/**']
+    // Test files are excluded by WXT's own default pattern.
+    excludeSources: ['design/**', 'e2e/**', 'coverage/**', 'src/test/**']
   },
   manifest: ({ browser, mode }) => ({
     name: 'PiHole Browser Extension',

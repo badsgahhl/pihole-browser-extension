@@ -1,5 +1,4 @@
 node_modules/
-design/node_modules/
 .output/
 .wxt/
 coverage/
@@ -8,7 +7,6 @@ stats.html
 stats-*.json
 .env
 .env.*
-.env.submit
 web-ext.config.ts
 .idea/
 .vscode/*
@@ -16,5 +14,4 @@ web-ext.config.ts
 .DS_Store
 *.log
 *.zip
-e2e/node_modules/
 e2e/out/

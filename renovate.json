@@ -3,7 +3,7 @@
   "description": [
     "Weekly (Monday 00-09, Berlin): minor, patch, pin and digest updates merge themselves once CI is green.",
     "Majors wait for a person as draft PRs. TypeScript stays below 6 and @types/node below 25 on purpose.",
-    "Renovate merges by itself (platformAutomerge off), so it must be allowed to bypass the review rule on master."
+    "Renovate merges by itself (platformAutomerge off); master must require the build-and-test check and nothing else that Renovate cannot satisfy."
   ],
   "extends": ["config:recommended"],
   "timezone": "Europe/Berlin",
@@ -50,10 +50,9 @@
       "allowedVersions": "<25"
     },
     {
-      "description": "Design tooling renders the mockups and store images locally; e2e drives the built extension in a headless browser. No CI covers either, so without ignoreTests no check would ever turn green.",
+      "description": "Design tooling renders the mockups and store images locally; e2e drives the built extension in a headless browser. CI still lints and formats e2e, so their updates wait for a green check like everything else.",
       "matchFileNames": ["design/**", "e2e/**"],
-      "groupName": "local tooling",
-      "ignoreTests": true
+      "groupName": "local tooling"
     },
     {
       "description": "Majors wait for a person, one draft PR each.",

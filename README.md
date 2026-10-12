@@ -129,11 +129,11 @@ For automated checks against a local Pi-hole a development build can carry host 
 ### Automation
 
 - **CI** (`.github/workflows/ci.yml`) runs format, lint, type-check, tests with coverage, the generated-client
-  check, both builds, `web-ext lint` and packages the zips as an artifact. Branch protection on `master` requires
-  the `build-and-test` check.
+  check, packages both targets and runs `web-ext lint`. Branch protection on `master` must require the
+  `build-and-test` check (the v4 setup required `eslint` and `prettier`, which no longer exist).
 - **Renovate** (`renovate.json`) opens dependency updates on Monday mornings; minor and patch updates merge
   themselves when CI is green, majors wait as drafts. It reads the config from the default branch, so enable the
-  Renovate app after `v5` is merged into `master`, and allow it to bypass the review rule so it can merge.
+  Renovate app after `v5` is merged into `master`.
 - **CodeQL** scans weekly and on every pull request.
 
 ## Release

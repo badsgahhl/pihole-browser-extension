@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   # One job on purpose: installing dependencies is the fixed cost. Steps run cheapest first, so a
-  # formatting slip fails in seconds. Branch protection requires this job by name.
+  # formatting slip fails in seconds. Branch protection on master must require this job by name.
   build-and-test:
     runs-on: ubuntu-latest
     steps:
@@ -52,25 +52,24 @@ jobs:
 
       # The Pi-hole API client is committed. Regenerating it from the vendored spec must be a no-op,
       # otherwise someone edited generated files or forgot to run generate:api after a spec update.
+      # `git add -N` makes a newly generated file count as a difference too.
       - name: Check the generated API client is in sync
+        env:
+          REDOCLY_TELEMETRY: off
         run: |
           pnpm generate:api
+          git add -N -- api-spec src/lib/api/pihole
           git diff --exit-code -- api-spec src/lib/api/pihole
 
-      - name: Build for Chrome and Edge
-        run: pnpm build
-
-      - name: Build for Firefox
-        run: pnpm build:firefox
+      # `wxt zip` builds each target itself, so there is no separate build step.
+      - name: Build and package for Chrome, Edge and Firefox
+        run: |
+          pnpm zip
+          pnpm zip:firefox
 
       # Warnings are reported, not fatal: the two expected ones are listed in SOURCE_CODE_REVIEW.md.
       - name: Lint the Firefox build
         run: pnpm exec web-ext lint --source-dir .output/firefox-mv3
-
-      - name: Package
-        run: |
-          pnpm zip
-          pnpm zip:firefox
 
       - name: Upload packages
         uses: actions/upload-artifact@v7
