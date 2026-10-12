@@ -134,6 +134,7 @@ popup:
 options:
   title: $1 · Pi-hole Switch
   nav:
+    label: Settings sections
     instances: Pi-holes
     general: General
     shortcuts: Shortcuts
@@ -170,6 +171,8 @@ options:
     accessPending: The browser will ask for access to $1 when you save.
     accessDenied: Without access to $1 the extension cannot reach this Pi-hole.
     empty: No Pi-hole configured yet.
+    untested: Not tested yet. Save to check the connection.
+    noAccess: Access not granted yet
   general:
     title: General
     intro: How the popup, the toolbar badge and the page context menu behave. Changes apply immediately.
@@ -178,6 +181,7 @@ options:
       title: Default pause duration
       text: Used by the hotkey and the context menu. The popup offers presets as well.
     units:
+      label: Unit
       seconds: seconds
       minutes: minutes
       hours: hours
@@ -229,6 +233,7 @@ options:
   shortcuts:
     title: Shortcuts
     intro: Global shortcuts work on any page. Inside the popup single keys do the same.
+    global: Browser shortcuts
     action: Action
     shortcut: Shortcut
     change: Change shortcuts
@@ -242,6 +247,8 @@ options:
   about:
     title: About
     intro: A small switch for Pi-hole v6.
+    description: Pi-hole Switch controls one or more Pi-hole v6 instances from the browser toolbar. It is an independent project and not affiliated with the Pi-hole team.
+    source: Source on GitHub
     contributors: Contributors
     debug: Debug information
     debugHint: 'Paste this into the issue:'

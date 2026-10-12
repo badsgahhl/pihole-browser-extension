@@ -31,6 +31,7 @@ import { computed } from 'vue'
 import { i18n } from '#i18n'
 import BaseChip from '@/components/base/BaseChip.vue'
 import type { ExtensionState } from '@/lib/state'
+import { bareVersion } from '@/lib/version'
 
 const props = defineProps<{ state: ExtensionState; reloadsOnPause?: boolean }>()
 
@@ -41,15 +42,10 @@ const paused = computed(() => props.state.overall === 'paused')
 const versions = computed(() => {
   const first = props.state.instances.find((instance) => instance.versions?.core)
   if (!first?.versions) return ''
-  const parts = [`Core ${bare(first.versions.core ?? '')}`]
-  if (first.versions.ftl) parts.push(`FTL ${bare(first.versions.ftl)}`)
+  const parts = [`Core ${bareVersion(first.versions.core)}`]
+  if (first.versions.ftl) parts.push(`FTL ${bareVersion(first.versions.ftl)}`)
   return parts.join(' · ')
 })
-
-/** Pi-hole reports versions as `v6.4.2`; the footer shows the bare number. */
-function bare(version: string): string {
-  return version.replace(/^v(?=\d)/, '')
-}
 
 const messages = computed(() => {
   const count = props.state.messagesCount

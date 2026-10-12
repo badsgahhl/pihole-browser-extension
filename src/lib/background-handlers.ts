@@ -1,6 +1,7 @@
 import { browser } from '#imports'
 
 import { ALARM_PAUSE_END, ALARM_STATUS, ensureStatusAlarm, tempAllowIdFromAlarm } from './alarms'
+import { HOTKEYS } from './commands'
 import { MENU_IDS, syncContextMenu } from './context-menu'
 import { onMessage } from './messaging'
 import {
@@ -25,12 +26,7 @@ import { apiBaseUrl } from './settings/url'
 import { isStale, stateItem } from './state'
 import { getCurrentTabHostname } from './tabs'
 
-export const HOTKEYS = {
-  toggle: 'hotkey-toggle-pihole',
-  deny: 'hotkey-blacklist-current-domain',
-  allow: 'hotkey-whitelist-current-domain',
-  settings: 'hotkey-open-settings'
-} as const
+export { HOTKEYS } from './commands'
 
 export const UNINSTALL_SURVEY_URL = 'https://forms.gle/RsGUyrmB1jtsGhYQ9'
 
