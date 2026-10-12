@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
-import { getBlocking } from '@/lib/api/pihole'
+import { deleteDomain, getBlocking } from '@/lib/api/pihole'
 import { FakePihole, installFakeNetwork } from '@/test/fake-pihole'
 import { contextFor, HOME, instance, permissionsMock, simulateWorkerRestart } from '@/test/helpers'
 
@@ -75,6 +75,17 @@ describe('withSession', () => {
     pihole.password = 'secret'
     expect(await status()).toMatchObject({ blocking: 'enabled' })
     expect(await recentLoginFailure(ctx, 60_000)).toBeNull()
+  })
+
+  it('accepts an empty 204 that carries the text/html header FTL sends', async () => {
+    await status()
+    pihole.respondWhen(
+      (method) => method === 'DELETE',
+      () => new Response(null, { status: 204, headers: { 'Content-Type': 'text/html; charset=utf-8' } })
+    )
+    await expect(
+      withSession(ctx, (o) => deleteDomain({ ...o, path: { type: 'allow', kind: 'exact', domain: 'x.example' } }))
+    ).resolves.toBeDefined()
   })
 
   it('rejects an address that answers with a web page instead of the API', async () => {

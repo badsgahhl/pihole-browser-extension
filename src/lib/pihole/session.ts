@@ -102,8 +102,13 @@ async function rememberFailure(ctx: InstanceContext, error: PiholeError): Promis
   })
 }
 
+/**
+ * JSON, or nothing at all: FTL answers 204 with an empty body that civetweb labels text/html, which
+ * the client hands over as an empty string. Only a non-empty text body is a web page.
+ */
 function isApiBody(data: unknown): boolean {
-  return data === undefined || data === null || typeof data === 'object'
+  if (data === undefined || data === null || typeof data === 'object') return true
+  return typeof data === 'string' && data.trim() === ''
 }
 
 /** A 2xx that is not JSON from the Pi-hole's own origin is a reverse proxy, a login page or a redirect. */
