@@ -19,6 +19,7 @@ describe('deriveListName', () => {
   it.each([
     [{ address: STEVEN, comment: 'My list' }, 'My list'],
     [{ address: STEVEN, comment: null }, 'StevenBlack hosts'],
+    [{ address: STEVEN, comment: 'Migrated from /etc/pihole/adlists.list' }, 'StevenBlack hosts'],
     [{ address: 'https://example.com/lists/ads.txt', comment: '' }, 'ads'],
     [{ address: 'https://example.com/', comment: null }, 'example.com'],
     [{ address: 'https://example.com/hosts', comment: null }, 'example.com hosts'],

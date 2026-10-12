@@ -1,8 +1,10 @@
+import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vitest/config'
 import { WxtVitest } from 'wxt/testing/vitest-plugin'
 
 export default defineConfig({
-  plugins: [WxtVitest()],
+  // WxtVitest wires the fake browser and WXT's aliases; the Vue plugin is not part of it.
+  plugins: [WxtVitest(), vue()],
   test: {
     environment: 'happy-dom',
     include: ['src/**/*.test.ts'],

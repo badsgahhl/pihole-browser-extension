@@ -4,6 +4,13 @@ import { defineConfig } from 'wxt'
 // Firefox add-on id as assigned by AMO for the existing listing. MV3 requires it to be explicit.
 const FIREFOX_ID = '{a4cc20af-d30a-4758-a799-2089ce45f452}'
 
+// Development builds only: origins granted at install so automated checks need no permission prompt,
+// e.g. WXT_DEV_HOST_PERMISSIONS="http://localhost:9810/*". Production manifests never carry these.
+const devHostPermissions = (process.env.WXT_DEV_HOST_PERMISSIONS ?? '')
+  .split(',')
+  .map((pattern) => pattern.trim())
+  .filter(Boolean)
+
 export default defineConfig({
   srcDir: 'src',
   publicDir: 'src/public',
@@ -24,13 +31,14 @@ export default defineConfig({
     sourcesTemplate: '{{name}}-{{packageVersion}}-sources.zip',
     excludeSources: ['design/**', 'coverage/**', '**/*.test.ts', 'src/test/**']
   },
-  manifest: ({ browser }) => ({
+  manifest: ({ browser, mode }) => ({
     name: 'PiHole Browser Extension',
     description: '__MSG_extDescription__',
     default_locale: 'en',
     permissions: ['storage', 'alarms', 'activeTab', 'contextMenus'],
     // No host access at install. The options page requests each Pi-hole's origin when it is saved.
     optional_host_permissions: ['http://*/*', 'https://*/*'],
+    ...(mode === 'development' && devHostPermissions.length > 0 && { host_permissions: devHostPermissions }),
     icons: {
       16: 'icons/icon-16.png',
       32: 'icons/icon-32.png',

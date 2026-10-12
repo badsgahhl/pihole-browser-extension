@@ -82,9 +82,12 @@ const GENERIC_LIST_NAMES = new Set([
 ])
 
 /** A readable name for a gravity list: its comment, else the telling part of its URL. */
+/** Comments Pi-hole writes itself when it imports the default list; they say nothing about the list. */
+const AUTOMATIC_COMMENT = /^migrated from /i
+
 export function deriveListName(entry: Pick<SearchGravity, 'address' | 'comment'>): string {
   const comment = entry.comment?.trim()
-  if (comment) return comment.slice(0, 40)
+  if (comment && !AUTOMATIC_COMMENT.test(comment)) return comment.slice(0, 40)
   const address = entry.address ?? ''
   try {
     const url = new URL(address)
