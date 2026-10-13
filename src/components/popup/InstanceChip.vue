@@ -4,11 +4,11 @@
     :tone="tone"
     :title="title"
     :aria-label="title"
-    class="h-[22px] text-[11px] font-medium"
+    class="h-[22px] min-w-0 text-[11px] font-medium"
     @click="emit('open', instance.id)"
   >
     <StatusDot size="sm" :tone="dotTone" />
-    <span class="max-w-[72px] truncate">{{ instance.name }}</span>
+    <span class="max-w-[72px] min-w-0 truncate">{{ instance.name }}</span>
   </BaseChip>
 </template>
 

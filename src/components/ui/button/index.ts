@@ -29,6 +29,9 @@ export const buttonVariants = cva(
         'icon-sm': 'size-7'
       }
     },
+    // A size's padding would otherwise override the links' `p-0` and push them past their row's edge.
+    // The size's height stays, so the click target keeps its height.
+    compoundVariants: [{ variant: ['link', 'link-muted'], class: 'px-0' }],
     defaultVariants: {
       variant: 'secondary',
       size: 'default'
