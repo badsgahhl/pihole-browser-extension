@@ -39,7 +39,8 @@
       </Button>
     </PanelSection>
 
-    <div class="flex items-center justify-between px-3 pb-2.5 text-[11px]">
+    <!-- Wraps instead of overflowing when a translation is too long for one line; the second link stays right. -->
+    <div class="flex flex-wrap items-center justify-between gap-x-3 px-3 pb-2.5 text-[11px]">
       <Button v-if="allowedByYou" variant="link" :disabled="busy" @click="emit('remove', 'allow')">
         <Trash2Icon class="size-3" />
         {{ t('popup.site.removeAllow') }}
@@ -52,7 +53,7 @@
         <ClockIcon class="size-3" />
         {{ t('popup.site.allowTemp', [String(tempAllowMinutes)]) }}
       </Button>
-      <Button variant="link-muted" @click="emit('open')">
+      <Button variant="link-muted" class="ml-auto" @click="emit('open')">
         {{ t('popup.site.openAdmin') }}
         <ExternalLinkIcon class="size-[11px]" />
       </Button>

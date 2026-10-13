@@ -1,5 +1,17 @@
 # Changelog
 
+## 5.0.2 · 2026-10-13
+
+### Fixed
+
+- Firefox reaches Pi-holes at an `http://` address again (#123). Firefox applies its Manifest V3 default policy to
+  extensions, which turned every request into `https://`; that failed on Pi-hole's self-signed certificate or on a
+  plain HTTP port, and the Pi-hole showed as unreachable.
+- The popup header fits two or more Pi-holes: the title no longer wraps, and three chips no longer push the popup
+  wider than its window. From two Pi-holes on, the chips take the title's place.
+- "Open in Pi-hole" stays inside the site card. Its links line up with the buttons above them and wrap onto a second
+  line when a translation is too long.
+
 ## 5.0.1 · 2026-10-12
 
 ### Fixed

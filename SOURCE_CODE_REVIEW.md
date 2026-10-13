@@ -44,6 +44,17 @@ Vite bundles and minifies with esbuild. There is no obfuscation, no code is load
 extension makes requests only to the Pi-hole addresses the user configures. Translations in `src/locales/*.yml` are
 compiled to `_locales/*/messages.json` by `@wxt-dev/i18n`.
 
+## Content security policy
+
+The manifest sets `content_security_policy.extension_pages` to `script-src 'self'; object-src 'self';`, the
+Manifest V2 default that version 4 ran under. Firefox's Manifest V3 default adds `upgrade-insecure-requests`, which
+turned every request to a Pi-hole at an `http://` address into `https://`. Pi-holes sit in the home network and are
+usually reached over plain HTTP; Pi-hole's own HTTPS uses a self-signed certificate, and many installs serve HTTP on
+a custom port. The upgraded requests failed, and the extension reported the Pi-hole as unreachable (#123).
+
+Requests still go only to the addresses the user enters, with the scheme the user enters; an `https://` address
+stays HTTPS. Script loading is unchanged: only the extension's own files.
+
 ## web-ext lint
 
 `pnpm exec web-ext lint --source-dir .output/firefox-mv3` reports no errors. Two warnings are expected:
