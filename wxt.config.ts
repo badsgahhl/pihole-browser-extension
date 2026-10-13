@@ -65,7 +65,11 @@ export default defineConfig({
           strict_min_version: '140.0',
           data_collection_permissions: { required: ['none'] }
         }
-      }
+      },
+      // Firefox's default MV3 policy adds upgrade-insecure-requests, which rewrites every request to an
+      // http:// Pi-hole into https:// and fails on a self-signed certificate or a plain HTTP port (#123).
+      // This is the MV2 default version 4 ran under; Chrome's MV3 default has no upgrade either.
+      content_security_policy: { extension_pages: "script-src 'self'; object-src 'self';" }
     })
   })
 })
