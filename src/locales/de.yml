@@ -14,7 +14,7 @@ contextMenu:
   openSettings: Pi-hole Switch Einstellungen öffnen
 
 badge:
-  on: AN
+  on: EIN
   off: AUS
   error: ERR
   info: INFO
@@ -201,7 +201,7 @@ options:
       title: Symbolleisten-Badge
       mode: Badge-Modus
       off: Aus
-      state: An / Aus
+      state: Ein / Aus
       percent: Blockiert %
       active: aktiv
       paused: pausiert
