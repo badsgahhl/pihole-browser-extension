@@ -1,3 +1,7 @@
+# Only the extension itself. design/ and e2e/ are separate npm projects (see their READMEs); without this list
+# Renovate counts every package.json below as a workspace member and fails to update pnpm-lock.yaml for them.
+packages:
+  - .
 allowBuilds:
   simple-git-hooks: true
   esbuild: false
