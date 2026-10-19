@@ -71,7 +71,7 @@
     "eslint-plugin-vue": "^10.11.1",
     "happy-dom": "^21.0.1",
     "lint-staged": "^17.6.0",
-    "oxfmt": "^0.72.0",
+    "oxfmt": "^0.73.0",
     "oxlint": "^1.87.0",
     "simple-git-hooks": "^2.14.0",
     "tailwindcss": "^4.3.3",
