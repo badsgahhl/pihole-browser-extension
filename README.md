@@ -90,6 +90,12 @@ Pi-hole › Settings › Web interface / API, or raise the limit there.
 **Unreachable.** Check address and port, and that the admin interface opens in a normal tab. For `https://` with a
 self-signed certificate, open the admin page once in the browser and accept the certificate.
 
+> [!TIP]
+> HTTPS only works when the browser trusts the Pi-hole's certificate. The extension cannot show a certificate warning,
+> so with Pi-hole's own self-signed certificate the Pi-hole simply stays unreachable. If accepting the certificate in
+> a tab does not help or does not last, follow Pi-hole's [TLS/SSL guide](https://docs.pi-hole.net/api/tls/): trust its
+> CA certificate in the browser or operating system, or give the Pi-hole a certificate of your own.
+
 **The site shows "Not blocked" although it is.** The lookup is exact. A list entry for `example.com` does not match
 `cdn.example.com`; open the domain in Pi-hole from the popup to see the full picture.
 
@@ -135,9 +141,9 @@ For automated checks against a local Pi-hole a development build can carry host 
 - **CI** (`.github/workflows/ci.yml`) runs format, lint, type-check, tests with coverage, the generated-client
   check, packages both targets and runs `web-ext lint`. Branch protection on `master` must require the
   `build-and-test` check (the v4 setup required `eslint` and `prettier`, which no longer exist).
-- **Renovate** (`renovate.json`) opens dependency updates on Monday mornings; minor and patch updates merge
-  themselves when CI is green, majors wait as drafts. It reads the config from the default branch, so enable the
-  Renovate app after `v5` is merged into `master`.
+- **Renovate** (`renovate.json`) bundles dependency updates into two PRs on Monday mornings, one with all minor and
+  patch updates and one with all majors. Both merge themselves once CI is green. Lock file maintenance comes as a PR
+  of its own, security fixes come immediately.
 - **CodeQL** scans weekly and on every pull request.
 
 ## Release
